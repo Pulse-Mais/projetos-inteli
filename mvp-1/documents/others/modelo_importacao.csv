@@ -1,0 +1,13 @@
+# MODELO DE IMPORTAÇÃO DE ALUNOS — Pulse Mais
+# -------------------------------------------------------
+# INSTRUÇÕES:
+# 1. Não altere o cabeçalho da linha 5 (nome,email,senha,cpf)
+# 2. Preencha os dados dos alunos a partir da linha 6
+# 3. CPF: somente números, sem pontos ou traços (ex: 12345678900)
+# 4. Senha: senha inicial do aluno — oriente-o a trocar no primeiro acesso
+# 5. Salve o arquivo como .csv ou .xlsx antes de fazer o upload
+# 6. Faça o upload em: POST /importacao/alunos (campo: arquivo)
+# -------------------------------------------------------
+nome,email,senha,cpf
+João Silva,joao.silva@email.com,senha123,12345678900
+Maria Souza,maria.souza@email.com,senha456,98765432100

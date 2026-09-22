@@ -1,0 +1,99 @@
+﻿/* Cabeçalho da página */
+.page-header {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Barra de ferramentas */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  margin-left: 48px;
+  margin-right: 48px;
+  flex-wrap: nowrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  flex: 1;
+}
+
+.search-box svg {
+  color: var(--color-text-support);
+  flex-shrink: 0;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  width: 100%;
+  background: transparent;
+}
+
+.search-box input::placeholder {
+  color: var(--color-text-support);
+}
+
+/* Contador */
+.contador {
+  font-size: 13px;
+  color: var(--color-text-support);
+  margin-bottom: 16px;
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Estado vazio */
+.estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--color-text-support);
+  gap: 12px;
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+.estado-vazio svg { opacity: 0.4; }
+.estado-vazio p   { font-size: 15px; }
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .page-header,
+  .toolbar,
+  .contador,
+  .tabela-wrapper,
+  .estado-vazio,
+  .tabela-dica {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .tabela-mentor th,
+  .tabela-mentor td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

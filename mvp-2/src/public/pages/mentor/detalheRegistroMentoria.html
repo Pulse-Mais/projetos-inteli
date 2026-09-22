@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar - Registrar Mentoria</title>
+
+  <link rel="stylesheet" href="../../css/mentor-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/mentor/detalheRegistroMentoria.css" />
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar do Mentor ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu">
+        <i data-lucide="panel-left" style="width:20px;height:20px;stroke-width:1.75"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" href="dashboardMentor.html" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" href="mentoradosMentor.html" title="Mentorados">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Mentorados</span>
+      </a>
+      <a class="sidebar-item is-active" href="registrarMentoriaMentor.html" title="Minhas Mentorias">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Minhas Mentorias</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" href="impactoMentor.html" title="Impacto">
+        <span class="sidebar-item-icon"><i data-lucide="bar-chart-3"></i></span>
+        <span class="sidebar-item-label">Impacto</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="configuracoesMentor.html" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Área principal ── -->
+  <div class="shell-main">
+
+    <header class="topbar">
+      <a class="topbar-logo" href="dashboardMentor.html">
+        <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+      </a>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <div class="avatar-menu" id="avatarMenu">
+          <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar">
+              <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+            </span>
+            <span class="avatar-meta">
+              <span class="avatar-name"></span>
+              <span class="avatar-role"></span>
+            </span>
+            <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+          </button>
+
+          <div class="avatar-dropdown" role="menu" hidden>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+              <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+      <div class="shell-container">
+
+        <div class="crumbs">
+          <a href="registrarMentoriaMentor.html">Minhas Mentorias</a>
+          <span class="sep">/</span>
+          <span class="current">Registrar Mentoria</span>
+        </div>
+
+        <section class="detail-heading">
+          <span class="detail-heading-icon">
+            <i data-lucide="calendar-days" style="width:28px;height:28px"></i>
+          </span>
+          <h1 class="page-title">Registrar Mentoria</h1>
+        </section>
+
+        <form class="detail-form" id="mentoringDetailForm">
+
+          <div class="field-block">
+            <div class="field-title-row">
+              <span class="field-title">Mentorados</span>
+              <button class="add-inline-btn" type="button" id="addDetailMenteeBtn">
+                <i data-lucide="plus" style="width:15px;height:15px"></i>
+                Adicionar
+              </button>
+            </div>
+            <div class="detail-mentees" id="detailMentees"></div>
+          </div>
+
+          <div class="detail-grid">
+            <label class="detail-field">
+              <span>Data da Sessão</span>
+              <div class="input-with-icon">
+                <i data-lucide="calendar-days" style="width:20px;height:20px"></i>
+                <input id="detailSessionDate" type="date" required />
+              </div>
+            </label>
+
+            <label class="detail-field">
+              <span>Duração (min)</span>
+              <div class="input-with-icon">
+                <i data-lucide="clock" style="width:20px;height:20px"></i>
+                <input id="detailSessionDuration" type="number" min="15" step="15" required />
+              </div>
+            </label>
+          </div>
+
+          <div class="field-block topics-block">
+            <span class="field-title">Temas abordados</span>
+            <div class="detail-topics" id="detailTopics"></div>
+            <button class="add-topic-btn" type="button" id="addDetailTopicBtn">
+              <i data-lucide="plus" style="width:15px;height:15px"></i>
+              Adicionar tema
+            </button>
+          </div>
+
+          <label class="detail-field notes-field">
+            <span>Observações</span>
+            <textarea id="detailSessionNotes"></textarea>
+          </label>
+
+          <div class="detail-actions">
+            <button class="btn btn-secondary" type="button" id="cancelDetailBtn">Cancelar</button>
+            <button class="btn btn-primary" type="submit">
+              <i data-lucide="save" style="width:17px;height:17px"></i>
+              Salvar registro
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/dateLimits.js"></script>
+<script src="../../js/mentor/mainMentor.js"></script>
+<script src="../../js/mentor/mentor.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

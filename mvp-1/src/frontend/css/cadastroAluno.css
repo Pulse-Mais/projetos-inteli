@@ -1,0 +1,171 @@
+@import url('../css/global.css');
+@import url('../css/perfil.css');
+
+/* Alinhamento de margens laterais conforme o padrão da seção de alunos/perfil */
+.page-header,
+.perfil-layout {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Ajuste de tamanho da fonte para inputs */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  font-size: 15px;
+}
+
+/* Estado de erro em campos de data */
+.input--erro,
+.input--erro:hover,
+.form-group input.input--erro:focus {
+  border-color: var(--color-danger) !important;
+  background: rgba(220, 38, 38, 0.04) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.campo-erro {
+  display: none;
+  color: var(--color-danger);
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.campo-erro.visivel {
+  display: block;
+}
+
+.campo-hint {
+  display: block;
+  color: var(--color-text-support);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Estilos extras para o formulário de cadastro */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.col-span-1 { grid-column: span 1; }
+.col-span-2 { grid-column: span 2; }
+.col-span-3 { grid-column: span 3; }
+.col-span-4 { grid-column: span 4; }
+.col-span-5 { grid-column: span 5; }
+.col-span-6 { grid-column: span 6; }
+.col-span-7 { grid-column: span 7; }
+.col-span-8 { grid-column: span 8; }
+.col-span-9 { grid-column: span 9; }
+.col-span-10 { grid-column: span 10; }
+.col-span-11 { grid-column: span 11; }
+.col-span-12 { grid-column: span 12; }
+.col-span-13 { grid-column: span 13; }
+.col-span-14 { grid-column: span 14; }
+.col-span-15 { grid-column: span 15; }
+.col-span-16 { grid-column: span 16; }
+
+.registration-section-header {
+  grid-column: span 16;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.registration-section-header--blue {
+  background: rgba(0, 56, 112, 0.06);
+  color: var(--color-primary);
+}
+
+.registration-section-header--green {
+  background: rgba(37, 176, 87, 0.10);
+  color: var(--color-accent);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.mensagem-feedback {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-top: 16px;
+  display: none;
+}
+
+.mensagem-feedback--sucesso {
+  background: rgba(37, 176, 87, 0.1);
+  border: 1.5px solid var(--color-accent);
+  color: #166534;
+}
+
+.mensagem-feedback--erro {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1.5px solid var(--color-danger);
+  color: #991b1b;
+}
+
+/* Ajuste para o botão cancelar estilo sidebar */
+.btn-cancelar {
+  width: 160px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-primary);
+  border-radius: 6px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--color-white);
+  transition: all 0.2s;
+}
+
+.btn-cancelar:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+@media (max-width: 768px) {
+  .page-header,
+  .perfil-layout {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr; /* Força uma única coluna */
+    gap: 16px;
+  }
+
+  /* Faz todas as colunas ocuparem largura total */
+  .col-span-1, .col-span-2, .col-span-3, .col-span-4,
+  .col-span-5, .col-span-6, .col-span-7, .col-span-8,
+  .col-span-9, .col-span-10, .col-span-11, .col-span-12,
+  .col-span-13, .col-span-14, .col-span-15, .col-span-16 {
+    grid-column: span 16 !important;
+  }
+
+  .form-footer {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .btn-cancelar, 
+  #btnCadastrar {
+    width: 100%;
+  }
+}
+

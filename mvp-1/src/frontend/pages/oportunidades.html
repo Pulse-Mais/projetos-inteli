@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Oportunidades</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/oportunidades.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <a href="perfilExAluno.html" class="sidebar__avatar-link" aria-label="Acessar Meu Perfil">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do ex-aluno">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepageExAluno.html" class="sidebar__link">Homepage</a>
+        <a href="conquistasExAluno.html" class="sidebar__link">Conquistas</a>
+        <a href="oportunidades.html" class="sidebar__link ativo">Oportunidades</a>
+      </nav>
+    </div>
+    <div class="sidebar__spacer"></div>
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo"><img src="/assets/logoAzul.png" alt="Pulse Mais"></div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content">
+    <div class="page-topbar">
+      <h2>Oportunidades Pulse Mais</h2>
+    </div>
+
+    <div class="page-header" style="margin-top:24px;">
+      <a href="homepageExAluno.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--color-text-support);font-size:13px;text-decoration:none;margin-bottom:12px;">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Voltar para Homepage
+      </a>
+      <h1>Oportunidades Pulse Mais</h1>
+      <p>Vagas, eventos e bolsas curados para a rede de ex-alunos.</p>
+    </div>
+
+    <!-- Toolbar de busca e filtros -->
+    <div class="oport-toolbar">
+      <div class="oport-search">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="buscaOport" placeholder="Buscar oportunidades...">
+      </div>
+      <div class="oport-filtros">
+        <button class="oport-filtro ativo" data-tipo="">Todos</button>
+        <button class="oport-filtro" data-tipo="Vaga">Vagas</button>
+        <button class="oport-filtro" data-tipo="Evento">Eventos</button>
+        <button class="oport-filtro" data-tipo="Estágio">Estágios</button>
+        <button class="oport-filtro" data-tipo="Bolsa de Estudo">Bolsas</button>
+      </div>
+    </div>
+
+    <!-- Contador -->
+    <p class="oport-contador" id="contadorOport"></p>
+
+    <!-- Grid de oportunidades -->
+    <div class="oport-grid" id="oportunidadesGrid">
+      <p style="color:var(--color-text-support);padding:24px;">Carregando oportunidades...</p>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="estado-vazio-oport" id="estadoVazioOport" style="display:none;">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--color-border)" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      <p>Nenhuma oportunidade encontrada para este filtro.</p>
+    </div>
+  </main>
+</div>
+
+<!-- Modal: Detalhes da Oportunidade -->
+<div class="modal-azul" id="modalOportunidade">
+  <div class="modal-azul__content">
+
+    <div class="modal-azul__header">
+      <h3>Detalhes da Oportunidade</h3>
+      <button class="modal-azul__fechar" id="btnFecharModalOport" aria-label="Fechar modal">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-azul__body">
+      <div class="oport-modal__header-info">
+        <div class="oport-modal__logo" id="modalOportLogoWrap">
+          <img id="modalOportLogo" src="" alt="Logo da empresa" style="display:none;">
+          <svg id="modalOportLogoPlaceholder" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="oport-card__tipo" id="modalOportTipo"></span>
+          <h2 class="oport-modal__titulo" id="modalOportTitulo"></h2>
+          <p class="oport-modal__empresa" id="modalOportEmpresa"></p>
+        </div>
+      </div>
+
+      <div class="oport-modal__grid">
+        <div class="oport-modal__grid-item">
+          <span>Modalidade</span>
+          <strong id="modalOportModalidade"></strong>
+        </div>
+        <div class="oport-modal__grid-item">
+          <span>Prazo</span>
+          <strong id="modalOportPrazo"></strong>
+        </div>
+        <div class="oport-modal__grid-item">
+          <span>Cidade</span>
+          <strong id="modalOportCidade"></strong>
+        </div>
+        <div class="oport-modal__grid-item">
+          <span>Nível</span>
+          <strong id="modalOportNivel"></strong>
+        </div>
+      </div>
+
+      <p class="oport-modal__desc-label">Descrição</p>
+      <p class="oport-modal__desc" id="modalOportDescricao"></p>
+
+      <div class="modal-azul__actions">
+        <button class="btn btn--outline" id="btnFecharModalOport2">Fechar</button>
+        <button class="btn btn--accent" id="btnBaixarOportPdf">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Baixar PDF
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/avatarShared.js"></script>
+<script src="../js/oportunidades.js"></script>
+</body>
+</html>

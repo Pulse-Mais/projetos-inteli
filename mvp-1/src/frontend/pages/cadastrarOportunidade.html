@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Cadastrar Oportunidade</title>
+  <link rel="stylesheet" href="../css/cadastroAluno.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <a href="perfilCoordenador.html">
+          <img src="/assets/avatar.png" class="sidebar__avatar" alt="Meu Perfil">
+        </a>
+      </div>
+      <nav class="sidebar__nav">
+        <a href="homepage.html" class="sidebar__link">Homepage</a>
+        <a href="alunos.html" class="sidebar__link">Alunos</a>
+        <a href="dashboard.html" class="sidebar__link">Dashboard</a>
+        <a href="oportunidadesCoordenador.html" class="sidebar__link ativo">Oportunidades</a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Cadastrar Oportunidade</h2>
+    </div>
+
+    <div class="page-header">
+      <a href="oportunidadesCoordenador.html" style="display:inline-flex; align-items:center; gap:6px; color:var(--color-text-support); font-size:13px; text-decoration:none; margin-bottom:12px;">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Voltar para Oportunidades
+      </a>
+      <h1>Nova Oportunidade</h1>
+      <p>Cadastre vagas, estágios, eventos ou bolsas de estudo para a rede de ex-alunos.</p>
+    </div>
+
+    <div class="perfil-layout">
+      <section class="perfil-card perfil-card--main">
+        <form id="formCadastroOportunidade">
+
+          <div class="form-row">
+            <div class="registration-section-header registration-section-header--blue">
+              <span>Detalhes da Oportunidade</span>
+            </div>
+
+            <div class="form-group col-span-10">
+              <label for="titulo">Título *</label>
+              <input type="text" id="titulo" name="titulo" placeholder="Ex: Desenvolvedor Frontend Júnior" required>
+            </div>
+            <div class="form-group col-span-6">
+              <label for="empresa">Empresa *</label>
+              <input type="text" id="empresa" name="empresa" placeholder="Ex: TechNova" required>
+            </div>
+
+            <div class="form-group col-span-5">
+              <label for="tipo">Tipo *</label>
+              <select id="tipo" name="tipo" required>
+                <option value="">Selecione...</option>
+                <option value="Vaga">Vaga</option>
+                <option value="Evento">Evento</option>
+                <option value="Estágio">Estágio</option>
+                <option value="Bolsa de Estudo">Bolsa de Estudo</option>
+              </select>
+            </div>
+            <div class="form-group col-span-5">
+              <label for="modalidade">Modalidade *</label>
+              <select id="modalidade" name="modalidade" required>
+                <option value="">Selecione...</option>
+                <option value="Presencial">Presencial</option>
+                <option value="Online">Online</option>
+                <option value="Híbrido">Híbrido</option>
+                <option value="EAD">EAD</option>
+              </select>
+            </div>
+            <div class="form-group col-span-6">
+              <label for="prazo">Prazo de inscrição *</label>
+              <input type="date" id="prazo" name="prazo" required>
+            </div>
+
+            <div class="form-group col-span-8">
+              <label for="cidade">Cidade</label>
+              <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo">
+            </div>
+            <div class="form-group col-span-8">
+              <label for="nivel">Nível</label>
+              <input type="text" id="nivel" name="nivel" placeholder="Ex: Júnior, Pleno, Iniciante">
+            </div>
+
+            <div class="form-group col-span-16">
+              <label for="descricao">Descrição</label>
+              <textarea id="descricao" name="descricao" rows="4" placeholder="Descreva a oportunidade, requisitos e benefícios..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <a href="oportunidadesCoordenador.html" class="btn-cancelar">Cancelar</a>
+            <button type="submit" class="btn btn--accent" id="btnCadastrarOportunidade">
+              Cadastrar Oportunidade
+            </button>
+          </div>
+
+        </form>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL DE FEEDBACK (Sucesso ou Erro) -->
+<div class="modal" id="modalFeedback">
+  <div class="modal__content" style="text-align: center; padding: 40px; max-width: 450px;">
+    <div id="feedbackIconContainer" style="width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
+      <!-- Ícone inserido via JS -->
+    </div>
+    <h2 id="feedbackTitle" style="color: var(--color-primary); margin-bottom: 12px;">Título</h2>
+    <p id="feedbackMessage" style="color: var(--color-text-support); margin-bottom: 32px; line-height: 1.6;">Mensagem detalhada aqui.</p>
+    <button class="btn" id="btnFeedbackAction" style="width: 100%; justify-content: center;">Continuar</button>
+  </div>
+</div>
+
+<script src="../js/datePicker.js"></script>
+<script src="../js/cadastroOportunidade.js"></script>
+</body>
+</html>

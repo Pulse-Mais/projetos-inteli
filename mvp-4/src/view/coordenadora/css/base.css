@@ -1,0 +1,99 @@
+/* Reset e estilos base dos elementos */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+body {
+  font-family: var(--fonte);
+  font-size: var(--texto-base);
+  font-weight: var(--peso-regular);
+  line-height: var(--altura-linha);
+  color: var(--texto-principal);
+  background-color: var(--cinza-fundo);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--peso-semibold);
+  line-height: 1.25;
+  color: var(--texto-principal);
+}
+
+h1 {
+  font-size: var(--texto-2xl);
+}
+h2 {
+  font-size: var(--texto-xl);
+}
+h3 {
+  font-size: var(--texto-lg);
+}
+
+a {
+  color: var(--cor-secundaria);
+  transition: color var(--transicao);
+}
+a:hover {
+  color: var(--cor-primaria);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cor-secundaria);
+  outline-offset: 2px;
+}
+
+/* Foco dos campos: borda azul + anel suave, sem o outline padrão */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--cor-secundaria);
+  box-shadow: 0 0 0 3px rgba(86, 150, 214, 0.18);
+}
+
+/* A busca já mostra o foco no contêiner (:focus-within), então o input interno não leva o anel */
+.busca-input:focus {
+  box-shadow: none;
+}

@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor | Alunos da Turma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../globalStyle/tokens.css">
+  <link rel="stylesheet" href="../styles/alunos-turma.css">
+</head>
+<body>
+  <!-- Layout principal da pagina Alunos da Turma -->
+  <div class="layout-gestor app-shell">
+    <!-- Sidebar: Logo, CardPerfil, Menu -->
+    <aside class="sidebar" aria-label="Menu do gestor">
+      <a class="brand" href="./dashboard.html" aria-label="Pulse Mais">
+        <img class="brand-logo" src="../../assets/imagemPulse.png" alt="Pulse Mais">
+      </a>
+
+      <section class="manager-card" aria-label="Usu&aacute;rio logado">
+        <span class="manager-avatar">
+          <i data-lucide="circle-user" aria-hidden="true"></i>
+        </span>
+        <p>Ol&aacute;, Gestor<br>Rafael</p>
+      </section>
+
+      <nav class="sidebar-nav" aria-label="Navega&ccedil;&atilde;o principal">
+        <a class="nav-item" href="./dashboard.html">
+          <i data-lucide="chart-bar" aria-hidden="true"></i>
+          Dashboard
+        </a>
+        <a class="nav-item active" href="./turmas.html" aria-current="page">
+          <i data-lucide="users" aria-hidden="true"></i>
+          Turmas
+        </a>
+        <a class="nav-item" href="./comunicados.html">
+          <i data-lucide="message-square-dot" aria-hidden="true"></i>
+          Comunicados
+        </a>
+        <button type="button" id="logoutButton" class="nav-item nav-item-logout" aria-label="Sair da conta">
+          <i data-lucide="log-out" aria-hidden="true"></i>
+          Sair
+        </button>
+      </nav>
+    </aside>
+
+    <main class="pagina-alunos-turma">
+      <!-- Barra superior: breadcrumb + busca + filtro -->
+      <div class="alunos-topo">
+        <nav class="breadcrumb" aria-label="Caminho de navega&ccedil;&atilde;o">
+          <a href="./turmas.html">Turmas</a>
+          <span class="breadcrumb-sep" aria-hidden="true">&rsaquo;</span>
+          <span class="breadcrumb-atual" aria-current="page">Geral</span>
+        </nav>
+
+        <div class="busca">
+          <input type="text" class="busca-input" placeholder="Buscar aluno...">
+          <i data-lucide="search"></i>
+        </div>
+
+        <select class="filtro-select" data-filtro="status" aria-label="Filtrar alunos por situa&ccedil;&atilde;o">
+          <option value="">Todos</option>
+          <option value="ativo">Ativos</option>
+          <option value="inativo">Inativos</option>
+        </select>
+      </div>
+
+      <form class="filtros-avancados" id="filtros-alunos">
+        <label class="filtro-campo">
+          <span>Idade minima</span>
+          <input type="number" name="idade_min" min="0" placeholder="Ex.: 18">
+        </label>
+        <label class="filtro-campo">
+          <span>Idade maxima</span>
+          <input type="number" name="idade_max" min="0" placeholder="Ex.: 24">
+        </label>
+        <label class="filtro-campo">
+          <span>Empregabilidade</span>
+          <select name="empregabilidade">
+            <option value="">Todas</option>
+            <option value="empregado">Empregado</option>
+            <option value="desempregado">Desempregado</option>
+          </select>
+        </label>
+        <label class="filtro-campo">
+          <span>Turma</span>
+          <select name="id_turma">
+            <option value="">Todas</option>
+          </select>
+        </label>
+        <label class="filtro-campo">
+          <span>Eventos min.</span>
+          <input type="number" name="eventos_min" min="0" placeholder="Ex.: 1">
+        </label>
+        <label class="filtro-campo">
+          <span>Eventos max.</span>
+          <input type="number" name="eventos_max" min="0" placeholder="Ex.: 5">
+        </label>
+        <label class="filtro-campo">
+          <span>Genero</span>
+          <select name="genero">
+            <option value="">Todos</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </label>
+        <div class="filtros-acoes">
+          <button type="submit" class="btn-filtro btn-filtro--primario">Aplicar filtros</button>
+          <button type="button" class="btn-filtro" id="btn-limpar-filtros">Limpar</button>
+        </div>
+      </form>
+
+      <section class="alunos-grade" id="alunos-grade" aria-label="Alunos da turma" aria-live="polite">
+        <div class="alunos-estado alunos-estado--carregando">Carregando alunos...</div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/gestor-api.js"></script>
+  <script src="../js/gestor.js"></script>
+  <script src="../js/alunos-turma.js"></script>
+</body>
+</html>
+

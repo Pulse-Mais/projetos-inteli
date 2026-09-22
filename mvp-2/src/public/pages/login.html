@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login · Pulsar</title>
+
+  <link rel="stylesheet" href="../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../css/aluno/aluno-login.css" />
+</head>
+<body>
+
+  <div class="login-page">
+    <div class="login-shell">
+
+      <!-- BRAND -->
+      <div class="pulsar-brand">
+        <svg class="pulsar-logo"
+             width="44" height="56"
+             viewBox="0 0 44 56"
+             aria-label="Pulsar" role="img">
+          <rect x="0"  y="0"  width="10" height="56" rx="5" fill="#003d82" />
+          <rect x="17" y="16" width="10" height="40" rx="5" fill="#16a34a" />
+          <rect x="34" y="7"  width="10" height="49" rx="5" fill="#eab308" />
+        </svg>
+        <h1 class="pulsar-wordmark">Pulsar</h1>
+      </div>
+      <!-- /BRAND -->
+
+      <!-- ===== FORM DE LOGIN ===== -->
+      <div id="login-panel">
+        <form class="login-card" id="login-form" novalidate>
+          <h2 class="login-title">Login</h2>
+
+          <div class="login-field">
+            <label for="login-user" class="login-label">E-mail</label>
+            <input id="login-user" name="login-user" type="text"
+                   autocomplete="username" class="login-input" />
+          </div>
+
+          <div class="login-field">
+            <label for="login-pwd" class="login-label">Senha</label>
+            <input id="login-pwd" name="login-pwd" type="password"
+                   autocomplete="current-password" class="login-input" />
+          </div>
+
+          <button type="submit" class="login-submit">Entrar</button>
+
+          <div class="pulsar-footer-bars" aria-hidden="true">
+            <span class="bar bar-blue"></span>
+            <span class="bar bar-green"></span>
+            <span class="bar bar-yellow"></span>
+          </div>
+        </form>
+
+        <p class="login-register-link">
+          Não tem conta?
+          <a href="#" id="btn-ir-cadastro">Cadastrar-se</a>
+        </p>
+      </div>
+      <!-- /FORM DE LOGIN -->
+
+      <!-- ===== PAINEL DE CADASTRO ===== -->
+      <div id="cadastro-panel" hidden>
+        <div class="cadastro-card">
+
+          <div class="cadastro-header">
+            <h2 class="cadastro-title">Criar conta</h2>
+            <p class="cadastro-subtitle">Preencha as informações para solicitar seu acesso</p>
+          </div>
+
+          <!-- Stepper -->
+          <div class="cadastro-stepper" id="cadastro-stepper">
+            <div class="step-item is-active" data-step="1">
+              <div class="step-dot">1</div>
+              <span class="step-label">Acesso</span>
+            </div>
+            <div class="step-item" data-step="2">
+              <div class="step-dot">2</div>
+              <span class="step-label">Pessoal</span>
+            </div>
+            <div class="step-item" data-step="3">
+              <div class="step-dot">3</div>
+              <span class="step-label">Socioecon.</span>
+            </div>
+            <div class="step-item" data-step="4">
+              <div class="step-dot">4</div>
+              <span class="step-label">LGPD</span>
+            </div>
+          </div>
+
+          <!-- Etapa 1: Dados de acesso -->
+          <div class="reg-step is-visible" id="reg-step-1">
+            <div class="reg-field">
+              <label class="reg-label" for="reg-email">E-mail <span class="req">*</span></label>
+              <input class="reg-input" id="reg-email" type="email"
+                     autocomplete="email" placeholder="seu@email.com" />
+            </div>
+            <div class="reg-field">
+              <label class="reg-label" for="reg-senha">Senha <span class="req">*</span></label>
+              <input class="reg-input" id="reg-senha" type="password"
+                     autocomplete="new-password" placeholder="Mínimo 8 caracteres" />
+            </div>
+            <div class="reg-field">
+              <label class="reg-label" for="reg-senha2">Confirmar senha <span class="req">*</span></label>
+              <input class="reg-input" id="reg-senha2" type="password"
+                     autocomplete="new-password" placeholder="Repita a senha" />
+            </div>
+          </div>
+
+          <!-- Etapa 2: Dados pessoais -->
+          <div class="reg-step" id="reg-step-2">
+            <div class="reg-field">
+              <label class="reg-label" for="reg-nome">Nome completo <span class="req">*</span></label>
+              <input class="reg-input" id="reg-nome" type="text"
+                     autocomplete="name" placeholder="Seu nome completo" />
+            </div>
+            <div class="reg-grid-2">
+              <div class="reg-field">
+                <label class="reg-label" for="reg-cpf">CPF <span class="req">*</span></label>
+                <input class="reg-input" id="reg-cpf" type="text"
+                       inputmode="numeric" placeholder="000.000.000-00" maxlength="14" />
+              </div>
+              <div class="reg-field">
+                <label class="reg-label" for="reg-telefone">Telefone</label>
+                <input class="reg-input" id="reg-telefone" type="tel"
+                       autocomplete="tel" placeholder="(00) 00000-0000" maxlength="15" />
+              </div>
+            </div>
+            <div class="reg-grid-2">
+              <div class="reg-field">
+                <label class="reg-label" for="reg-nascimento">Data de nascimento <span class="req">*</span></label>
+                <input class="reg-input" id="reg-nascimento" type="date" data-date-limit="past" />
+              </div>
+              <div class="reg-field">
+                <label class="reg-label" for="reg-genero">Gênero</label>
+                <select class="reg-select" id="reg-genero">
+                  <option value="">Selecione...</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                  <option value="Prefiro_nao_informar">Prefiro não informar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 3: Dados socioeconômicos -->
+          <div class="reg-step" id="reg-step-3">
+            <div class="reg-grid-2">
+              <div class="reg-field">
+                <label class="reg-label" for="reg-raca">Autodeclaração racial</label>
+                <select class="reg-select" id="reg-raca">
+                  <option value="">Selecione...</option>
+                  <option value="Branca">Branca</option>
+                  <option value="Preta">Preta</option>
+                  <option value="Parda">Parda</option>
+                  <option value="Indígena">Indígena</option>
+                  <option value="Prefiro_nao_informar">Prefiro não informar</option>
+                </select>
+              </div>
+              <div class="reg-field">
+                <label class="reg-label" for="reg-renda">Renda familiar</label>
+                <select class="reg-select" id="reg-renda">
+                  <option value="">Selecione...</option>
+                  <option value="Ate_1_SM">Até 1 salário mínimo</option>
+                  <option value="1_a_2_SM">1 a 2 salários mínimos</option>
+                  <option value="2_a_3_SM">2 a 3 salários mínimos</option>
+                  <option value="3_a_5_SM">3 a 5 salários mínimos</option>
+                  <option value="Acima_5_SM">Acima de 5 salários mínimos</option>
+                </select>
+              </div>
+            </div>
+            <div class="reg-grid-2">
+              <div class="reg-field">
+                <label class="reg-label" for="reg-moradia">Tipo de moradia</label>
+                <select class="reg-select" id="reg-moradia">
+                  <option value="">Selecione...</option>
+                  <option value="Propria">Própria</option>
+                  <option value="Alugada">Alugada</option>
+                  <option value="Cedida">Cedida</option>
+                  <option value="Financiada">Financiada</option>
+                  <option value="Outros">Outros</option>
+                </select>
+              </div>
+              <div class="reg-field" style="justify-content:flex-end;padding-bottom:12px">
+                <div class="reg-check-row">
+                  <input type="checkbox" id="reg-pcd" />
+                  <label class="reg-check-label" for="reg-pcd">
+                    Pessoa com deficiência (PCD)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="reg-field">
+              <label class="reg-label" for="reg-bairro">Bairro</label>
+              <input class="reg-input" id="reg-bairro" type="text" placeholder="Seu bairro" />
+            </div>
+            <div class="reg-grid-2">
+              <div class="reg-field">
+                <label class="reg-label" for="reg-cidade">Cidade</label>
+                <input class="reg-input" id="reg-cidade" type="text" placeholder="Sua cidade" />
+              </div>
+              <div class="reg-field">
+                <label class="reg-label" for="reg-estado">Estado</label>
+                <select class="reg-select" id="reg-estado">
+                  <option value="">UF</option>
+                  <option value="AC">AC</option><option value="AL">AL</option>
+                  <option value="AP">AP</option><option value="AM">AM</option>
+                  <option value="BA">BA</option><option value="CE">CE</option>
+                  <option value="DF">DF</option><option value="ES">ES</option>
+                  <option value="GO">GO</option><option value="MA">MA</option>
+                  <option value="MT">MT</option><option value="MS">MS</option>
+                  <option value="MG">MG</option><option value="PA">PA</option>
+                  <option value="PB">PB</option><option value="PR">PR</option>
+                  <option value="PE">PE</option><option value="PI">PI</option>
+                  <option value="RJ">RJ</option><option value="RN">RN</option>
+                  <option value="RS">RS</option><option value="RO">RO</option>
+                  <option value="RR">RR</option><option value="SC">SC</option>
+                  <option value="SP">SP</option><option value="SE">SE</option>
+                  <option value="TO">TO</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 4: LGPD -->
+          <div class="reg-step" id="reg-step-4">
+            <div class="reg-check-row">
+              <input type="checkbox" id="reg-lgpd" />
+              <label class="reg-check-label" for="reg-lgpd">
+                Autorizo o uso dos meus dados pessoais pela equipe Pulse Mais para fins de
+                acompanhamento e desenvolvimento da minha jornada profissional, conforme a
+                Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018). <span class="req">*</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Erro -->
+          <p class="cadastro-error" id="cadastro-error" hidden></p>
+
+          <!-- Navegação -->
+          <div class="cadastro-nav">
+            <button type="button" class="btn-back" id="reg-btn-back" hidden>Voltar</button>
+            <button type="button" class="btn-next" id="reg-btn-next">Próximo</button>
+            <button type="button" class="btn-submit" id="reg-btn-submit" hidden>Finalizar cadastro</button>
+          </div>
+
+          <!-- Sucesso (oculto até o cadastro ser concluído) -->
+          <div class="cadastro-success" id="cadastro-success" style="display:none">
+            <div class="cadastro-success-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h3>Cadastro enviado!</h3>
+            <p>Suas informações foram recebidas. Aguarde a aprovação da equipe Pulse Mais para acessar sua conta.</p>
+            <span class="cadastro-success-redirect" id="cadastro-redirect-msg">Voltando ao login em <b id="cadastro-countdown">5</b>s…</span>
+          </div>
+
+        </div>
+
+        <p class="login-back-link">
+          <a href="#" id="btn-voltar-login">← Voltar ao login</a>
+        </p>
+      </div>
+      <!-- /PAINEL DE CADASTRO -->
+
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/dateLimits.js"></script>
+  <script src="../js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prontuário - Psicóloga | Pulse Mais</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/prontuario.css">
+</head>
+<body>
+
+  <header class="psi-navbar">
+    <div class="psi-navbar-inner">
+      <div class="psi-saudacao">
+        <div class="psi-avatar">
+          <i data-lucide="user"></i>
+        </div>
+        <div class="psi-saudacao-texto">
+          <span class="psi-saudacao-nome">Olá, psicóloga!</span>
+          <span class="psi-saudacao-sub">seja bem-vinda de volta.</span>
+        </div>
+      </div>
+
+      <div class="psi-navbar-centro">
+        <div class="psi-busca">
+          <i data-lucide="search"></i>
+          <input type="text" id="busca-atendimentos" placeholder="Buscar atendimentos">
+        </div>
+        <select class="psi-select" id="ordenacao-atendimentos">
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+        </select>
+      </div>
+
+      <div class="psi-navbar-logo">
+        <a href="atendimentos.html" aria-label="Pulse Mais">
+          <img src="../coordenadora/img/logo-pulse.svg" alt="Pulse Mais" class="psi-logo-img">
+        </a>
+      </div>
+
+      <button type="button" id="logoutButton" class="psi-navbar-logout" aria-label="Sair da conta">
+        <i data-lucide="log-out"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <div class="acoes-topo">
+    <a class="btn-fluxo btn-fluxo--secundario" href="atendimentos.html">
+      <i data-lucide="arrow-left"></i> Atendimentos
+    </a>
+  </div>
+
+  <div class="prontuario-status" id="prontuario-status" role="status">Carregando atendimento...</div>
+
+  <div class="prontuario-grid">
+    <section class="card-prontuario">
+      <div class="pil-titulo" id="aluno-nome">Aluno</div>
+
+      <div class="perfil-corpo">
+        <div class="perfil-foto-col">
+          <div class="perfil-foto-box">
+            <div class="foto-placeholder">
+              <i data-lucide="user"></i>
+            </div>
+            <span class="pil-matricula" id="aluno-matricula">Matrícula: -</span>
+          </div>
+        </div>
+
+        <div class="perfil-campos">
+          <div class="campo-dado">
+            <span class="campo-rotulo">Status:</span>
+            <span class="campo-valor" id="aluno-status">-</span>
+          </div>
+          <div class="campo-dado">
+            <span class="campo-rotulo">Turma:</span>
+            <span class="campo-valor" id="aluno-turma">-</span>
+          </div>
+          <div class="campo-dado">
+            <span class="campo-rotulo">RM da psicóloga:</span>
+            <span class="campo-valor" id="psicologa-rm">-</span>
+          </div>
+          <div class="campo-dado">
+            <span class="campo-rotulo">Atendimentos encontrados:</span>
+            <span class="campo-valor" id="total-atendimentos">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card-prontuario">
+      <div class="pil-titulo" id="form-prontuario-titulo">Novo Registro</div>
+
+      <label class="campo-form">
+        <span>Resumo do atendimento*</span>
+        <input type="text" id="resumo-prontuario" maxlength="160" placeholder="Ex.: Acompanhamento inicial sobre ansiedade">
+      </label>
+
+      <div class="editor-caixa">
+        <div class="editor-toolbar">
+          <button class="toolbar-btn" aria-label="Negrito"><i data-lucide="bold"></i></button>
+          <button class="toolbar-btn" aria-label="Itálico"><i data-lucide="italic"></i></button>
+          <button class="toolbar-btn" aria-label="Sublinhado"><i data-lucide="underline"></i></button>
+          <span class="toolbar-sep"></span>
+          <button class="toolbar-btn" aria-label="Lista"><i data-lucide="list"></i></button>
+          <button class="toolbar-btn" aria-label="Link"><i data-lucide="link"></i></button>
+          <span class="toolbar-sep"></span>
+          <button class="toolbar-btn" aria-label="Anexo"><i data-lucide="paperclip"></i></button>
+          <button class="toolbar-btn" aria-label="Imagem"><i data-lucide="image"></i></button>
+          <button class="toolbar-btn" aria-label="Emoji"><i data-lucide="smile"></i></button>
+        </div>
+        <textarea class="editor-area" id="editor-prontuario" placeholder="Escreva o conteúdo do registro aqui..."></textarea>
+      </div>
+
+      <div class="acoes-prontuario-form">
+        <button type="button" class="btn-fluxo btn-fluxo--secundario" id="btn-cancelar-edicao" hidden>Cancelar edição</button>
+        <button type="button" class="btn-fluxo btn-fluxo--primario" id="btn-salvar-prontuario">
+          <i data-lucide="lock-keyhole"></i> Salvar registro
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div class="prontuario-grid" style="margin-bottom: 0">
+    <section class="card-prontuario">
+      <div class="pil-titulo">Atendimentos</div>
+      <div class="lista-relatorios" id="lista-relatorios"></div>
+    </section>
+
+    <section class="card-prontuario detalhe-atendimento">
+      <div class="detalhe-cabecalho">
+        <div>
+          <span class="campo-rotulo">Detalhe do atendimento</span>
+          <h2 id="detalhe-titulo">Selecione um atendimento</h2>
+        </div>
+        <div class="detalhe-acoes">
+          <span class="detalhe-data" id="detalhe-data">-</span>
+          <button type="button" class="btn-fluxo btn-fluxo--secundario" id="btn-editar-relatorio" disabled>
+            <i data-lucide="pencil"></i> Editar
+          </button>
+        </div>
+      </div>
+
+      <div class="detalhe-bloco">
+        <span class="campo-rotulo">Resumo</span>
+        <p id="detalhe-resumo">Os dados do atendimento aparecerão aqui.</p>
+      </div>
+
+      <div class="detalhe-bloco">
+        <span class="campo-rotulo">Observações</span>
+        <p id="detalhe-observacoes">Selecione um atendimento da lista para visualizar as informações registradas.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="psi-modal" id="modal-confirmar-prontuario" hidden>
+    <div class="psi-modal-caixa" role="dialog" aria-modal="true" aria-labelledby="titulo-confirmar-prontuario">
+      <div class="psi-modal-icone"><i data-lucide="triangle-alert"></i></div>
+      <h2 id="titulo-confirmar-prontuario">Confirmar registro no prontuário?</h2>
+      <p id="texto-confirmar-prontuario">Este registro será salvo no histórico de atendimentos do aluno.</p>
+      <label class="psi-confirmacao-explicita">
+        <input type="checkbox" id="confirmacao-prontuario">
+        <span>Li e confirmo que as informações estão corretas.</span>
+      </label>
+      <div class="psi-modal-acoes">
+        <button type="button" class="btn-fluxo btn-fluxo--secundario" id="cancelar-prontuario">Cancelar</button>
+        <button type="button" class="btn-fluxo btn-fluxo--primario" id="confirmar-prontuario" disabled>Salvar definitivamente</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/psicologaService.js"></script>
+  <script>
+    lucide.createIcons();
+
+    const paramsPagina = new URLSearchParams(window.location.search);
+    const rmPsicologa = sessionStorage.getItem('psicologaRm') || localStorage.getItem('psicologaRm') || '';
+    const raAluno = paramsPagina.get('ra') || paramsPagina.get('id');
+    const relatorioInicial = paramsPagina.get('relatorio');
+    const abrirNovoRegistro = paramsPagina.get('novo') === '1';
+    const statusProntuario = document.getElementById('prontuario-status');
+    const listaRelatorios = document.getElementById('lista-relatorios');
+    const buscaAtendimentos = document.getElementById('busca-atendimentos');
+    const ordenacaoAtendimentos = document.getElementById('ordenacao-atendimentos');
+    const resumoProntuario = document.getElementById('resumo-prontuario');
+    const editorProntuario = document.getElementById('editor-prontuario');
+    const tituloFormulario = document.getElementById('form-prontuario-titulo');
+    const botaoSalvarProntuario = document.getElementById('btn-salvar-prontuario');
+    const botaoCancelarEdicao = document.getElementById('btn-cancelar-edicao');
+    const botaoEditarRelatorio = document.getElementById('btn-editar-relatorio');
+    const modalProntuario = document.getElementById('modal-confirmar-prontuario');
+    const checkProntuario = document.getElementById('confirmacao-prontuario');
+    const confirmarProntuario = document.getElementById('confirmar-prontuario');
+    const tituloConfirmarProntuario = document.getElementById('titulo-confirmar-prontuario');
+    const textoConfirmarProntuario = document.getElementById('texto-confirmar-prontuario');
+    const controlesProntuario = [
+      buscaAtendimentos,
+      ordenacaoAtendimentos,
+      resumoProntuario,
+      editorProntuario,
+      botaoSalvarProntuario,
+      botaoCancelarEdicao,
+      botaoEditarRelatorio,
+    ];
+    let relatoriosAluno = [];
+    let relatorioSelecionadoId = null;
+    let relatorioEmEdicaoId = null;
+    let usarRelatorioInicial = true;
+
+    function normalizarTexto(valor) {
+      return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function formatarData(data) {
+      if (!data) return '-';
+      const dataObj = new Date(data);
+
+      if (Number.isNaN(dataObj.getTime())) {
+        return data;
+      }
+
+      return dataObj.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+    }
+
+    function definirEstado(mensagem, tipo = 'info', acao = null) {
+      statusProntuario.replaceChildren();
+      statusProntuario.dataset.tipo = tipo;
+      statusProntuario.hidden = !mensagem;
+
+      if (!mensagem) {
+        return;
+      }
+
+      const texto = document.createElement('span');
+      texto.textContent = mensagem;
+      statusProntuario.appendChild(texto);
+
+      if (acao) {
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'prontuario-status-acao';
+        botao.textContent = acao.texto;
+        botao.addEventListener('click', acao.onClick);
+        statusProntuario.appendChild(botao);
+      }
+    }
+
+    function definirControlesCarregando(carregando) {
+      controlesProntuario.forEach((controle) => {
+        controle.disabled = carregando;
+      });
+
+      if (!carregando) {
+        botaoEditarRelatorio.disabled = !relatorioSelecionadoId;
+      }
+    }
+
+    function renderizarSkeletonRelatorios() {
+      listaRelatorios.innerHTML = '';
+
+      for (let index = 0; index < 3; index += 1) {
+        const item = document.createElement('div');
+        item.className = 'relatorio-item relatorio-item--loading';
+        item.innerHTML = `
+          <span class="skeleton skeleton-relatorio-data"></span>
+          <span class="skeleton skeleton-relatorio-titulo"></span>
+          <span class="skeleton skeleton-relatorio-texto"></span>
+        `;
+        listaRelatorios.appendChild(item);
+      }
+    }
+
+    function limparDetalheRelatorio(mensagem = 'Selecione um atendimento da lista para visualizar as informações registradas.') {
+      relatorioSelecionadoId = null;
+      document.getElementById('detalhe-titulo').textContent = 'Selecione um atendimento';
+      document.getElementById('detalhe-data').textContent = '-';
+      document.getElementById('detalhe-resumo').textContent = 'Os dados do atendimento aparecerão aqui.';
+      document.getElementById('detalhe-observacoes').textContent = mensagem;
+      botaoEditarRelatorio.disabled = true;
+    }
+
+    function preencherAluno(aluno) {
+      document.getElementById('aluno-nome').textContent = aluno?.nome || 'Aluno não encontrado';
+      document.getElementById('aluno-matricula').textContent = `Matrícula: ${raAluno || '-'}`;
+      document.getElementById('aluno-status').textContent = aluno?.status || '-';
+      document.getElementById('aluno-turma').textContent = aluno?.id_turma ? `Turma ${aluno.id_turma}` : '-';
+      document.getElementById('psicologa-rm').textContent = rmPsicologa;
+    }
+
+    function selecionarRelatorio(relatorio) {
+      relatorioSelecionadoId = relatorio.id_relatorio;
+      document.querySelectorAll('.relatorio-item').forEach((item) => {
+        item.classList.toggle('relatorio-item--ativo', Number(item.dataset.id) === Number(relatorio.id_relatorio));
+      });
+
+      document.getElementById('detalhe-titulo').textContent = `Atendimento #${relatorio.id_relatorio}`;
+      document.getElementById('detalhe-data').textContent = formatarData(relatorio.data);
+      document.getElementById('detalhe-resumo').textContent = relatorio.info_simplificada || 'Sem resumo registrado.';
+      document.getElementById('detalhe-observacoes').textContent = relatorio.observacoes || 'Sem observações registradas.';
+      botaoEditarRelatorio.disabled = false;
+
+      const novaUrl = new URL(window.location.href);
+      novaUrl.searchParams.set('rm', rmPsicologa);
+      novaUrl.searchParams.set('ra', raAluno);
+      novaUrl.searchParams.set('relatorio', relatorio.id_relatorio);
+      window.history.replaceState({}, '', novaUrl);
+    }
+
+    function limparFormulario() {
+      relatorioEmEdicaoId = null;
+      resumoProntuario.value = '';
+      editorProntuario.value = '';
+      tituloFormulario.textContent = 'Novo Registro';
+      botaoSalvarProntuario.innerHTML = '<i data-lucide="lock-keyhole"></i> Salvar registro';
+      botaoCancelarEdicao.hidden = true;
+      checkProntuario.checked = false;
+      confirmarProntuario.disabled = true;
+      lucide.createIcons();
+    }
+
+    function iniciarEdicaoRelatorio() {
+      const relatorio = relatoriosAluno.find((item) => Number(item.id_relatorio) === Number(relatorioSelecionadoId));
+
+      if (!relatorio) {
+        definirEstado('Selecione um atendimento antes de editar.', 'erro');
+        return;
+      }
+
+      relatorioEmEdicaoId = relatorio.id_relatorio;
+      resumoProntuario.value = relatorio.info_simplificada || '';
+      editorProntuario.value = relatorio.observacoes || '';
+      tituloFormulario.textContent = `Editar Atendimento #${relatorio.id_relatorio}`;
+      botaoSalvarProntuario.innerHTML = '<i data-lucide="save"></i> Atualizar registro';
+      botaoCancelarEdicao.hidden = false;
+      resumoProntuario.focus();
+      lucide.createIcons();
+    }
+
+    function obterRelatoriosFiltrados() {
+      const termoBusca = normalizarTexto(buscaAtendimentos.value);
+      const direcao = ordenacaoAtendimentos.value;
+
+      return relatoriosAluno
+        .filter((relatorio) => {
+          const textoRelatorio = normalizarTexto(`${relatorio.id_relatorio} ${relatorio.data} ${relatorio.info_simplificada} ${relatorio.observacoes}`);
+          return textoRelatorio.includes(termoBusca);
+        })
+        .sort((a, b) => {
+          const dataA = new Date(a.data).getTime() || 0;
+          const dataB = new Date(b.data).getTime() || 0;
+          return direcao === 'recentes' ? dataB - dataA : dataA - dataB;
+        });
+    }
+
+    function renderizarRelatorios() {
+      const relatoriosFiltrados = obterRelatoriosFiltrados();
+      listaRelatorios.innerHTML = '';
+      document.getElementById('total-atendimentos').textContent = String(relatoriosAluno.length);
+
+      if (relatoriosFiltrados.length === 0) {
+        botaoEditarRelatorio.disabled = true;
+        listaRelatorios.innerHTML = '<p class="lista-vazia">Nenhum atendimento encontrado para este aluno.</p>';
+        limparDetalheRelatorio('Nenhum atendimento disponível para exibição.');
+        return;
+      }
+
+      relatoriosFiltrados.forEach((relatorio) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'relatorio-item';
+        item.dataset.id = relatorio.id_relatorio;
+        item.innerHTML = `
+          <span class="relatorio-data">${formatarData(relatorio.data)}</span>
+          <strong></strong>
+          <small></small>
+        `;
+        item.querySelector('strong').textContent = `Atendimento #${relatorio.id_relatorio}`;
+        item.querySelector('small').textContent = relatorio.info_simplificada || 'Sem resumo registrado.';
+        item.addEventListener('click', () => selecionarRelatorio(relatorio));
+        listaRelatorios.appendChild(item);
+      });
+
+      const relatorioAtual = relatoriosFiltrados.find((relatorio) => Number(relatorio.id_relatorio) === Number(relatorioSelecionadoId));
+      if (relatorioAtual) {
+        selecionarRelatorio(relatorioAtual);
+      }
+    }
+
+    async function carregarDetalhes() {
+      if (!raAluno) {
+        preencherAluno(null);
+        definirEstado('Aluno não informado. Volte para a lista de atendimentos e selecione um aluno.', 'erro');
+        return;
+      }
+
+      definirEstado('Carregando atendimento...', 'info');
+      definirControlesCarregando(true);
+      renderizarSkeletonRelatorios();
+
+      try {
+        const [resultadoAlunos, resultadoRelatorios] = await Promise.allSettled([
+          window.PsicologaService.listarAlunosAtendidos(rmPsicologa),
+          window.PsicologaService.listarRelatoriosAluno(rmPsicologa, raAluno),
+        ]);
+
+        if (resultadoAlunos.status === 'rejected') {
+          throw resultadoAlunos.reason;
+        }
+
+        const alunos = resultadoAlunos.value;
+        const aluno = alunos.find((item) => Number(item.ra) === Number(raAluno));
+        preencherAluno(aluno);
+        relatoriosAluno = resultadoRelatorios.status === 'fulfilled' ? resultadoRelatorios.value : [];
+        relatorioSelecionadoId = relatorioSelecionadoId || (usarRelatorioInicial ? relatorioInicial : null) || relatoriosAluno[relatoriosAluno.length - 1]?.id_relatorio || null;
+        usarRelatorioInicial = false;
+        renderizarRelatorios();
+
+        const relatorioSelecionado = relatoriosAluno.find((relatorio) => Number(relatorio.id_relatorio) === Number(relatorioSelecionadoId));
+        if (relatorioSelecionado) {
+          selecionarRelatorio(relatorioSelecionado);
+        }
+
+        if (abrirNovoRegistro) {
+          limparFormulario();
+          resumoProntuario.focus();
+        }
+
+        definirEstado(resultadoRelatorios.status === 'rejected' ? 'Nenhum atendimento encontrado para este aluno.' : '', 'vazio');
+      } catch (erro) {
+        preencherAluno(null);
+        relatoriosAluno = [];
+        renderizarRelatorios();
+        definirEstado(erro.message || 'Não foi possível carregar os detalhes do atendimento.', 'erro', {
+          texto: 'Tentar novamente',
+          onClick: carregarDetalhes,
+        });
+      } finally {
+        definirControlesCarregando(false);
+      }
+    }
+
+    document.getElementById('btn-salvar-prontuario').addEventListener('click', () => {
+      if (!raAluno) {
+        definirEstado('Aluno não informado. Selecione um aluno antes de salvar.', 'erro');
+        return;
+      }
+
+      if (!resumoProntuario.value.trim()) {
+        resumoProntuario.focus();
+        return;
+      }
+
+      if (!editorProntuario.value.trim()) {
+        editorProntuario.focus();
+        return;
+      }
+
+      tituloConfirmarProntuario.textContent = relatorioEmEdicaoId ? 'Confirmar atualização no prontuário?' : 'Confirmar registro no prontuário?';
+      textoConfirmarProntuario.textContent = relatorioEmEdicaoId
+        ? 'As alterações serão enviadas para a API e exibidas no histórico do aluno.'
+        : 'Este registro será salvo no histórico de atendimentos do aluno.';
+      modalProntuario.hidden = false;
+    });
+
+    botaoEditarRelatorio.addEventListener('click', iniciarEdicaoRelatorio);
+    botaoCancelarEdicao.addEventListener('click', limparFormulario);
+
+    checkProntuario.addEventListener('change', () => {
+      confirmarProntuario.disabled = !checkProntuario.checked;
+    });
+
+    document.getElementById('cancelar-prontuario').addEventListener('click', () => {
+      modalProntuario.hidden = true;
+      checkProntuario.checked = false;
+      confirmarProntuario.disabled = true;
+    });
+
+    confirmarProntuario.addEventListener('click', async () => {
+      const resumoRegistro = resumoProntuario.value.trim();
+      const observacoesRegistro = editorProntuario.value.trim();
+
+      try {
+        definirEstado(relatorioEmEdicaoId ? 'Atualizando registro...' : 'Salvando registro...', 'info');
+        botaoSalvarProntuario.disabled = true;
+        confirmarProntuario.disabled = true;
+
+        if (relatorioEmEdicaoId) {
+          await window.PsicologaService.atualizarRelatorioAluno(rmPsicologa, raAluno, relatorioEmEdicaoId, {
+            info_simplificada: resumoRegistro,
+            observacoes: observacoesRegistro,
+          });
+        } else {
+          await window.PsicologaService.criarRelatorioAluno(rmPsicologa, raAluno, {
+            info_simplificada: resumoRegistro,
+            observacoes: observacoesRegistro,
+            data: new Date().toISOString().slice(0, 10),
+          });
+        }
+
+        modalProntuario.hidden = true;
+        const relatorioAlteradoId = relatorioEmEdicaoId;
+        limparFormulario();
+        relatorioSelecionadoId = relatorioAlteradoId || null;
+        await carregarDetalhes();
+
+        if (relatorioAlteradoId) {
+          const relatorioAtualizado = relatoriosAluno.find((item) => Number(item.id_relatorio) === Number(relatorioAlteradoId));
+          if (relatorioAtualizado) {
+            selecionarRelatorio(relatorioAtualizado);
+          }
+        }
+
+        definirEstado(relatorioAlteradoId ? 'Registro atualizado com sucesso.' : 'Registro salvo com sucesso.', 'sucesso');
+      } catch (erro) {
+        definirEstado(erro.message || 'Não foi possível salvar o atendimento.', 'erro');
+      } finally {
+        confirmarProntuario.disabled = !checkProntuario.checked;
+        botaoSalvarProntuario.disabled = false;
+      }
+    });
+
+    buscaAtendimentos.addEventListener('input', renderizarRelatorios);
+    ordenacaoAtendimentos.addEventListener('change', renderizarRelatorios);
+    carregarDetalhes();
+  </script>
+
+</body>
+</html>

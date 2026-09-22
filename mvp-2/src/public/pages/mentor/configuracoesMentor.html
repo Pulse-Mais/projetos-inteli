@@ -1,0 +1,415 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar - Configurações</title>
+
+  <link rel="stylesheet" href="../../css/mentor-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/mentor/configuracoesMentor.css" />
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar do Mentor ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu">
+        <i data-lucide="panel-left" style="width:20px;height:20px;stroke-width:1.75"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" href="dashboardMentor.html" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" href="mentoradosMentor.html" title="Mentorados">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Mentorados</span>
+      </a>
+      <a class="sidebar-item" href="registrarMentoriaMentor.html" title="Minhas Mentorias">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Minhas Mentorias</span>
+      </a>
+      <a class="sidebar-item" href="impactoMentor.html" title="Impacto">
+        <span class="sidebar-item-icon"><i data-lucide="bar-chart-3"></i></span>
+        <span class="sidebar-item-label">Impacto</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item is-active" href="configuracoesMentor.html" aria-current="page" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Área principal ── -->
+  <div class="shell-main">
+
+    <header class="topbar">
+      <a class="topbar-logo" href="dashboardMentor.html">
+        <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+      </a>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <div class="avatar-menu" id="avatarMenu">
+          <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar">
+              <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+            </span>
+            <span class="avatar-meta">
+              <span class="avatar-name"></span>
+              <span class="avatar-role"></span>
+            </span>
+            <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+          </button>
+
+          <div class="avatar-dropdown" role="menu" hidden>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+              <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+      <div class="shell-container">
+
+        <div class="crumbs">
+          <span class="sep">/</span>
+          <span class="current">Configurações</span>
+        </div>
+
+        <div class="page-heading">
+          <h1 class="page-title">Configurações</h1>
+          <p>Gerencie sua conta, equipe, programas e integrações da Pulsar.</p>
+        </div>
+
+        <div class="settings-layout">
+
+          <!-- ── Menu lateral ── -->
+          <aside class="settings-menu" aria-label="Categorias de configuração">
+            <span class="menu-group-title">Pessoal</span>
+            <button class="settings-menu-item active" data-settings-section="profile">
+              <i data-lucide="user-round" style="width:18px;height:18px"></i>
+              Conta & Perfil
+            </button>
+            <button class="settings-menu-item" data-settings-section="security">
+              <i data-lucide="lock-keyhole" style="width:18px;height:18px"></i>
+              Segurança
+              <span class="menu-alert" id="securityAlert">1 alerta</span>
+            </button>
+            <button class="settings-menu-item" data-settings-section="appearance">
+              <i data-lucide="palette" style="width:18px;height:18px"></i>
+              Aparência & Idioma
+            </button>
+
+            <span class="menu-group-title">Sistema</span>
+            <button class="settings-menu-item" data-settings-section="privacy">
+              <i data-lucide="shield" style="width:18px;height:18px"></i>
+              Dados & LGPD
+            </button>
+          </aside>
+
+          <!-- ── Painéis de conteúdo ── -->
+          <div class="settings-content">
+
+            <!-- ────────────────── Conta & Perfil ────────────────── -->
+            <div class="settings-panel" data-panel="profile">
+              <section class="profile-card">
+                <div class="card-heading">
+                  <h2>Conta & Perfil</h2>
+                  <p>Informações exibidas a outros membros da equipe.</p>
+                </div>
+
+                <div class="profile-summary">
+                  <span class="profile-avatar" id="profileAvatar">—</span>
+                  <div class="profile-copy">
+                    <h3 id="profileSummaryName">Carregando…</h3>
+                    <p id="profileSummaryMeta">—</p>
+                    <div class="photo-actions">
+                      <button class="btn btn-secondary" id="changePhotoBtn">
+                        <i data-lucide="image" style="width:16px;height:16px"></i>
+                        Trocar foto
+                      </button>
+                      <button class="btn btn-secondary" id="removePhotoBtn">
+                        <i data-lucide="trash-2" style="width:16px;height:16px"></i>
+                        Remover
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <input type="file" id="inputFotoPerfilMentor" accept="image/png,image/jpeg,image/webp" hidden />
+
+                <form id="profileForm">
+                  <div class="form-grid">
+                    <label class="form-field">
+                      <span>Nome completo</span>
+                      <input class="settings-input" id="fieldNome" name="nome" placeholder="Seu nome" />
+                    </label>
+                    <label class="form-field">
+                      <span>Cargo <span class="field-note">(gerenciado pela equipe)</span></span>
+                      <input class="settings-input" id="fieldCargo" name="cargo" readonly />
+                    </label>
+                    <label class="form-field">
+                      <span>E-mail</span>
+                      <input class="settings-input" id="fieldEmail" name="email" type="email" placeholder="seu@email.com" />
+                    </label>
+                    <label class="form-field">
+                      <span>Perfil</span>
+                      <input class="settings-input" id="fieldPerfil" name="perfil" readonly />
+                    </label>
+                  </div>
+
+                  <div id="settingsFeedback" hidden></div>
+
+                  <div class="form-actions">
+                    <button class="btn btn-secondary" type="button" id="cancelSettingsBtn">Cancelar</button>
+                    <button class="btn btn-primary" type="submit" id="saveSettingsBtn">
+                      <i data-lucide="save" style="width:16px;height:16px"></i>
+                      Salvar
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="danger-zone">
+                <h2><i data-lucide="triangle-alert" style="width:18px;height:18px"></i> Zona de risco</h2>
+                <p>Ações abaixo não podem ser desfeitas. Tenha certeza antes de prosseguir.</p>
+                <div class="danger-actions">
+                  <button class="danger-outline-btn" id="logoutAllBtn">
+                    <i data-lucide="log-out" style="width:16px;height:16px"></i>
+                    Sair de todos os dispositivos
+                  </button>
+                  <button class="danger-btn" id="deleteAccountBtn">
+                    <i data-lucide="trash-2" style="width:16px;height:16px"></i>
+                    Excluir conta
+                  </button>
+                </div>
+              </section>
+            </div>
+
+            <!-- ────────────────── Segurança ────────────────── -->
+            <div class="settings-panel" data-panel="security" hidden>
+              <section class="profile-card">
+                <div class="card-heading">
+                  <h2>Segurança</h2>
+                  <p>Gerencie suas credenciais e sessões ativas.</p>
+                </div>
+
+                <p class="settings-sublabel">Alterar senha</p>
+                <form id="passwordForm">
+                  <div class="form-grid">
+                    <label class="form-field">
+                      <span>Senha atual</span>
+                      <input class="settings-input" id="fieldSenhaAtual" type="password" placeholder="••••••••" autocomplete="current-password" />
+                    </label>
+                    <span></span>
+                    <label class="form-field">
+                      <span>Nova senha <span class="field-note">(mín. 6 caracteres)</span></span>
+                      <input class="settings-input" id="fieldNovaSenha" type="password" placeholder="••••••••" autocomplete="new-password" />
+                    </label>
+                    <label class="form-field">
+                      <span>Confirmar nova senha</span>
+                      <input class="settings-input" id="fieldConfirmarSenha" type="password" placeholder="••••••••" autocomplete="new-password" />
+                    </label>
+                  </div>
+
+                  <div id="passwordFeedback" hidden></div>
+
+                  <div class="form-actions">
+                    <button class="btn btn-secondary" type="button" id="cancelPasswordBtn">Cancelar</button>
+                    <button class="btn btn-primary" type="submit" id="savePasswordBtn">
+                      <i data-lucide="lock" style="width:16px;height:16px"></i>
+                      Alterar senha
+                    </button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="profile-card" style="margin-top:var(--space-4)">
+                <div class="card-heading">
+                  <h2>Sessões ativas</h2>
+                  <p>Dispositivos com acesso à sua conta.</p>
+                </div>
+
+                <div class="session-item">
+                  <span class="session-icon">
+                    <i data-lucide="monitor" style="width:20px;height:20px"></i>
+                  </span>
+                  <div class="session-copy">
+                    <strong>Navegador atual</strong>
+                    <span id="sessionBrowser">—</span>
+                  </div>
+                  <span class="session-badge">Ativa agora</span>
+                </div>
+
+                <div class="form-actions" style="margin-top:var(--space-5)">
+                  <button class="danger-outline-btn" id="securityLogoutAllBtn">
+                    <i data-lucide="log-out" style="width:16px;height:16px"></i>
+                    Encerrar todas as sessões
+                  </button>
+                </div>
+              </section>
+            </div>
+
+            <!-- ────────────────── Aparência & Idioma ────────────────── -->
+            <div class="settings-panel" data-panel="appearance" hidden>
+              <section class="profile-card">
+                <div class="card-heading">
+                  <h2>Aparência</h2>
+                  <p>Personalize como a interface é exibida para você.</p>
+                </div>
+
+                <p class="settings-sublabel">Tema</p>
+                <div class="theme-options" id="themeOptions">
+                  <label class="theme-option" for="themeLight">
+                    <input type="radio" name="theme" id="themeLight" value="light" checked />
+                    <span class="theme-preview">
+                      <i data-lucide="sun" style="width:24px;height:24px"></i>
+                    </span>
+                    <span class="theme-label">Claro</span>
+                  </label>
+                  <label class="theme-option is-disabled" for="themeDark" title="Indisponível no momento">
+                    <input type="radio" name="theme" id="themeDark" value="dark" disabled />
+                    <span class="theme-preview">
+                      <i data-lucide="moon" style="width:24px;height:24px"></i>
+                    </span>
+                    <span class="theme-label">Escuro</span>
+                  </label>
+                  <label class="theme-option is-disabled" for="themeSystem" title="Indisponível no momento">
+                    <input type="radio" name="theme" id="themeSystem" value="system" disabled />
+                    <span class="theme-preview">
+                      <i data-lucide="monitor" style="width:24px;height:24px"></i>
+                    </span>
+                    <span class="theme-label">Sistema</span>
+                  </label>
+                </div>
+                <p class="field-note" style="margin-top:var(--space-3)">Modo escuro e tema do sistema indisponíveis no momento.</p>
+              </section>
+
+              <section class="profile-card" style="margin-top:var(--space-4)">
+                <div class="card-heading">
+                  <h2>Idioma</h2>
+                  <p>Idioma exibido na plataforma.</p>
+                </div>
+
+                <div style="max-width:280px">
+                  <label class="form-field">
+                    <span>Idioma</span>
+                    <select class="settings-input" id="fieldLanguage" disabled>
+                      <option value="pt-BR" selected>Português (Brasil)</option>
+                      <option value="en">English</option>
+                      <option value="es">Español</option>
+                    </select>
+                  </label>
+                </div>
+                <p class="field-note" style="margin-top:var(--space-3)">Apenas Português está disponível nesta versão.</p>
+              </section>
+            </div>
+
+            <!-- ────────────────── Dados & LGPD ────────────────── -->
+            <div class="settings-panel" data-panel="privacy" hidden>
+              <section class="profile-card">
+                <div class="card-heading">
+                  <h2>Dados & LGPD</h2>
+                  <p>Seus direitos e o uso dos seus dados pessoais na plataforma Pulsar.</p>
+                </div>
+
+                <div class="lgpd-list">
+                  <div class="lgpd-item">
+                    <span class="lgpd-icon"><i data-lucide="database" style="width:18px;height:18px"></i></span>
+                    <div>
+                      <strong>Dados coletados</strong>
+                      <p>Nome, e-mail, informações de mentoria e histórico de sessões.</p>
+                    </div>
+                  </div>
+                  <div class="lgpd-item">
+                    <span class="lgpd-icon"><i data-lucide="target" style="width:18px;height:18px"></i></span>
+                    <div>
+                      <strong>Finalidade</strong>
+                      <p>Acompanhamento de jovens, relatórios de impacto e melhoria dos programas Pulsar.</p>
+                    </div>
+                  </div>
+                  <div class="lgpd-item">
+                    <span class="lgpd-icon"><i data-lucide="share-2" style="width:18px;height:18px"></i></span>
+                    <div>
+                      <strong>Compartilhamento</strong>
+                      <p>Dados compartilhados exclusivamente com a equipe de gestão e coordenação.</p>
+                    </div>
+                  </div>
+                  <div class="lgpd-item">
+                    <span class="lgpd-icon"><i data-lucide="calendar" style="width:18px;height:18px"></i></span>
+                    <div>
+                      <strong>Retenção</strong>
+                      <p>Dados retidos enquanto o vínculo com o programa estiver ativo, conforme a LGPD.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions" style="justify-content:flex-start;margin-top:var(--space-6)">
+                  <button class="btn btn-secondary" id="requestDataBtn">
+                    <i data-lucide="download" style="width:16px;height:16px"></i>
+                    Solicitar meus dados
+                  </button>
+                </div>
+              </section>
+
+              <section class="danger-zone" style="margin-top:var(--space-4)">
+                <h2><i data-lucide="triangle-alert" style="width:18px;height:18px"></i> Excluir conta</h2>
+                <p>A exclusão é permanente. Todos os seus dados serão removidos da plataforma.</p>
+                <div class="danger-actions">
+                  <button class="danger-btn" id="lgpdDeleteAccountBtn">
+                    <i data-lucide="trash-2" style="width:16px;height:16px"></i>
+                    Excluir minha conta
+                  </button>
+                </div>
+              </section>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ── Toast de notificação ── -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- ── Modal de confirmação ── -->
+<div class="confirm-backdrop" id="confirmBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="confirm-modal">
+    <div class="confirm-icon" id="confirmIcon"></div>
+    <h3 class="confirm-title" id="confirmTitle"></h3>
+    <p class="confirm-message" id="confirmMessage"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" id="confirmCancelBtn">Cancelar</button>
+      <button class="btn" id="confirmOkBtn"></button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/mentor/mainMentor.js"></script>
+<script src="../../js/mentor/mentor.js"></script>
+<script src="../../js/mentor/configuracoesMentor.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

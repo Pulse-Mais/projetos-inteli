@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oportunidades · Pulsar</title>
+
+  <link rel="stylesheet" href="../../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-oportunidades.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <div class="shell">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <button class="sidebar-toggle" id="sidebar-toggle-btn"
+                aria-label="Fixar menu expandido" title="Fixar menu">
+          <i data-lucide="panel-left"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+
+        <a href="dashboard.html" class="sidebar-item" title="Dashboard">
+          <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+          <span class="sidebar-item-label">Dashboard</span>
+        </a>
+
+        <a href="perfil.html" class="sidebar-item" title="Meu Perfil">
+          <span class="sidebar-item-icon"><i data-lucide="user"></i></span>
+          <span class="sidebar-item-label">Meu Perfil</span>
+        </a>
+
+        <a href="oportunidades.html" class="sidebar-item is-active"
+           aria-current="page" title="Oportunidades">
+          <span class="sidebar-item-icon"><i data-lucide="history"></i></span>
+          <span class="sidebar-item-label">Oportunidades</span>
+          <span class="sidebar-item-bar" aria-hidden="true"></span>
+        </a>
+
+        <a href="empregabilidade.html" class="sidebar-item" title="Empregabilidade">
+          <span class="sidebar-item-icon"><i data-lucide="briefcase"></i></span>
+          <span class="sidebar-item-label">Empregabilidade</span>
+        </a>
+
+        <a href="ensino-superior.html" class="sidebar-item" title="Ensino Superior">
+          <span class="sidebar-item-icon"><i data-lucide="graduation-cap"></i></span>
+          <span class="sidebar-item-label">Ensino Superior</span>
+        </a>
+
+      </nav>
+    </aside>
+    <!-- /SIDEBAR -->
+
+    <!-- ===== SHELL MAIN ===== -->
+    <div class="shell-main">
+
+      <!-- HEADER / TOPBAR -->
+      <header class="topbar">
+        <a class="topbar-logo" href="dashboard.html">
+          <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+        </a>
+        <div class="topbar-spacer"></div>
+
+        <div class="topbar-actions">
+          <div class="avatar-menu" id="avatar-menu">
+            <button class="avatar-trigger" id="avatar-trigger"
+                    aria-haspopup="menu" aria-expanded="false">
+              <span class="avatar">
+                <i data-lucide="user"></i>
+              </span>
+              <span class="avatar-meta">
+                <span class="avatar-name"></span>
+                <span class="avatar-role"></span>
+              </span>
+              <i data-lucide="chevron-down" class="avatar-chevron"></i>
+            </button>
+
+            <div class="avatar-dropdown" role="menu" hidden>
+              <a class="dropdown-item" role="menuitem" href="perfil.html">
+                <i data-lucide="user"></i> Meu perfil
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item is-danger" role="menuitem" href="#">
+                <i data-lucide="log-out"></i> Sair
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- /HEADER -->
+
+      <!-- CONTENT -->
+          <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+        <div class="shell-container">
+
+          <!-- HERO -->
+          <section class="hero">
+            <h1 class="hero-title">Oportunidades</h1>
+          </section>
+          <!-- /HERO -->
+
+          <!-- BOARD 3 COLUNAS -->
+          <div class="opp-board">
+
+            <!-- COLUNA: CURSOS -->
+            <div class="opp-column">
+              <div class="opp-column-head is-courses">Cursos:</div>
+              <div class="opp-column-body" id="opp-cursos-body">
+                <p class="opp-empty">Carregando...</p>
+              </div><!-- /opp-column-body -->
+            </div><!-- /coluna cursos -->
+
+            <!-- COLUNA: EVENTOS -->
+            <div class="opp-column">
+              <div class="opp-column-head is-events">Eventos:</div>
+              <div class="opp-column-body" id="opp-eventos-body">
+                <p class="opp-empty">Carregando...</p>
+              </div><!-- /opp-column-body -->
+            </div><!-- /coluna eventos -->
+
+            <!-- COLUNA: BOLSAS -->
+            <div class="opp-column">
+              <div class="opp-column-head is-grants">Bolsas:</div>
+              <div class="opp-column-body" id="opp-bolsas-body">
+                <p class="opp-empty">Carregando...</p>
+              </div><!-- /opp-column-body -->
+            </div><!-- /coluna bolsas -->
+
+          </div><!-- /opp-board -->
+
+        </div><!-- /shell-container -->
+      </main>
+      <!-- /CONTENT -->
+
+    </div><!-- /shell-main -->
+
+
+  </div><!-- /shell -->
+
+  <!-- MODAL DETALHES -->
+  <div class="opp-modal-overlay" id="opp-modal" aria-modal="true" role="dialog">
+    <div class="opp-modal">
+      <div class="opp-modal-header">
+        <h2 class="opp-modal-title" id="modal-titulo">—</h2>
+        <button class="opp-modal-close" id="modal-close" aria-label="Fechar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="opp-modal-body" id="modal-body"></div>
+    </div>
+  </div>
+  <!-- /MODAL -->
+
+  <script src="../../js/api.js"></script>
+  <script src="../../js/mainJovem.js"></script>
+  <script src="../../js/aluno/oportunidades.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

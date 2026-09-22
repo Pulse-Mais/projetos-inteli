@@ -1,0 +1,73 @@
+/* Variáveis globais: cores, tipografia, espaçamento, raios e sombras */
+/* Fonte única de verdade — cópia do design system da coordenadora. */
+:root {
+
+  /* Cores */
+  --cor-primaria:        #003870;
+  --cor-primaria-escura: #0C253D;
+
+  --cor-secundaria:       #5696D6;
+  --cor-secundaria-clara: #99CCFF;
+
+  --branco:       #FFFFFF;
+  --cinza-fundo:  #F5F7FA;
+  --cinza-borda:  #DADCE4;
+
+  /* Feedback */
+  --sucesso:        #22C55E;
+  --sucesso-fundo:  #DCFCE7;
+  --alerta:         #F4B400;
+  --alerta-fundo:   #FEF3C7;
+
+  --erro:           #EF4444;
+  --erro-fundo:     #FEE2E2;
+
+
+  --texto-principal:  #0C253D;
+  --texto-secundario: #5A6B7B;
+  --texto-sobre-azul: #FFFFFF;
+
+  /* Tipografia */
+  --fonte: 'Poppins', system-ui, -apple-system, sans-serif;
+
+
+  --peso-regular:  400;
+  --peso-medio:    500;
+  --peso-semibold: 600;
+  --peso-bold:     700;
+
+  --texto-2xs:  0.5rem;
+  --texto-xs:   0.6875rem;
+  --texto-sm:   0.8125rem;
+  --texto-base: 0.875rem;
+  --texto-lg:   1rem;
+  --texto-xl:   1.25rem;
+  --texto-2xl:  1.5rem;
+
+  --altura-linha: 1.5;
+
+  /* Espaçamento */
+  --espaco-1: 0.25rem;
+  --espaco-2: 0.5rem;
+  --espaco-3: 0.75rem;
+  --espaco-4: 1rem;
+  --espaco-5: 1.25rem;
+  --espaco-6: 1.5rem;
+  --espaco-7: 2.5rem;
+
+  /* Raios e sombras */
+  --raio-sm:   6px;
+  --raio-md:   10px;
+  --raio-lg:   12px;
+  --raio-full: 999px;
+
+  --sombra-sm: 0 1px 2px rgba(12, 37, 61, 0.06);
+  --sombra-md: 0 4px 12px rgba(12, 37, 61, 0.08);
+  --sombra-lg: 0 8px 24px rgba(12, 37, 61, 0.10);
+
+  /* Layout */
+  --largura-menu: 240px;
+  --altura-topo:  64px;
+
+  --transicao: 160ms ease;
+}

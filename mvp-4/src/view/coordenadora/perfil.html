@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Aluno — Coordenadora | Pulse Mais</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/perfil.css">
+  <link rel="stylesheet" href="css/fluxos.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- Barra lateral -->
+    <aside class="sidebar">
+      <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+      <div class="sidebar-user">
+        <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-nome">Olá, Mariana</span>
+          <span class="sidebar-user-cargo">Coord. Pedagógica</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="dashboard.html" class="nav-link"><i data-lucide="chart-bar"></i> Dashboard</a>
+        <a href="turmas.html" class="nav-link ativo"><i data-lucide="users"></i> Turmas</a>
+        <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+        <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+        <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+          <i data-lucide="log-out"></i>
+          Sair
+        </button>
+      </nav>
+    </aside>
+
+    <main class="conteudo">
+
+      <!-- Volta para a tela anterior (lista de alunos/turmas) -->
+      <button type="button" class="perfil-voltar" onclick="history.back()">
+        <i data-lucide="arrow-left"></i> Voltar
+      </button>
+
+      <!-- DADOS DE EXEMPLO — TODO (back-end): preencher com os dados do aluno -->
+      <header class="perfil-cabecalho">
+        <div class="perfil-cabecalho-info">
+          <span class="perfil-avatar"><i data-lucide="circle-user"></i></span>
+          <div>
+            <h1 class="perfil-nome" id="perfil-nome">Carregando aluno...</h1>
+            <div class="perfil-tags-bloco">
+              <div class="perfil-tags">
+                <span class="perfil-tag"><i data-lucide="users"></i> <span id="perfil-turma-tag">Turma</span></span>
+                <span class="perfil-tag"><i data-lucide="calendar"></i> <span id="perfil-ingresso-tag">Ingresso</span></span>
+              </div>
+              <div class="perfil-tags">
+                <span class="perfil-tag" id="perfil-categoria-tag"><i data-lucide="bookmark"></i> <span id="perfil-categoria-texto">Tipo de jovem</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="perfil-cabecalho-status">
+          <span class="perfil-status"><span class="ponto"></span> <span id="perfil-status-texto">Carregando</span></span>
+          <span class="perfil-ra" id="perfil-ra">RA: --</span>
+        </div>
+      </header>
+
+      <div class="perfil-grade">
+
+        <!-- Coluna da esquerda -->
+        <div class="perfil-coluna">
+
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="mail"></i> Informações de Contato</h2>
+            </div>
+            <div class="campos">
+              <div class="campo"><span class="campo-label">E-mail primário*</span><span class="campo-valor" id="contato-email-primario">Carregando</span></div>
+              <div class="campo"><span class="campo-label">E-mail secundário</span><span class="campo-valor" id="contato-email-secundario">Carregando</span></div>
+              <div class="campos-linha">
+                <div class="campo"><span class="campo-label">Telefone primário*</span><span class="campo-valor" id="contato-telefone-primario">Carregando</span></div>
+                <div class="campo"><span class="campo-label">Telefone secundário</span><span class="campo-valor" id="contato-telefone-secundario">Carregando</span></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dados Pessoais — o botão Editar abre o modal -->
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="user"></i> Dados Pessoais</h2>
+              <a href="#" class="perfil-acao" id="btn-editar-dados"><i data-lucide="square-pen"></i> Editar</a>
+            </div>
+            <div class="campos">
+              <div class="campo"><span class="campo-label">Turma - Jornada</span><span class="campo-valor" id="dp-turma">02</span></div>
+              <div class="campos-linha">
+                <div class="campo"><span class="campo-label">Gênero</span><span class="campo-valor" id="dp-genero">Feminino</span></div>
+                <div class="campo"><span class="campo-label">Formação</span><span class="campo-valor" id="dp-formacao">Carregando</span></div>
+              </div>
+              <div class="campos-linha">
+                <div class="campo"><span class="campo-label">Renda familiar</span><span class="campo-valor" id="dp-renda">R$ 3.000,00</span></div>
+                <div class="campo"><span class="campo-label">&nbsp;</span></div>
+              </div>
+              <div class="campo"><span class="campo-label">Endereço</span><span class="campo-valor" id="dp-endereco">Rua torres, 73 - São Paulo, SP</span></div>
+            </div>
+          </section>
+
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="clipboard-plus"></i> Anotações da Equipe</h2>
+              <span class="perfil-card-contagem" id="relatorios-contagem">Carregando</span>
+            </div>
+            <div class="anotacoes" id="relatorios-lista" aria-live="polite"></div>
+            <button class="btn-anotacao" id="btn-nova-anotacao" type="button">+ Adicionar nova anotação</button>
+          </section>
+
+        </div>
+
+        <!-- Coluna da direita -->
+        <div class="perfil-coluna">
+
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="file-text" style="color: var(--sucesso)"></i> Jornada Acadêmica</h2>
+              <a href="#" class="perfil-acao" id="btn-editar-jornada"><i data-lucide="square-pen"></i> Editar</a>
+            </div>
+            <div class="campos">
+              <div class="campo"><span class="campo-label">Tipo de jovem</span><span class="campo-valor" id="jornada-tipo-jovem">Carregando</span></div>
+              <div class="campo" id="jornada-tipo-jovem-edicao" hidden>
+                <span class="campo-label">Alterar tipo de jovem</span>
+                <div class="form-linha">
+                  <select id="jornada-tipo-jovem-select">
+                    <option value="">Selecione</option>
+                    <option value="Aprendiz">Conectado</option>
+                    <option value="Capacitado">Capacitado</option>
+                    <option value="Empregado">Transformado</option>
+                  </select>
+                  <button type="button" class="perfil-acao perfil-acao-botao" id="btn-salvar-tipo-jovem">
+                    <i data-lucide="save"></i> Salvar
+                  </button>
+                </div>
+                <p class="modal-feedback" id="jornada-tipo-jovem-feedback" aria-live="polite"></p>
+              </div>
+            </div>
+            <ul class="trilha" id="trilha-jornada">
+              <li class="trilha-item trilha-item--pendente"><span class="trilha-rail"><span class="trilha-check"><i data-lucide="info"></i></span></span><div class="trilha-modulo"><div class="trilha-modulo-info"><span class="trilha-modulo-nome">Carregando jornada acadêmica...</span><span class="trilha-modulo-detalhe"></span></div><span class="pill-status pill-status--pendente">Carregando</span></div></li>
+            </ul>
+            <button type="button" class="trilha-adicionar" id="btn-add-modulo"><i data-lucide="plus"></i> Adicionar módulo</button>
+          </section>
+
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="calendar-check" style="color: var(--cor-secundaria)"></i> Frequência</h2>
+              <button type="button" class="perfil-acao perfil-acao-botao" id="btn-registrar-frequencia">
+                <i data-lucide="square-pen"></i> Registrar
+              </button>
+            </div>
+            <div class="frequencia-resumo" id="frequencia-resumo" aria-live="polite">
+              Informe a aula, data e presença para registrar ou atualizar a frequência deste aluno.
+            </div>
+          </section>
+
+          <section class="perfil-card">
+            <div class="perfil-card-topo">
+              <h2 class="perfil-card-titulo"><i data-lucide="building" style="color: var(--erro)"></i> Empregabilidade &amp; Ensino Superior</h2>
+              <a href="#" class="perfil-acao" id="btn-registrar-conquista"><i data-lucide="building"></i> Registrar conquista</a>
+            </div>
+            <div class="emp-grade">
+              <div class="emp-box emp-box--azul"><i data-lucide="building"></i><span class="emp-label">Status profissional</span><span class="emp-valor" id="emp-status">Empregado</span></div>
+              <div class="emp-box emp-box--verde"><i data-lucide="square-check"></i><span class="emp-label">Programas concluídos</span><span class="emp-valor">Finalizado</span></div>
+              <div class="emp-box emp-box--amarelo"><i data-lucide="list"></i><span class="emp-label">Ensino superior</span><span class="emp-valor">Engenharia de Software</span></div>
+              <div class="emp-box emp-box--rosa"><i data-lucide="briefcase"></i><span class="emp-label">Engajamento</span><span class="emp-valor">75%</span></div>
+            </div>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: nova anotação da equipe -->
+  <div class="modal-overlay" id="modal-anotacao" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-anotacao-titulo">
+      <div class="modal-topo">
+        <h2 class="modal-titulo" id="modal-anotacao-titulo"><i data-lucide="clipboard-plus"></i> Nova anotação</h2>
+        <button class="modal-fechar" id="modal-anotacao-fechar" aria-label="Fechar"><i data-lucide="x"></i></button>
+      </div>
+
+      <form class="modal-form" id="form-anotacao">
+        <label class="form-campo">
+          <span class="form-label">Resumo da observação</span>
+          <input type="text" name="info_simplificada" maxlength="255" required>
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Observações completas</span>
+          <textarea name="observacoes" rows="4" placeholder="Detalhes internos da equipe"></textarea>
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Data</span>
+          <input type="date" name="data" required>
+        </label>
+        <p class="modal-feedback" id="modal-anotacao-feedback" aria-live="polite"></p>
+
+        <div class="modal-acoes">
+          <button type="button" class="btn-modal btn-modal--ghost" id="modal-anotacao-cancelar">Cancelar</button>
+          <button type="submit" class="btn-modal btn-modal--primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Modal: registrar frequência -->
+  <div class="modal-overlay" id="modal-frequencia" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-frequencia-titulo">
+      <div class="modal-topo">
+        <h2 class="modal-titulo" id="modal-frequencia-titulo"><i data-lucide="calendar-check"></i> Registrar frequência</h2>
+        <button class="modal-fechar" id="modal-frequencia-fechar" aria-label="Fechar"><i data-lucide="x"></i></button>
+      </div>
+
+      <form class="modal-form" id="form-frequencia">
+        <label class="form-campo">
+          <span class="form-label">ID da aula</span>
+          <input type="number" name="id_aula" min="1" step="1" required>
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Data</span>
+          <input type="date" name="data" required>
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Frequência</span>
+          <select name="frequencia" required>
+            <option value="true">Presente</option>
+            <option value="false">Falta</option>
+          </select>
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Acao</span>
+          <select name="acao" required>
+            <option value="registrar">Registrar nova frequência</option>
+            <option value="atualizar">Atualizar frequência existente</option>
+          </select>
+        </label>
+        <p class="modal-feedback" id="modal-frequencia-feedback" aria-live="polite"></p>
+
+        <div class="modal-acoes">
+          <button type="button" class="btn-modal btn-modal--ghost" id="modal-frequencia-cancelar">Cancelar</button>
+          <button type="submit" class="btn-modal btn-modal--primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Modal: editar dados pessoais -->
+  <div class="modal-overlay" id="modal-editar" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <div class="modal-topo">
+        <h2 class="modal-titulo" id="modal-titulo"><i data-lucide="square-pen"></i> Editar Dados Pessoais</h2>
+        <button class="modal-fechar" id="modal-fechar" aria-label="Fechar"><i data-lucide="x"></i></button>
+      </div>
+
+      <form class="modal-form" id="form-dados">
+        <label class="form-campo">
+          <span class="form-label">Turma - Jornada</span>
+          <input type="text" name="turma">
+        </label>
+        <div class="form-linha">
+          <label class="form-campo">
+            <span class="form-label">Gênero</span>
+            <select name="genero">
+              <option>Feminino</option>
+              <option>Masculino</option>
+              <option>Outro</option>
+              <option>Prefiro não informar</option>
+            </select>
+          </label>
+          <label class="form-campo">
+            <span class="form-label">Renda familiar</span>
+            <input type="text" name="renda">
+          </label>
+        </div>
+        <label class="form-campo">
+          <span class="form-label">Endereço</span>
+          <input type="text" name="endereco">
+        </label>
+        <label class="form-campo">
+          <span class="form-label">Observações</span>
+          <textarea name="obs" rows="3" placeholder="Anotações gerais sobre o aluno..."></textarea>
+        </label>
+        <p class="modal-feedback" id="modal-editar-feedback" aria-live="polite"></p>
+
+        <div class="modal-acoes">
+          <button type="button" class="btn-modal btn-modal--ghost" id="modal-cancelar">Cancelar</button>
+          <button type="submit" class="btn-modal btn-modal--primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: registrar conquista de emprego -->
+  <div class="modal-overlay" id="modal-conquista" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-conquista-titulo">
+      <div class="modal-topo">
+        <h2 class="modal-titulo" id="modal-conquista-titulo"><i data-lucide="building"></i> Registrar conquista de emprego</h2>
+        <button class="modal-fechar" id="modal-conquista-fechar" aria-label="Fechar"><i data-lucide="x"></i></button>
+      </div>
+
+      <form class="modal-form" id="form-conquista">
+        <label class="form-campo">
+          <span class="form-label">Status profissional</span>
+          <select name="status">
+            <option>Empregado</option>
+            <option>Estágio</option>
+            <option>Buscando recolocação</option>
+            <option>Desempregado</option>
+          </select>
+        </label>
+        <div class="form-linha">
+          <label class="form-campo">
+            <span class="form-label">Empresa</span>
+            <input type="text" name="empresa" placeholder="Opcional">
+          </label>
+          <label class="form-campo">
+            <span class="form-label">Cargo</span>
+            <input type="text" name="cargo" placeholder="Opcional">
+          </label>
+        </div>
+        <label class="form-campo">
+          <span class="form-label">Data de início</span>
+          <input type="date" name="data_inicio">
+        </label>
+
+        <div class="modal-acoes">
+          <button type="button" class="btn-modal btn-modal--ghost" id="modal-conquista-cancelar">Cancelar</button>
+          <button type="submit" class="btn-modal btn-modal--primario">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/coordenadora-api.js"></script>
+  <script src="js/perfil-aluno.js"></script>
+  <script src="js/perfil-jornada.js"></script>
+  <script src="js/perfil-relatorios.js"></script>
+  <script src="js/perfil-frequencia.js"></script>
+  <script src="js/fluxos.js"></script>
+
+  <!-- Modais de edição, jornada e conquista -->
+  <script>
+    lucide.createIcons();
+
+    // Lê nome e RA da URL (vindos da lista de alunos) e ajusta o cabeçalho
+    // TODO (back-end): com o RA/id, buscar todos os dados do aluno na API e preencher a página
+    const paramsPerfil = new URLSearchParams(window.location.search);
+    const nomeAluno = paramsPerfil.get('nome');
+    const raAluno = paramsPerfil.get('ra');
+      if (nomeAluno) document.querySelector('.perfil-nome').textContent = nomeAluno;
+      if (raAluno) document.querySelector('.perfil-ra').textContent = 'RA: ' + raAluno;
+
+    const modal     = document.getElementById('modal-editar');
+    const btnAbrir  = document.getElementById('btn-editar-dados');
+    const btnFechar = document.getElementById('modal-fechar');
+    const btnCancel = document.getElementById('modal-cancelar');
+    const form      = document.getElementById('form-dados');
+    const feedbackEdicao = document.getElementById('modal-editar-feedback');
+    const btnSalvarDados = form.querySelector('[type="submit"]');
+
+    function normalizarValor(valor) {
+      return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function extrairNumero(valor) {
+      const numero = String(valor || '').match(/\d+/);
+      return numero ? Number(numero[0]) : undefined;
+    }
+
+    function setFeedbackEdicao(mensagem, tipo) {
+      if (!feedbackEdicao) return;
+
+      feedbackEdicao.textContent = mensagem || '';
+      feedbackEdicao.className = `modal-feedback${tipo ? ` modal-feedback--${tipo}` : ''}`;
+    }
+
+    function setEdicaoCarregando(carregando) {
+      Array.from(form.elements).forEach((elemento) => {
+        elemento.disabled = carregando;
+      });
+
+      btnSalvarDados.textContent = carregando ? 'Salvando...' : 'Salvar';
+    }
+
+    // Abre o modal preenchendo o formulário com o que já está na tela
+    function abrirModal(e) {
+      if (e) e.preventDefault();
+      form.turma.value    = document.getElementById('dp-turma').textContent.trim();
+      form.genero.value   = document.getElementById('dp-genero').textContent.trim();
+      form.renda.value    = document.getElementById('dp-renda').textContent.trim();
+      form.endereco.value = document.getElementById('dp-endereco').textContent.trim();
+      const campoObs = document.getElementById('dp-obs');
+      const obs = campoObs ? campoObs.textContent.trim() : '';
+      form.obs.value = (obs === '—') ? '' : obs;
+      modal.hidden = false;
+    }
+    function fecharModal() { modal.hidden = true; }
+
+    btnAbrir.addEventListener('click', abrirModal);
+    btnFechar.addEventListener('click', fecharModal);
+    btnCancel.addEventListener('click', fecharModal);
+    // clicar no fundo escuro (fora da caixa) fecha
+    modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
+    // tecla ESC fecha
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) fecharModal(); });
+
+    // Salvar: por enquanto só atualiza a tela
+    // TODO (back-end): enviar os dados para a API (ex.: PUT /alunos/:id) — os "name" dos campos já batem
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const aluno = window.PerfilAluno?.getAlunoAtual();
+      const raEdicao = aluno?.ra || window.PerfilAluno?.getRaAtual();
+      const idTurma = extrairNumero(form.turma.value);
+      const genero = normalizarValor(form.genero.value);
+
+      if (!raEdicao) {
+        setFeedbackEdicao('Aluno nao carregado para edicao.', 'erro');
+        return;
+      }
+
+      if (!idTurma) {
+        setFeedbackEdicao('Informe uma turma valida para salvar.', 'erro');
+        return;
+      }
+
+      setEdicaoCarregando(true);
+      setFeedbackEdicao('Salvando alteracoes...', 'carregando');
+
+      window.CoordenadoraAPI.atualizarAluno(raEdicao, {
+        id_turma: idTurma,
+        genero,
+      })
+        .then(() => window.PerfilAluno.carregar())
+        .then(() => {
+          setFeedbackEdicao('Dados atualizados com sucesso.', 'sucesso');
+          fecharModal();
+        })
+        .catch((error) => {
+          console.error('[Editar Aluno Coordenadora]', error);
+          setFeedbackEdicao(error.message || 'Nao foi possivel salvar os dados.', 'erro');
+        })
+        .finally(() => {
+          setEdicaoCarregando(false);
+        });
+
+      return;
+      if (!form.endereco.value.trim() || !form.renda.value.trim()) {
+        await PulseModal.confirm({
+          titulo: 'Revise os dados informados',
+          texto: 'Preencha renda familiar e endereço antes de salvar.',
+          confirmar: 'Entendi'
+        });
+        return;
+      }
+      const confirmado = await PulseModal.confirm({
+        titulo: 'Salvar dados do aluno?',
+        texto: 'Confira os formatos e informações antes de atualizar o cadastro.',
+        confirmar: 'Salvar dados'
+      });
+      if (!confirmado) return;
+      document.getElementById('dp-turma').textContent    = form.turma.value;
+      document.getElementById('dp-genero').textContent   = form.genero.value;
+      document.getElementById('dp-renda').textContent    = form.renda.value;
+      document.getElementById('dp-endereco').textContent = form.endereco.value;
+      const campoObsAtualizado = document.getElementById('dp-obs');
+      if (campoObsAtualizado) {
+        campoObsAtualizado.textContent = form.obs.value.trim() || '—';
+      }
+
+      fecharModal();
+    });
+
+    // ===== Jornada acadêmica (editar trilha de módulos) =====
+    const btnEditarJornada = document.getElementById('btn-editar-jornada');
+    const trilha           = document.getElementById('trilha-jornada');
+    const btnAddModulo      = document.getElementById('btn-add-modulo');
+    const selectTipoJovem   = document.getElementById('jornada-tipo-jovem-select');
+    const btnSalvarTipoJovem = document.getElementById('btn-salvar-tipo-jovem');
+    const feedbackTipoJovem = document.getElementById('jornada-tipo-jovem-feedback');
+    const blocoEdicaoTipoJovem = document.getElementById('jornada-tipo-jovem-edicao');
+
+    // Cria um <li> de módulo com a mesma estrutura dos já existentes
+    function criarModulo(nome) {
+      const li = document.createElement('li');
+      li.className = 'trilha-item trilha-item--andamento';
+      li.innerHTML =
+        '<span class="trilha-rail"><span class="trilha-check"><i data-lucide="check"></i></span></span>' +
+        '<div class="trilha-modulo"><span class="trilha-modulo-nome"></span>' +
+        '<span class="pill-status pill-status--andamento">Em andamento</span>' +
+        '<button type="button" class="trilha-remover" aria-label="Remover módulo"><i data-lucide="x"></i></button></div>';
+      // textContent evita injeção de HTML pelo nome digitado
+      li.querySelector('.trilha-modulo-nome').textContent = nome;
+      return li;
+    }
+
+    // Alterna entrar/sair do modo de ediÃ§Ã£o
+    btnEditarJornada.addEventListener('click', (e) => {
+      e.preventDefault();
+      const editando = trilha.classList.toggle('editando');
+      if (blocoEdicaoTipoJovem) {
+        blocoEdicaoTipoJovem.hidden = !editando;
+      }
+      if (!editando) {
+        const categoriaAtual = document.getElementById('jornada-tipo-jovem')?.textContent?.trim() || '';
+        if (selectTipoJovem) {
+          selectTipoJovem.value = categoriaAtual;
+        }
+        setFeedbackTipoJovem('', '');
+      }
+      btnEditarJornada.innerHTML = editando
+        ? '<i data-lucide="check"></i> Concluir'
+        : '<i data-lucide="square-pen"></i> Editar';
+      lucide.createIcons();
+      // TODO (back-end): ao Concluir, enviar a lista de mÃ³dulos atualizada para a API
+    });
+
+    function setFeedbackTipoJovem(mensagem, tipo) {
+      if (!feedbackTipoJovem) return;
+
+      feedbackTipoJovem.textContent = mensagem || '';
+      feedbackTipoJovem.className = `modal-feedback${tipo ? ` modal-feedback--${tipo}` : ''}`;
+    }
+
+    function setTipoJovemCarregando(carregando) {
+      if (selectTipoJovem) selectTipoJovem.disabled = carregando;
+      if (btnSalvarTipoJovem) {
+        btnSalvarTipoJovem.disabled = carregando;
+        btnSalvarTipoJovem.innerHTML = carregando
+          ? 'Salvando...'
+          : '<i data-lucide="save"></i> Salvar';
+        lucide.createIcons();
+      }
+    }
+
+    btnSalvarTipoJovem.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const aluno = window.PerfilAluno?.getAlunoAtual?.();
+      const raEdicao = aluno?.ra || window.PerfilAluno?.getRaAtual?.();
+
+      const categoria = selectTipoJovem?.value?.trim() || '';
+
+      if (!raEdicao) {
+        setFeedbackTipoJovem('Aluno nao carregado para edicao.', 'erro');
+        return;
+      }
+
+      if (!categoria) {
+        setFeedbackTipoJovem('Selecione um tipo de jovem.', 'erro');
+        return;
+      }
+
+      setTipoJovemCarregando(true);
+      setFeedbackTipoJovem('Salvando alteracao...', 'carregando');
+
+      window.CoordenadoraAPI.atualizarAluno(raEdicao, {
+        categoria,
+      })
+        .then(() => window.PerfilAluno.carregar())
+        .then(() => {
+          setFeedbackTipoJovem('Tipo de jovem atualizado com sucesso.', 'sucesso');
+        })
+        .catch((error) => {
+          console.error('[Editar Jornada Coordenadora]', error);
+          setFeedbackTipoJovem(error.message || 'Nao foi possivel salvar o tipo de jovem.', 'erro');
+        })
+        .finally(() => {
+          setTipoJovemCarregando(false);
+        });
+    });
+
+    btnAddModulo.addEventListener('click', () => {
+      const nome = window.prompt('Nome do módulo:');
+      if (nome && nome.trim()) {
+        trilha.appendChild(criarModulo(nome.trim()));
+        lucide.createIcons();   // renderiza os ícones do módulo recém-criado
+      }
+    });
+
+    // Delegação: remover funciona também nos módulos criados depois
+    trilha.addEventListener('click', (e) => {
+      const botao = e.target.closest('.trilha-remover');
+      if (botao) botao.closest('.trilha-item').remove();
+    });
+
+    // ===== Modal: registrar conquista de emprego =====
+    const modalConquista     = document.getElementById('modal-conquista');
+    const btnConquista       = document.getElementById('btn-registrar-conquista');
+    const btnConquistaFechar = document.getElementById('modal-conquista-fechar');
+    const btnConquistaCancel = document.getElementById('modal-conquista-cancelar');
+    const formConquista      = document.getElementById('form-conquista');
+    const empStatus          = document.getElementById('emp-status');
+
+    function abrirConquista(e) {
+      if (e) e.preventDefault();
+      // Começa o select já no status que está na tela
+      formConquista.status.value = empStatus.textContent.trim();
+      modalConquista.hidden = false;
+    }
+    function fecharConquista() { modalConquista.hidden = true; }
+
+    btnConquista.addEventListener('click', abrirConquista);
+    btnConquistaFechar.addEventListener('click', fecharConquista);
+    btnConquistaCancel.addEventListener('click', fecharConquista);
+    
+    modalConquista.addEventListener('click', (e) => { if (e.target === modalConquista) fecharConquista(); });
+    // tecla ESC fecha
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modalConquista.hidden) fecharConquista(); });
+
+    // Salvar: atualiza só a caixa "Status profissional"
+    // TODO (back-end): enviar empresa, cargo, data e status para a API (ex.: POST /alunos/:id/emprego)
+    formConquista.addEventListener('submit', (e) => {
+      e.preventDefault();
+      empStatus.textContent = formConquista.status.value;
+
+      fecharConquista();
+    });
+  </script>
+
+</body>
+</html>

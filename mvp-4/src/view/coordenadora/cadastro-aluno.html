@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novo aluno | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span><span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link ativo"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+      <main class="conteudo pagina-operacional">
+        <header class="pagina-operacional__topo">
+          <div>
+            <h1>Cadastrar novo aluno</h1>
+            <p class="pagina-operacional__descricao">Preencha os dados pessoais e de contato para iniciar a jornada.</p>
+          </div>
+          <a href="alunos.html" class="btn-fluxo btn-fluxo--secundario"><i data-lucide="arrow-left"></i> Voltar</a>
+        </header>
+        <div class="aviso">
+          <i data-lucide="info"></i
+          ><span>Os formatos de CPF, e-mail e telefone serão validados antes do cadastro.</span>
+        </div>
+        <form class="painel" id="form-aluno" novalidate>
+          <h2 class="painel-titulo"><i data-lucide="user-plus"></i> Dados do aluno</h2>
+          <div class="form-grade form-grade--3">
+            <label class="campo-form campo-form--largo"
+              ><span>Nome completo*</span><input name="nome" required
+            /></label>
+            <label class="campo-form"
+              ><span>CPF*</span><input name="cpf" placeholder="000.000.000-00" required /><small
+                class="campo-erro"
+              ></small
+            ></label>
+            <label class="campo-form"
+              ><span>Data de nascimento*</span><input type="date" name="nascimento" required
+            /></label>
+            <label class="campo-form"
+              ><span>E-mail principal*</span
+              ><input type="email" name="email" placeholder="aluno@email.com" required /><small
+                class="campo-erro"
+              ></small
+            ></label>
+            <label class="campo-form"
+              ><span>Telefone principal*</span><input name="telefone" placeholder="(11) 99999-9999" required /><small
+                class="campo-erro"
+              ></small
+            ></label>
+            <label class="campo-form"
+              ><span>Turma*</span
+              ><select name="turma" required>
+                <option value="">Selecione</option>
+                <option>Turma 1</option>
+                <option>Turma 2</option>
+                <option>Turma 3</option>
+              </select></label
+            >
+            <label class="campo-form"
+              ><span>Gênero</span
+              ><select name="genero">
+                <option>Prefiro não informar</option>
+                <option>Feminino</option>
+                <option>Masculino</option>
+                <option>Outro</option>
+              </select></label
+            >
+            <label class="campo-form"
+              ><span>Status inicial</span
+              ><select name="status">
+                <option>Ativo</option>
+                <option>Em processo de matrícula</option>
+              </select></label
+            >
+            <label class="campo-form campo-form--largo"><span>Endereço</span><input name="endereco" /></label>
+          </div>
+          <div class="acoes-form">
+            <a href="alunos.html" class="btn-fluxo btn-fluxo--secundario">Cancelar</a
+            ><button class="btn-fluxo btn-fluxo--primario" type="submit">
+              <i data-lucide="save"></i> Salvar aluno
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/fluxos.js"></script>
+    <script>
+      lucide.createIcons();
+      
+      const DEFAULT_RM_COORDENADORA = '1001';
+
+      function getRmCoordenadora() {
+        const params = new URLSearchParams(window.location.search);
+        const rmSalvo = params.get('rm')
+          || window.localStorage.getItem('rmCoordenadora')
+          || window.PULSE_COORDENADORA_RM
+          || DEFAULT_RM_COORDENADORA;
+
+        return String(rmSalvo) === '1011' ? DEFAULT_RM_COORDENADORA : rmSalvo;
+      }
+
+      const formAluno = document.getElementById("form-aluno");
+      formAluno.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        formAluno.querySelectorAll(".campo-form").forEach((c) => c.classList.remove("erro"));
+        formAluno.querySelectorAll(".campo-erro").forEach((c) => (c.textContent = ""));
+
+        const erros = [];
+        const validar = (nome, regex, msg) => {
+          const campo = formAluno.elements[nome];
+          if (!regex.test(String(campo.value || "").trim())) {
+            campo.closest(".campo-form").classList.add("erro");
+            campo.closest(".campo-form").querySelector(".campo-erro").textContent = msg;
+            erros.push(msg);
+          }
+        };
+
+        validar("cpf", /^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "Use o formato 000.000.000-00.");
+        validar("email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Informe um e-mail válido.");
+        validar("telefone", /^\(\d{2}\) \d{4,5}-\d{4}$/, "Use o formato (11) 99999-9999.");
+
+        if (!formAluno.checkValidity() || erros.length) {
+          await PulseModal.confirm({
+            titulo: "Revise os dados informados",
+            texto: "Há campos obrigatórios vazios ou com formato inválido.",
+            confirmar: "Entendi",
+          });
+          return;
+        }
+
+        const ok = await PulseModal.confirm({
+          titulo: "Salvar cadastro do aluno?",
+          texto: "Confirme se os dados pessoais e de contato estão corretos.",
+          confirmar: "Salvar aluno",
+        });
+
+        if (!ok) return;
+
+        const nome = String(formAluno.elements["nome"].value || "").trim();
+        const cpf = String(formAluno.elements["cpf"].value || "").replace(/\D/g, "");
+        const email_primario = String(formAluno.elements["email"].value || "").trim();
+        const tel_primario = String(formAluno.elements["telefone"].value || "").replace(/\D/g, "");
+        const genero = String(formAluno.elements["genero"].value || "").trim();
+        const data_nasc = String(formAluno.elements["nascimento"].value || "").trim();
+        const categoria = String(formAluno.elements["status"].value || "").trim();
+        const data_ingresso = new Date().toISOString().slice(0, 10);
+
+        const payload = {
+          nome,
+          cpf,
+          email_primario,
+          tel_primario,
+          genero,
+          data_nasc,
+          data_ingresso,
+          categoria,
+        };
+
+        try {
+          const rm = getRmCoordenadora();
+          const resp = await fetch(`/coordenadora/${rm}/alunos`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (resp.status === 201) {
+            await PulseModal.confirm({ titulo: "Sucesso", texto: "Aluno cadastrado com sucesso.", confirmar: "OK" });
+            location.href = "alunos.html";
+            return;
+          }
+
+          const body = await resp.json().catch(() => ({}));
+
+          if (resp.status === 409) {
+            await PulseModal.confirm({
+              titulo: "Conflito",
+              texto: body.error || "CPF ou e-mail já cadastrado.",
+              confirmar: "OK",
+            });
+            return;
+          }
+
+          await PulseModal.confirm({
+            titulo: "Erro",
+            texto: body.error || "Não foi possível cadastrar o aluno.",
+            confirmar: "OK",
+          });
+        } catch (err) {
+          console.error("[Cadastro Aluno]", err);
+          await PulseModal.confirm({ titulo: "Erro", texto: "Erro de comunicação com o servidor.", confirmar: "OK" });
+        }
+      });
+    </script>
+  </body>
+</html>

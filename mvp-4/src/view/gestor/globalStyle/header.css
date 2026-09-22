@@ -1,0 +1,94 @@
+/* Cabeçalho da página + busca/filtro — alinhado à coordenadora (tokens) */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-4);
+}
+
+.title-group h1 {
+  margin: 0;
+  font-size: var(--texto-2xl);
+  font-weight: var(--peso-semibold);
+  line-height: 1.25;
+  color: var(--texto-principal);
+}
+
+.title-group p {
+  margin: var(--espaco-1) 0 0;
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+}
+
+/* ===== Busca ===== */
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  min-width: 240px;
+  padding: 0 var(--espaco-3);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  background-color: var(--branco);
+}
+
+.search-field:focus-within {
+  border-color: var(--cor-secundaria);
+}
+
+.search-field .lucide {
+  order: -1;
+  width: 20px;
+  height: 20px;
+  color: var(--texto-secundario);
+}
+
+.search-field input {
+  width: 100%;
+  padding: var(--espaco-3) 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+}
+
+/* ===== Filtro ===== */
+.filter-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filter-field select {
+  appearance: none;
+  min-width: 200px;
+  padding: var(--espaco-3) var(--espaco-7) var(--espaco-3) var(--espaco-4);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  background-color: var(--branco);
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+  cursor: pointer;
+}
+
+.filter-field select:focus {
+  border-color: var(--cor-secundaria);
+}
+
+.filter-field .lucide {
+  position: absolute;
+  right: var(--espaco-3);
+  width: 18px;
+  height: 18px;
+  color: var(--texto-secundario);
+  pointer-events: none;
+}

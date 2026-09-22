@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registros | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span>
+            <span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link ativo"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+
+      <main class="conteudo pagina-operacional">
+        <header>
+          <h1>Registros de acompanhamento</h1>
+          <p class="pagina-operacional__descricao">
+            Registre frequência em aulas e eventos ou atualize a empregabilidade com dados reais do backend.
+          </p>
+        </header>
+
+        <nav class="abas" data-abas>
+          <button class="aba ativa" data-aba="aulas"><i data-lucide="book-open-check"></i> Frequência em aulas</button>
+          <button class="aba" data-aba="eventos"><i data-lucide="calendar-check"></i> Frequência em eventos</button>
+          <button class="aba" data-aba="emprego"><i data-lucide="briefcase-business"></i> Empregabilidade</button>
+        </nav>
+
+        <section class="painel aba-painel" data-aba-painel="aulas">
+          <h2 class="painel-titulo"><i data-lucide="book-open-check"></i> Registrar aula</h2>
+          <form class="form-registro" id="form-registro-aulas">
+            <div class="form-grade form-grade--3">
+              <label class="campo-form">
+                <span>Turma*</span>
+                <select name="id_turma" required>
+                  <option value="">Carregando turmas...</option>
+                </select>
+              </label>
+              <label class="campo-form">
+                <span>ID da aula*</span>
+                <input name="id_aula" type="number" min="1" required placeholder="Ex.: 1" />
+              </label>
+              <label class="campo-form">
+                <span>Data*</span>
+                <input name="data" type="date" required />
+              </label>
+            </div>
+
+            <div class="aviso status--info" id="registros-aulas-feedback">Carregando alunos reais do backend...</div>
+
+            <div style="overflow-x: auto; margin-top: 20px">
+              <table class="tabela-operacional">
+                <thead>
+                  <tr>
+                    <th>Aluno</th>
+                    <th>RA</th>
+                    <th>Presença</th>
+                    <th>Observação</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-alunos-frequencia">
+                  <tr>
+                    <td colspan="4">Carregando alunos...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="acoes-form">
+              <button class="btn-fluxo btn-fluxo--primario" type="submit">
+                <i data-lucide="save"></i> Salvar frequência
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="painel aba-painel" data-aba-painel="eventos" hidden>
+          <h2 class="painel-titulo"><i data-lucide="calendar-check"></i> Registrar participação em evento</h2>
+          <form class="form-registro" id="form-registro-evento">
+            <div class="form-grade">
+              <label class="campo-form">
+                <span>Aluno*</span>
+                <input name="aluno" required list="lista-alunos-registros" placeholder="Busque por nome ou RA" />
+              </label>
+              <label class="campo-form">
+                <span>Evento*</span>
+                <input name="evento" required placeholder="Nome do evento" />
+              </label>
+              <label class="campo-form">
+                <span>Data*</span>
+                <input name="data" type="date" required />
+              </label>
+              <label class="campo-form">
+                <span>Participação*</span>
+                <select name="frequencia">
+                  <option value="true">Participou</option>
+                  <option value="false">Não participou</option>
+                </select>
+              </label>
+              <label class="campo-form campo-form--largo">
+                <span>Observação</span>
+                <textarea name="observacao" placeholder="Opcional"></textarea>
+              </label>
+            </div>
+            <div class="aviso status--info" id="registros-eventos-feedback">
+              Informe o aluno e o evento para salvar o registro no backend.
+            </div>
+            <div class="acoes-form">
+              <button class="btn-fluxo btn-fluxo--primario" type="submit">
+                <i data-lucide="save"></i> Salvar participação
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="painel aba-painel" data-aba-painel="emprego" hidden>
+          <h2 class="painel-titulo"><i data-lucide="briefcase-business"></i> Registrar empregabilidade</h2>
+          <form class="form-registro" id="form-registro-emprego">
+            <div class="form-grade">
+              <label class="campo-form">
+                <span>Aluno*</span>
+                <input name="aluno" required list="lista-alunos-registros" placeholder="Busque por nome ou RA" />
+              </label>
+              <label class="campo-form">
+                <span>Status profissional*</span>
+                <select name="status">
+                  <option>Empregado</option>
+                  <option>Estágio</option>
+                  <option>Buscando oportunidade</option>
+                  <option>Desempregado</option>
+                </select>
+              </label>
+              <label class="campo-form">
+                <span>Empresa</span>
+                <input name="empresa" placeholder="Obrigatório para emprego ou estágio" />
+              </label>
+              <label class="campo-form">
+                <span>Cargo</span>
+                <input name="cargo" placeholder="Obrigatório para emprego ou estágio" />
+              </label>
+              <label class="campo-form">
+                <span>Data de início</span>
+                <input name="data_inicio" type="date" />
+              </label>
+              <label class="campo-form">
+                <span>Faixa salarial</span>
+                <select name="faixa_salarial">
+                  <option>Não informado</option>
+                  <option>Até R$ 2.000</option>
+                  <option>R$ 2.001 a R$ 4.000</option>
+                  <option>Acima de R$ 4.000</option>
+                </select>
+              </label>
+            </div>
+            <div class="aviso status--info" id="registros-emprego-feedback">
+              Registre um emprego ativo ou atualize o status profissional do aluno.
+            </div>
+            <div class="acoes-form">
+              <button class="btn-fluxo btn-fluxo--primario" type="submit">
+                <i data-lucide="save"></i> Salvar empregabilidade
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <datalist id="lista-alunos-registros"></datalist>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/fluxos.js"></script>
+    <script src="js/coordenadora-api.js"></script>
+    <script src="js/registros.js"></script>
+  </body>
+</html>

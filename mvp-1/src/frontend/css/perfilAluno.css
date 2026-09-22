@@ -1,0 +1,143 @@
+/* =====================================================
+   Override do grid principal — nesta página usamos
+   layout 2 colunas (avatar | dados) em vez do grid
+   de 16 colunas compartilhado por outras páginas.
+   ===================================================== */
+.perfil-card .perfil-main-grid {
+  grid-template-columns: 168px 1fr;
+  gap: 32px;
+}
+
+.perfil-card .perfil-identity {
+  grid-column: auto;
+  align-self: start;
+}
+
+.perfil-card .perfil-info {
+  grid-column: auto;
+  gap: 20px;
+}
+
+/* Botões de ação da foto — altura fixa garante tamanho igual entre label e button */
+#fotoEditAcoes .btn {
+  width: 100%;
+  height: 36px;
+  justify-content: center;
+  font-size: 12px;
+  padding: 0 12px;
+  gap: 6px;
+  box-sizing: border-box;
+}
+
+/* 3 indicadores — ocupa toda a largura sem colunas vazias */
+.perfil-indicadores .indicadores-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Grid de 2 colunas para dados acadêmicos (seção em largura total do card) */
+.perfil-info-grid--4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.perfil-info-grid--4 > article {
+  min-width: 0;
+}
+
+/* Cabeçalho da seção de Observações */
+.perfil-section-header--obs {
+  background: var(--color-gray);
+  color: var(--color-text-support);
+}
+
+/* Campo de observações — altura mínima para o textarea */
+.perfil-section--obs {
+  min-height: 120px;
+}
+
+.perfil-section--obs p {
+  min-height: 80px;
+  white-space: pre-wrap;
+}
+
+/* =====================================================
+   Modo de edição — campos com linha inferior
+   (visual idêntico ao portal do aluno)
+   ===================================================== */
+.perfil-card .form-input-edit {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #c9cdd4;
+  border-radius: 0;
+  padding: 0 0 4px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.perfil-card .form-input-edit:focus {
+  border-bottom-color: var(--color-accent);
+}
+
+.perfil-card textarea.form-input-edit {
+  border: 1.5px solid #c9cdd4;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  resize: vertical;
+}
+
+.perfil-card textarea.form-input-edit:focus {
+  border-color: var(--color-accent);
+}
+
+/* =====================================================
+   Campo Naturalidade — flex no modo edição para
+   mostrar cidade e estado lado a lado
+   ===================================================== */
+.naturalidade-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.naturalidade-edit > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.naturalidade-edit > span:last-child {
+  flex: 0 0 72px;
+}
+
+/* Oculta o separador " – " entre os dois inputs */
+.naturalidade-edit .naturalidade-sep {
+  display: none;
+}
+
+/* =====================================================
+   Responsivo
+   ===================================================== */
+@media (max-width: 768px) {
+  .perfil-card .perfil-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-card .perfil-identity {
+    align-items: center;
+  }
+
+  .perfil-card__foto {
+    max-width: 140px;
+    margin: 0 auto;
+  }
+
+  .perfil-info-grid--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

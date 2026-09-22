@@ -1,0 +1,394 @@
+.alunos-page {
+  gap: 28px;
+}
+
+.alunos-muted-icon {
+  color: var(--muted);
+}
+
+.alunos-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.alunos-heading h1 {
+  color: var(--navy);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.alunos-heading p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.alunos-card {
+  padding: 20px 24px 12px;
+}
+
+.alunos-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.alunos-search {
+  width: min(100%, 280px);
+  height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.alunos-search:focus-within {
+  border-color: var(--blue-btn);
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, .1);
+}
+
+.alunos-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--navy);
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+}
+
+.alunos-search input::placeholder {
+  color: var(--muted);
+}
+
+.alunos-filter {
+  height: 40px;
+  gap: 6px;
+}
+
+/* ── Filter dropdown ─────────────────────────────────────────── */
+.filter-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 100;
+  min-width: 230px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 16px;
+}
+
+.filter-dropdown.hidden {
+  display: none;
+}
+
+.filter-dropdown__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.filter-dropdown__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.filter-dropdown__clear {
+  font-size: 11px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  padding: 0;
+}
+
+.filter-dropdown__clear:hover {
+  color: var(--navy);
+}
+
+.filter-group {
+  margin-bottom: 14px;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 8px;
+}
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-pill {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--slate);
+  background: var(--bg);
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color .12s, background .12s, color .12s;
+}
+
+.filter-pill:hover {
+  border-color: var(--brand-dark);
+  color: var(--brand-dark);
+}
+
+.filter-pill.active {
+  border-color: var(--brand-dark);
+  background: var(--brand-dark);
+  color: var(--white);
+}
+
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--brand-dark);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.filter-badge.hidden {
+  display: none;
+}
+
+.alunos-table {
+  min-width: 1050px;
+  table-layout: fixed;
+}
+
+.alunos-table th:nth-child(1) { width: 25%; }
+.alunos-table th:nth-child(2) { width: 22%; }
+.alunos-table th:nth-child(3) { width: 14%; }
+.alunos-table th:nth-child(4) { width: 16%; }
+.alunos-table th:nth-child(5) { width: 10%; }
+.alunos-table th:nth-child(6) { width: 7%; }
+.alunos-table th:nth-child(7) { width: 6%; }
+
+.alunos-table thead th {
+  padding-top: 14px;
+  padding-bottom: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.alunos-table tbody td {
+  height: 68px;
+}
+
+.alunos-student {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.alunos-student__avatar {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--brand-dark);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.alunos-student__name {
+  overflow: hidden;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alunos-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.alunos-contact__email {
+  color: var(--navy);
+  font-size: 13px;
+}
+
+.alunos-contact__phone {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.alunos-frequency,
+.alunos-grade {
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.alunos-grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.alunos-action {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--slate);
+  background: var(--white);
+  cursor: pointer;
+}
+
+.alunos-action:hover {
+  color: var(--blue-btn);
+  background: var(--blue-light);
+}
+
+.alunos-footer {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.alunos-footer p {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.alunos-pagination,
+.alunos-page-numbers {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alunos-page-button,
+.alunos-page-number {
+  height: 34px;
+  min-width: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--navy);
+  background: var(--white);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.alunos-page-number.active {
+  border-color: var(--brand-dark);
+  color: var(--white);
+  background: var(--brand-dark);
+}
+
+.alunos-page-button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+@media (max-width: 899px) {
+  .alunos-heading h1 {
+    font-size: 21px;
+  }
+}
+
+@media (max-width: 599px) {
+  .alunos-page {
+    gap: 16px;
+  }
+
+  .alunos-heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .alunos-heading .btn {
+    justify-content: center;
+  }
+
+  .alunos-heading h1 {
+    font-size: 19px;
+  }
+
+  .alunos-card {
+    padding: 14px 0 8px;
+  }
+
+  .alunos-toolbar,
+  .alunos-footer {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .alunos-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .alunos-search {
+    width: 100%;
+  }
+
+  .alunos-filter {
+    justify-content: center;
+  }
+
+  .alunos-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

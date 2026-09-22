@@ -1,0 +1,68 @@
+@import url("../../globalStyle/base.css");
+@import url("../../globalStyle/layoutGestor.css");
+@import url("../../globalStyle/sidebar.css");
+@import url("../../globalStyle/estruturaPerfilAluno.css");
+@import url("../../globalStyle/sidebarTurmasResponsive.css");
+
+/* Resumo de frequencia no perfil do aluno (mesmo visual do portal do coordenador) */
+.frequencia-resumo {
+  background-color: var(--cinza-fundo);
+  border-radius: var(--raio-sm);
+  color: var(--texto-secundario);
+  font-size: var(--texto-sm);
+  line-height: 1.5;
+  min-height: 52px;
+  padding: var(--espaco-4);
+}
+.frequencia-resumo--erro {
+  background-color: var(--erro-fundo);
+  color: var(--erro);
+}
+.frequencia-resumo--carregando {
+  color: var(--cor-primaria);
+}
+.frequencia-resumo--painel {
+  align-items: center;
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  display: flex;
+  gap: var(--espaco-4);
+}
+.frequencia-percentual {
+  align-items: center;
+  border-radius: var(--raio-full);
+  color: var(--branco);
+  display: flex;
+  flex-shrink: 0;
+  font-size: var(--texto-lg);
+  font-weight: var(--peso-bold);
+  height: 72px;
+  justify-content: center;
+  width: 72px;
+}
+.frequencia-detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.frequencia-detalhes strong {
+  color: var(--texto-principal);
+  font-size: var(--texto-sm);
+}
+.frequencia-detalhes span {
+  color: var(--texto-secundario);
+  font-size: var(--texto-sm);
+}
+.frequencia-resumo--alta .frequencia-percentual {
+  background-color: var(--sucesso);
+}
+.frequencia-resumo--media .frequencia-percentual {
+  background-color: var(--alerta);
+}
+.frequencia-resumo--baixa .frequencia-percentual {
+  background-color: var(--erro);
+}
+.frequencia-percentual--vazio {
+  background-color: var(--cinza-borda);
+  color: var(--texto-secundario);
+}

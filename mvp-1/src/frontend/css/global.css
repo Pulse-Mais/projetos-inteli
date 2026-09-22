@@ -1,0 +1,761 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('./datePicker.css');
+@import url('./comboBox.css');
+
+/* Variáveis globais — usadas em toda a aplicação via var(--nome) */
+:root {
+  --color-primary: #003870; /* azul principal: fundo da sidebar, títulos, botões primários */
+  --color-accent:  #25B057; /* verde de destaque: botões de ação, badges ativos, barra lateral ativa */
+
+  --color-white:  #FFFFFF;  /* fundo de cards e topbar */
+  --color-gray:   #F5F5F5;  /* fundo geral da página */
+  --color-border: #DDDDDD;  /* bordas de inputs e separadores */
+
+  --color-text:         #1E293B; /* texto principal */
+  --color-text-support: #6B7280; /* texto secundário e placeholders */
+
+  --color-danger:  #DC2626; /* vermelho: erros, botão excluir, badge inativo */
+  --color-warning: #F59E0B; /* amarelo: alertas e badge pendente */
+
+  --sidebar-width: 240px; /* largura fixa da sidebar; usada em main-content e page-topbar */
+
+  --radius-sm: 6px;  /* inputs, botões pequenos */
+  --radius-md: 10px; /* cards */
+  --radius-lg: 16px; /* modais */
+
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.08); /* sombra padrão dos cards */
+
+  --color-success-text: #15803d; /* texto de mensagens de sucesso */
+}
+
+/* Skip navigation — acessibilidade de teclado */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 99999;
+  text-decoration: none;
+  border-radius: 0 0 var(--radius-sm) 0;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background-color: var(--color-gray);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+/* Layout principal */
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-width);
+  background-color: #FDFCFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+
+  overflow: hidden;
+  background-image: url('/assets/wave-top.png'), url('/assets/wave-bottom.png');
+
+  /* overflow-y:auto (não hidden): em zoom/escala alta o 100vh efetivo encolhe,
+     mas o conteúdo (avatar 160px + N links de 44px) não acompanha — sem isso,
+     o excesso era cortado silenciosamente (sem barra de rolagem) em vez de
+     ficar acessível. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-image: url('/assets/wave-top.png'), url('/assets/wave-bottom.png');
+  background-position: top center, bottom center;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
+
+/* Espaçador flexível acima do conteúdo — cresce igual ao sidebar__spacer para centralizar verticalmente */
+.sidebar::before {
+  content: '';
+  display: block;
+  flex: 1;
+  min-height: 100px;
+}
+
+.sidebar__top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 1.5vh, 12px);
+  width: 100%;
+}
+
+.sidebar__spacer {
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.5vh, 24px);
+  padding-bottom: clamp(10px, 3vh, 50px);
+  padding-top: 8px;
+  width: 100%;
+  /* fundo transparente para não cobrir a onda inferior (wave-bottom) da sidebar */
+  background: transparent;
+}
+
+.sidebar__logo {
+  width: 120px;
+}
+
+.sidebar__logo img {
+  width: 100%;
+  height: auto;
+}
+
+/* Avatar com link para o perfil */
+.sidebar__avatar-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  position: relative;
+  border-radius: var(--radius-sm);
+  outline-offset: 3px;
+}
+
+.sidebar__avatar-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+}
+
+.sidebar__avatar-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-primary);
+  opacity: 1;
+  transition: opacity 0.15s;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.sidebar__avatar-link:hover .sidebar__avatar-hint,
+.sidebar__avatar-link:focus-visible .sidebar__avatar-hint {
+  opacity: 1;
+}
+
+.sidebar__avatar-link:hover .sidebar__avatar {
+  opacity: 0.85;
+}
+
+/* Na página de perfil, o hint fica sempre visível */
+.sidebar__avatar-link--ativo .sidebar__avatar-hint {
+  opacity: 1;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.sidebar__avatar {
+  width: clamp(90px, 16vh, 160px);
+  height: clamp(90px, 16vh, 160px);
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: none;
+  transition: opacity 0.15s;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sidebar__name {
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Navegação */
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: clamp(4px, 1vh, 12px);
+  align-items: center;
+  margin-top: clamp(6px, 1.5vh, 20px);
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: 6px;
+  color: var(--color-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 2px solid var(--color-primary);
+  background: var(--color-white);
+  width: 160px;
+  height: clamp(36px, 5.5vh, 44px);
+  text-align: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar__link:hover {
+  background-color: #f0f0f0;
+}
+
+.sidebar__link.ativo {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+}
+
+.sidebar__link.ativo::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 36px;
+  background-color: var(--color-accent);
+  border-radius: 2px;
+}
+
+.sidebar__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Botão de logout */
+.sidebar__logout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar__logout .sidebar__link {
+  background: #f0f0f0;
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.sidebar__logout .sidebar__link:hover {
+  background-color: #fde8e8;
+}
+
+/* Área de conteúdo */
+.main-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  /* min-width:0 evita que filhos com largura intrínseca grande (tabelas, grids)
+     forcem o item flex a ultrapassar o espaço disponível e sobrepor a sidebar. */
+  min-width: 0;
+  /* 112px dá uma margem de segurança acima da altura mínima da topbar fixa
+     (64px + padding), evitando que o conteúdo fique colado ou sobreposto se
+     o título quebrar texto ou a fonte renderizar maior em algum computador. */
+  padding: 112px 32px 32px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Sem topbar no portal do aluno */
+.aluno-portal {
+  padding-top: 32px;
+}
+
+/* Grid de página — 16 colunas */
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1200px) {
+  .page-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Topbar fixa */
+.page-topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  z-index: 200;
+  width: calc(100% - var(--sidebar-width));
+  min-height: 64px;
+  margin: 0;
+  background: #FDFCFF;
+  padding: 20px 24px;
+  border-bottom: 2px solid var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-topbar h2 {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Cabeçalho de página */
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-header p {
+  font-size: 14px;
+  color: var(--color-text-support);
+  margin-top: 4px;
+}
+
+/* Cards */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s, transform 0.1s;
+  text-decoration: none;
+}
+
+.btn:hover   { opacity: 0.9; }
+.btn:active  { transform: scale(0.98); }
+
+.btn--primary { background: var(--color-primary); color: var(--color-white); }
+.btn--accent  { background: var(--color-accent);  color: var(--color-white); }
+.btn--danger  { background: var(--color-danger);  color: var(--color-white); }
+.btn--outline {
+  background: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Badges de status */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge--ativo    { background: rgba(37,176,87,0.15); color: var(--color-accent); }
+.badge--inativo  { background: rgba(220,38,38,0.15); color: var(--color-danger); }
+.badge--pendente { background: rgba(245,158,11,0.15); color: var(--color-warning); }
+
+/* Chip de contexto exibido na topbar das telas de portal (aluno/ex-aluno) */
+.portal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(0, 56, 112, 0.08);
+  color: var(--color-primary);
+}
+
+/* Modais — overlay com blur fixado sobre todos os outros elementos via z-index 9999 */
+.modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.modal.aberto {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal__content {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 440px;
+  width: 90%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.modal.aberto .modal__content {
+  transform: translateY(0);
+}
+
+.modal__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(220,38,38,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.modal__icon svg { color: var(--color-danger); }
+
+.modal h2 {
+  text-align: center;
+  font-size: 20px;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.modal p {
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-support);
+  margin-bottom: 24px;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Campos de formulário */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  background: var(--color-white);
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-support);
+}
+
+/* Fallback para o <input type="date"> nativo, usado apenas se datePicker.js não
+   carregar — o componente customizado (datePicker.css/js) substitui a experiência
+   normalmente, já que o calendário nativo do navegador não pode ser estilizado. */
+input[type="date"] {
+  min-height: 44px;
+  cursor: pointer;
+}
+
+/* Responsividade mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 10000;
+    width: 260px;
+  }
+
+  .sidebar.aberta {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+  }
+
+  .sidebar-overlay.ativa {
+    display: block;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding: 80px 20px 32px !important;
+  }
+
+  .page-topbar {
+    left: 0 !important;
+    width: 100% !important;
+    padding: 12px 20px !important;
+  }
+
+  .page-topbar h2 {
+    font-size: 18px;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+}
+
+/* ===== TABELA MENTOR (compartilhada) ===== */
+.tabela-wrapper {
+  margin-left: 48px;
+  margin-right: 48px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.tabela-mentor {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-mentor thead tr {
+  background: var(--color-primary);
+}
+
+.tabela-mentor th {
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 14px 20px;
+  text-align: left;
+}
+
+.tabela-mentor td {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabela-mentor tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-mentor tbody tr:hover td {
+  background: var(--color-gray);
+  cursor: pointer;
+}
+
+.tabela-mentor .nome-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tabela-mentor .nome-link:hover {
+  text-decoration: underline;
+}
+
+.tabela-dica {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 10px;
+  margin-left: 48px;
+  margin-right: 48px;
+  padding-bottom: 8px;
+}
+
+/* ===== MODAL AZUL (compartilhado) ===== */
+.modal-azul {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-azul.aberto {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-azul__content {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  max-width: 540px;
+  width: 92%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.28);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-azul.aberto .modal-azul__content {
+  transform: translateY(0);
+}
+
+.modal-azul__header {
+  background: var(--color-primary);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+}
+
+.modal-azul__header h3 {
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.modal-azul__fechar {
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.modal-azul__fechar:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.modal-azul__fechar svg {
+  width: 16px;
+  height: 16px;
+}
+
+.modal-azul__body {
+  padding: 24px 24px 28px;
+}
+
+.modal-azul__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

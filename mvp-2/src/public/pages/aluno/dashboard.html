@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Dashboard — Pulsar</title>
+  <link rel="stylesheet" href="../../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-dashboard.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar do Aluno ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left" style="width:20px;height:20px;stroke-width:1.75"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item is-active" href="dashboard.html" aria-current="page" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" href="perfil.html" title="Meu Perfil">
+        <span class="sidebar-item-icon"><i data-lucide="user"></i></span>
+        <span class="sidebar-item-label">Meu Perfil</span>
+      </a>
+      <a class="sidebar-item" href="oportunidades.html" title="Oportunidades">
+        <span class="sidebar-item-icon"><i data-lucide="history"></i></span>
+        <span class="sidebar-item-label">Oportunidades</span>
+      </a>
+      <a class="sidebar-item" href="empregabilidade.html" title="Empregabilidade">
+        <span class="sidebar-item-icon"><i data-lucide="briefcase"></i></span>
+        <span class="sidebar-item-label">Empregabilidade</span>
+      </a>
+      <a class="sidebar-item" href="ensino-superior.html" title="Ensino Superior">
+        <span class="sidebar-item-icon"><i data-lucide="graduation-cap"></i></span>
+        <span class="sidebar-item-label">Ensino Superior</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ── Área principal ── -->
+  <div class="shell-main">
+
+    <!-- Header -->
+    <header class="topbar">
+      <a class="topbar-logo" href="dashboard.html">
+        <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+      </a>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <div class="avatar-menu" id="avatarMenu">
+          <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar">
+              <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+            </span>
+            <span class="avatar-meta">
+              <span class="avatar-name"></span>
+              <span class="avatar-role"></span>
+            </span>
+            <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+          </button>
+
+          <div class="avatar-dropdown" role="menu" hidden>
+            <a class="dropdown-item" role="menuitem">
+              <i data-lucide="user" style="width:16px;height:16px"></i> Meu perfil
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+              <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo do Dashboard -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+      <div class="shell-container">
+
+        <!-- Breadcrumbs -->
+        <div class="crumbs">
+          <div class="crumbs-path">
+            <a href="#">Jovens</a>
+            <span class="sep">/</span>
+            <a href="#">Dashboard</a>
+            <span class="sep">/</span>
+            <span class="current" id="dash-breadcrumb-nome"></span>
+          </div>
+        </div>
+
+        <!-- HERO -->
+        <section class="hero">
+          <h1 class="hero-title">Meu Dashboard</h1>
+        </section>
+        <!-- /HERO -->
+
+        <!-- Resumo do perfil -->
+        <section class="profile-summary">
+          <div class="avatar-xl" id="dash-initials"></div>
+          <div class="profile-summary-info">
+            <h2 class="profile-summary-name" id="dash-nome"></h2>
+            <div class="profile-summary-meta">
+              <span id="dash-programa">—</span>
+              <span class="dot"></span>
+              <span id="dash-cpf">—</span>
+              <span class="dot"></span>
+              <span id="dash-idade">—</span>
+            </div>
+            <div class="profile-summary-location" id="dash-location">—</div>
+            <div class="profile-summary-badges">
+              <span class="pbadge is-soft-warning pbadge-dot" id="dash-badge-jornada" hidden></span>
+              <span class="pbadge is-warning" id="dash-badge-multiplicadora" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block;flex-shrink:0"><path d="M12 2.5 14.9 8.6l6.6.95-4.8 4.7 1.15 6.6L12 17.7l-5.9 3.15 1.15-6.6L2.5 9.55l6.6-.95Z"/></svg>
+                Multiplicadora
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- KPIs — grid de 3 colunas -->
+        <div class="grid-3" style="gap: var(--space-5); margin-bottom: var(--space-8);">
+
+          <!-- Atividades -->
+          <div class="stat-block">
+            <div class="stat-block-head">
+              <div class="stat-block-icon">
+                <i data-lucide="layout-dashboard" style="width:18px;height:18px;stroke-width:2.2"></i>
+              </div>
+              <h3 class="stat-block-title">Atividades</h3>
+            </div>
+            <div class="stat-block-body">
+              <div class="stat-block-row">
+                <span class="stat-block-label">Pendentes:</span>
+                <span class="stat-block-value" id="dash-ativ-pendentes">—</span>
+              </div>
+              <div class="stat-block-row">
+                <span class="stat-block-label">Certificados:</span>
+                <span class="stat-block-value" id="dash-certificados">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mentorias -->
+          <div class="stat-block">
+            <div class="stat-block-head">
+              <div class="stat-block-icon">
+                <i data-lucide="user" style="width:18px;height:18px;stroke-width:2.2"></i>
+              </div>
+              <h3 class="stat-block-title">Mentorias</h3>
+            </div>
+            <div class="stat-block-body">
+              <div class="stat-block-row">
+                <span class="stat-block-label">Última sessão:</span>
+                <span class="stat-block-value" id="dash-ment-ultima">—</span>
+              </div>
+              <div class="stat-block-row">
+                <span class="stat-block-label">Mentor:</span>
+                <span class="stat-block-value" id="dash-ment-mentor">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frequência com Donut -->
+          <div class="stat-block">
+            <div class="stat-block-head">
+              <div class="stat-block-icon">
+                <i data-lucide="layout-dashboard" style="width:18px;height:18px;stroke-width:2.2"></i>
+              </div>
+              <h3 class="stat-block-title">Frequência acumulada</h3>
+            </div>
+            <div class="stat-block-body">
+              <div class="stat-block-freq">
+                <!-- Donut chart (68%) -->
+                <div class="donut" style="width:96px;height:96px">
+                  <svg class="donut-svg" viewBox="0 0 96 96">
+                    <circle class="donut-track" cx="48" cy="48" r="43" stroke-width="10" />
+                    <circle
+                      id="dash-freq-circle"
+                      class="donut-fill"
+                      cx="48" cy="48" r="43"
+                      stroke-width="10"
+                      stroke-dasharray="270.18"
+                      stroke-dashoffset="270.18"
+                    />
+                  </svg>
+                  <div class="donut-center" id="dash-freq-valor">—</div>
+                </div>
+
+                <div class="freq-info">
+                  <div class="freq-info-row">
+                    <span class="label">Mínimo:</span>
+                    <span class="value">75%</span>
+                  </div>
+                  <div class="freq-info-row">
+                    <span class="label">Diferença:</span>
+                    <span class="value" id="dash-freq-diferenca">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Quick Tiles — Wayfinding cromático -->
+        <div class="quick-tiles">
+          <a href="empregabilidade.html" class="quick-tile is-events">
+            <span class="quick-tile-icon">
+              <i data-lucide="briefcase" style="width:36px;height:36px;stroke-width:1.7"></i>
+            </span>
+            <span class="quick-tile-label">Empregabilidade</span>
+          </a>
+
+          <a href="oportunidades.html" class="quick-tile is-opps">
+            <span class="quick-tile-icon">
+              <i data-lucide="award" style="width:36px;height:36px;stroke-width:1.7"></i>
+            </span>
+            <span class="quick-tile-label">Oportunidades</span>
+          </a>
+
+          <a href="ensino-superior.html" class="quick-tile is-courses">
+            <span class="quick-tile-icon">
+              <i data-lucide="graduation-cap" style="width:36px;height:36px;stroke-width:1.7"></i>
+            </span>
+            <span class="quick-tile-label">Ensino Superior</span>
+          </a>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+</div>
+
+
+<script src="../../js/api.js"></script>
+<script src="../../js/mainJovem.js"></script>
+<script src="../../js/aluno/dashboard.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

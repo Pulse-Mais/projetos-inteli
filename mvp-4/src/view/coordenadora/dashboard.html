@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Coordenadora | Pulse Mais</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar">
+            <i data-lucide="circle-user"></i>
+          </span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span>
+            <span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link ativo">
+            <i data-lucide="chart-bar"></i>
+            Dashboard
+          </a>
+          <a href="turmas.html" class="nav-link">
+            <i data-lucide="users"></i>
+            Turmas
+          </a>
+          <a href="registros.html" class="nav-link">
+            <i data-lucide="clipboard-check"></i>
+            Registros
+          </a>
+          <a href="comunicados.html" class="nav-link">
+            <i data-lucide="message-square-dot"></i>
+            Comunicados
+          </a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+
+      <main class="conteudo">
+        <header class="pagina-cabecalho">
+          <h1>Dashboard de Impacto</h1>
+          <div class="acoes-csv">
+            <button class="btn btn-primario" id="btn-exportar">
+              <i data-lucide="download"></i> Exportar tabela CSV
+            </button>
+            <input type="file" id="input-csv" accept=".csv" hidden />
+          </div>
+        </header>
+
+        <section class="filtros">
+          <div class="busca">
+            <i data-lucide="search"></i>
+            <input type="text" class="busca-input" placeholder="Buscar aluno..." />
+          </div>
+
+          <select class="filtro-select" id="dashboard-filtro-turma">
+            <option value="">Todas as turmas</option>
+          </select>
+
+          <select class="filtro-select" id="dashboard-filtro-periodo">
+            <option value="">Período: 12 meses</option>
+            <option value="6">Últimos 6 meses</option>
+            <option value="3">Últimos 3 meses</option>
+          </select>
+        </section>
+
+        <section class="cards-indicadores">
+          <article class="card card--info">
+            <div class="card-topo">
+              <div class="card-icone card-icone--info">
+                <i data-lucide="users"></i>
+              </div>
+              <span class="card-selo card-selo--positivo">+4</span>
+            </div>
+            <span class="card-rotulo">Alunos Ativos</span>
+            <span class="card-valor">248</span>
+            <span class="card-subtexto">alunos matriculados</span>
+          </article>
+
+          <article class="card card--sucesso">
+            <div class="card-topo">
+              <div class="card-icone card-icone--sucesso">
+                <i data-lucide="briefcase"></i>
+              </div>
+              <span class="card-selo card-selo--positivo">+18%</span>
+            </div>
+            <span class="card-rotulo">Empregabilidade</span>
+            <span class="card-valor">72%</span>
+            <span class="card-subtexto">dos formados</span>
+          </article>
+
+          <article class="card card--alerta">
+            <div class="card-topo">
+              <div class="card-icone card-icone--alerta">
+                <i data-lucide="square-check"></i>
+              </div>
+              <span class="card-selo card-selo--positivo">+4%</span>
+            </div>
+            <span class="card-rotulo">Frequência Média</span>
+            <span class="card-valor">89%</span>
+            <span class="card-subtexto">presença geral</span>
+          </article>
+
+          <a href="risco-evasao.html" class="card card--erro">
+            <div class="card-topo">
+              <div class="card-icone card-icone--erro">
+                <i data-lucide="triangle-alert"></i>
+              </div>
+              <span class="card-selo card-selo--negativo">-1</span>
+            </div>
+            <span class="card-rotulo">Risco de Evasão</span>
+            <span class="card-valor">12</span>
+            <span class="card-subtexto">alunos em atenção</span>
+          </a>
+        </section>
+
+        <section class="grafico-secao">
+          <h2 class="grafico-titulo">Evolução da Jornada</h2>
+          <p class="grafico-subtitulo">Formados × empregados nos últimos 12 meses</p>
+          <div class="grafico-caixa">
+            <canvas id="grafico-jornada"></canvas>
+          </div>
+        </section>
+
+        <section class="alertas-secao">
+          <div class="alertas-cabecalho">
+            <h2 class="alertas-titulo">Alertas de risco de evasão</h2>
+            <span class="alertas-contagem">12 alunos</span>
+          </div>
+
+          <div class="tabela-caixa">
+            <table class="tabela">
+              <thead>
+                <tr>
+                  <th>Aluno</th>
+                  <th>Turma</th>
+                  <th>Frequência</th>
+                  <th>Risco</th>
+                </tr>
+              </thead>
+              <tbody id="lista-alertas">
+                <!-- DADOS DE EXEMPLO — TODO (back-end): preencher com os alunos em risco vindos da API -->
+                <tr>
+                  <td>Ana Souza</td>
+                  <td>2024A</td>
+                  <td>62%</td>
+                  <td><span class="pill pill-erro">Alto</span></td>
+                </tr>
+                <tr>
+                  <td>Bruno Lima</td>
+                  <td>2024B</td>
+                  <td>71%</td>
+                  <td><span class="pill pill-alerta">Médio</span></td>
+                </tr>
+                <tr>
+                  <td>Carla Dias</td>
+                  <td>2023A</td>
+                  <td>68%</td>
+                  <td><span class="pill pill-alerta">Médio</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Bibliotecas via CDN: ícones (Lucide) e gráficos (Chart.js) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/coordenadora-api.js"></script>
+    <script src="js/fluxos.js"></script>
+    <script type="text/plain" data-script-legado-dashboard-grafico>
+      lucide.createIcons();
+
+      // Gráfico de linha: formados x empregados (dados de exemplo)
+      const ctx = document.getElementById('grafico-jornada');
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+          datasets: [
+            {
+              label: 'Formados',
+              data: [12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32, 35],
+              borderColor: '#003870',
+              backgroundColor: 'rgba(0, 56, 112, 0.08)',
+              tension: 0.3,
+              fill: true
+            },
+            {
+              label: 'Empregados',
+              data: [8, 10, 11, 13, 15, 17, 19, 20, 23, 25, 27, 30],
+              borderColor: '#5696D6',
+              backgroundColor: 'rgba(86, 150, 214, 0.08)',
+              tension: 0.3,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    </script>
+    <script src="js/dashboard.js"></script>
+
+    <script>
+      // ===== Importar / exportar CSV =====
+
+      // Exportar: gera o CSV a partir dos dados reais atualmente exibidos no dashboard
+      document.getElementById("btn-exportar").addEventListener("click", function () {
+        try {
+          // Coletar cards
+          const cards = Array.from(document.querySelectorAll(".cards-indicadores .card")).map((card) => ({
+            rotulo: card.querySelector(".card-rotulo")?.textContent?.trim() || "",
+            valor: card.querySelector(".card-valor")?.textContent?.trim() || "",
+            subtexto: card.querySelector(".card-subtexto")?.textContent?.trim() || "",
+          }));
+
+          // Coletar dados do gráfico
+          const grafico =
+            window.CoordenadoraExport && typeof window.CoordenadoraExport.obterGrafico === "function"
+              ? window.CoordenadoraExport.obterGrafico()
+              : null;
+
+          // Coletar alertas
+          const obterAlertas =
+            window.CoordenadoraExport && typeof window.CoordenadoraExport.obterAlertas === "function"
+              ? window.CoordenadoraExport.obterAlertas
+              : null;
+          const fonte = obterAlertas ? obterAlertas() : window.coordenadoraAlertas || [];
+          const alertas = Array.isArray(fonte) ? fonte : [];
+
+          const linhas = [];
+
+          // Seção: Cards
+          linhas.push("Cards");
+          linhas.push("Rótulo,Valor,Subtexto");
+          cards.forEach((c) =>
+            linhas.push(
+              [c.rotulo.replace(/,/g, " "), c.valor.replace(/,/g, " "), c.subtexto.replace(/,/g, " ")].join(","),
+            ),
+          );
+          linhas.push("");
+
+          // Seção: Evolução da Jornada (gráfico)
+          if (grafico && Array.isArray(grafico.labels) && Array.isArray(grafico.datasets)) {
+            const ds0 = grafico.datasets[0] || { label: "Série 1", data: [] };
+            const ds1 = grafico.datasets[1] || { label: "Série 2", data: [] };
+            linhas.push(`Jornada: ${ds0.label} x ${ds1.label}`);
+            linhas.push(["Mês", ds0.label || "Série 1", ds1.label || "Série 2"].join(","));
+            for (let i = 0; i < grafico.labels.length; i++) {
+              const mes = (grafico.labels[i] || "").toString().replace(/,/g, " ");
+              const v0 = ds0.data[i] !== undefined ? ds0.data[i] : "";
+              const v1 = ds1.data[i] !== undefined ? ds1.data[i] : "";
+              linhas.push([mes, v0, v1].join(","));
+            }
+            linhas.push("");
+          }
+
+          // Seção: Alertas
+          linhas.push("Alertas");
+          linhas.push("Aluno,Turma,Frequência,Risco");
+          alertas.forEach((a) => {
+            const nome = (a.nome || "").toString().replace(/,/g, " ");
+            const turma = (a.nome_turma || a.turma || "").toString().replace(/,/g, " ");
+            const percentual = Number(a.percentual_presenca || a.percentual || 0);
+            const frequencia = `${percentual}%`;
+            const risco = percentual < 70 ? "Alto" : "Médio";
+            linhas.push([nome, turma, frequencia, risco].join(","));
+          });
+
+          const csv = linhas.join("\n");
+          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          const now = new Date();
+          const pad = (n) => String(n).padStart(2, "0");
+          link.download = `alunos-export-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}.csv`;
+          link.click();
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          console.error("Erro ao exportar CSV", err);
+          alert("Erro ao gerar o arquivo CSV. Tente novamente.");
+        }
+      });
+
+      // Importar: por enquanto só abre o seletor de arquivo
+      const inputCsv = document.getElementById("input-csv");
+      document.getElementById("btn-importar").addEventListener("click", () => inputCsv.click());
+
+      inputCsv.addEventListener("change", function () {
+        const arquivo = inputCsv.files[0];
+        if (!arquivo) return;
+        window.location.href = "importacao-csv.html?arquivo=" + encodeURIComponent(arquivo.name);
+      });
+    </script>
+  </body>
+</html>

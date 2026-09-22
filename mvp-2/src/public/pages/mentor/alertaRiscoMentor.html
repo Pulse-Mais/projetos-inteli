@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar - Alerta de Risco</title>
+
+  <link rel="stylesheet" href="../../css/mentor-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/mentor/alertaRiscoMentor.css" />
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── Sidebar do Mentor ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu">
+        <i data-lucide="panel-left" style="width:20px;height:20px;stroke-width:1.75"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item is-active" href="dashboardMentor.html" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" href="mentoradosMentor.html" title="Mentorados">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Mentorados</span>
+      </a>
+      <a class="sidebar-item" href="registrarMentoriaMentor.html" title="Minhas Mentorias">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Minhas Mentorias</span>
+      </a>
+      <a class="sidebar-item" href="impactoMentor.html" title="Impacto">
+        <span class="sidebar-item-icon"><i data-lucide="bar-chart-3"></i></span>
+        <span class="sidebar-item-label">Impacto</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" href="configuracoesMentor.html" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Área principal ── -->
+  <div class="shell-main">
+
+    <header class="topbar">
+      <a class="topbar-logo" href="dashboardMentor.html">
+        <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+      </a>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <div class="avatar-menu" id="avatarMenu">
+          <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+            <span class="avatar">
+              <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+            </span>
+            <span class="avatar-meta">
+              <span class="avatar-name"></span>
+              <span class="avatar-role"></span>
+            </span>
+            <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+          </button>
+
+          <div class="avatar-dropdown" role="menu" hidden>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+              <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+      <div class="shell-container">
+
+        <div class="crumbs">
+          <a href="dashboardMentor.html">Dashboard</a>
+          <span class="sep">/</span>
+          <span class="current">Alerta de Risco</span>
+        </div>
+
+        <section class="risk-heading-card">
+          <span class="risk-heading-icon">
+            <i data-lucide="triangle-alert" style="width:27px;height:27px"></i>
+          </span>
+          <h1 class="page-title">Detalhe de alerta de risco</h1>
+        </section>
+
+        <section class="student-summary-card">
+          <span class="student-avatar" id="riskStudentAvatar">—</span>
+          <div>
+            <h2 id="riskStudentName">Carregando…</h2>
+            <p id="riskStudentCpf">CPF —</p>
+          </div>
+        </section>
+
+        <h2 class="section-title">Alertas de risco</h2>
+
+        <section class="risk-grid">
+          <article class="risk-metric-card">
+            <h3>
+              <span class="metric-icon"><i data-lucide="calendar-check" style="width:21px;height:21px"></i></span>
+              Frequência
+            </h3>
+            <p>Porcentagem de presença</p>
+            <div class="attendance-row">
+              <div class="attendance-track"><span id="riskFreqBar" style="width:0%"></span></div>
+              <strong id="riskFreqPct">—</strong>
+            </div>
+            <small id="riskLastClass">Último encontro: —</small>
+          </article>
+
+          <article class="risk-metric-card">
+            <h3>
+              <span class="metric-icon"><i data-lucide="clipboard-list" style="width:21px;height:21px"></i></span>
+              Atividades Pendentes
+            </h3>
+            <strong class="pending-value" id="riskPendingCount">—</strong>
+            <small id="riskLastActivity">Última atividade enviada: —</small>
+          </article>
+        </section>
+
+        <div class="risk-actions">
+          <button class="btn btn-primary" id="riskMentoringBtn">
+            <i data-lucide="calendar-plus" style="width:18px;height:18px"></i>
+            Registrar Mentoria
+          </button>
+          <button class="btn btn-secondary" id="riskProfileBtn">
+            <i data-lucide="user-round" style="width:18px;height:18px"></i>
+            Ver perfil
+          </button>
+        </div>
+
+        <section class="escalation-card">
+          <div class="escalation-card-header">
+            <span class="escalation-card-icon">
+              <i data-lucide="send" style="width:20px;height:20px"></i>
+            </span>
+            <div>
+              <h2>Notificar Coordenação</h2>
+              <p class="escalation-card-desc">Descreva a situação do aluno para que a equipe de coordenação seja alertada.</p>
+            </div>
+          </div>
+          <form id="escalationForm" novalidate>
+            <textarea
+              id="escalationText"
+              class="escalation-textarea"
+              rows="4"
+              placeholder="Ex.: O aluno está com baixa frequência e não respondeu às últimas tentativas de contato…"
+              maxlength="1000"
+            ></textarea>
+            <div id="escalationFeedback" class="escalation-feedback" hidden></div>
+            <div class="escalation-form-footer">
+              <span class="escalation-char-count"><span id="escalationCharCount">0</span>/1000</span>
+              <button type="submit" class="btn btn-primary" id="escalationSubmitBtn">
+                <i data-lucide="send" style="width:16px;height:16px"></i>
+                Enviar Alerta
+              </button>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/mentor/mainMentor.js"></script>
+<script src="../../js/mentor/mentor.js"></script>
+<script src="../../js/mentor/alertaRiscoMentor.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

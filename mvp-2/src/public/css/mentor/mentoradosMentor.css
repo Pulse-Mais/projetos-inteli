@@ -1,0 +1,169 @@
+/* ============================================================
+   mentoradosMentor.css — Estilos específicos da tela Mentorados
+   Layout base: mentor-layout.css
+   ============================================================ */
+
+/* ---------------- Page hero ---------------- */
+.page-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.warning-chip {
+  height: 40px;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--warning-soft-border);
+  border-radius: var(--radius-full);
+  background: var(--warning-soft);
+  color: #92400e;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.warning-chip [data-lucide] { color: var(--warning); }
+
+/* ---------------- Sections ---------------- */
+.mentees-section + .mentees-section {
+  margin-top: var(--space-8);
+}
+
+.status-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-tight);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.mentees-section--alert   .status-title { color: var(--destructive); }
+.mentees-section--warning .status-title { color: var(--warning); }
+.mentees-section--regular .status-title { color: var(--foreground); }
+.mentees-section--regular .status-dot   { background: var(--success); }
+
+/* ---------------- Mentee card ---------------- */
+.mentee-card {
+  position: relative;
+  padding: var(--space-6) var(--space-6) var(--space-6) calc(var(--space-6) + 4px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.mentee-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+}
+
+.mentee-card--alert::before   { background: var(--destructive); }
+.mentee-card--warning::before { background: var(--warning); }
+.mentee-card--regular::before { background: var(--success); }
+
+.mentee-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.mentee-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.mentee-header h3 {
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-1);
+}
+
+.mentee-header p {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* ---------------- Mentee metrics ---------------- */
+.mentee-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.mentee-metric {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.mentee-metric span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.mentee-metric strong {
+  color: #fff;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* ---------------- Mentee actions ---------------- */
+.mentee-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 900px) {
+  .mentee-metrics { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .mentee-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mentee-actions .btn { justify-content: center; }
+}

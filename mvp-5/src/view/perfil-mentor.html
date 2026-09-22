@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .page-heading { margin-bottom: 24px; }
+    .page-heading h1 { font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .page-heading p  { font-size: 13px; color: var(--muted); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card  { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .stat-icon  { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+    .stat-value { font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 13px; color: var(--navy); margin-bottom: 2px; }
+    .stat-sub   { font-size: 11px; color: var(--muted); }
+
+    .info-card { }
+    .info-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand-dark);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .info-field  { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .info-field:nth-child(odd)  { padding-right: 32px; border-right: 1px solid var(--border); }
+    .info-field:nth-child(even) { padding-left: 32px; }
+    .info-field--full { grid-column: span 2; border-right: none !important; padding-right: 0 !important; padding-left: 0 !important; }
+    .info-field:last-child, .info-field:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+    .info-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: 6px;
+    }
+    .info-value {
+      font-size: 14px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-value svg { color: var(--muted); flex-shrink: 0; }
+    .info-value--muted { color: var(--muted); font-style: italic; }
+    .info-bio { font-size: 13px; color: var(--slate); line-height: 1.7; }
+
+    @media (max-width: 799px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .info-grid-2 { grid-template-columns: 1fr; }
+      .info-field:nth-child(odd)  { padding-right: 0; border-right: none; }
+      .info-field:nth-child(even) { padding-left: 0; }
+      .info-field--full { grid-column: span 1; }
+    }
+    @media (max-width: 499px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-mentor.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="perfil-mentor.html" class="sidebar__nav-item active" title="Perfil" aria-current="page">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Perfil</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="page-heading">
+        <h1>Dados Gerais</h1>
+        <p>Informações sobre sua atuação como mentor(a)</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green-badge-bg);">
+            <i data-lucide="users" width="18" height="18" style="color:var(--green-badge-text);"></i>
+          </div>
+          <div class="stat-value" id="stat-mentorandos">—</div>
+          <div class="stat-label">Mentorandos ativos</div>
+          <div class="stat-sub">Total no programa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--blue-light);">
+            <i data-lucide="trending-up" width="18" height="18" style="color:var(--blue-btn);"></i>
+          </div>
+          <div class="stat-value" id="stat-presenca">—</div>
+          <div class="stat-label">Taxa de presença</div>
+          <div class="stat-sub">Últimos 6 meses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--error-bg);">
+            <i data-lucide="star" width="18" height="18" style="color:var(--error-text);"></i>
+          </div>
+          <div class="stat-value" id="stat-avaliacao">—</div>
+          <div class="stat-label">Avaliação média</div>
+          <div class="stat-sub">De mentorandos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--orange-light);">
+            <i data-lucide="clock" width="18" height="18" style="color:var(--orange-text);"></i>
+          </div>
+          <div class="stat-value" id="stat-horas">—</div>
+          <div class="stat-label">Tempo dedicado</div>
+          <div class="stat-sub">Este mês</div>
+        </div>
+      </div>
+
+      <!-- Informações Pessoais -->
+      <div class="card info-card">
+        <div class="info-card-title">Informações Pessoais</div>
+        <div class="info-grid-2">
+
+          <div class="info-field">
+            <div class="info-label">Nome Completo</div>
+            <div class="info-value" id="info-nome">
+              <span class="info-value--muted">—</span>
+            </div>
+          </div>
+          <div class="info-field">
+            <div class="info-label">Área de Atuação</div>
+            <div class="info-value" id="info-area">
+              <i data-lucide="briefcase" width="14" height="14"></i>
+              <span>—</span>
+            </div>
+          </div>
+
+          <div class="info-field">
+            <div class="info-label">E-mail</div>
+            <div class="info-value" id="info-email">
+              <i data-lucide="mail" width="14" height="14"></i>
+              <span>—</span>
+            </div>
+          </div>
+          <div class="info-field">
+            <div class="info-label">Telefone</div>
+            <div class="info-value" id="info-telefone">
+              <i data-lucide="phone" width="14" height="14"></i>
+              <span>—</span>
+            </div>
+          </div>
+
+          <div class="info-field">
+            <div class="info-label">Cidade</div>
+            <div class="info-value" id="info-cidade">
+              <i data-lucide="map-pin" width="14" height="14"></i>
+              <span>—</span>
+            </div>
+          </div>
+          <div class="info-field">
+            <div class="info-label">Disponibilidade</div>
+            <div class="info-value" id="info-disponibilidade">
+              <i data-lucide="calendar" width="14" height="14"></i>
+              <span>—</span>
+            </div>
+          </div>
+
+          <div class="info-field info-field--full">
+            <div class="info-label">Biografia</div>
+            <div class="info-bio" id="info-bio">—</div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') {
+      console.warn('[DEV] API offline.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function initials(nome = '') {
+  return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join('');
+}
+
+function setText(id, value, fallback = '—') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const target = el.querySelector('span') || el;
+  target.textContent = value || fallback;
+  if (value) target.classList.remove('info-value--muted');
+}
+
+function logout() {
+  sessionStorage.removeItem('pulse_session');
+  localStorage.removeItem('pulse_session');
+  window.location.href = 'dashboard.html';
+}
+
+async function renderPerfil(session) {
+  const userId = session.id || session.userId;
+
+  const [usuario, sessions] = await Promise.all([
+    apiFetch('/usuarios/' + userId),
+    apiFetch('/mentor/' + userId + '/mentorias'),
+  ]);
+
+  // Preencher informações pessoais
+  if (usuario) {
+    setText('info-nome', usuario.nome);
+    setText('info-area', usuario.area_atuacao || usuario.area || usuario.cargo);
+    setText('info-email', usuario.email);
+    setText('info-telefone', usuario.telefone);
+    setText('info-cidade', usuario.cidade);
+    setText('info-disponibilidade', usuario.disponibilidade || usuario.horario);
+
+    const bio = usuario.biografia || usuario.bio || usuario.sobre;
+    const bioEl = document.getElementById('info-bio');
+    if (bioEl) bioEl.textContent = bio || 'Sem biografia cadastrada.';
+
+    // Atualizar topbar com dados reais
+    const ini = initials(usuario.nome);
+    document.getElementById('topbar-name').textContent      = usuario.nome;
+    document.getElementById('topbar-avatar').textContent    = ini;
+    document.getElementById('sidebar-initials').textContent = ini;
+  }
+
+  // Calcular stats
+  const lista = Array.isArray(sessions) ? sessions : [];
+
+  const mentorandos = new Set(lista.map(s => s.id_jovem)).size;
+  const realizadas  = lista.filter(s => s.presente === true || s.presente === 1).length;
+  const presenca    = lista.length > 0 ? Math.round(realizadas / lista.length * 100) : 0;
+
+  const avaliacoes = lista.filter(s => s.avaliacao != null && !isNaN(Number(s.avaliacao)));
+  const avgAval = avaliacoes.length
+    ? (avaliacoes.reduce((a, s) => a + Number(s.avaliacao), 0) / avaliacoes.length).toFixed(1)
+    : '–';
+
+  const totalHoras = lista.reduce((acc, s) => acc + (parseFloat(s.duracao) || parseFloat(s.horas) || 1), 0);
+
+  document.getElementById('stat-mentorandos').textContent = mentorandos || '0';
+  document.getElementById('stat-presenca').textContent    = lista.length ? presenca + '%' : '—';
+  document.getElementById('stat-avaliacao').textContent   = avgAval;
+  document.getElementById('stat-horas').textContent       = Math.round(totalHoras) + 'h';
+}
+
+(async () => {
+  const session = getSession();
+  if (!session || session.perfil !== 'Mentor') {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  const ini = initials(session.nome || '');
+  document.getElementById('topbar-name').textContent      = session.nome || 'Mentor';
+  document.getElementById('topbar-avatar').textContent    = ini;
+  document.getElementById('sidebar-initials').textContent = ini;
+
+  lucide.createIcons();
+
+  await renderPerfil(session);
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>

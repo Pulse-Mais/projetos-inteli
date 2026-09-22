@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Alunos</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/alunos.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Seção superior: avatar, nome e navegação -->
+    <div class="sidebar__top">
+      <a href="perfilCoordenador.html" class="sidebar__avatar-link" aria-label="Acessar Meu Perfil">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do coordenador">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+
+      <nav class="sidebar__nav">
+        <a href="homepage.html" class="sidebar__link">Homepage</a>
+        <a href="alunos.html" class="sidebar__link ativo">Alunos</a>
+        <a href="dashboard.html" class="sidebar__link">Dashboard</a>
+        <a href="oportunidadesCoordenador.html" class="sidebar__link">Oportunidades</a>
+      </nav>
+    </div>
+
+    <!-- Espaçador flexível -->
+    <div class="sidebar__spacer"></div>
+
+    <!-- Seção inferior: logo e logout -->
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Alunos</h2>
+    </div>
+
+    <div class="page-header">
+      <h1>Alunos Pulse Mais</h1>
+      <p>Gerencie e acompanhe todos os alunos cadastrados na plataforma.</p>
+    </div>
+
+    <!-- Abas: Alunos Ativos / Ex-Alunos -->
+    <div class="tabs-status">
+      <button type="button" class="tab-status-btn ativo" id="tabAlunosAtivos" data-status="ativos">Alunos Ativos</button>
+      <button type="button" class="tab-status-btn" id="tabExAlunos" data-status="exalunos">Ex-Alunos</button>
+    </div>
+
+    <!-- Barra: busca + filtro + botão de adicionar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          id="campoBusca"
+          placeholder="Buscar aluno por nome ou programa..."
+        >
+      </div>
+
+      <div class="filter-dropdown" id="filterDropdownWrapper">
+        <button class="filter-btn" id="filterToggle">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+        </button>
+        <div class="filter-dropdown__menu" id="filterMenu">
+          <p class="filter-dropdown__label">Categoria</p>
+          <button class="filter-dropdown__item active" data-category="todas">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Todas
+          </button>
+          <button class="filter-dropdown__item" data-category="capacitado">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Capacitado
+          </button>
+          <button class="filter-dropdown__item" data-category="transformado">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Transformado
+          </button>
+          <button class="filter-dropdown__item" data-category="conectado">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            Conectado
+          </button>
+          <div class="filter-dropdown__divider"></div>
+          <p class="filter-dropdown__label">Ano de Ingresso</p>
+          <div id="anoFiltroContainer"></div>
+        </div>
+      </div>
+
+      <a href="cadastrarAluno.html" class="btn btn--accent" id="btnNovoAluno">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Adicionar Aluno
+      </a>
+    </div>
+
+    <!-- Contador de resultados -->
+    <p class="contador" id="contador">Carregando...</p>
+
+    <!-- Grade de alunos (preenchida pelo JS) -->
+    <div class="alunos-grid" id="listaAlunos"></div>
+
+    <!-- Estado vazio (aparece quando busca não encontra nada ou banco vazio) -->
+    <div class="estado-vazio" id="estadoVazio" style="display:none;">
+      <div id="estadoVazioConteudo" style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 16px;">
+        <svg width="64" height="64" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <p id="estadoVazioMensagem" style="font-size: 16px; font-weight: 500; max-width: 400px; line-height: 1.5;">Nenhum aluno encontrado.</p>
+        <a href="cadastrarAluno.html" class="btn btn--accent" id="btnEstadoVazio" style="display: none;">
+          Cadastrar meu primeiro aluno
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/alunos.js"></script>
+</body>
+</html>

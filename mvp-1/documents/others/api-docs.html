@@ -1,0 +1,4169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pulse Mais — API Docs</title>
+  <style>
+  :root {
+    --bg: #0f172a;
+    --bg-elevated: #1e293b;
+    --bg-code: #0b1220;
+    --border: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --status-success: #22c55e;
+    --status-redirect: #a855f7;
+    --status-client: #f59e0b;
+    --status-server: #ef4444;
+    --status-other: #64748b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre { font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg-elevated);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar-header { padding: 0 24px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-header h1 { margin: 0; font-size: 18px; letter-spacing: 0.5px; }
+  .version { margin: 4px 0 0; font-size: 12px; color: var(--text-muted); }
+  .nav-list { list-style: none; margin: 0; padding: 8px 0; }
+  .nav-module { padding: 8px 0; }
+  .nav-module-title {
+    display: block;
+    padding: 6px 24px;
+    font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.8px;
+  }
+  .nav-module-title:hover { background: rgba(56, 189, 248, 0.08); text-decoration: none; }
+  .nav-module ul { list-style: none; margin: 4px 0 0; padding: 0; }
+  .nav-module ul li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 24px 4px 32px;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+  .nav-module ul li a:hover { color: var(--text); text-decoration: none; background: rgba(56, 189, 248, 0.05); }
+  .mini-method {
+    display: inline-block;
+    min-width: 48px;
+    text-align: center;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0b1220;
+    letter-spacing: 0.5px;
+  }
+  .mini-path { font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  /* MAIN */
+  main {
+    padding: 32px 48px;
+    max-width: 980px;
+  }
+  .intro {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .intro h1 { margin: 0 0 8px; font-size: 24px; }
+  .intro p { margin: 4px 0; color: var(--text-muted); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .legend span {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0b1220;
+    letter-spacing: 0.5px;
+  }
+
+  .module { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .module:first-of-type { border-top: none; padding-top: 0; }
+  .module h2 {
+    margin: 0 0 16px;
+    font-size: 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .prefix {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 400;
+  }
+
+  /* ENDPOINT */
+  .endpoint {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .method {
+    display: inline-block;
+    min-width: 64px;
+    text-align: center;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0b1220;
+    letter-spacing: 0.5px;
+  }
+  .path {
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg-code);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .summary { margin: 0 0 16px; color: var(--text-muted); }
+
+  .rf {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .rf-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .rf-value {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .block { margin: 16px 0; }
+  .block h4 {
+    margin: 0 0 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .block.notes p {
+    background: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid #f59e0b;
+    padding: 8px 12px;
+    margin: 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: top;
+  }
+  th { color: var(--text-muted); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:last-child td { border-bottom: none; }
+  td code, .code {
+    background: var(--bg-code);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  pre.code {
+    padding: 10px 14px;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .type {
+    color: var(--text-muted);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+  }
+  .muted { color: var(--text-muted); font-style: italic; }
+
+  .status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0b1220;
+    letter-spacing: 0.5px;
+  }
+  .status-success  { background: var(--status-success); }
+  .status-redirect { background: var(--status-redirect); }
+  .status-client   { background: var(--status-client); }
+  .status-server   { background: var(--status-server); }
+  .status-other    { background: var(--status-other); color: var(--text); }
+
+  footer {
+    margin-top: 64px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 900px) {
+    body { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; max-height: 360px; }
+    main { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+  
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <h1>Pulse Mais API</h1>
+        <p class="version">v1 — documentação interna</p>
+      </header>
+      <nav><ul class="nav-list">
+      <li class="nav-module">
+        <a href="#health" class="nav-module-title">Health</a>
+        <ul>
+        <li>
+          <a href="#get-health">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/health</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#usuarios" class="nav-module-title">Usuários</a>
+        <ul>
+        <li>
+          <a href="#get-usuarios">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/usuarios</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-usuarios-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/usuarios/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-usuarios">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/usuarios</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-usuarios-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/usuarios/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-usuarios-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/usuarios/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#alunos" class="nav-module-title">Alunos</a>
+        <ul>
+        <li>
+          <a href="#get-alunos">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/alunos</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-alunos-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/alunos/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-alunos-id-perfil">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/alunos/:id/perfil</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-alunos">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/alunos</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-alunos-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/alunos/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-alunos-id-portal">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/alunos/:id/portal</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-alunos-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/alunos/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-alunos-id-entregas">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/alunos/:id/entregas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-alunos-id-entregas">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/alunos/:id/entregas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-alunos-id-historico">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/alunos/:id/historico</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-alunos-id-historico">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/alunos/:id/historico</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-alunos-id-historico-id-hist">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/alunos/:id/historico/:id_hist</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-alunos-id-historico-id-hist">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/alunos/:id/historico/:id_hist</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#mentores" class="nav-module-title">Mentores</a>
+        <ul>
+        <li>
+          <a href="#get-mentores">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/mentores</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-mentores-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/mentores/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-mentores-id-mentorandos">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/mentores/:id/mentorandos</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-mentores">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/mentores</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-mentores-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/mentores/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-mentores-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/mentores/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#mentorias" class="nav-module-title">Mentorias</a>
+        <ul>
+        <li>
+          <a href="#get-mentorias">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/mentorias</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-mentorias-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/mentorias/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-mentorias">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/mentorias</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-mentorias-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/mentorias/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-mentorias-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/mentorias/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#programas" class="nav-module-title">Programas</a>
+        <ul>
+        <li>
+          <a href="#get-programas">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/programas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-programas-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/programas/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-programas">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/programas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-programas-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/programas/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-programas-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/programas/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#eventos" class="nav-module-title">Eventos</a>
+        <ul>
+        <li>
+          <a href="#get-eventos">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/eventos</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-eventos-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/eventos/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-eventos">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/eventos</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-eventos-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/eventos/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-eventos-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/eventos/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#indicadores" class="nav-module-title">Indicadores</a>
+        <ul>
+        <li>
+          <a href="#get-indicadores">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/indicadores</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-indicadores-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/indicadores/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-indicadores">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/indicadores</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-indicadores-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/indicadores/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-indicadores-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/indicadores/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#avaliacoes" class="nav-module-title">Avaliações</a>
+        <ul>
+        <li>
+          <a href="#get-avaliacoes">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/avaliacoes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-avaliacoes-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/avaliacoes/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-avaliacoes">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/avaliacoes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-avaliacoes-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/avaliacoes/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-avaliacoes-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/avaliacoes/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#atividades" class="nav-module-title">Atividades</a>
+        <ul>
+        <li>
+          <a href="#get-atividades">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/atividades</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-atividades-id">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/atividades/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-atividades">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/atividades</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-atividades-id">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/atividades/:id</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-atividades-id">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/atividades/:id</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#importacao" class="nav-module-title">Importação</a>
+        <ul>
+        <li>
+          <a href="#post-importacao-alunos">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/importacao/alunos</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#dashboard" class="nav-module-title">Dashboard</a>
+        <ul>
+        <li>
+          <a href="#get-dashboard">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/dashboard</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#acompanha" class="nav-module-title">Acompanha</a>
+        <ul>
+        <li>
+          <a href="#post-acompanha">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/acompanha</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#matriculas" class="nav-module-title">Matrículas</a>
+        <ul>
+        <li>
+          <a href="#get-matriculas">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/matriculas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-matriculas">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/matriculas</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-matriculas-aluno-id-aluno">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/matriculas/aluno/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-matriculas-programa-id-programa">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/matriculas/programa/:id_programa</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-matriculas-id-programa-id-aluno">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/matriculas/:id_programa/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-matriculas-id-programa-id-aluno">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/matriculas/:id_programa/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-matriculas-id-programa-id-aluno">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/matriculas/:id_programa/:id_aluno</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#participacoes-evento" class="nav-module-title">Participações em Evento</a>
+        <ul>
+        <li>
+          <a href="#get-participacoes-evento">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/participacoes-evento</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-participacoes-evento">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/participacoes-evento</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-participacoes-evento-evento-id-evento">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/participacoes-evento/evento/:id_evento</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-participacoes-evento-aluno-id-aluno">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/participacoes-evento/aluno/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-participacoes-evento-id-evento-id-aluno">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/participacoes-evento/:id_evento/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#put-participacoes-evento-id-evento-id-aluno">
+            <span class="mini-method" style="background:#f59e0b">PUT</span>
+            <span class="mini-path">/participacoes-evento/:id_evento/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-participacoes-evento-id-evento-id-aluno">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/participacoes-evento/:id_evento/:id_aluno</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#gerencias" class="nav-module-title">Gerências</a>
+        <ul>
+        <li>
+          <a href="#get-gerencias">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/gerencias</span>
+          </a>
+        </li>
+        <li>
+          <a href="#post-gerencias">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/gerencias</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-gerencias-programa-id-programa">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/gerencias/programa/:id_programa</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-gerencias-coordenador-id-coordenador">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/gerencias/coordenador/:id_coordenador</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-gerencias-id-coordenador-id-programa">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/gerencias/:id_coordenador/:id_programa</span>
+          </a>
+        </li></ul>
+      </li>
+      <li class="nav-module">
+        <a href="#anotacoes" class="nav-module-title">Anotações Privadas</a>
+        <ul>
+        <li>
+          <a href="#post-anotacoes">
+            <span class="mini-method" style="background:#22c55e">POST</span>
+            <span class="mini-path">/anotacoes</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-anotacoes-aluno-id-aluno">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/anotacoes/aluno/:id_aluno</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-anotacoes-aluno-id-aluno-mentor-id-mentor">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/anotacoes/aluno/:id_aluno/mentor/:id_mentor</span>
+          </a>
+        </li>
+        <li>
+          <a href="#get-anotacoes-mentor-id-mentor">
+            <span class="mini-method" style="background:#3b82f6">GET</span>
+            <span class="mini-path">/anotacoes/mentor/:id_mentor</span>
+          </a>
+        </li>
+        <li>
+          <a href="#delete-anotacoes-mentor-id-mentor-aluno-id-aluno">
+            <span class="mini-method" style="background:#ef4444">DELETE</span>
+            <span class="mini-path">/anotacoes/mentor/:id_mentor/aluno/:id_aluno</span>
+          </a>
+        </li></ul>
+      </li></ul></nav>
+    </aside>
+  <main>
+    
+  <section class="intro">
+    <h1>Documentação da Pulse Mais WebAPI</h1>
+    <p>Referência completa dos endpoints expostos pela aplicação. Todos os erros seguem o formato <code>{ "error": "mensagem" }</code>.</p>
+    <p>Use a navegação à esquerda para saltar entre módulos.</p>
+    <div class="legend">
+      <span style="background:#3b82f6">GET</span>
+      <span style="background:#22c55e">POST</span>
+      <span style="background:#f59e0b">PUT</span>
+      <span style="background:#ef4444">DELETE</span>
+    </div>
+  </section>
+    
+    <section class="module" id="health">
+      <h2>Health <span class="prefix">/health</span></h2>
+      
+    <article class="endpoint" id="get-health">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/health</code>
+        
+      </header>
+      <p class="summary">Verifica se o servidor e o banco estão operacionais.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Servidor e banco operacionais.</td>
+          <td><pre class="code">{ "status": "ok", "db": "connected", "project": "Pulse Mais G01" }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-server">503</span></td>
+          <td>Banco indisponível.</td>
+          <td><pre class="code">{ "status": "error", "db": "disconnected" }</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="usuarios">
+      <h2>Usuários <span class="prefix">/usuarios</span></h2>
+      
+    <article class="endpoint" id="get-usuarios">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/usuarios</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Lista todos os usuários cadastrados.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de usuários.</td>
+          <td><pre class="code">Array&lt;{ id_usuario, nome, email, cpf, senha }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-usuarios-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/usuarios/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Busca usuário por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Usuário encontrado.</td>
+          <td><pre class="code">{ id_usuario, nome, email, cpf, senha }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Usuário não encontrado.</td>
+          <td><pre class="code">{ "error": "..." }</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-usuarios">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/usuarios</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001, RN01</span></div>
+      </header>
+      <p class="summary">Cria novo usuário.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "nome": string, "email": string, "senha": string, "cpf": string }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Usuário criado.</td>
+          <td><pre class="code">objeto usuário criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">409</span></td>
+          <td>CPF ou email já cadastrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-usuarios-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/usuarios/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Atualiza dados do usuário.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { nome, email, senha, cpf }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Usuário atualizado.</td>
+          <td><pre class="code">objeto usuário atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Usuário não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-usuarios-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/usuarios/:id</code>
+        
+      </header>
+      <p class="summary">Remove usuário fisicamente.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Usuário não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="alunos">
+      <h2>Alunos <span class="prefix">/alunos</span></h2>
+      
+    <article class="endpoint" id="get-alunos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/alunos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001, RF009, RN02</span></div>
+      </header>
+      <p class="summary">Lista alunos com filtros opcionais.</p>
+      
+      
+      
+    <div class="block">
+      <h4>Query parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>nome</code></td>
+        <td><span class="type">string</span></td>
+        <td>busca parcial (ilike)</td>
+      </tr>
+      <tr>
+        <td><code>cpf</code></td>
+        <td><span class="type">string</span></td>
+        <td>match exato</td>
+      </tr>
+      <tr>
+        <td><code>email</code></td>
+        <td><span class="type">string</span></td>
+        <td>busca parcial (ilike)</td>
+      </tr>
+      <tr>
+        <td><code>ativo</code></td>
+        <td><span class="type">true | false</span></td>
+        <td>default = true</td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista filtrada de alunos com dados do usuário embebidos.</td>
+          <td><pre class="code">Array&lt;{ id_usuario, id_mentor, ativo, usuario: { nome, email, cpf } }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-alunos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/alunos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Busca aluno por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Aluno encontrado.</td>
+          <td><pre class="code">{ id_usuario, id_mentor, ativo, usuario: { nome, email, cpf } }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado ou inativo.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-alunos-id-perfil">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/alunos/:id/perfil</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF004, RN05</span></div>
+      </header>
+      <p class="summary">Retorna perfil consolidado do aluno (somente-leitura).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Perfil completo do aluno com vínculos.</td>
+          <td><pre class="code">{ usuario, programas: [...], eventos: [...], avaliacoes: [...], mentorias: [...], historico_profissional: [...] }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado ou inativo.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-alunos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/alunos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Cria vínculo de aluno para um usuário já existente.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_usuario": integer, "id_mentor": integer (opcional) }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Vínculo criado.</td>
+          <td><pre class="code">{ id_usuario, id_mentor, ativo }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Usuário não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-alunos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/alunos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001</span></div>
+      </header>
+      <p class="summary">Atualiza dados do aluno (campos da tabela aluno).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_mentor": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Aluno atualizado.</td>
+          <td><pre class="code">objeto aluno atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-alunos-id-portal">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/alunos/:id/portal</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF005, RN09</span></div>
+      </header>
+      <p class="summary">Atualiza dados do próprio aluno via Portal do Aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { nome, email, senha, cpf }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Dados do usuário (sem o campo senha).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>ID inválido.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-alunos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/alunos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF001, RN02</span></div>
+      </header>
+      <p class="summary">Inativa o aluno (exclusão lógica — ativo = false).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Inativado (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-alunos-id-entregas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/alunos/:id/entregas</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Lista todas as entregas de atividades do aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de entregas.</td>
+          <td><pre class="code">Array&lt;{ id_aluno, id_atividade, data_realizacao, nota }&gt;</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-alunos-id-entregas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/alunos/:id/entregas</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003, RN04</span></div>
+      </header>
+      <p class="summary">Registra entrega de atividade para o aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_atividade": integer, "data_realizacao": "YYYY-MM-DD", "nota": number (opcional) }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Entrega criada.</td>
+          <td><pre class="code">objeto entrega criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>Data futura (RN04) ou aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-alunos-id-historico">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/alunos/:id/historico</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF010</span></div>
+      </header>
+      <p class="summary">Lista histórico profissional do aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista do histórico profissional.</td>
+          <td><pre class="code">Array&lt;{ id_historico, cargo, empresa, data_inicio, data_fim, id_usuario }&gt;</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado ou inativo.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-alunos-id-historico">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/alunos/:id/historico</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF010</span></div>
+      </header>
+      <p class="summary">Cria registro no histórico profissional do aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "cargo": string, "empresa": string, "data_inicio": "YYYY-MM-DD", "data_fim": "YYYY-MM-DD" (opcional) }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Histórico criado.</td>
+          <td><pre class="code">objeto histórico criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno não encontrado ou inativo.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-alunos-id-historico-id-hist">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/alunos/:id/historico/:id_hist</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF010</span></div>
+      </header>
+      <p class="summary">Atualiza registro do histórico profissional.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td>ID do aluno</td>
+      </tr>
+      <tr>
+        <td><code>id_hist</code></td>
+        <td><span class="type">integer</span></td>
+        <td>ID do histórico</td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { cargo, empresa, data_inicio, data_fim }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Histórico atualizado.</td>
+          <td><pre class="code">objeto histórico atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno ou histórico não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-alunos-id-historico-id-hist">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/alunos/:id/historico/:id_hist</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF010</span></div>
+      </header>
+      <p class="summary">Remove registro do histórico profissional.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td>ID do aluno</td>
+      </tr>
+      <tr>
+        <td><code>id_hist</code></td>
+        <td><span class="type">integer</span></td>
+        <td>ID do histórico</td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Aluno ou histórico não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="mentores">
+      <h2>Mentores <span class="prefix">/mentores</span></h2>
+      
+    <article class="endpoint" id="get-mentores">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/mentores</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF011</span></div>
+      </header>
+      <p class="summary">Lista todos os mentores.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de mentores.</td>
+          <td><pre class="code">Array&lt;{ id_usuario, especialidade, disponibilidade, tipo_vinculo, ativo, usuario: { nome, email, cpf } }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-mentores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/mentores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF011</span></div>
+      </header>
+      <p class="summary">Busca mentor por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Mentor encontrado com dados do usuário.</td>
+          <td><pre class="code">objeto mentor com dados do usuário</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentor não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-mentores-id-mentorandos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/mentores/:id/mentorandos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF013</span></div>
+      </header>
+      <p class="summary">Lista alunos vinculados ao mentor (via tabela acompanha).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de mentorandos.</td>
+          <td><pre class="code">Array&lt;{ id_usuario, nome, email, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-mentores">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/mentores</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF011</span></div>
+      </header>
+      <p class="summary">Cria novo mentor (cria usuário + vínculo mentor).</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "nome": string, "email": string, "senha": string, "cpf": string, "especialidade": string, "disponibilidade": string, "tipo_vinculo": string }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Mentor criado.</td>
+          <td><pre class="code">objeto mentor criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">409</span></td>
+          <td>CPF ou email já cadastrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-mentores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/mentores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF011</span></div>
+      </header>
+      <p class="summary">Atualiza dados do mentor.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto dos campos do mentor.</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Mentor atualizado.</td>
+          <td><pre class="code">objeto mentor atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentor não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-mentores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/mentores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF011, RN13</span></div>
+      </header>
+      <p class="summary">Inativa o mentor (exclusão lógica — ativo = false).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Inativado (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentor não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="mentorias">
+      <h2>Mentorias <span class="prefix">/mentorias</span></h2>
+      
+    <article class="endpoint" id="get-mentorias">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/mentorias</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Lista todas as mentorias.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de mentorias.</td>
+          <td><pre class="code">Array&lt;{ id_mentoria, formato, tema, duracao, data }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-mentorias-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/mentorias/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Busca mentoria por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Mentoria encontrada.</td>
+          <td><pre class="code">objeto mentoria</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentoria não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-mentorias">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/mentorias</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012, RN12</span></div>
+      </header>
+      <p class="summary">Cria nova mentoria vinculando mentor e aluno.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "formato": string, "tema": string, "duracao": integer, "data": "YYYY-MM-DDTHH:mm:ssZ", "id_mentor": integer, "id_aluno": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Mentoria criada.</td>
+          <td><pre class="code">objeto mentoria criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>Mentor ou aluno inativos (RN12).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentor ou aluno não encontrados.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-mentorias-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/mentorias/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Atualiza dados da mentoria.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { formato, tema, duracao, data }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Mentoria atualizada.</td>
+          <td><pre class="code">objeto mentoria atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentoria não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-mentorias-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/mentorias/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Remove a mentoria.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentoria não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="programas">
+      <h2>Programas <span class="prefix">/programas</span></h2>
+      
+    <article class="endpoint" id="get-programas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/programas</code>
+        
+      </header>
+      <p class="summary">Lista todos os programas.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de programas.</td>
+          <td><pre class="code">Array&lt;{ id_programa, titulo, inicio, fim }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-programas-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/programas/:id</code>
+        
+      </header>
+      <p class="summary">Busca programa por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Programa encontrado.</td>
+          <td><pre class="code">objeto programa</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Programa não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-programas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/programas</code>
+        
+      </header>
+      <p class="summary">Cria novo programa.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "titulo": string, "inicio": "YYYY-MM-DD", "fim": "YYYY-MM-DD" }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Programa criado.</td>
+          <td><pre class="code">objeto programa criado</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-programas-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/programas/:id</code>
+        
+      </header>
+      <p class="summary">Atualiza dados do programa.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { titulo, inicio, fim }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Programa atualizado.</td>
+          <td><pre class="code">objeto programa atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Programa não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-programas-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/programas/:id</code>
+        
+      </header>
+      <p class="summary">Remove o programa.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Programa não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="eventos">
+      <h2>Eventos <span class="prefix">/eventos</span></h2>
+      
+    <article class="endpoint" id="get-eventos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/eventos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF007</span></div>
+      </header>
+      <p class="summary">Lista todos os eventos.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de eventos.</td>
+          <td><pre class="code">Array&lt;{ id_evento, nome, data, local }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-eventos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/eventos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF007</span></div>
+      </header>
+      <p class="summary">Busca evento por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Evento encontrado.</td>
+          <td><pre class="code">objeto evento</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Evento não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-eventos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/eventos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF007</span></div>
+      </header>
+      <p class="summary">Cria novo evento e notifica todos os alunos ativos por e-mail (RF007).</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "nome": string, "data": "YYYY-MM-DDTHH:mm:ssZ", "local": string }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Evento criado.</td>
+          <td><pre class="code">objeto evento criado</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>Se SMTP não estiver configurado, o e-mail é logado no console sem interromper a criação.</p></div>
+    </article>
+
+    <article class="endpoint" id="put-eventos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/eventos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF007</span></div>
+      </header>
+      <p class="summary">Atualiza dados do evento.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { nome, data, local }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Evento atualizado.</td>
+          <td><pre class="code">objeto evento atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Evento não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-eventos-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/eventos/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF007</span></div>
+      </header>
+      <p class="summary">Remove o evento.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Evento não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="indicadores">
+      <h2>Indicadores <span class="prefix">/indicadores</span></h2>
+      
+    <article class="endpoint" id="get-indicadores">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/indicadores</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Lista todos os indicadores de avaliação.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de indicadores.</td>
+          <td><pre class="code">Array&lt;{ id_indicador, nome, descricao, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-indicadores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/indicadores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Busca indicador por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Indicador encontrado.</td>
+          <td><pre class="code">objeto indicador</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Indicador não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-indicadores">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/indicadores</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002, RN03</span></div>
+      </header>
+      <p class="summary">Cria novo indicador vinculado a um programa.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "nome": string, "descricao": string (opcional), "id_programa": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Indicador criado.</td>
+          <td><pre class="code">objeto indicador criado</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-indicadores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/indicadores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Atualiza o indicador.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { nome, descricao, id_programa }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Indicador atualizado.</td>
+          <td><pre class="code">objeto indicador atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Indicador não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-indicadores-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/indicadores/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Remove o indicador.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Indicador não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="avaliacoes">
+      <h2>Avaliações <span class="prefix">/avaliacoes</span></h2>
+      
+    <article class="endpoint" id="get-avaliacoes">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/avaliacoes</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Lista todas as avaliações.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de avaliações.</td>
+          <td><pre class="code">Array&lt;{ id_avaliacao, nota, data_avaliacao, id_indicador, id_aluno }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-avaliacoes-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/avaliacoes/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Busca avaliação por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Avaliação encontrada.</td>
+          <td><pre class="code">objeto avaliação</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Avaliação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-avaliacoes">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/avaliacoes</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002, RN03, RN10</span></div>
+      </header>
+      <p class="summary">Registra nova avaliação de indicador para um aluno.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "nota": integer (1-5), "data_avaliacao": "YYYY-MM-DD", "id_indicador": integer, "id_aluno": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Avaliação criada.</td>
+          <td><pre class="code">objeto avaliação criado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>Nota fora do intervalo 1-5 (RN10).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-avaliacoes-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/avaliacoes/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Atualiza a avaliação.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { nota, data_avaliacao, id_indicador, id_aluno }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Avaliação atualizada.</td>
+          <td><pre class="code">objeto avaliação atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>Nota inválida.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Avaliação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-avaliacoes-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/avaliacoes/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Remove a avaliação.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Avaliação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="atividades">
+      <h2>Atividades <span class="prefix">/atividades</span></h2>
+      
+    <article class="endpoint" id="get-atividades">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/atividades</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Lista todas as atividades cadastradas.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de atividades.</td>
+          <td><pre class="code">Array&lt;{ id_atividade, titulo, status, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-atividades-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/atividades/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Busca atividade por ID.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Atividade encontrada.</td>
+          <td><pre class="code">objeto atividade</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Atividade não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-atividades">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/atividades</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Cria nova atividade.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "titulo": string, "status": string, "id_programa": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Atividade criada.</td>
+          <td><pre class="code">objeto atividade criado</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-atividades-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/atividades/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Atualiza atividade.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { titulo, status, id_programa }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Atividade atualizada.</td>
+          <td><pre class="code">objeto atividade atualizado</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Atividade não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-atividades-id">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/atividades/:id</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF003</span></div>
+      </header>
+      <p class="summary">Remove a atividade.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Atividade não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="importacao">
+      <h2>Importação <span class="prefix">/importacao</span></h2>
+      
+    <article class="endpoint" id="post-importacao-alunos">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/importacao/alunos</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF006, RN06, RN08</span></div>
+      </header>
+      <p class="summary">Importa alunos a partir de arquivo CSV ou XLSX.</p>
+      <div class="block"><h4>Headers</h4><pre class="code">Content-Type: multipart/form-data</pre></div>
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">Form field "arquivo" — arquivo .csv ou .xlsx. Colunas obrigatórias: nome, email, senha, cpf.</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Todos os registros importados sem conflito.</td>
+          <td><pre class="code">{ "importados": integer }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-success">207</span></td>
+          <td>Importação parcial — alguns CPFs já existiam.</td>
+          <td><pre class="code">{ "importados": integer, "conflitos": [{ "linha": integer, "cpf": string, "motivo": string }] }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">400</span></td>
+          <td>Formato inválido ou colunas ausentes (RN08).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="dashboard">
+      <h2>Dashboard <span class="prefix">/dashboard</span></h2>
+      
+    <article class="endpoint" id="get-dashboard">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/dashboard</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF008</span></div>
+      </header>
+      <p class="summary">Retorna indicadores agregados de impacto institucional.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Indicadores agregados.</td>
+          <td><pre class="code">{
+  "total_alunos_ativos": integer,
+  "taxa_empregabilidade": float,
+  "concluintes_por_programa": [
+    { "id_programa": integer, "titulo": string, "total": integer }
+  ]
+}</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="acompanha">
+      <h2>Acompanha <span class="prefix">/acompanha</span></h2>
+      
+    <article class="endpoint" id="post-acompanha">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/acompanha</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF013</span></div>
+      </header>
+      <p class="summary">Cria vínculo de acompanhamento entre mentor, aluno e programa.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_mentor": integer, "id_aluno": integer, "id_programa": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Vínculo criado.</td>
+          <td><pre class="code">{ id_mentor, id_aluno, id_programa }</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="matriculas">
+      <h2>Matrículas <span class="prefix">/matriculas</span></h2>
+      
+    <article class="endpoint" id="get-matriculas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/matriculas</code>
+        
+      </header>
+      <p class="summary">Lista todas as matrículas.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de matrículas.</td>
+          <td><pre class="code">Array&lt;{ id_programa, id_aluno, status_conclusao, data_ingresso }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-matriculas">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/matriculas</code>
+        
+      </header>
+      <p class="summary">Cria vínculo de matrícula entre aluno e programa.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_programa": integer, "id_aluno": integer, "status_conclusao"?: integer, "data_ingresso"?: "YYYY-MM-DD" }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Matrícula criada.</td>
+          <td><pre class="code">{ id_programa, id_aluno, status_conclusao, data_ingresso }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">409</span></td>
+          <td>Matrícula já existente para este par aluno/programa.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-matriculas-aluno-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/matriculas/aluno/:id_aluno</code>
+        
+      </header>
+      <p class="summary">Lista todas as matrículas de um aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Matrículas do aluno.</td>
+          <td><pre class="code">Array&lt;{ id_programa, id_aluno, status_conclusao, data_ingresso }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-matriculas-programa-id-programa">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/matriculas/programa/:id_programa</code>
+        
+      </header>
+      <p class="summary">Lista todos os alunos matriculados em um programa.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Matrículas do programa.</td>
+          <td><pre class="code">Array&lt;{ id_programa, id_aluno, status_conclusao, data_ingresso }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-matriculas-id-programa-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/matriculas/:id_programa/:id_aluno</code>
+        
+      </header>
+      <p class="summary">Busca matrícula específica por chave composta (programa + aluno).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Matrícula encontrada.</td>
+          <td><pre class="code">{ id_programa, id_aluno, status_conclusao, data_ingresso }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Matrícula não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-matriculas-id-programa-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/matriculas/:id_programa/:id_aluno</code>
+        
+      </header>
+      <p class="summary">Atualiza dados da matrícula (ex.: status de conclusão).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">Qualquer subconjunto de { status_conclusao, data_ingresso }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Matrícula atualizada.</td>
+          <td><pre class="code">{ id_programa, id_aluno, status_conclusao, data_ingresso }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Matrícula não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-matriculas-id-programa-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/matriculas/:id_programa/:id_aluno</code>
+        
+      </header>
+      <p class="summary">Remove vínculo de matrícula.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Matrícula removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Matrícula não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="participacoes-evento">
+      <h2>Participações em Evento <span class="prefix">/participacoes-evento</span></h2>
+      
+    <article class="endpoint" id="get-participacoes-evento">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/participacoes-evento</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Lista todas as participações em eventos.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de participações.</td>
+          <td><pre class="code">Array&lt;{ id_evento, id_aluno, presenca }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-participacoes-evento">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/participacoes-evento</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Registra participação de um aluno em um evento.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_evento": integer, "id_aluno": integer, "presenca"?: boolean }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Participação registrada.</td>
+          <td><pre class="code">{ id_evento, id_aluno, presenca }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">409</span></td>
+          <td>Participação já registrada para este par evento/aluno.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-participacoes-evento-evento-id-evento">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/participacoes-evento/evento/:id_evento</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Lista todos os alunos participantes de um evento.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_evento</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Participações do evento.</td>
+          <td><pre class="code">Array&lt;{ id_evento, id_aluno, presenca }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-participacoes-evento-aluno-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/participacoes-evento/aluno/:id_aluno</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Lista todos os eventos em que um aluno participou.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Participações do aluno.</td>
+          <td><pre class="code">Array&lt;{ id_evento, id_aluno, presenca }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-participacoes-evento-id-evento-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/participacoes-evento/:id_evento/:id_aluno</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Busca participação específica por chave composta (evento + aluno).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_evento</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Participação encontrada.</td>
+          <td><pre class="code">{ id_evento, id_aluno, presenca }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Participação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="put-participacoes-evento-id-evento-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#f59e0b">PUT</span>
+        <code class="path">/participacoes-evento/:id_evento/:id_aluno</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF002</span></div>
+      </header>
+      <p class="summary">Atualiza presença do aluno no evento.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_evento</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "presenca": boolean }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Presença atualizada.</td>
+          <td><pre class="code">{ id_evento, id_aluno, presenca }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Participação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>Campo `presenca` é obrigatório. Reflete o registro de frequência em evento (RN03).</p></div>
+    </article>
+
+    <article class="endpoint" id="delete-participacoes-evento-id-evento-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/participacoes-evento/:id_evento/:id_aluno</code>
+        
+      </header>
+      <p class="summary">Remove participação do aluno no evento.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_evento</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Participação removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Participação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="gerencias">
+      <h2>Gerências <span class="prefix">/gerencias</span></h2>
+      
+    <article class="endpoint" id="get-gerencias">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/gerencias</code>
+        
+      </header>
+      <p class="summary">Lista todos os vínculos coordenador–programa.</p>
+      
+      
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Lista de gerências.</td>
+          <td><pre class="code">Array&lt;{ id_coordenador, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="post-gerencias">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/gerencias</code>
+        
+      </header>
+      <p class="summary">Cria vínculo de gerência entre coordenador e programa.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_coordenador": integer, "id_programa": integer }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Vínculo criado.</td>
+          <td><pre class="code">{ id_coordenador, id_programa }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">409</span></td>
+          <td>Vínculo já existente para este par coordenador/programa.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-gerencias-programa-id-programa">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/gerencias/programa/:id_programa</code>
+        
+      </header>
+      <p class="summary">Lista coordenadores responsáveis por um programa.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Gerências do programa.</td>
+          <td><pre class="code">Array&lt;{ id_coordenador, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="get-gerencias-coordenador-id-coordenador">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/gerencias/coordenador/:id_coordenador</code>
+        
+      </header>
+      <p class="summary">Lista programas gerenciados por um coordenador.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_coordenador</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Gerências do coordenador.</td>
+          <td><pre class="code">Array&lt;{ id_coordenador, id_programa }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-gerencias-id-coordenador-id-programa">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/gerencias/:id_coordenador/:id_programa</code>
+        
+      </header>
+      <p class="summary">Remove vínculo de gerência entre coordenador e programa.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_coordenador</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_programa</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Vínculo removido (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Vínculo não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+    </section>
+
+    <section class="module" id="anotacoes">
+      <h2>Anotações Privadas <span class="prefix">/anotacoes</span></h2>
+      
+    <article class="endpoint" id="post-anotacoes">
+      <header class="endpoint-header">
+        <span class="method" style="background:#22c55e">POST</span>
+        <code class="path">/anotacoes</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Registra anotação qualitativa de um mentor sobre um aluno.</p>
+      
+      
+      
+      <div class="block"><h4>Body</h4><pre class="code">{ "id_mentor": integer, "id_aluno": integer, "conteudo_texto": string }</pre></div>
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">201</span></td>
+          <td>Anotação registrada.</td>
+          <td><pre class="code">{ id_mentor, id_aluno, data_registro, conteudo_texto }</pre></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Mentor ou aluno não encontrado.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>Somente mentores podem criar anotações. O campo `data_registro` é preenchido automaticamente (RN13).</p></div>
+    </article>
+
+    <article class="endpoint" id="get-anotacoes-aluno-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/anotacoes/aluno/:id_aluno</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF013</span></div>
+      </header>
+      <p class="summary">Lista todas as anotações de um aluno (visão coordenador — todos os mentores).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Anotações do aluno.</td>
+          <td><pre class="code">Array&lt;{ id_mentor, id_aluno, data_registro, conteudo_texto }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>Retorna anotações de todos os mentores sobre o aluno. Acesso restrito ao coordenador (RN13).</p></div>
+    </article>
+
+    <article class="endpoint" id="get-anotacoes-aluno-id-aluno-mentor-id-mentor">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/anotacoes/aluno/:id_aluno/mentor/:id_mentor</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF013</span></div>
+      </header>
+      <p class="summary">Lista anotações de um mentor específico sobre um aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_mentor</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Anotações do mentor sobre o aluno.</td>
+          <td><pre class="code">Array&lt;{ id_mentor, id_aluno, data_registro, conteudo_texto }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>Mentor acessa apenas suas próprias anotações sobre o aluno (RN13).</p></div>
+    </article>
+
+    <article class="endpoint" id="get-anotacoes-mentor-id-mentor">
+      <header class="endpoint-header">
+        <span class="method" style="background:#3b82f6">GET</span>
+        <code class="path">/anotacoes/mentor/:id_mentor</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF013</span></div>
+      </header>
+      <p class="summary">Lista todas as anotações feitas por um mentor (sobre todos os seus alunos).</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_mentor</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">200</span></td>
+          <td>Anotações do mentor.</td>
+          <td><pre class="code">Array&lt;{ id_mentor, id_aluno, data_registro, conteudo_texto }&gt;</pre></td>
+        </tr></tbody>
+      </table>
+    </div>
+      
+    </article>
+
+    <article class="endpoint" id="delete-anotacoes-mentor-id-mentor-aluno-id-aluno">
+      <header class="endpoint-header">
+        <span class="method" style="background:#ef4444">DELETE</span>
+        <code class="path">/anotacoes/mentor/:id_mentor/aluno/:id_aluno</code>
+        <div class="rf"><span class="rf-label">RF / RN</span><span class="rf-value">RF012</span></div>
+      </header>
+      <p class="summary">Remove anotação de um mentor sobre um aluno.</p>
+      
+      
+    <div class="block">
+      <h4>Path parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>id_mentor</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><code>id_aluno</code></td>
+        <td><span class="type">integer</span></td>
+        <td></td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+    <div class="block">
+      <h4>Query parameters</h4>
+      <table class="params">
+        <thead><tr><th>Nome</th><th>Tipo</th><th>Descrição</th></tr></thead>
+        <tbody>
+      <tr>
+        <td><code>data</code></td>
+        <td><span class="type">string (ISO timestamp)</span></td>
+        <td>data_registro da anotação a remover</td>
+      </tr></tbody>
+      </table>
+    </div>
+      
+      
+    <div class="block">
+      <h4>Respostas</h4>
+      <table class="responses">
+        <thead><tr><th>Status</th><th>Descrição</th><th>Body</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><span class="status status-success">204</span></td>
+          <td>Anotação removida (sem corpo).</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr>
+        <tr>
+          <td><span class="status status-client">404</span></td>
+          <td>Anotação não encontrada.</td>
+          <td><span class="muted">sem corpo</span></td>
+        </tr></tbody>
+      </table>
+    </div>
+      <div class="block notes"><h4>Observações</h4><p>O parâmetro `data` (query string) é obrigatório para identificar a anotação pelo timestamp exato (RN13).</p></div>
+    </article>
+    </section>
+    
+  <section class="module" id="status-codes">
+    <h2>Códigos de status</h2>
+    <article class="endpoint">
+      <table>
+        <thead><tr><th>Código</th><th>Significado</th></tr></thead>
+        <tbody>
+          <tr><td><span class="status status-success">200</span></td><td>Sucesso em GET / PUT.</td></tr>
+          <tr><td><span class="status status-success">201</span></td><td>Criação bem-sucedida.</td></tr>
+          <tr><td><span class="status status-success">204</span></td><td>Deleção / inativação bem-sucedida (sem corpo).</td></tr>
+          <tr><td><span class="status status-success">207</span></td><td>Importação parcial (sucesso com conflitos).</td></tr>
+          <tr><td><span class="status status-client">400</span></td><td>Dados inválidos (BadRequestError).</td></tr>
+          <tr><td><span class="status status-client">404</span></td><td>Recurso não encontrado (NotFoundError).</td></tr>
+          <tr><td><span class="status status-client">409</span></td><td>Conflito — ex.: CPF duplicado (ConflictError).</td></tr>
+          <tr><td><span class="status status-server">500</span></td><td>Erro interno do servidor.</td></tr>
+        </tbody>
+      </table>
+    </article>
+  </section>
+    <footer>Pulse Mais G01 — gerado estaticamente a partir de <code>src/docs/apiDocs.ts</code>.</footer>
+  </main>
+</body>
+</html>

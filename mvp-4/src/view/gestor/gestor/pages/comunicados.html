@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor | Comunicados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../globalStyle/tokens.css">
+  <link rel="stylesheet" href="../styles/comunicados.css">
+</head>
+<body>
+  <!-- Layout principal da pagina Comunicados -->
+  <div class="layout-gestor app-shell">
+    <!-- Sidebar: Logo, CardPerfil, Menu -->
+    <aside class="sidebar" aria-label="Menu do gestor">
+      <a class="brand" href="./dashboard.html" aria-label="Pulse Mais">
+        <img class="brand-logo" src="../../assets/imagemPulse.png" alt="Pulse Mais">
+      </a>
+
+      <section class="manager-card" aria-label="Usu&aacute;rio logado">
+        <span class="manager-avatar">
+          <i data-lucide="circle-user" aria-hidden="true"></i>
+        </span>
+        <p>Ol&aacute;, Gestor<br>Rafael</p>
+      </section>
+
+      <nav class="sidebar-nav" aria-label="Navega&ccedil;&atilde;o principal">
+        <a class="nav-item" href="./dashboard.html">
+          <i data-lucide="chart-bar" aria-hidden="true"></i>
+          Dashboard
+        </a>
+        <a class="nav-item" href="./turmas.html">
+          <i data-lucide="users" aria-hidden="true"></i>
+          Turmas
+        </a>
+        <a class="nav-item active" href="./comunicados.html" aria-current="page">
+          <i data-lucide="message-square-dot" aria-hidden="true"></i>
+          Comunicados
+        </a>        <button type="button" id="logoutButton" class="nav-item nav-item-logout" aria-label="Sair da conta">
+          <i data-lucide="log-out" aria-hidden="true"></i>
+          Sair
+        </button>      </nav>
+    </aside>
+
+    <main class="pagina-comunicados">
+
+      <!-- Topo: titulo + busca + filtro -->
+      <div class="com-topo">
+        <div>
+          <h1 class="com-titulo">Comunicados</h1>
+          <p class="com-subtitulo">Envie avisos para alunos, mentores e equipe</p>
+        </div>
+        <div class="com-topo-acoes">
+          <div class="busca">
+            <input type="text" class="busca-input" placeholder="Buscar comunicado...">
+            <i data-lucide="search"></i>
+          </div>
+          <select class="filtro-select">
+            <option value="">Todos os tipos</option>
+            <option value="Eventos">Eventos</option>
+            <option value="Informativo">Informativo</option>
+            <option value="Aviso">Aviso</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Historico -->
+      <section class="com-secao">
+        <h2 class="com-secao-titulo"><i data-lucide="calendar"></i> Hist&oacute;rico</h2>
+
+        <div class="com-historico" id="com-historico">
+
+          <article class="com-card com-card--evento"
+                   data-tipo="evento" data-tag="Eventos" data-data="14/05/2026"
+                   data-titulo="Mentoria com Executivos da TechCo" data-dest="Turma 1"
+                   data-local="Audit&oacute;rio Principal &mdash; Sede Pulse Mais, Av. Paulista, 1000"
+                   data-evento-data="20/05/2026, das 19h &agrave;s 21h"
+                   data-conteudo="Confirmem presen&ccedil;a na pr&oacute;xima sess&atilde;o de mentoria com l&iacute;deres da TechCo. O encontro acontecer&aacute; no audit&oacute;rio principal e contar&aacute; com profissionais das &aacute;reas de produto, engenharia e dados.">
+            <button type="button" class="com-card-menu-btn" aria-label="Op&ccedil;&otilde;es do comunicado"><i data-lucide="ellipsis-vertical"></i></button>
+            <div class="com-card-menu">
+              <button type="button" class="com-card-menu-item com-card-menu-item--excluir"><i data-lucide="trash-2"></i> Excluir</button>
+            </div>
+            <div class="com-card-topo">
+              <span class="com-tag">Eventos</span>
+              <span class="com-data">14/05/2026</span>
+            </div>
+            <h3 class="com-card-titulo">Mentoria com Executivos da TechCo</h3>
+            <p class="com-card-texto">Confirmem presen&ccedil;a na pr&oacute;xima sess&atilde;o de mentoria com l&iacute;deres da TechCo. O encontro acontecer&aacute; no audit&oacute;rio...</p>
+            <div class="com-card-rodape"><i data-lucide="users"></i> Turma 1</div>
+          </article>
+
+          <article class="com-card com-card--info"
+                   data-tipo="info" data-tag="Informativo" data-data="27/05/2026"
+                   data-titulo="Libera&ccedil;&atilde;o das Grava&ccedil;&otilde;es e C&oacute;digos das Aulas" data-dest="Todas as turmas"
+                   data-conteudo="As grava&ccedil;&otilde;es e os c&oacute;digos das aulas j&aacute; est&atilde;o dispon&iacute;veis na plataforma.">
+            <button type="button" class="com-card-menu-btn" aria-label="Op&ccedil;&otilde;es do comunicado"><i data-lucide="ellipsis-vertical"></i></button>
+            <div class="com-card-menu">
+              <button type="button" class="com-card-menu-item com-card-menu-item--excluir"><i data-lucide="trash-2"></i> Excluir</button>
+            </div>
+            <div class="com-card-topo">
+              <span class="com-tag">Informativo</span>
+              <span class="com-data">27/05/2026</span>
+            </div>
+            <h3 class="com-card-titulo">Libera&ccedil;&atilde;o das Grava&ccedil;&otilde;es e C&oacute;digos das Aulas</h3>
+            <p class="com-card-texto">As grava&ccedil;&otilde;es e os c&oacute;digos das aulas j&aacute; est&atilde;o dispon&iacute;veis na plataforma.</p>
+            <div class="com-card-rodape"><i data-lucide="users"></i> Todas as turmas</div>
+          </article>
+
+          <article class="com-card com-card--info"
+                   data-tipo="info" data-tag="Informativo" data-data="26/05/2026"
+                   data-titulo="Nova Agenda de Plant&atilde;o de D&uacute;vidas Aberta" data-dest="Todas as turmas"
+                   data-conteudo="A grade de hor&aacute;rios com os nossos monitores para a pr&oacute;xima semana j&aacute; est&aacute; dispon&iacute;vel.">
+            <button type="button" class="com-card-menu-btn" aria-label="Op&ccedil;&otilde;es do comunicado"><i data-lucide="ellipsis-vertical"></i></button>
+            <div class="com-card-menu">
+              <button type="button" class="com-card-menu-item com-card-menu-item--excluir"><i data-lucide="trash-2"></i> Excluir</button>
+            </div>
+            <div class="com-card-topo">
+              <span class="com-tag">Informativo</span>
+              <span class="com-data">26/05/2026</span>
+            </div>
+            <h3 class="com-card-titulo">Nova Agenda de Plant&atilde;o de D&uacute;vidas Aberta</h3>
+            <p class="com-card-texto">A grade de hor&aacute;rios com os nossos monitores para a pr&oacute;xima semana j&aacute; est&aacute; dispon&iacute;vel.</p>
+            <div class="com-card-rodape"><i data-lucide="users"></i> Todas as turmas</div>
+          </article>
+
+          <article class="com-card com-card--aviso"
+                   data-tipo="aviso" data-tag="Aviso" data-data="25/05/2026"
+                   data-titulo="Manuten&ccedil;&atilde;o Programada na Plataforma" data-dest="Todas as turmas"
+                   data-conteudo="Aten&ccedil;&atilde;o! No pr&oacute;ximo domingo, o nosso ambiente virtual de aprendizagem passar&aacute; por uma atualiza&ccedil;&atilde;o de infraestrutura e ficar&aacute; fora do ar das 02h &agrave;s 06h.">
+            <button type="button" class="com-card-menu-btn" aria-label="Op&ccedil;&otilde;es do comunicado"><i data-lucide="ellipsis-vertical"></i></button>
+            <div class="com-card-menu">
+              <button type="button" class="com-card-menu-item com-card-menu-item--excluir"><i data-lucide="trash-2"></i> Excluir</button>
+            </div>
+            <div class="com-card-topo">
+              <span class="com-tag"><i data-lucide="triangle-alert"></i> Aviso</span>
+              <span class="com-data">25/05/2026</span>
+            </div>
+            <h3 class="com-card-titulo">Manuten&ccedil;&atilde;o Programada na Plataforma</h3>
+            <p class="com-card-texto">Aten&ccedil;&atilde;o! No pr&oacute;ximo domingo, o nosso ambiente virtual de aprendizagem passar&aacute; por uma atualiza&ccedil;&atilde;o de infraestrutura e ficar&aacute; fora do ar das 02h &agrave;s 06h.</p>
+            <div class="com-card-rodape"><i data-lucide="users"></i> Todas as turmas</div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Novo comunicado -->
+      <section class="com-secao">
+        <h2 class="com-secao-titulo">Novo comunicado</h2>
+
+        <form class="com-form" id="form-comunicado">
+          <div class="com-form-linha">
+            <label class="form-campo">
+              <span class="form-label">T&iacute;tulo</span>
+              <input type="text" name="titulo" placeholder="T&iacute;tulo do comunicado">
+            </label>
+            <label class="form-campo">
+              <span class="form-label">Tipo</span>
+              <select name="tipo">
+                <option>Informativo</option>
+                <option>Eventos</option>
+                <option>Aviso</option>
+              </select>
+            </label>
+            <label class="form-campo">
+              <span class="form-label">Destinat&aacute;rio</span>
+              <select name="destinatarios">
+                <option value="todos">Todos os alunos</option>
+                <option value="ativos">Alunos ativos</option>
+                <option value="ex-alunos">Ex-alunos</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="com-editor">
+            <div class="com-toolbar">
+              <button type="button" data-comando="bold" aria-label="Negrito" title="Negrito"><i data-lucide="bold"></i></button>
+              <button type="button" data-comando="italic" aria-label="It&aacute;lico" title="It&aacute;lico"><i data-lucide="italic"></i></button>
+              <button type="button" data-comando="underline" aria-label="Sublinhado" title="Sublinhado"><i data-lucide="underline"></i></button>
+              <button type="button" data-comando="insertUnorderedList" aria-label="Lista" title="Lista"><i data-lucide="list"></i></button>
+              <button type="button" data-acao-editor="link" aria-label="Link" title="Adicionar link"><i data-lucide="link"></i></button>
+              <button type="button" data-acao-editor="anexo" aria-label="Anexar" title="Anexar arquivo"><i data-lucide="paperclip"></i></button>
+              <button type="button" data-acao-editor="imagem" aria-label="Imagem" title="Adicionar imagem"><i data-lucide="image"></i></button>
+              <button type="button" data-acao-editor="emoji" aria-label="Emoji" title="Adicionar emoji"><i data-lucide="smile"></i></button>
+              <div class="com-emoji-menu" id="com-emoji-menu" hidden>
+                <button type="button" data-emoji="😀" aria-label="Sorriso">😀</button>
+                <button type="button" data-emoji="👏" aria-label="Palmas">👏</button>
+                <button type="button" data-emoji="🎉" aria-label="Celebra&ccedil;&atilde;o">🎉</button>
+                <button type="button" data-emoji="📢" aria-label="Comunicado">📢</button>
+                <button type="button" data-emoji="📅" aria-label="Calend&aacute;rio">📅</button>
+                <button type="button" data-emoji="✅" aria-label="Confirma&ccedil;&atilde;o">✅</button>
+                <button type="button" data-emoji="⚠️" aria-label="Aten&ccedil;&atilde;o">⚠️</button>
+                <button type="button" data-emoji="💼" aria-label="Trabalho">💼</button>
+              </div>
+            </div>
+            <div
+              class="com-editor-area"
+              id="com-editor-area"
+              contenteditable="true"
+              role="textbox"
+              aria-multiline="true"
+              data-placeholder="Escreva o conte&uacute;do do comunicado aqui..."
+            ></div>
+            <textarea name="conteudo" id="com-conteudo" hidden></textarea>
+            <input type="file" id="com-anexo-input" hidden>
+            <input type="file" id="com-imagem-input" accept="image/*" hidden>
+          </div>
+
+          <div class="com-form-acoes">
+            <p class="com-feedback" id="com-feedback" aria-live="polite"></p>
+            <button type="submit" class="btn-publicar">Publicar comunicado</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="com-secao">
+        <h2 class="com-secao-titulo"><i data-lucide="upload"></i> Importar hist&oacute;rico</h2>
+
+        <form class="com-form importacao-form" id="form-importacao">
+          <label class="form-campo">
+            <span class="form-label">Arquivo CSV</span>
+            <input type="file" name="file" accept=".csv,text/csv">
+          </label>
+          <div class="com-form-acoes">
+            <span class="importacao-resultado" id="importacao-resultado" aria-live="polite"></span>
+            <button type="submit" class="btn-publicar">Importar CSV</button>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- Modal: comunicado completo -->
+  <div class="modal" id="com-modal" hidden>
+    <div class="modal-overlay" data-fechar></div>
+    <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="com-modal-titulo">
+      <button type="button" class="modal-fechar" aria-label="Fechar" data-fechar><i data-lucide="x"></i></button>
+
+      <div class="modal-cabecalho">
+        <span class="com-tag" id="com-modal-tag"></span>
+        <span class="com-data" id="com-modal-data"></span>
+      </div>
+
+      <h3 class="modal-titulo" id="com-modal-titulo"></h3>
+
+      <div class="modal-dest"><i data-lucide="users"></i> <span id="com-modal-dest"></span></div>
+
+      <!-- Detalhes de evento (so aparecem quando ha local/data) -->
+      <div class="modal-evento" id="com-modal-evento" hidden>
+        <div class="modal-evento-item" id="com-modal-local-item"><i data-lucide="map-pin"></i> <span id="com-modal-local"></span></div>
+        <div class="modal-evento-item" id="com-modal-quando-item"><i data-lucide="calendar"></i> <span id="com-modal-quando"></span></div>
+      </div>
+
+      <p class="modal-conteudo" id="com-modal-conteudo"></p>
+    </div>
+  </div>
+
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="../js/gestor-api.js"></script>
+  <script src="../js/gestor.js"></script>
+  <script src="../js/comunicados.js"></script>
+
+</body>
+</html>

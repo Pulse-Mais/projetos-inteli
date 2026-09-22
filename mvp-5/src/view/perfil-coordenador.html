@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Coordenador — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    /* ── Estilos específicos desta página (perfil-coordenador) ─────── */
+
+    /* ── Profile hero card ─────────────────────────────────────────── */
+    .profile-hero {
+      background: var(--brand-dark);
+      border-radius: 16px;
+      padding: 32px 32px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+      flex-shrink: 0;       /* não comprime em flex-column pai */
+      min-height: 160px;    /* garante altura mínima independente do contexto */
+    }
+    /* Círculos decorativos — clip-path evita o overflow: hidden que colapsa a altura */
+    .profile-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      pointer-events: none;
+    }
+    .profile-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: 40%;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+    .profile-hero__avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--brand-yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--navy);
+      flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .profile-hero__info { flex: 1; position: relative; z-index: 1; }
+    .profile-hero__name {
+      font-size: 20px;        /* H3 token: título de card/projeto */
+      font-weight: 500;       /* H3: Medium */
+      line-height: 1.3;       /* H3: LH 1.3 */
+      color: var(--white);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .profile-hero__meta {
+      font-size: 14px;        /* UI TEXT token */
+      font-weight: 400;       /* UI TEXT: Regular */
+      line-height: 1.5;       /* UI TEXT: LH 1.5 */
+      color: var(--blue-mid);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .profile-hero__meta-item { display: flex; align-items: center; gap: 5px; }
+    .profile-hero__stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .profile-stat { text-align: center; }
+    .profile-stat__value {
+      font-size: 40px;        /* METRIC token: KPIs e taxas */
+      font-weight: 600;       /* METRIC: SemiBold */
+      line-height: 1.1;       /* METRIC: LH 1.1 */
+      color: var(--white);
+    }
+    .profile-stat__label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--blue-light);
+      margin-top: 4px;
+    }
+    .profile-stat__divider {
+      width: 1px;
+      background: rgba(255,255,255,0.15);
+      align-self: stretch;
+    }
+    .profile-hero__actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    /* ── Responsive (específico desta página) ────────────────────── */
+    @media (max-width: 899px) {
+      .profile-hero__stats { gap: 20px; }
+    }
+
+    @media (max-width: 599px) {
+      .profile-hero {
+        flex-direction: column;
+        padding: 20px 16px 16px;
+        gap: 16px;
+        min-height: unset;
+      }
+      .profile-hero__avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 22px;
+      }
+      .profile-hero__name { font-size: 17px; gap: 8px; }
+      .profile-hero__meta { font-size: 12px; gap: 10px; margin-bottom: 14px; }
+      .profile-hero__stats { gap: 16px; }
+      .profile-stat__value { font-size: 28px; }  /* METRIC → escala mobile */
+      .profile-stat__label { font-size: 10px; }
+    }
+
+    @media (max-width: 400px) {
+      .profile-hero { padding: 16px 14px 14px; }
+      .profile-hero__name  { font-size: 15px; }
+      .profile-hero__stats { gap: 12px; flex-wrap: wrap; }
+      .profile-stat__value { font-size: 22px; }  /* METRIC → escala 360 px */
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav">
+      <a href="dashboard.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html" class="sidebar__nav-item" title="Alunos">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item active" title="Perfil" aria-current="page">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html" class="sidebar__nav-item" title="Relatórios">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html" class="sidebar__nav-item" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item" id="sidebar-nav-mentoria" title="Mentoria">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__nav-item" title="Configurações">
+        <i data-lucide="settings" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Configurações</span>
+      </a>
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Perfil</span>
+      </div>
+
+      <div class="topbar__search">
+        <i data-lucide="search" width="14" height="14" class="topbar__search-icon"></i>
+        <input type="search" placeholder="Buscar aluno, programa..." id="global-search" />
+      </div>
+
+      <div class="topbar__actions">
+        <button class="topbar__icon-btn" title="Notificações">
+          <i data-lucide="bell" width="18" height="18"></i>
+        </button>
+        <div class="topbar__user" id="topbar-user">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+          <i data-lucide="chevron-down" width="14" height="14" style="color:var(--muted)"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content">
+
+      <!-- ── Profile hero ───────────────────────────────────────── -->
+      <div class="profile-hero">
+        <div class="profile-hero__avatar" id="hero-avatar">--</div>
+
+        <div class="profile-hero__info">
+          <div class="profile-hero__name" id="hero-name">
+            <span class="skeleton" style="width:200px;height:22px;display:inline-block;border-radius:6px;"></span>
+          </div>
+          <div class="profile-hero__meta" id="hero-meta">
+            <span class="skeleton" style="width:280px;height:14px;display:inline-block;border-radius:4px;"></span>
+          </div>
+          <div class="profile-hero__stats" id="hero-stats">
+            <div class="profile-stat">
+              <div class="profile-stat__value" id="stat-alunos">—</div>
+              <div class="profile-stat__label">Alunos acompanhados</div>
+            </div>
+            <div class="profile-stat__divider"></div>
+            <div class="profile-stat">
+              <div class="profile-stat__value" id="stat-ativos">—</div>
+              <div class="profile-stat__label">Alunos ativos</div>
+            </div>
+            <div class="profile-stat__divider"></div>
+            <div class="profile-stat">
+              <div class="profile-stat__value" id="stat-transformados">—</div>
+              <div class="profile-stat__label">Transformados</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Alunos acompanhados table ──────────────────────────── -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="users" width="16" height="16"></i>
+            Alunos acompanhados
+          </h2>
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-muted" id="table-count">—</span>
+            <a href="cadastrar-aluno.html" class="btn btn--primary" style="font-size:12px;padding:6px 12px;">
+              <i data-lucide="user-plus" width="13" height="13"></i>
+              Novo aluno
+            </a>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data de entrada</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th>Frequência</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="students-tbody">
+              <!-- skeleton rows -->
+              <tr>
+                <td colspan="7" style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+                  <i data-lucide="loader-2" width="16" height="16" style="animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></i>
+                  Carregando alunos...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="table-empty" class="hidden" style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+          <i data-lucide="users" width="32" height="32" style="margin-bottom:8px;opacity:.4;"></i>
+          <div>Nenhum aluno encontrado.</div>
+        </div>
+      </div>
+
+      <!-- ── Personal info grid ─────────────────────────────────── -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="contact" width="16" height="16"></i>
+            Informações do perfil
+          </h2>
+          <button class="btn" id="btn-save-all"
+            style="display:none;font-size:12px;padding:6px 14px;background:var(--blue-btn);color:#fff;">
+            <i data-lucide="save" width="13" height="13"></i>
+            Salvar alterações
+          </button>
+        </div>
+
+        <div class="info-grid">
+          <!-- Col 1: Dados pessoais -->
+          <div class="info-col">
+            <div class="info-col__title">Dados pessoais</div>
+            <div class="info-field">
+              <div class="info-field__label">Nome completo</div>
+              <div class="info-field__value" id="field-nome">
+                <span class="skeleton" style="width:160px;height:16px;border-radius:4px;display:inline-block;"></span>
+              </div>
+              <div class="inline-edit hidden" id="edit-nome">
+                <input type="text" id="input-nome" />
+                <button class="inline-edit__save" data-field="nome">Salvar</button>
+                <button class="inline-edit__cancel" data-for="nome">Cancelar</button>
+              </div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">E-mail</div>
+              <div class="info-field__value" id="field-email">
+                <span class="skeleton" style="width:180px;height:16px;border-radius:4px;display:inline-block;"></span>
+              </div>
+              <div class="inline-edit hidden" id="edit-email">
+                <input type="email" id="input-email" />
+                <button class="inline-edit__save" data-field="email">Salvar</button>
+                <button class="inline-edit__cancel" data-for="email">Cancelar</button>
+              </div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Perfil de acesso</div>
+              <div class="info-field__value" id="field-perfil">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Membro desde</div>
+              <div class="info-field__value" id="field-criado-em">—</div>
+            </div>
+          </div>
+
+          <!-- Col 2: Atividade -->
+          <div class="info-col">
+            <div class="info-col__title">Atividade recente</div>
+            <div class="info-field">
+              <div class="info-field__label">Total de alunos</div>
+              <div class="info-field__value" id="field-total-alunos">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Alunos ativos</div>
+              <div class="info-field__value" id="field-alunos-ativos">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Categoria — Conectado</div>
+              <div class="info-field__value" id="field-conectados">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Categoria — Capacitado</div>
+              <div class="info-field__value" id="field-capacitados">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Categoria — Transformado</div>
+              <div class="info-field__value" id="field-transformados">—</div>
+            </div>
+          </div>
+
+          <!-- Col 3: Sistema -->
+          <div class="info-col">
+            <div class="info-col__title">Sistema</div>
+            <div class="info-field">
+              <div class="info-field__label">Status da conta</div>
+              <div class="info-field__value">
+                <span class="badge badge--green">Ativo</span>
+              </div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Alunos evadidos</div>
+              <div class="info-field__value" id="field-evadidos">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Alunos formados</div>
+              <div class="info-field__value" id="field-formados">—</div>
+            </div>
+            <div class="info-field">
+              <div class="info-field__label">Alunos inativos</div>
+              <div class="info-field__value" id="field-inativos">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Recent activities ──────────────────────────────────── -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="clock" width="16" height="16"></i>
+            Atividades recentes
+          </h2>
+        </div>
+        <div class="activity-cards" id="activity-cards">
+          <div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">
+            Carregando...
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script>
+/* ================================================================
+   Pulse Control — Perfil do Coordenador
+   Pessoa 2 | Endpoints: GET /usuarios/:id · PATCH /usuarios/:id · GET /jovens
+   RN17 / RN18 / RN19 — perfil Coordenacao autenticado
+   ================================================================ */
+
+const API = 'http://localhost:3000/api';
+
+// ── Dev mock — ativo quando API não responde (sem API rodando) ────────────
+const MOCK_DATA = {
+  usuario: { id:1, nome:'Joana Moura', email:'joana.moura@pulsemais.org',
+             perfil:'Coordenacao', id_jovem:null, criado_em:'2024-01-15T10:00:00Z' },
+  jovens: [
+    {id:1, nome:'Lucas Ferreira',    telefone:'(11) 98765-4321', criado_em:'2025-01-10T10:00:00Z', categoria_atual:'Transformado', status_global:'Ativo'},
+    {id:2, nome:'Ana Beatriz Santos',telefone:'(11) 91234-5678', criado_em:'2025-02-20T10:00:00Z', categoria_atual:'Capacitado',   status_global:'Ativo'},
+    {id:3, nome:'Carlos Eduardo Lima',telefone:'(11) 97777-8888',criado_em:'2025-03-05T10:00:00Z', categoria_atual:'Conectado',    status_global:'Ativo'},
+    {id:4, nome:'Mariana Oliveira',  telefone:'(11) 93333-4444', criado_em:'2025-03-18T10:00:00Z', categoria_atual:'Capacitado',   status_global:'Ativo'},
+    {id:5, nome:'Rafael Souza',      telefone:'(11) 92222-3333', criado_em:'2025-04-01T10:00:00Z', categoria_atual:'Conectado',    status_global:'Formado'},
+    {id:6, nome:'Isabela Costa',     telefone:'(11) 91111-2222', criado_em:'2025-04-15T10:00:00Z', categoria_atual:'Transformado', status_global:'Ativo'},
+    {id:7, nome:'Diego Alves',       telefone:'(11) 99999-0000', criado_em:'2025-05-02T10:00:00Z', categoria_atual:'Conectado',    status_global:'Evadido'},
+    {id:8, nome:'Fernanda Rocha',    telefone:'(11) 98888-1234', criado_em:'2025-05-20T10:00:00Z', categoria_atual:'Capacitado',   status_global:'Ativo'},
+  ],
+};
+
+// ── Session: lê userId do sessionStorage (definido pela Pessoa 1 no login) ──
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session')
+      || localStorage.getItem('pulse_session');
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  // Fallback de desenvolvimento: usa id=1 enquanto auth não existe
+  return { userId: 1, perfil: 'Coordenacao', nome: 'Dev User' };
+}
+
+// ── HTTP helpers ──────────────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  // Abort após 600 ms — garante queda rápida para mock quando API está fora
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 6000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    // API fora do ar ou timeout → fallback para dados de desenvolvimento
+    const isNetErr = err instanceof TypeError || err.name === 'AbortError';
+    if (isNetErr) {
+      console.warn('[DEV] API indisponível — usando dados mock.');
+      if (path.includes('/usuarios/')) return MOCK_DATA.usuario;
+      if (path === '/jovens')          return MOCK_DATA.jovens;
+      return {};
+    }
+    throw err;
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+  el.innerHTML = `
+    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" width="16" height="16"></i>
+    ${msg}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons({ nodes: [el] });
+  setTimeout(() => el.remove(), 3500);
+}
+
+// ── Formatters ────────────────────────────────────────────────────────────
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2)
+    .map(p => p[0].toUpperCase()).join('');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function fmtPerfil(p) {
+  const map = { Gestao: 'Gestão', Coordenacao: 'Coordenação', Mentor: 'Mentor',
+    Aluno: 'Aluno', Psicologo: 'Psicólogo' };
+  return map[p] || p;
+}
+
+function categoriaClass(cat) {
+  return { Conectado: 'conectado', Capacitado: 'capacitado', Transformado: 'transformado' }[cat] || '';
+}
+
+// ── Render helpers ────────────────────────────────────────────────────────
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val ?? '—';
+}
+
+function setHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+// ── Load coordinator profile (GET /usuarios/:id) ──────────────────────────
+async function loadProfile(userId) {
+  const user = await apiFetch(`/usuarios/${userId}`);
+
+  // Topbar + sidebar
+  const ini = initials(user.nome);
+  setText('topbar-name', user.nome);
+  setHTML('topbar-avatar', ini);
+  setHTML('sidebar-initials', ini);
+
+  // Hero
+  setHTML('hero-avatar', ini);
+  setHTML('hero-name', `
+    ${escHtml(user.nome)}
+    <span class="badge badge--yellow">
+      <i data-lucide="briefcase" width="10" height="10"></i>
+      ${fmtPerfil(user.perfil)}
+    </span>
+    <span class="badge badge--green">Ativo</span>
+  `);
+  setHTML('hero-meta', `
+    <span class="profile-hero__meta-item">
+      <i data-lucide="mail" width="13" height="13"></i>
+      ${escHtml(user.email)}
+    </span>
+    <span class="profile-hero__meta-item">
+      <i data-lucide="calendar" width="13" height="13"></i>
+      Desde ${fmtDate(user.criado_em)}
+    </span>
+  `);
+  lucide.createIcons();
+
+  // Info grid — dados pessoais
+  setHTML('field-nome', `
+    ${escHtml(user.nome)}
+    <span class="info-field__edit" onclick="toggleEdit('nome', '${escHtml(user.nome)}')">
+      <i data-lucide="pencil" width="11" height="11"></i> Editar
+    </span>
+  `);
+  setHTML('field-email', `
+    ${escHtml(user.email)}
+    <span class="info-field__edit" onclick="toggleEdit('email', '${escHtml(user.email)}')">
+      <i data-lucide="pencil" width="11" height="11"></i> Editar
+    </span>
+  `);
+  setText('field-perfil', fmtPerfil(user.perfil));
+  setText('field-criado-em', fmtDate(user.criado_em));
+  lucide.createIcons();
+
+  return user;
+}
+
+// ── Load students list (GET /jovens) ──────────────────────────────────────
+async function loadStudents() {
+  const jovens = await apiFetch('/jovens');
+
+  // Stats
+  const total = jovens.length;
+  const ativos = jovens.filter(j => j.status_global === 'Ativo').length;
+  const transformados = jovens.filter(j => j.categoria_atual === 'Transformado').length;
+  const capacitados = jovens.filter(j => j.categoria_atual === 'Capacitado').length;
+  const conectados = jovens.filter(j => j.categoria_atual === 'Conectado').length;
+  const evadidos = jovens.filter(j => j.status_global === 'Evadido').length;
+  const formados = jovens.filter(j => j.status_global === 'Formado').length;
+  const inativos = jovens.filter(j => j.status_global === 'Inativo').length;
+
+  setText('stat-alunos', total);
+  setText('stat-ativos', ativos);
+  setText('stat-transformados', transformados);
+  setText('table-count', `${total} aluno${total !== 1 ? 's' : ''}`);
+  setText('field-total-alunos', total);
+  setText('field-alunos-ativos', ativos);
+  setText('field-conectados', conectados);
+  setText('field-capacitados', capacitados);
+  setText('field-transformados', transformados);
+  setText('field-evadidos', evadidos);
+  setText('field-formados', formados);
+  setText('field-inativos', inativos);
+
+  // Table rows (todos os alunos, do mais recente ao mais antigo)
+  const tbody = document.getElementById('students-tbody');
+  const emptyEl = document.getElementById('table-empty');
+  if (!jovens.length) {
+    tbody.innerHTML = '';
+    emptyEl.classList.remove('hidden');
+    return jovens;
+  }
+
+  // Ordena por data de cadastro (mais recente primeiro); tabela exibe apenas os 5 mais recentes
+  const ordenados = [...jovens]
+    .sort((a, b) => new Date(b.criado_em) - new Date(a.criado_em));
+
+  const top5 = ordenados.slice(0, 5);
+
+  const taxas = await Promise.all(
+    top5.map(j =>
+      apiFetch(`/frequencia/jovens/${j.id}/frequencias-aula`)
+        .then(data => {
+          if (!Array.isArray(data) || !data.length) return null;
+          const pres = data.filter(r => r.presente === true || r.presente === 1).length;
+          return Math.round(pres / data.length * 100);
+        })
+        .catch(() => null)
+    )
+  );
+
+  tbody.innerHTML = top5.map((j, i) => `
+    <tr onclick="window.location.href='perfil-aluno.html?id=${j.id}'" style="cursor:pointer;">
+      <td class="td-name">${escHtml(j.nome)}</td>
+      <td class="td-muted">${j.telefone || '—'}</td>
+      <td class="td-muted">${fmtDate(j.criado_em)}</td>
+      <td>
+        <span class="category-dot ${categoriaClass(j.categoria_atual)}">
+          ${j.categoria_atual || '—'}
+        </span>
+      </td>
+      <td>
+        <span class="badge ${j.status_global === 'Ativo' ? 'badge--green-soft' : 'badge--blue'}">
+          ${j.status_global || '—'}
+        </span>
+      </td>
+      <td class="td-muted">${taxas[i] != null ? taxas[i] + '%' : '—'}</td>
+      <td>
+        <a href="perfil-aluno.html?id=${j.id}" class="td-link">
+          Ver perfil
+          <i data-lucide="arrow-right" width="12" height="12"></i>
+        </a>
+      </td>
+    </tr>
+  `).join('');
+
+  lucide.createIcons();
+
+  // Activity cards: os 3 mais recentes
+  renderActivityCards(ordenados.slice(0, 3));
+
+  return jovens;
+}
+
+// ── Render activity cards ─────────────────────────────────────────────────
+function renderActivityCards(jovens) {
+  const themes = [
+    { cls: 'green',  icon: 'user-check', link: 'Alunos', href: '#' },
+    { cls: 'blue',   icon: 'book-open',  link: 'Programas', href: '#' },
+    { cls: 'orange', icon: 'clock',      link: 'Frequência', href: '#' },
+  ];
+  const container = document.getElementById('activity-cards');
+  if (!jovens.length) {
+    container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">Sem atividades recentes.</div>';
+    return;
+  }
+  container.innerHTML = jovens.map((j, i) => {
+    const t = themes[i % themes.length];
+    return `
+      <div class="activity-card activity-card--${t.cls}">
+        <div class="activity-card__icon">
+          <i data-lucide="${t.icon}" width="16" height="16"></i>
+        </div>
+        <div class="activity-card__body">
+          <div class="activity-card__title">Jovem cadastrado</div>
+          <div class="activity-card__desc">${escHtml(j.nome)} entrou na categoria <strong>${j.categoria_atual}</strong></div>
+          <div class="activity-card__meta">
+            <i data-lucide="calendar" width="11" height="11"></i>
+            ${fmtDate(j.criado_em)}
+          </div>
+        </div>
+        <a href="alunos.html" class="activity-card__link">${t.link} →</a>
+      </div>
+    `;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ── Inline editing ────────────────────────────────────────────────────────
+let editMode = false;
+let currentUser = null;
+
+function toggleEdit(field, currentValue) {
+  const displayEl = document.getElementById(`field-${field}`);
+  const editEl    = document.getElementById(`edit-${field}`);
+  const inputEl   = document.getElementById(`input-${field}`);
+  displayEl.classList.toggle('hidden');
+  editEl.classList.toggle('hidden');
+  if (inputEl) inputEl.value = currentValue;
+}
+
+// Save single field via PATCH /usuarios/:id
+document.addEventListener('click', async (e) => {
+  if (e.target.matches('.inline-edit__save')) {
+    const field = e.target.dataset.field;
+    const inputEl = document.getElementById(`input-${field}`);
+    const value = inputEl?.value?.trim();
+    if (!value) { toast('Campo não pode estar vazio.', 'error'); return; }
+
+    const session = getSession();
+    try {
+      const updated = await apiFetch(`/usuarios/${session.userId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ [field]: value }),
+      });
+      toast(`${field === 'nome' ? 'Nome' : 'E-mail'} atualizado com sucesso.`, 'success');
+      toggleEdit(field, value);
+      // Refresh display
+      const displayEl = document.getElementById(`field-${field}`);
+      displayEl.innerHTML = `
+        ${escHtml(value)}
+        <span class="info-field__edit" onclick="toggleEdit('${field}', '${escHtml(value)}')">
+          <i data-lucide="pencil" width="11" height="11"></i> Editar
+        </span>`;
+      if (field === 'nome') {
+        const ini = initials(value);
+        document.getElementById('hero-avatar').textContent = ini;
+        document.getElementById('topbar-avatar').textContent = ini;
+        document.getElementById('sidebar-initials').textContent = ini;
+        document.getElementById('topbar-name').textContent = value;
+      }
+      lucide.createIcons();
+    } catch (err) {
+      toast(err.message || 'Erro ao atualizar.', 'error');
+    }
+  }
+
+  if (e.target.matches('.inline-edit__cancel')) {
+    const field = e.target.dataset.for;
+    const displayEl = document.getElementById(`field-${field}`);
+    const editEl    = document.getElementById(`edit-${field}`);
+    displayEl.classList.remove('hidden');
+    editEl.classList.add('hidden');
+  }
+});
+
+// ── Security: redirect if wrong profile ───────────────────────────────────
+function guardProfile() {
+  const session = getSession();
+  // RN18: perfil Coordenacao
+  if (session.perfil && session.perfil !== 'Coordenacao' && session.perfil !== 'Gestao') {
+    // Redirect to login (Pessoa 1 handle) when auth is live
+    // window.location.href = '/index.html';
+    console.warn('[RN18] Acesso negado — perfil não autorizado:', session.perfil);
+  }
+  return session;
+}
+
+// ── HTML escape ────────────────────────────────────────────────────────────
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Bootstrap ─────────────────────────────────────────────────────────────
+(async function init() {
+  // Init Lucide icons
+  lucide.createIcons();
+
+  const session = guardProfile();
+
+  try {
+    const [user] = await Promise.all([
+      loadProfile(session.userId),
+      loadStudents(),
+    ]);
+    currentUser = user;
+  } catch (err) {
+    console.error('Init error:', err);
+    if (err.status === 404) {
+      toast('Usuário não encontrado.', 'error');
+    } else if (err.status === 401 || err.status === 403) {
+      toast('Sessão expirada. Faça login novamente.', 'error');
+      // window.location.href = '/index.html';
+    } else {
+      toast('Erro ao carregar perfil. Verifique a conexão com a API.', 'error');
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

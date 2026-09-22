@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portal do Aluno Pulse Mais — acompanhe programas abertos e seu desempenho.">
+  <title>Pulse Mais — Portal do Aluno</title>
+  <link rel="icon" type="image/png" href="/assets/logoAzul.png">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/homepageAluno.css">
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
+
+<div class="layout">
+
+  <div class="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- Sidebar de navegação -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <a href="perfilAlunoPortal.html" class="sidebar__avatar-link" aria-label="Acessar Meu Perfil">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do aluno">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepageAluno.html" class="sidebar__link ativo" aria-current="page">Homepage</a>
+        <a href="dashboardAluno.html" class="sidebar__link">Dashboard</a>
+        <a href="agendaAluno.html" class="sidebar__link">Agenda</a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" id="btnLogout" aria-label="Sair da conta">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content page-grid" id="main-content">
+
+    <div class="page-topbar">
+      <button class="menu-toggle" aria-label="Abrir menu de navegação">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+      <h2>Homepage</h2>
+    </div>
+
+    <!-- Banner de boas-vindas -->
+    <div class="banner-boas-vindas">
+      <div class="banner-texto">
+        <h1 id="heroSaudacao">Olá, Luana. Bom te ver por aqui.</h1>
+        <h2>O que é possível ver?</h2>
+        <p>Aqui você tem um panorama geral do seu desempenho<br>no programa Pulse Mais e demais atividades.</p>
+      </div>
+      <img src="/assets/banner-home.png" alt="Banner" class="banner-imagem">
+    </div>
+
+    <!-- Próximos eventos -->
+    <section class="programas-abertos">
+      <h2 class="programas-abertos__titulo">O que vem por aí</h2>
+      <div class="card programas-lista" id="programasLista">
+        <p class="estado-carregando" id="loadingProgramas">Carregando...</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/portalAluno.js"></script>
+<script src="../js/homepageAluno.js"></script>
+</body>
+</html>

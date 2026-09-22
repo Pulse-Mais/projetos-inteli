@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      background: var(--color-page-bg);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 100vh;
+      height: 100dvh;
+      width: 64px;
+      background: var(--color-brand);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 100;
+      padding-bottom: var(--spacing-md);
+    }
+
+    .sidebar-logo {
+      width: 64px;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      color: white;
+    }
+    .sidebar-logo svg { width: 22px; height: 22px; stroke-width: 1.75; }
+
+    .sidebar-nav {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: var(--spacing-sm);
+      gap: 2px;
+    }
+
+    .nav-item {
+      position: relative;
+      width: 100%;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.5);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color .15s, background-color .15s;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(255,255,255,.08);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: rgba(255,255,255,.12);
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 3px; height: 24px;
+      background: #fff;
+      border-radius: 0 3px 3px 0;
+    }
+
+    .nav-item svg { width: 20px; height: 20px; stroke-width: 1.75; }
+
+    .nav-item::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: calc(100% + 10px);
+      top: 50%; transform: translateY(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 12px; font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      z-index: 200;
+    }
+    .nav-item:hover::after { opacity: 1; }
+
+    .sidebar-footer {
+      width: 100%;
+      border-top: 1px solid rgba(255,255,255,.12);
+      padding-top: var(--spacing-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Main ── */
+    .main-wrapper {
+      margin-left: 64px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .header {
+      position: sticky;
+      top: 0;
+      height: var(--header-height);
+      background: var(--color-card-bg);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-xl);
+      z-index: 50;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .header-logo img {
+      height: 44px;
+      width: auto;
+    }
+
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: var(--radius-full);
+      background: var(--color-brand);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+
+    /* ── Conteúdo ── */
+    .page-content {
+      flex: 1;
+      padding: var(--spacing-xl);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <i data-lucide="panel-left"></i>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item"        href="#" data-tip="Buscar"><i data-lucide="search"></i></a>
+      <a class="nav-item active" href="#" data-tip="Dashboard"><i data-lucide="home"></i></a>
+      <a class="nav-item"        href="#" data-tip="Jovens"><i data-lucide="users"></i></a>
+      <a class="nav-item"        href="#" data-tip="Calendário"><i data-lucide="calendar"></i></a>
+      <a class="nav-item"        href="#" data-tip="Relatórios"><i data-lucide="flag"></i></a>
+      <a class="nav-item"        href="#" data-tip="Notificações"><i data-lucide="bell"></i></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="nav-item" href="#" data-tip="Configurações"><i data-lucide="settings"></i></a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="header">
+      <a class="header-logo" href="#">
+        <img src="../../../assets/logoPulsar.png" alt="Pulsar">
+      </a>
+
+      <div class="header-user">
+        <span class="user-name" id="userName"></span>
+        <div class="user-avatar" id="userAvatar"></div>
+      </div>
+    </header>
+
+    <!-- conteúdo da página aqui -->
+    <main class="page-content"></main>
+  </div>
+
+</div>
+
+<script src="../js/api.js"></script>
+<script>
+  lucide.createIcons();
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

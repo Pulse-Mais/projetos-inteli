@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alerta de frequência | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span><span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link ativo"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+      <main class="conteudo pagina-operacional">
+        <header class="pagina-operacional__topo">
+          <div>
+            <h1>Alerta de frequência</h1>
+            <p class="pagina-operacional__descricao" id="nome-alerta">Ana Souza · Turma 2024A</p>
+          </div>
+          <a href="risco-evasao.html" class="btn-fluxo btn-fluxo--secundario"
+            ><i data-lucide="arrow-left"></i> Lista de risco</a
+          >
+        </header>
+        <div class="aviso aviso--erro">
+          <i data-lucide="triangle-alert"></i
+          ><span
+            ><strong>Frequência abaixo do limite esperado.</strong><br />O aluno atingiu 62% de presença e acumula 5
+            faltas consecutivas.</span
+          >
+        </div>
+        <section class="resumo-grade">
+          <div class="resumo-item"><span>Frequência atual</span><strong style="color: var(--erro)">62%</strong></div>
+          <div class="resumo-item"><span>Faltas consecutivas</span><strong>5</strong></div>
+          <div class="resumo-item">
+            <span>Última presença</span><strong style="font-size: var(--texto-lg)">22/05/2026</strong>
+          </div>
+          <div class="resumo-item"><span>Risco</span><strong style="color: var(--erro)">Alto</strong></div>
+        </section>
+        <section class="painel">
+          <h2 class="painel-titulo"><i data-lucide="list-checks"></i> Histórico recente</h2>
+          <table class="tabela-operacional">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Atividade</th>
+                <th>Situação</th>
+                <th>Observação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>05/06/2026</td>
+                <td>Aula de Desenvolvimento Web</td>
+                <td><span class="status status--erro">Ausente</span></td>
+                <td>Sem justificativa</td>
+              </tr>
+              <tr>
+                <td>03/06/2026</td>
+                <td>Mentoria de carreira</td>
+                <td><span class="status status--erro">Ausente</span></td>
+                <td>Contato sem retorno</td>
+              </tr>
+              <tr>
+                <td>29/05/2026</td>
+                <td>Aula de Banco de Dados</td>
+                <td><span class="status status--alerta">Justificada</span></td>
+                <td>Questão familiar</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+        <form class="painel" id="form-acao">
+          <h2 class="painel-titulo"><i data-lucide="message-square-text"></i> Registrar ação de acompanhamento</h2>
+          <div class="form-grade">
+            <label class="campo-form"
+              ><span>Tipo de ação*</span
+              ><select required>
+                <option>Contato com aluno</option>
+                <option>Contato com responsável</option>
+                <option>Reunião de acompanhamento</option>
+                <option>Encaminhamento à psicóloga</option>
+              </select></label
+            ><label class="campo-form"><span>Data*</span><input type="date" required /></label
+            ><label class="campo-form campo-form--largo"
+              ><span>Observação*</span
+              ><textarea required placeholder="Descreva o contato e os próximos passos"></textarea>
+            </label>
+          </div>
+          <div class="acoes-form">
+            <button class="btn-fluxo btn-fluxo--primario" type="submit">
+              <i data-lucide="save"></i> Registrar acompanhamento
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/fluxos.js"></script>
+    <script>
+      lucide.createIcons();
+      const aluno = new URLSearchParams(location.search).get("aluno");
+      if (aluno) document.getElementById("nome-alerta").textContent = aluno + " · Turma 2024A";
+      document.getElementById("form-acao").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        await PulseModal.confirm({
+          titulo: "Registrar acompanhamento?",
+          texto: "A ação ficará disponível no histórico do aluno.",
+          confirmar: "Registrar ação",
+        });
+      });
+    </script>
+  </body>
+</html>

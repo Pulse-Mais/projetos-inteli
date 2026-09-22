@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Alunos Associados</title>
+  <meta name="description" content="Alunos Associados ao Mentor — Plataforma Pulse Mais">
+    <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <link rel="stylesheet" href="../css/global.css">
+    <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <link rel="stylesheet" href="../css/alunosAssociados.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="sidebar__top">
+      <a href="perfilMentor.html" class="sidebar__avatar-link" aria-label="Meu Perfil">
+        <img src="../assets/avatar.png" class="sidebar__avatar" id="sidebarAvatar" alt="Meu Perfil">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+
+      <nav class="sidebar__nav">
+        <a href="homepageMentor.html" class="sidebar__link">
+          Homepage
+        </a>
+        <a href="alunosAssociados.html" class="sidebar__link ativo">
+          Alunos Associados
+        </a>
+        <a href="agendaMentorias.html" class="sidebar__link">
+          Agendas
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sair
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Alunos Associados</h2>
+    </div>
+
+    <div class="page-header">
+      <h1>Meus Alunos</h1>
+      <p>Alunos vinculados ao seu programa de mentoria.</p>
+    </div>
+
+    <!-- Barra de busca -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          id="campoBusca"
+          placeholder="Buscar aluno por nome ou e-mail..."
+        >
+      </div>
+    </div>
+
+    <!-- Contador de resultados -->
+    <p class="contador" id="contador">Carregando...</p>
+
+    <!-- Tabela de alunos -->
+    <div class="tabela-wrapper">
+      <table class="tabela-mentor">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Programa</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="listaAlunos">
+          <!-- Preenchido pelo JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="estado-vazio" id="estadoVazio" style="display:none;">
+      <svg width="56" height="56" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <p id="estadoVazioMensagem">Nenhum aluno encontrado.</p>
+    </div>
+
+    <p class="tabela-dica" id="dica" style="display:none;">
+      Clique no nome do aluno para visualizar seus detalhes e histórico de mentorias.
+    </p>
+
+  </main>
+
+</div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/alunosAssociados.js"></script>
+</body>
+</html>

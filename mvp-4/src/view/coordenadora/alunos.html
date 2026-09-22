@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alunos - Coordenadora | Pulse Mais</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/alunos.css">
+  <link rel="stylesheet" href="css/fluxos.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <aside class="sidebar">
+      <a href="dashboard.html" aria-label="Pulse Mais"><a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a></a>
+
+      <div class="sidebar-user">
+        <span class="sidebar-user-avatar">
+          <i data-lucide="circle-user"></i>
+        </span>
+        <div class="sidebar-user-info">
+          <span class="sidebar-user-nome">Ola, Mariana</span>
+          <span class="sidebar-user-cargo">Coord. Pedagogica</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="dashboard.html" class="nav-link">
+          <i data-lucide="chart-bar"></i>
+          Dashboard
+        </a>
+        <a href="turmas.html" class="nav-link ativo">
+          <i data-lucide="users"></i>
+          Turmas
+        </a>
+        <a href="registros.html" class="nav-link">
+          <i data-lucide="clipboard-check"></i>
+          Registros
+        </a>
+        <a href="comunicados.html" class="nav-link">
+          <i data-lucide="message-square-dot"></i>
+          Comunicados
+        </a>
+        <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+          <i data-lucide="log-out"></i>
+          Sair
+        </button>
+      </nav>
+    </aside>
+
+    <main class="conteudo">
+
+      <div class="alunos-topo">
+        <nav class="breadcrumb" aria-label="Caminho">
+          <a href="turmas.html">Turmas</a>
+          <span class="breadcrumb-sep">&rsaquo;</span>
+          <span class="breadcrumb-atual">Geral</span>
+        </nav>
+
+        <div class="busca">
+          <input type="text" class="busca-input" placeholder="Buscar aluno...">
+          <i data-lucide="search"></i>
+        </div>
+
+        <select class="filtro-select" id="filtro-categoria-jovem" aria-label="Filtrar por categoria de jovem">
+          <option value="">Todas as categorias</option>
+          <option value="jovens conectados">Jovens Conectados</option>
+          <option value="jovens capacitados">Jovens Capacitados</option>
+          <option value="jovens transformados">Jovens Transformados</option>
+        </select>
+        <div class="btn-dropdown" id="btn-dropdown-alunos">
+          <button type="button" class="btn-fluxo btn-fluxo--primario" id="btn-adicionar-alunos">
+            <i data-lucide="user-plus"></i>
+            Adicionar alunos
+            <i data-lucide="chevron-down"></i>
+          </button>
+          <div class="btn-dropdown-menu" id="menu-adicionar-alunos" hidden>
+            <a href="cadastro-aluno.html" class="btn-dropdown-item">Novo aluno</a>
+            <button type="button" class="btn-dropdown-item" id="btn-importar-csv">Importar CSV</button>
+          </div>
+        </div>
+        <input type="file" id="input-csv-alunos" accept=".csv" hidden>
+      </div>
+
+      <form class="filtros-avancados" id="filtros-alunos">
+        <label class="filtro-campo">
+          <span>Idade minima</span>
+          <input type="number" name="idade_min" min="0" placeholder="Ex.: 18">
+        </label>
+        <label class="filtro-campo">
+          <span>Idade maxima</span>
+          <input type="number" name="idade_max" min="0" placeholder="Ex.: 24">
+        </label>
+        <label class="filtro-campo">
+          <span>Empregabilidade</span>
+          <select name="empregabilidade">
+            <option value="">Todas</option>
+            <option value="empregado">Empregado</option>
+            <option value="desempregado">Desempregado</option>
+          </select>
+        </label>
+        <label class="filtro-campo">
+          <span>Turma</span>
+          <select name="id_turma">
+            <option value="">Todas</option>
+          </select>
+        </label>
+        <label class="filtro-campo">
+          <span>Localizacao</span>
+          <input type="text" name="localizacao" placeholder="Cidade, bairro ou CEP">
+        </label>
+        <label class="filtro-campo">
+          <span>Eventos min.</span>
+          <input type="number" name="eventos_min" min="0" placeholder="Ex.: 1">
+        </label>
+        <label class="filtro-campo">
+          <span>Eventos max.</span>
+          <input type="number" name="eventos_max" min="0" placeholder="Ex.: 5">
+        </label>
+        <label class="filtro-campo">
+          <span>Genero</span>
+          <select name="genero">
+            <option value="">Todos</option>
+            <option value="feminino">Feminino</option>
+            <option value="masculino">Masculino</option>
+            <option value="outro">Outro</option>
+            <option value="prefiro nao informar">Prefiro não informar</option>
+          </select>
+        </label>
+        <div class="filtros-acoes">
+          <button type="submit" class="btn-filtro btn-filtro--primario">Aplicar filtros</button>
+          <button type="button" class="btn-filtro" id="btn-limpar-filtros">Limpar</button>
+        </div>
+      </form>
+
+      <section class="alunos-grade" id="alunos-grade" aria-live="polite">
+        <p class="alunos-estado">Carregando alunos...</p>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/coordenadora-api.js"></script>
+  <script src="js/alunos.js"></script>
+
+</body>
+</html>

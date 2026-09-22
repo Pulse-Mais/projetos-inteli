@@ -1,0 +1,293 @@
+/* Seletor de data customizado — substitui o calendário nativo do navegador, que não
+   pode ser estilizado via CSS (só o ícone que o abre é estilizável, não o popup em si).
+   O <input type="date"> original é mantido no DOM (mesmo id/name/value/required),
+   apenas visualmente reduzido a 1x1px, para que qualquer código existente que leia
+   .value ou use FormData continue funcionando sem alteração. Ver js/datePicker.js. */
+
+.date-picker-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.date-picker-native-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.date-picker-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px 4px 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  transition: border-color 0.2s;
+}
+
+.date-picker-trigger:hover {
+  border-color: var(--color-primary);
+}
+
+.date-picker-trigger:has(.date-picker-trigger__input:focus) {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 56, 112, 0.12);
+}
+
+.date-picker-trigger--erro,
+.date-picker-trigger--erro:hover,
+.date-picker-trigger--erro:has(.date-picker-trigger__input:focus) {
+  border-color: var(--color-danger) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.date-picker-trigger--desabilitado {
+  opacity: 0.6;
+}
+
+.date-picker-trigger__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 6px 0;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  background: transparent;
+}
+
+.date-picker-trigger__input::placeholder {
+  color: var(--color-text-support);
+}
+
+.date-picker-trigger__input:disabled {
+  cursor: not-allowed;
+}
+
+.date-picker-trigger__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.date-picker-trigger__icone:hover {
+  background: rgba(0, 56, 112, 0.1);
+}
+
+.date-picker-trigger__icone:disabled {
+  color: var(--color-text-support);
+  cursor: not-allowed;
+}
+
+/* Popup do calendário (anexado ao <body>, posicionado via JS) */
+.date-picker-popup {
+  position: fixed;
+  z-index: 10000;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 20px;
+  width: 340px;
+  font-family: 'Poppins', sans-serif;
+  animation: datePickerFadeIn 0.12s ease;
+}
+
+@keyframes datePickerFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.date-picker-popup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.date-picker-popup__titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: capitalize;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.date-picker-popup__titulo:hover {
+  background: rgba(0, 56, 112, 0.08);
+}
+
+.date-picker-popup__nav {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-gray);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.date-picker-popup__nav:hover {
+  background: rgba(0, 56, 112, 0.12);
+}
+
+.date-picker-popup__nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: var(--color-gray);
+}
+
+.date-picker-popup__semana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+}
+
+.date-picker-popup__semana span {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-support);
+  text-transform: uppercase;
+}
+
+.date-picker-popup__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.date-picker-popup__dia {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.date-picker-popup__dia:hover {
+  background: rgba(0, 56, 112, 0.1);
+}
+
+.date-picker-popup__dia--hoje {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.date-picker-popup__dia--selecionado {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.date-picker-popup__dia--selecionado:hover {
+  background: var(--color-primary);
+}
+
+.date-picker-popup__dia--desabilitado {
+  color: var(--color-border);
+  cursor: not-allowed;
+}
+
+.date-picker-popup__dia--desabilitado:hover {
+  background: none;
+}
+
+/* Vista de seleção rápida de ano (aberta ao clicar no título do mês/ano) */
+.date-picker-popup__grid-anos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.date-picker-popup__ano {
+  padding: 10px 4px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-gray);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.date-picker-popup__ano:hover {
+  background: rgba(0, 56, 112, 0.12);
+}
+
+.date-picker-popup__ano--hoje {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.date-picker-popup__ano--selecionado {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.date-picker-popup__ano--selecionado:hover {
+  background: var(--color-primary);
+}
+
+.date-picker-popup__ano:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: var(--color-gray);
+  color: var(--color-text-support);
+}
+
+.date-picker-popup__footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+}
+
+.date-picker-popup__hoje {
+  border: none;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.date-picker-popup__hoje:hover {
+  text-decoration: underline;
+}

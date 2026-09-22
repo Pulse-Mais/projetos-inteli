@@ -1,0 +1,201 @@
+/* ============================================================
+   aluno-ensinoSuperior.css
+   Pulsar · Pulse Mais
+   Estilos específicos da tela Ensino Superior.
+   Tokens e componentes base (.hero, .stat-card, .info-row,
+   .list-card, .grid-3, etc.) já estão em aluno-layout.css.
+   ============================================================ */
+
+/* Grade 2 colunas (stat cards) */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+/* Linha lado a lado (Histórico + Certificados) */
+.row {
+  display: flex;
+  gap: var(--space-8);
+}
+
+/* Utilitários de margem vertical */
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+
+/* ── Simple card / Skill card — items de Histórico e Certificados ── */
+.list-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: #fafafb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+
+/* ── Card Certificados: header com botão ── */
+.list-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+.list-card-header .list-card-title { margin-bottom: 0; }
+
+.btn-sm {
+  padding: 4px 12px;
+  font-size: var(--text-sm);
+}
+
+.cert-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+/* ── Painel Verificar Status ── */
+.status-detail {
+  margin-top: var(--space-6);
+  background: var(--input-background, #f8fafc);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--success, #38a169);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+}
+
+.status-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.status-detail-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.status-detail-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+}
+.status-detail-close:hover { color: var(--foreground); background: var(--border); }
+
+.status-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.status-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.status-detail-label {
+  font-size: var(--text-xs, 11px);
+  color: var(--muted-foreground);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-detail-value {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+}
+
+.status-detail-disciplinas { margin-top: var(--space-3); }
+
+.status-disc-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.disc-chip {
+  font-size: var(--text-xs, 11px);
+  font-weight: var(--font-weight-semibold);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.disc-chip.is-success  { background: var(--success-light, #f0fff4); color: var(--success, #38a169); border: 1px solid var(--success, #38a169); }
+.disc-chip.is-warning  { background: var(--warning-light, #fffbeb); color: var(--warning, #d97706); border: 1px solid var(--warning, #d97706); }
+.disc-chip.is-danger   { background: var(--danger-light,  #fff5f5); color: var(--danger,  #e53e3e); border: 1px solid var(--danger,  #e53e3e); }
+
+/* ── Painel Pendências ── */
+.pend-detail { border-left-color: var(--warning, #d97706); }
+
+.pend-loading,
+.pend-empty {
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+  padding: var(--space-3) 0;
+}
+
+.pend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.pend-item:last-child { border-bottom: none; }
+
+.pend-item-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pend-item-icon.is-warning { background: var(--warning-light, #fffbeb); color: var(--warning, #d97706); }
+.pend-item-icon.is-danger  { background: var(--danger-light, #fff5f5);  color: var(--danger, #e53e3e); }
+
+.pend-item-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pend-item-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+}
+
+.pend-item-meta {
+  font-size: var(--text-xs, 11px);
+  color: var(--muted-foreground);
+}
+
+.pend-badge {
+  font-size: var(--text-xs, 11px);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.pend-badge.is-warning { background: var(--warning-light, #fffbeb); color: var(--warning, #d97706); }
+.pend-badge.is-danger  { background: var(--danger-light, #fff5f5);  color: var(--danger, #e53e3e); }

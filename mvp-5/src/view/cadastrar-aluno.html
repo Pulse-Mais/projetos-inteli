@@ -1,0 +1,769 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Aluno — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    /* ── Estilos específicos desta página (cadastrar-aluno) ────────────── */
+
+    /* ── Grade do formulário ──────────────────────────────────────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 32px;
+    }
+
+    .form-field           { display: flex; flex-direction: column; gap: 6px; }
+    .form-field--full     { grid-column: span 2; }
+
+    /* Rótulo — CAPTION token */
+    .form-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--yellow-text);
+      line-height: 1.4;
+    }
+    .form-label .req { color: var(--error-text); margin-left: 2px; }
+
+    /* Inputs e selects — UI TEXT token */
+    .form-input,
+    .form-select {
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--navy);
+      background: var(--white);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B95A1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--blue-btn);
+      box-shadow: 0 0 0 3px rgba(49,130,206,.12);
+    }
+    .form-input.has-error              { border-color: var(--error-text); }
+    .form-input.has-error:focus        { box-shadow: 0 0 0 3px rgba(216,90,48,.12); }
+
+    /* Texto auxiliar — CAPTION */
+    .form-helper {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Mensagem de erro inline — CAPTION */
+    .form-error {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--error-text);
+      line-height: 1.4;
+      display: none;
+      align-items: center;
+      gap: 4px;
+    }
+    .form-error.visible { display: flex; }
+
+    /* Prefixo monetário (R$) */
+    .input-group                { position: relative; }
+    .input-group__prefix {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--muted);
+      pointer-events: none;
+      user-select: none;
+    }
+    .input-group .form-input    { padding-left: 36px; }
+
+    /* Separador de seção — CAPTION uppercase */
+    .form-section-title {
+      grid-column: span 2;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: -4px;
+    }
+
+    /* Rodapé do formulário */
+    .form-actions {
+      grid-column: span 2;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+
+    /* Banner de sucesso */
+    .success-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: var(--green-badge-bg);
+      border: 1px solid var(--green-card-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--green-badge-text);
+      margin-bottom: 16px;
+    }
+    .success-banner.visible { display: flex; }
+
+    /* ── Date picker ─────────────────────────────────────────────────── */
+    .date-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .date-input-wrapper .form-input {
+      padding-right: 40px;
+      flex: 1;
+    }
+    .date-picker-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 38px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border-radius: 0 8px 8px 0;
+      transition: color .15s, background .15s;
+      overflow: hidden;
+    }
+    .date-picker-btn:hover { color: var(--brand-dark); background: rgba(0,56,112,.06); }
+    .date-picker-btn input[type="date"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+    }
+
+    /* ── Responsividade ───────────────────────────────────────────────── */
+    @media (max-width: 899px) {
+      .form-grid { gap: 16px 24px; }
+    }
+    @media (max-width: 599px) {
+      .form-grid                { grid-template-columns: 1fr; }
+      .form-field--full,
+      .form-section-title,
+      .form-actions             { grid-column: span 1; }
+      .form-actions             { flex-direction: column-reverse; }
+      .form-actions .btn        { width: 100%; justify-content: center; }
+    }
+    @media (max-width: 400px) {
+      .form-input, .form-select { height: 38px; font-size: 13px; }
+      .form-label               { font-size: 11px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav">
+      <a href="dashboard.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html" class="sidebar__nav-item active" title="Alunos">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html" class="sidebar__nav-item" title="Relatórios">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html" class="sidebar__nav-item" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item" id="sidebar-nav-mentoria" title="Mentoria">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <a href="perfil-coordenador.html"
+           style="color:var(--muted);text-decoration:none;">Perfil</a>
+        <i data-lucide="chevron-right" width="14" height="14"></i>
+        <span>Novo aluno</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Conteúdo -->
+    <main class="content">
+      <div class="card">
+
+        <!-- Cabeçalho da seção -->
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="user-plus" width="16" height="16"></i>
+            Cadastrar novo aluno
+          </h2>
+          <a href="perfil-coordenador.html" class="btn btn--outline btn--sm">
+            <i data-lucide="arrow-left" width="13" height="13"></i>
+            Voltar
+          </a>
+        </div>
+
+        <!-- Banner de sucesso (aparece após submit) -->
+        <div class="success-banner" id="success-banner">
+          <i data-lucide="check-circle-2" width="18" height="18"></i>
+          <span id="success-msg">Aluno cadastrado! Redirecionando...</span>
+        </div>
+
+        <!-- Formulário -->
+        <form id="form-cadastrar" novalidate>
+          <div class="form-grid">
+
+            <!-- ── Dados obrigatórios ──────────────────────────────── -->
+            <div class="form-section-title">Dados obrigatórios</div>
+
+            <!-- Nome completo -->
+            <div class="form-field form-field--full">
+              <label class="form-label" for="input-nome">
+                Nome completo <span class="req">*</span>
+              </label>
+              <input class="form-input" type="text" id="input-nome"
+                     placeholder="Ex: João Pedro Silva"
+                     autocomplete="name" maxlength="100" />
+              <span class="form-error" id="error-nome"></span>
+            </div>
+
+            <!-- E-mail -->
+            <div class="form-field">
+              <label class="form-label" for="input-email">
+                E-mail <span class="req">*</span>
+              </label>
+              <input class="form-input" type="email" id="input-email"
+                     placeholder="aluno@email.com"
+                     autocomplete="email" maxlength="100" />
+              <span class="form-error" id="error-email"></span>
+            </div>
+
+            <!-- Telefone -->
+            <div class="form-field">
+              <label class="form-label" for="input-telefone">
+                Telefone <span class="req">*</span>
+              </label>
+              <input class="form-input" type="tel" id="input-telefone"
+                     placeholder="(11) 99999-9999"
+                     autocomplete="tel" maxlength="15" />
+              <span class="form-error" id="error-telefone"></span>
+            </div>
+
+            <!-- ── Dados complementares ───────────────────────────── -->
+            <div class="form-section-title">Dados complementares</div>
+
+            <!-- CPF -->
+            <div class="form-field">
+              <label class="form-label" for="input-cpf">CPF</label>
+              <input class="form-input" type="text" id="input-cpf"
+                     placeholder="000.000.000-00" maxlength="14" />
+              <span class="form-error" id="error-cpf"></span>
+            </div>
+
+            <!-- Data de nascimento -->
+            <div class="form-field">
+              <label class="form-label" for="input-data-nascimento">
+                Data de nascimento
+              </label>
+              <div class="date-input-wrapper">
+                <input class="form-input" type="text" id="input-data-nascimento"
+                       placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" />
+                <button type="button" class="date-picker-btn" title="Abrir calendário">
+                  <i data-lucide="calendar" width="16" height="16"></i>
+                  <input type="date" id="native-datepicker"
+                         min="1996-01-01" max="2012-12-31"
+                         onchange="fillDateFromPicker(this)" />
+                </button>
+              </div>
+              <span class="form-helper">Faixa etária aceita: 14 a 29 anos</span>
+              <span class="form-error" id="error-data-nascimento"></span>
+            </div>
+
+            <!-- Gênero -->
+            <div class="form-field">
+              <label class="form-label" for="input-genero">Gênero</label>
+              <select class="form-select" id="input-genero">
+                <option value="">Selecione...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Não-binário">Não-binário</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+              </select>
+            </div>
+
+            <!-- Renda inicial -->
+            <div class="form-field">
+              <label class="form-label" for="input-renda">Renda inicial</label>
+              <div class="input-group">
+                <span class="input-group__prefix">R$</span>
+                <input class="form-input" type="number" id="input-renda"
+                       placeholder="0,00" min="0" step="0.01" />
+              </div>
+              <span class="form-helper">Renda mensal no momento do cadastro</span>
+            </div>
+
+            <!-- Endereço -->
+            <div class="form-field form-field--full">
+              <label class="form-label" for="input-endereco">Endereço</label>
+              <input class="form-input" type="text" id="input-endereco"
+                     placeholder="Rua, número, bairro — São Paulo, SP"
+                     maxlength="200" />
+            </div>
+
+            <!-- Programa -->
+            <div class="form-field form-field--full">
+              <label class="form-label" for="input-programa">Programa</label>
+              <select class="form-select" id="input-programa">
+                <option value="">Selecione um programa (opcional)...</option>
+              </select>
+              <span class="form-helper">O aluno será inscrito neste programa após o cadastro</span>
+              <span class="form-error" id="error-programa"></span>
+            </div>
+
+            <!-- ── Ações ──────────────────────────────────────────── -->
+            <div class="form-actions">
+              <a href="perfil-coordenador.html" class="btn btn--outline">
+                Cancelar
+              </a>
+              <button type="submit" class="btn btn--primary" id="btn-submit">
+                <i data-lucide="user-plus" width="14" height="14"></i>
+                Cadastrar aluno
+              </button>
+            </div>
+
+          </div><!-- /.form-grid -->
+        </form>
+
+      </div><!-- /.card -->
+    </main>
+
+  </div><!-- /.main -->
+</div><!-- /.app -->
+
+<!-- Toast -->
+<div id="toast-container"></div>
+
+<script>
+/* ================================================================
+   Pulse Control — Cadastrar Aluno
+   Pessoa 2 | Endpoint: POST /api/jovens
+   RN03: nome, email e telefone obrigatórios
+   RN04: data_nascimento DD/MM/AAAA, faixa 14–29 anos
+   RN01: email único (409 da API)
+   ================================================================ */
+
+// ── Segurança: escapa HTML antes de injetar via innerHTML ─────────────────
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Session ───────────────────────────────────────────────────────────────
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session')
+              || localStorage.getItem('pulse_session');
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  // Fallback de desenvolvimento
+  return { userId: 1, perfil: 'Coordenacao' };
+}
+
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+
+// ── HTTP helper ───────────────────────────────────────────────────────────
+// POST usa timeout maior (8 s) que GET (600 ms).
+// Escrita nunca usa mock — propaga o erro claramente.
+async function apiFetch(path, options = {}) {
+  const isWrite = options.method && options.method !== 'GET';
+  const timeout = isWrite ? 80000 : 6000;
+  const ctrl    = new AbortController();
+  const timer   = setTimeout(() => ctrl.abort(), timeout);
+
+  try {
+    const res = await fetch(`http://localhost:3000/api${path}`, {
+      ...options,
+      signal:  ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+    });
+    clearTimeout(timer);
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      const e    = new Error(body.message || body.error || res.statusText);
+      e.status   = res.status;
+      throw e;
+    }
+    if (res.status === 204) return null;
+    return res.json();
+
+  } catch (err) {
+    clearTimeout(timer);
+    const isNetErr = err instanceof TypeError || err.name === 'AbortError';
+
+    if (isNetErr) {
+      if (isWrite) {
+        // Não simula sucesso para escrita — o dado não foi salvo
+        const e  = new Error('API indisponível. Verifique se o servidor está rodando (npm run dev).');
+        e.status = 503;
+        throw e;
+      }
+      // GET: mock mínimo para o topbar
+      console.warn('[DEV] API indisponível — usando mock para GET.');
+      if (path.includes('/usuarios/')) {
+        return { id: 1, nome: 'Joana Moura', email: 'joana.moura@pulsemais.org',
+                 perfil: 'Coordenacao', criado_em: '2024-01-15T10:00:00Z' };
+      }
+      return {};
+    }
+    throw err;
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+function toast(msg, type = 'default') {
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = `toast${type === 'success' ? ' toast--success' : type === 'error' ? ' toast--error' : ''}`;
+  const icon = type === 'success' ? 'check-circle-2' : type === 'error' ? 'alert-circle' : 'info';
+  el.innerHTML = `<i data-lucide="${icon}" width="16" height="16"></i><span>${escHtml(msg)}</span>`;
+  container.appendChild(el);
+  lucide.createIcons();
+  setTimeout(() => el.remove(), 4000);
+}
+
+// ── Topbar ────────────────────────────────────────────────────────────────
+function initials(nome) {
+  const parts = (nome || '').trim().split(' ').filter(Boolean);
+  if (!parts.length) return '--';
+  return parts.length === 1
+    ? parts[0][0].toUpperCase()
+    : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+async function initTopbar() {
+  const session = getSession();
+  try {
+    const user = await apiFetch(`/usuarios/${session.userId}`);
+    const ini  = initials(user.nome);
+    document.getElementById('topbar-avatar').textContent  = ini;
+    document.getElementById('topbar-name').textContent    = user.nome;
+    document.getElementById('sidebar-initials').textContent = ini;
+  } catch (_) {}
+}
+
+// ── Date picker ───────────────────────────────────────────────────────────
+function fillDateFromPicker(input) {
+  const v = input.value; // YYYY-MM-DD
+  if (v) {
+    const [y, m, d] = v.split('-');
+    document.getElementById('input-data-nascimento').value = `${d}/${m}/${y}`;
+    clearError('data-nascimento');
+  }
+  input.value = '';
+}
+
+// ── Máscaras de entrada ───────────────────────────────────────────────────
+function soDigitos(s) { return String(s ?? '').replace(/\D/g, ''); }
+
+function formatarTelefone(valor) {
+  const d = soDigitos(valor).slice(0, 11);
+  if (d.length === 0)  return '';
+  if (d.length <= 2)   return `(${d}`;
+  if (d.length <= 7)   return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  if (d.length <= 10)  return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+}
+
+function formatarCpf(valor) {
+  const d = soDigitos(valor).slice(0, 11);
+  if (d.length === 0)  return '';
+  if (d.length <= 3)   return d;
+  if (d.length <= 6)   return `${d.slice(0,3)}.${d.slice(3)}`;
+  if (d.length <= 9)   return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`;
+  return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
+}
+
+function formatarData(valor) {
+  const d = soDigitos(valor).slice(0, 8);
+  if (d.length === 0)  return '';
+  if (d.length <= 2)   return d;
+  if (d.length <= 4)   return `${d.slice(0,2)}/${d.slice(2)}`;
+  return `${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4)}`;
+}
+
+function aplicarMascara(input, fn) {
+  input.addEventListener('input', () => {
+    const pos = input.selectionStart;
+    const digitosAntes = soDigitos(input.value.slice(0, pos)).length;
+    input.value = fn(input.value);
+    let c = 0, newPos = 0;
+    for (let i = 0; i < input.value.length; i++) {
+      if (/\d/.test(input.value[i])) c++;
+      if (c === digitosAntes) { newPos = i + 1; break; }
+    }
+    input.setSelectionRange(newPos, newPos);
+  });
+}
+
+// ── Helpers de validação ──────────────────────────────────────────────────
+function val(id) {
+  return (document.getElementById(`input-${id}`)?.value ?? '').trim();
+}
+
+function showError(fieldId, msg) {
+  const input = document.getElementById(`input-${fieldId}`);
+  const errEl = document.getElementById(`error-${fieldId}`);
+  input?.classList.add('has-error');
+  if (errEl) {
+    errEl.innerHTML = `<i data-lucide="alert-circle" width="12" height="12"></i>${escHtml(msg)}`;
+    errEl.classList.add('visible');
+    lucide.createIcons();
+  }
+}
+
+function clearError(fieldId) {
+  document.getElementById(`input-${fieldId}`)?.classList.remove('has-error');
+  const errEl = document.getElementById(`error-${fieldId}`);
+  if (errEl) { errEl.textContent = ''; errEl.classList.remove('visible'); }
+}
+
+function clearAllErrors() {
+  ['nome','email','telefone','cpf','data-nascimento'].forEach(clearError);
+}
+
+function validateClient() {
+  let ok = true;
+  clearAllErrors();
+
+  if (!val('nome')) {
+    showError('nome', 'Nome é obrigatório'); ok = false;
+  }
+
+  const email = val('email');
+  if (!email) {
+    showError('email', 'E-mail é obrigatório'); ok = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('email', 'Formato de e-mail inválido'); ok = false;
+  }
+
+  const tel = val('telefone');
+  if (!tel) {
+    showError('telefone', 'Telefone é obrigatório'); ok = false;
+  } else if (tel.replace(/\D/g, '').length < 10 || tel.replace(/\D/g, '').length > 11) {
+    showError('telefone', 'Telefone inválido: informe DDD + número (10 ou 11 dígitos)'); ok = false;
+  }
+
+  const dn = val('data-nascimento');
+  if (dn && !/^\d{2}\/\d{2}\/\d{4}$/.test(dn)) {
+    showError('data-nascimento', 'Use o formato DD/MM/AAAA'); ok = false;
+  }
+
+  return ok;
+}
+
+// ── Submit ────────────────────────────────────────────────────────────────
+document.getElementById('form-cadastrar').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validateClient()) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader-2" width="14" height="14" class="spin"></i> Cadastrando...';
+  lucide.createIcons();
+
+  const rendaStr = val('renda');
+  const dados = {
+    id_usuario:      getSession().userId,
+    nome:            val('nome'),
+    email:           val('email'),
+    telefone:        val('telefone'),
+    cpf:             val('cpf')              || null,
+    data_nascimento: val('data-nascimento')  || null,
+    genero:          val('genero')           || null,
+    renda_inicial:   rendaStr ? parseFloat(rendaStr) : null,
+    endereco:        val('endereco')         || null,
+  };
+
+  try {
+    const novo = await apiFetch('/jovens', { method: 'POST', body: JSON.stringify(dados) });
+
+    // Inscreve no programa selecionado (opcional)
+    const idPrograma = val('programa');
+    if (novo && novo.id && idPrograma) {
+      await apiFetch(`/jovens/${novo.id}/inscricoes/${novo.id}/inscricao`, {
+        method: 'POST',
+        body: JSON.stringify({ id_programa: Number(idPrograma) }),
+      });
+    }
+
+    // Sucesso — mostra banner, trava form e redireciona
+    document.getElementById('success-msg').textContent =
+      `${dados.nome} cadastrado com sucesso! Redirecionando...`;
+    document.getElementById('success-banner').classList.add('visible');
+    lucide.createIcons();
+    toast(`${dados.nome} cadastrado com sucesso!`, 'success');
+
+    document.getElementById('form-cadastrar')
+      .querySelectorAll('input, select, button, a.btn')
+      .forEach(el => { el.disabled = true; el.style.pointerEvents = 'none'; });
+
+    setTimeout(() => { window.location.href = 'perfil-coordenador.html'; }, 2000);
+
+  } catch (err) {
+    // Restaura botão
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="user-plus" width="14" height="14"></i> Cadastrar aluno';
+    lucide.createIcons();
+
+    // Mapeia erros da API para os campos corretos
+    if (err.status === 409) {
+      const msg = (err.message || '').toLowerCase();
+      if (msg.includes('email')) {
+        showError('email', 'Este e-mail já está cadastrado');
+      } else if (msg.includes('cpf')) {
+        showError('cpf', 'Este CPF já está cadastrado');
+      } else {
+        toast(err.message || 'Dado duplicado.', 'error');
+      }
+    } else if (err.status === 400 || err.status === 422) {
+      const msgRaw = err.message || '';
+      const msg    = msgRaw.toLowerCase();
+      if (msg.includes('nome'))                                          showError('nome', msgRaw);
+      else if (msg.includes('email'))                                    showError('email', msgRaw);
+      else if (msg.includes('telefone'))                                 showError('telefone', msgRaw);
+      else if (msg.includes('cpf'))                                      showError('cpf', msgRaw);
+      else if (msg.includes('nascimento') || msg.includes('data') || msg.includes('idade'))
+                                                                         showError('data-nascimento', msgRaw);
+      else toast(msgRaw || 'Dados inválidos. Verifique os campos.', 'error');
+    } else {
+      toast(err.message || 'Erro ao cadastrar. Tente novamente.', 'error');
+    }
+  }
+});
+
+// ── Limpa erro ao digitar ─────────────────────────────────────────────────
+['nome','email','telefone','cpf','data-nascimento'].forEach(id => {
+  document.getElementById(`input-${id}`)
+    ?.addEventListener('input', () => clearError(id));
+});
+
+// ── Carrega programas no select ───────────────────────────────────────────
+async function carregarProgramas() {
+  const sel = document.getElementById('input-programa');
+  if (!sel) return;
+  try {
+    const programas = await apiFetch('/programas');
+    if (Array.isArray(programas)) {
+      programas.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.nome;
+        sel.appendChild(opt);
+      });
+    }
+  } catch (_) { /* mantém apenas a opção padrão se a API falhar */ }
+}
+
+// ── Inicialização ─────────────────────────────────────────────────────────
+(async function init() {
+  lucide.createIcons();
+  await initTopbar();
+  await carregarProgramas();
+  aplicarMascara(document.getElementById('input-telefone'),       formatarTelefone);
+  aplicarMascara(document.getElementById('input-cpf'),            formatarCpf);
+  aplicarMascara(document.getElementById('input-data-nascimento'), formatarData);
+})();
+</script>
+<script>
+(function() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    const s = raw ? JSON.parse(raw) : null;
+    if (s && s.perfil === 'Gestao') {
+      const el = document.getElementById('sidebar-nav-mentoria');
+      if (el) el.style.display = 'none';
+    }
+  } catch(_) {}
+})();
+</script></body>
+</html>

@@ -1,0 +1,292 @@
+﻿/* Conquistas e certificados do ex-aluno */
+
+/* Foto (avatar) da sidebar com bordas arredondadas — seção do Ex-Aluno */
+.sidebar__avatar {
+  border-radius: var(--radius-lg);
+}
+
+/* Histórico na Pulse Mais (linha do tempo horizontal) */
+.jornada-card {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.jornada-card__header {
+  margin-bottom: 32px;
+}
+
+.jornada-card__header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.jornada-card__sub {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 2px;
+}
+
+.jornada {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.jornada__step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* Conector horizontal entre as etapas */
+.jornada__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: var(--color-border);
+  z-index: 0;
+}
+
+.jornada__step--conecta:not(:last-child)::after {
+  background: var(--color-accent);
+}
+
+/* Marcador (bolinha) de cada etapa */
+.jornada__dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  flex-shrink: 0;
+  background: var(--color-white);
+  border: 3px solid var(--color-border);
+  color: var(--color-white);
+}
+
+.jornada__step--done .jornada__dot {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.jornada__step--pendente .jornada__dot {
+  border-style: dashed;
+}
+
+.jornada__label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-top: 10px;
+}
+
+.jornada__step--pendente .jornada__label {
+  color: var(--color-text-support);
+}
+
+.jornada__desc {
+  font-size: 11px;
+  color: var(--color-text-support);
+  margin-top: 2px;
+}
+
+.jornada__data {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-top: 6px;
+}
+
+.jornada__step--pendente .jornada__data {
+  color: var(--color-text-support);
+  font-weight: 500;
+}
+
+/* Lista de conquistas e certificados */
+.conquistas-lista-card {
+  margin-bottom: 16px;
+}
+
+.conquistas-lista-card__header {
+  margin-bottom: 20px;
+}
+
+.conquistas-lista-card__header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.conquistas-lista-card__sub {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 2px;
+}
+
+.cert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cert-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cert-item__icone {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: rgba(37, 176, 87, 0.1);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cert-item__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cert-item__titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.cert-item__meta {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 2px;
+}
+
+.cert-item__desc {
+  font-size: 13px;
+  color: var(--color-text-support);
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
+.cert-item__acao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cert-item__pdf {
+  font-size: 13px;
+  padding: 7px 14px;
+  white-space: nowrap;
+}
+
+.estado-carregando {
+  padding: 16px;
+  color: var(--color-text-support);
+  font-size: 14px;
+}
+
+.cert-item { cursor: pointer; }
+
+/* Modal de detalhes da conquista */
+.conquista-modal__icone-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(37, 176, 87, 0.1);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  overflow: hidden;
+}
+
+.conquista-modal__icone-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.conquista-modal__titulo {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 4px;
+}
+
+.conquista-modal__data {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-support);
+  margin-bottom: 16px;
+}
+
+.conquista-modal__desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .jornada {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    padding-left: 19px;
+  }
+
+  /* conector passa a ser vertical no mobile */
+  .jornada__step {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .jornada__step:not(:last-child)::after {
+    top: 38px;
+    left: 18px;
+    width: 3px;
+    height: 100%;
+  }
+
+  .jornada__label,
+  .jornada__data,
+  .jornada__desc {
+    margin-top: 0;
+  }
+
+  .cert-item {
+    flex-wrap: wrap;
+  }
+
+  .cert-item__acao {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+}

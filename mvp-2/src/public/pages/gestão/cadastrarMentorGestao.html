@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastrar Mentor – Pulsar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/cadastrarMentorGestao.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Relatórios">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Relatórios</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item is-active" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-wrapper" id="mainWrapper">
+
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <img src="../../assets/logoPulsar.png" alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <p class="breadcrumb">Mentores</p>
+
+      <div class="page-title-row">
+        <h1 class="page-title">Cadastrar Mentor</h1>
+        <span class="count-badge" id="countBadge">0 mentores</span>
+      </div>
+
+      <div class="section-card">
+        <h2 class="section-card__title">Dados do Mentor</h2>
+
+        <!-- Banner de feedback -->
+        <div class="banner banner--success" id="bannerSucesso" hidden>
+          <i data-lucide="check-circle"></i>
+          <span id="bannerSucessoMsg"></span>
+        </div>
+        <div class="banner banner--error" id="bannerErro" hidden>
+          <i data-lucide="alert-circle"></i>
+          <span id="bannerErroMsg"></span>
+        </div>
+
+        <form id="formMentor" novalidate>
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label class="form-label" for="fieldNome">Nome completo</label>
+              <input class="input" type="text" id="fieldNome"
+                placeholder="Ex.: Ana Souza" maxlength="200" autocomplete="name" />
+              <span class="field-error" id="errNome" hidden></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fieldEmail">E-mail</label>
+              <input class="input" type="email" id="fieldEmail"
+                placeholder="mentor@exemplo.com" maxlength="200" autocomplete="email" />
+              <span class="field-error" id="errEmail" hidden></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fieldSenha">Senha temporária</label>
+              <div class="input-password-wrap">
+                <input class="input" type="password" id="fieldSenha"
+                  placeholder="Mínimo 8 caracteres" maxlength="128" autocomplete="new-password" />
+                <button type="button" class="btn-toggle-senha" id="btnToggleSenha" aria-label="Mostrar senha">
+                  <i data-lucide="eye" id="iconeSenha"></i>
+                </button>
+              </div>
+              <span class="field-error" id="errSenha" hidden></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="fieldArea">Área de atuação</label>
+              <input class="input" type="text" id="fieldArea"
+                placeholder="Ex.: Tecnologia, Gestão, Design…" maxlength="200" />
+              <span class="field-error" id="errArea" hidden></span>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="btnLimpar">Limpar</button>
+            <button type="submit" class="btn btn-primary" id="btnSalvar">
+              <i data-lucide="user-plus"></i>
+              <span>Cadastrar Mentor</span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Listagem de mentores -->
+      <div class="section-card">
+        <div class="list-header">
+          <h2 class="section-card__title">Mentores cadastrados</h2>
+          <select class="filter-select" id="filterAtivo">
+            <option value="">Todos os status</option>
+            <option value="true">Ativos</option>
+            <option value="false">Inativos</option>
+          </select>
+        </div>
+
+        <div class="state-panel" id="stateLoading" hidden>
+          <span class="spinner" aria-hidden="true"></span>
+          <p>Carregando mentores…</p>
+        </div>
+
+        <div class="state-panel state-panel--error" id="stateError" hidden>
+          <i data-lucide="alert-circle" class="state-icon"></i>
+          <p id="stateErrorMsg">Erro ao carregar.</p>
+          <button class="btn btn-secondary" id="btnTentarNovamente">Tentar de novo</button>
+        </div>
+
+        <div class="state-panel" id="stateEmpty" hidden>
+          <i data-lucide="users" class="state-icon"></i>
+          <p>Sem dados</p>
+        </div>
+
+        <div class="mentores-grid" id="mentoresGrid"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modal: editar mentor -->
+<div class="modal-overlay" id="modalEditarMentor">
+  <div class="modal-dialog" role="dialog" aria-labelledby="modalEditarTitulo" aria-modal="true">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalEditarTitulo">Editar Mentor</h2>
+      <button class="modal-close" id="modalEditarFechar" type="button" aria-label="Fechar">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="banner banner--error" id="modalBannerErro" hidden>
+        <i data-lucide="alert-circle"></i>
+        <span id="modalBannerErroMsg"></span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="editNome">Nome completo</label>
+          <input class="input" type="text" id="editNome" maxlength="200" />
+          <span class="field-error" id="editErrNome" hidden></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editEmail">E-mail</label>
+          <input class="input" type="email" id="editEmail" maxlength="200" />
+          <span class="field-error" id="editErrEmail" hidden></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editArea">Área de atuação</label>
+          <input class="input" type="text" id="editArea" maxlength="200" />
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modalEditarCancelar" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="modalEditarSalvar" type="button">
+        <i data-lucide="save"></i> Salvar
+      </button>
+    </div>
+
+    <div class="modal-divider"></div>
+
+    <div class="modal-status-section">
+      <span class="modal-status-label" id="modalStatusLabel">Status do mentor</span>
+      <button class="btn btn-secondary btn-status-toggle" id="btnAlterarStatus" type="button">
+        <i data-lucide="user-x" id="iconeStatus"></i>
+        <span id="textoStatus">Desativar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/gestão/cadastrarMentorGestao.js"></script>
+<script src="../../js/gestão/main.js"></script>
+</body>
+</html>

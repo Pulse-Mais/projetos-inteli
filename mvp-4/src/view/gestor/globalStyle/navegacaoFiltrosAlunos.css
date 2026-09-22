@@ -1,0 +1,231 @@
+/* Lista de alunos da turma — design idêntico ao da coordenadora (tokens) */
+
+.pagina-alunos-turma {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--espaco-6);
+  background-color: var(--cinza-fundo);
+}
+
+
+/* ===== Barra superior: breadcrumb + busca + filtro ===== */
+.alunos-topo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--espaco-6);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  background-color: var(--branco);
+  border: 1px solid var(--cor-secundaria-clara);
+  border-radius: var(--raio-full);
+  padding: var(--espaco-3) var(--espaco-5);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+.breadcrumb a { color: var(--texto-secundario); }
+.breadcrumb a:hover { color: var(--cor-primaria); }
+.breadcrumb-sep { color: var(--texto-secundario); }
+.breadcrumb-atual { color: var(--texto-principal); }
+
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: 0 var(--espaco-4);
+  flex: 1;
+  min-width: 220px;
+}
+.busca:focus-within { border-color: var(--cor-secundaria); }
+.busca-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: var(--espaco-3) 0;
+  font-size: var(--texto-sm);
+}
+/* A busca mostra o foco no contêiner (:focus-within); o input interno não leva o anel */
+.busca-input:focus { box-shadow: none; }
+.busca .lucide {
+  color: var(--texto-secundario);
+  width: 20px;
+  height: 20px;
+}
+
+
+.filtro-select {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.filtros-avancados {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-6);
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espaco-4);
+}
+
+.filtro-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filtro-campo span {
+  color: var(--texto-secundario);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.filtro-campo input,
+.filtro-campo select {
+  width: 100%;
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3);
+  color: var(--texto-principal);
+  background-color: var(--branco);
+  font: inherit;
+  font-size: var(--texto-sm);
+}
+
+.filtros-acoes {
+  display: flex;
+  align-items: end;
+  gap: var(--espaco-2);
+  flex-wrap: wrap;
+}
+
+.btn-filtro,
+.btn-estado {
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  background-color: var(--branco);
+  color: var(--texto-principal);
+  font: inherit;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  cursor: pointer;
+}
+
+.btn-filtro--primario {
+  border-color: var(--cor-secundaria);
+  background-color: var(--cor-secundaria);
+  color: var(--branco);
+}
+
+.alunos-estado {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-3);
+  min-height: 160px;
+  border: 1px dashed var(--cinza-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--branco);
+  color: var(--texto-secundario);
+  text-align: center;
+  padding: var(--espaco-5);
+}
+
+.alunos-estado--erro {
+  border-color: var(--erro);
+  color: var(--erro);
+}
+
+.pill-neutro {
+  background-color: var(--cinza-fundo);
+  color: var(--texto-secundario);
+}
+
+
+/* ===== Grade de cards de aluno ===== */
+.alunos-grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: var(--espaco-5);
+}
+
+.aluno-card {
+  background-color: var(--branco);
+  border: 1px solid var(--cor-secundaria-clara);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espaco-6) var(--espaco-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-2);
+  text-align: center;
+  color: var(--texto-principal);
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+.aluno-card:hover {
+  box-shadow: var(--sombra-md);
+  transform: translateY(-2px);
+}
+
+
+.aluno-avatar {
+  width: 44px;
+  height: 44px;
+  color: #9aa5b1;
+}
+
+.aluno-nome {
+  font-size: var(--texto-base);
+  font-weight: var(--peso-semibold);
+}
+.aluno-matricula {
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+}
+
+
+/* Selos de situação */
+.pill {
+  display: inline-block;
+  margin-top: var(--espaco-2);
+  padding: 4px var(--espaco-4);
+  border-radius: var(--raio-full);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.pill-ativo   { background-color: var(--sucesso-fundo); color: var(--sucesso); }
+.pill-inativo { background-color: var(--erro-fundo);    color: var(--erro); }
+
+
+@media (max-width: 760px) {
+  .pagina-alunos-turma { padding: var(--espaco-4); }
+}

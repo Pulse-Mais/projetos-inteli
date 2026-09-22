@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar — Registro de Anotações</title>
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/anotacoes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item is-active" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Frequências">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Frequências</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <img src="../../assets/logoPulsar.png" alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <!-- BREADCRUMB -->
+      <nav class="breadcrumb">
+        <a data-navigate="dashboard">Dashboard</a>
+        <span class="breadcrumb__sep">/</span>
+        <span>Registro de Anotações</span>
+      </nav>
+
+      <!-- TÍTULO -->
+      <h1 class="page-title">Anotações</h1>
+
+      <!-- FORM CARD -->
+      <div class="form-card">
+
+        <!-- Linha: Categoria + Tipo -->
+        <div class="form-row">
+
+          <div class="form-group">
+            <label class="form-label" for="categoria">Categoria</label>
+            <div class="select-wrap">
+              <select id="categoria" name="categoria">
+                <option value="" disabled selected>Selecione uma categoria</option>
+                <option value="Mentoria">Mentoria</option>
+                <option value="Atendimento">Atendimento</option>
+                <option value="Evolucao_Geral">Evolução Geral</option>
+                <option value="Academico">Acadêmico</option>
+                <option value="Outro">Outro</option>
+              </select>
+              <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="tipoAlerta">Tipo</label>
+            <div class="select-wrap">
+              <select id="tipoAlerta" name="tipoAlerta">
+                <option value="Geral" selected>Geral</option>
+                <option value="Alerta">Alerta</option>
+                <option value="Conquista">Conquista</option>
+              </select>
+              <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Textarea -->
+        <div class="form-group">
+          <label class="form-label" for="textoAnotacao">Texto da anotação</label>
+          <textarea
+            id="textoAnotacao"
+            name="textoAnotacao"
+            placeholder="Registre observações sobre o jovem, contexto, próximos passos..."
+          ></textarea>
+        </div>
+
+      </div>
+      <!-- /form-card -->
+
+      <!-- AÇÕES -->
+      <div class="form-actions">
+        <button class="btn-cancel" id="btnCancelar">Cancelar</button>
+        <button class="btn-save"   id="btnSalvar">Salvar</button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/gestão/main.js"></script>
+<script src="../../js/gestão/anotacoes.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+# ======================================================================
+# S5-T13 — TESTES DE CARGA — Pulse Mais API
+# Target: servidor local em http://localhost:3000
+#
+# Pré-requisito: crie src/scripts/load-test/.env.load-test copiando
+# o arquivo .env.load-test.example e preenchendo com credenciais reais.
+#
+# Executar:
+#   npm run load:smoke   → 1 usuário por 30s (verifica se tudo funciona)
+#   npm run load:carga   → rampa 1→5 usuários, depois 5 por 2 min
+# ======================================================================
+
+config:
+  target: "http://localhost:3000"
+  processor: "./artillery-processor.js"
+
+  plugins:
+    expect: {}
+
+  environments:
+    smoke:
+      phases:
+        - name: "Smoke — 1 usuário por 30s"
+          duration: 30
+          arrivalRate: 1
+
+  phases:
+    - name: "Aquecimento — rampa 1 a 5 usuários em 60s"
+      duration: 60
+      arrivalRate: 1
+      rampTo: 5
+    - name: "Carga sustentada — 5 usuários por 120s"
+      duration: 120
+      arrivalRate: 5
+
+  http:
+    timeout: 30
+
+# ── Cenários ──────────────────────────────────────────────────────────
+
+scenarios:
+
+  # Peso 3: fluxo mais comum — aluno abre o dashboard
+  - name: "Fluxo Aluno — login + /me + dashboard"
+    weight: 3
+    beforeScenario: "definirVariaveis"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email_aluno }}"
+            senha: "{{ senha_aluno }}"
+          capture:
+            - json: "$.token"
+              as: "token"
+            - json: "$.usuario.jovem_id"
+              as: "jovem_id"
+          expect:
+            - statusCode: 200
+      - think: 0.5
+      - get:
+          url: "/api/me"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/dashboard/aluno/{{ jovem_id }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  # Peso 2: mentor consulta seus jovens
+  - name: "Fluxo Mentor — login + dashboard"
+    weight: 2
+    beforeScenario: "definirVariaveis"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email_mentor }}"
+            senha: "{{ senha_mentor }}"
+          capture:
+            - json: "$.token"
+              as: "token"
+          expect:
+            - statusCode: 200
+      - think: 0.5
+      - get:
+          url: "/api/dashboard/mentor"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  # Peso 2: gestão consulta KPIs e jovens em risco (em paralelo no front)
+  - name: "Fluxo Gestão — login + KPIs + jovens em risco"
+    weight: 2
+    beforeScenario: "definirVariaveis"
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email_gestao }}"
+            senha: "{{ senha_gestao }}"
+          capture:
+            - json: "$.token"
+              as: "token"
+          expect:
+            - statusCode: 200
+      - think: 0.5
+      - get:
+          url: "/api/dashboard"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/dashboard/jovens-em-risco"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200

@@ -1,0 +1,12 @@
+/* Homepage do ex-aluno: reutiliza banner-boas-vindas, acao-card e page-grid de homepage.css */
+
+/* Chip de contexto do ex-aluno na topbar (cor âmbar) */
+.portal-badge--exaluno {
+  color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Foto (avatar) da sidebar com bordas arredondadas — seção do Ex-Aluno */
+.sidebar__avatar {
+  border-radius: var(--radius-lg);
+}

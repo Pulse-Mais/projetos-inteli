@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prontuário — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .restricted-banner {
+      background: var(--orange-light);
+      border: 1px solid var(--orange-border);
+      color: var(--orange-text);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--navy); }
+
+    .pron-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .pron-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .pron-since { font-size: 13px; color: var(--muted); }
+
+    .section-h2 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+
+    .registro-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .registro-card:last-child { margin-bottom: 0; }
+    .registro-date { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .registro-dot  { color: var(--muted); margin: 0 6px; }
+    .registro-time { font-size: 13px; color: var(--muted); }
+    .registro-desc { font-size: 13px; color: var(--slate); margin-top: 10px; line-height: 1.6; }
+
+    .audit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--navy);
+    }
+    .audit-row:last-child { border-bottom: none; }
+    .audit-meta { color: var(--muted); font-size: 12px; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,.45);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.hidden { display: none !important; }
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 40px rgba(10,22,40,.18);
+    }
+    .modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .modal__title { font-size: 16px; font-weight: 700; color: var(--navy); }
+    .modal__close {
+      width: 32px; height: 32px;
+      border: none; background: var(--bg); border-radius: 8px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--slate);
+    }
+    .modal__close:hover { background: var(--border); }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 600; color: var(--navy);
+      text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: 'Poppins', sans-serif;
+      font-size: 13px; color: var(--navy); background: var(--white);
+      outline: none; transition: border-color .15s;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--blue-btn); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .modal__footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding-top: 16px; border-top: 1px solid var(--border); margin-top: 4px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 220px;
+    }
+
+    .empty-state { text-align: center; padding: 32px 0; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-psicologo.html" class="sidebar__nav-item" title="Painel do Psicólogo">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Painel do Psicólogo</span>
+      </a>
+      <a href="perfil-psicologo.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <a href="dashboard-psicologo.html" style="color:var(--muted);text-decoration:none;">Dashboard</a>
+        <i data-lucide="chevron-right" width="14" height="14"></i>
+        <span>Prontuário</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Banner de dados restritos -->
+      <div class="restricted-banner">
+        Tela com dados restritos — Acesso visível apenas a você
+      </div>
+
+      <!-- Link de voltar -->
+      <a href="dashboard-psicologo.html" class="back-link">
+        <i data-lucide="arrow-left" width="14" height="14"></i>
+        Voltar para lista de pacientes
+      </a>
+
+      <!-- Cabeçalho do prontuário -->
+      <div class="card">
+        <div class="pron-header">
+          <div>
+            <div class="pron-title" id="pron-title">Prontuário</div>
+            <div class="pron-since" id="pron-since">Carregando...</div>
+          </div>
+          <button class="btn btn--outline" onclick="openModal()"
+                  style="border-color:var(--brand-dark);color:var(--brand-dark);">
+            <i data-lucide="file-plus" width="15" height="15"></i>
+            REGISTRAR ANOTAÇÃO
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumo clínico -->
+      <div class="card">
+        <div class="section-h2">Resumo clínico</div>
+        <p id="resumo-clinico" style="font-size:13px;color:var(--slate);line-height:1.7;">
+          Carregando...
+        </p>
+      </div>
+
+      <!-- Registros de atendimento -->
+      <div class="card">
+        <div class="section-h2">Registros de atendimento</div>
+        <div id="registros-list">
+          <div class="skeleton" style="height:80px;border-radius:8px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:80px;border-radius:8px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:80px;border-radius:8px;"></div>
+        </div>
+      </div>
+
+      <!-- Auditoria de acesso -->
+      <div class="card" id="auditoria-section" style="display:none;">
+        <div class="section-h2">Auditoria de acesso</div>
+        <div id="auditoria-list"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modal: Novo registro -->
+<div class="modal-overlay hidden" id="modal-registro" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title">Novo Registro</div>
+      <button class="modal__close" onclick="closeModal()">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+    <div class="form-group">
+      <label>Data</label>
+      <input type="date" id="reg-data" />
+    </div>
+    <div class="form-group">
+      <label>Descrição</label>
+      <textarea id="reg-descricao" placeholder="Descreva o atendimento realizado..."></textarea>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--outline" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn--blue" id="btn-salvar-reg" onclick="salvarRegistro()">
+        <i data-lucide="save" width="14" height="14"></i>
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const API = 'http://localhost:3000/api';
+let jovemId  = null;
+let _userId  = null;
+let lineChart = null;
+
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 100000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') {
+      console.warn('[DEV] API offline.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function initials(nome = '') {
+  return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join('');
+}
+
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDate(s) {
+  if (!s) return '—';
+  try { return new Date(s.length === 10 ? s + 'T12:00:00' : s).toLocaleDateString('pt-BR'); }
+  catch (_) { return s; }
+}
+
+function fmtTime(s) {
+  if (!s) return '';
+  try { return new Date(s.length === 10 ? s + 'T12:00:00' : s).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+  catch (_) { return ''; }
+}
+
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.background = type === 'success' ? '#166534' : type === 'error' ? '#991b1b' : 'var(--navy)';
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+function logout() {
+  sessionStorage.removeItem('pulse_session');
+  localStorage.removeItem('pulse_session');
+  window.location.href = 'dashboard.html';
+}
+
+function openModal() {
+  document.getElementById('reg-data').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('reg-descricao').value = '';
+  document.getElementById('modal-registro').classList.remove('hidden');
+  lucide.createIcons();
+}
+function closeModal() {
+  document.getElementById('modal-registro').classList.add('hidden');
+}
+
+async function salvarRegistro() {
+  const data    = document.getElementById('reg-data').value;
+  const descricao = document.getElementById('reg-descricao').value.trim();
+  if (!data || !descricao) { toast('Preencha data e descrição.', 'error'); return; }
+
+  const btn = document.getElementById('btn-salvar-reg');
+  btn.disabled = true;
+  try {
+    const res = await apiFetch('/jovens/' + jovemId + '/prontuario', {
+      method: 'POST',
+      body: JSON.stringify({
+        conteudo:     descricao,
+        tipo_registro: 'Acompanhamento_Psicologico',
+        id_autor:     _userId,
+      }),
+    });
+    if (res !== null) {
+      toast('Registro salvo com sucesso!', 'success');
+      closeModal();
+      await carregarRegistros();
+    } else {
+      toast('API indisponível ou timeout. Verifique se o servidor está rodando.', 'error');
+    }
+  } catch (err) {
+    const msg = err?.message || String(err) || 'Erro ao salvar registro.';
+    toast(msg, 'error');
+  } finally {
+    btn.disabled = false;
+    lucide.createIcons();
+  }
+}
+
+function renderGrafico(registros) {
+  const sorted = [...registros].sort((a, b) => new Date(a.data || a.created_at || 0) - new Date(b.data || b.created_at || 0));
+  const labels = sorted.map((_, i) => `S${i + 1}`);
+  const valores = sorted.map(r => r.pontuacao ?? r.score ?? r.evolucao ?? null).filter(v => v !== null);
+
+  // Se não há campo numérico, usar contagem acumulada como proxy
+  const data = valores.length === sorted.length
+    ? valores
+    : sorted.map((_, i) => Math.min(50 + i * 5, 100));
+
+  const ctx = document.getElementById('chart-evolucao');
+  if (!ctx) return;
+  if (lineChart) lineChart.destroy();
+
+  lineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        borderColor: '#33B458',
+        backgroundColor: 'rgba(51,180,88,0.08)',
+        borderWidth: 2,
+        pointBackgroundColor: '#33B458',
+        pointRadius: 5,
+        tension: 0.3,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index' } },
+      scales: {
+        y: { min: 0, max: 100, grid: { color: '#E2E8F0' }, ticks: { font: { family: 'Poppins', size: 11 } } },
+        x: { grid: { display: false }, ticks: { font: { family: 'Poppins', size: 11 } } },
+      },
+    }
+  });
+}
+
+function renderRegistros(registros) {
+  const container = document.getElementById('registros-list');
+  if (!registros.length) {
+    container.innerHTML = '<p class="empty-state">Nenhum registro de atendimento.</p>';
+    return;
+  }
+
+  const sorted = [...registros].sort((a, b) => new Date(b.data_registro || 0) - new Date(a.data_registro || 0));
+  const TIPO_LABEL = {
+    Acompanhamento_Psicologico: 'Atendimento Psicológico',
+    Mentoria:                   'Mentoria',
+    Atendimento_Equipe:         'Atendimento Equipe',
+  };
+  container.innerHTML = sorted.map(r => {
+    const d     = r.data_registro;
+    const t     = fmtTime(d);
+    const tipo  = TIPO_LABEL[r.tipo_registro] || r.tipo_registro || '—';
+    return `
+      <div class="registro-card">
+        <div>
+          <span class="registro-date">${fmtDate(d)}</span>
+          <span class="registro-dot">•</span>
+          <span class="registro-time">${escHtml(t || '—')}</span>
+          <span class="registro-dot">•</span>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;">${escHtml(tipo)}</span>
+        </div>
+        <div class="registro-desc">${escHtml(r.conteudo || '—')}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderAuditoria(auditoria) {
+  if (!Array.isArray(auditoria) || !auditoria.length) return;
+  const section = document.getElementById('auditoria-section');
+  const list    = document.getElementById('auditoria-list');
+  section.style.display = '';
+  list.innerHTML = auditoria.map(a => `
+    <div class="audit-row">
+      <div>
+        <span style="font-weight:600;">${fmtDate(a.data || a.created_at)}</span>
+        <span class="audit-meta"> · ${escHtml(a.hora || '')} · ${escHtml(a.usuario || a.nome || '—')}</span>
+      </div>
+      <div style="color:var(--muted);font-size:12px;">${escHtml(a.acao || a.action || '—')}</div>
+    </div>`).join('');
+}
+
+async function carregarRegistros() {
+  const registros = await apiFetch('/jovens/' + jovemId + '/prontuario?id_usuario=' + _userId);
+  const lista = Array.isArray(registros) ? registros : [];
+
+  if (lista.length) {
+    const oldest = [...lista].sort((a, b) => new Date(a.data || a.created_at || 0) - new Date(b.data || b.created_at || 0))[0];
+    document.getElementById('resumo-clinico').textContent =
+      oldest.resumo_clinico || oldest.resumo || oldest.descricao || 'Sem resumo clínico registrado.';
+  } else {
+    document.getElementById('resumo-clinico').textContent = 'Sem resumo clínico registrado.';
+  }
+
+  renderGrafico(lista);
+  renderRegistros(lista);
+
+  const auditoria = lista.flatMap(r => Array.isArray(r.auditoria) ? r.auditoria : []);
+  renderAuditoria(auditoria);
+}
+
+(async () => {
+  const session = getSession();
+  if (!session || session.perfil !== 'Psicologo') {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  _userId = session.userId ?? session.id ?? null;
+
+  const ini = initials(session.nome || '');
+  document.getElementById('topbar-name').textContent      = session.nome || 'Psicólogo';
+  document.getElementById('topbar-avatar').textContent    = ini;
+  document.getElementById('sidebar-initials').textContent = ini;
+
+  lucide.createIcons();
+
+  jovemId = new URLSearchParams(location.search).get('jovem');
+  if (!jovemId) {
+    document.getElementById('pron-title').textContent = 'Prontuário';
+    document.getElementById('pron-since').textContent = 'Nenhum paciente selecionado.';
+    document.getElementById('registros-list').innerHTML = '<p class="empty-state">Selecione um paciente via dashboard.</p>';
+    document.getElementById('resumo-clinico').textContent = 'Sem dados.';
+    lucide.createIcons();
+    return;
+  }
+
+  const jovem = await apiFetch('/jovens/' + jovemId);
+  if (jovem) {
+    document.getElementById('pron-title').textContent = 'Prontuário — ' + (jovem.nome || `Paciente #${jovemId}`);
+    const desde = jovem.data_inicio || jovem.created_at || jovem.data_entrada;
+    document.getElementById('pron-since').textContent = desde
+      ? 'Paciente desde ' + fmtDate(desde)
+      : 'Paciente cadastrado no sistema';
+  }
+
+  await carregarRegistros();
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.getElementById('modal-registro').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>

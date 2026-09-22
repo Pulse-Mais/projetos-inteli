@@ -1,0 +1,205 @@
+/* Banner de boas-vindas */
+.banner-boas-vindas {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 420px;
+  grid-column: 2 / 16;
+  margin-top: 60px;
+}
+
+.banner-boas-vindas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.24);
+  pointer-events: none;
+}
+
+.banner-texto {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  z-index: 2;
+  max-width: 560px;
+  text-align: left;
+  color: var(--color-white);
+}
+
+.banner-texto h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+/* Subtítulo "O que é possível ver?" */
+.banner-texto h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 10px;
+  opacity: 0.9;
+}
+
+.banner-texto p {
+  font-size: 18px;
+  line-height: 1.7;
+  margin: 0 0 20px;
+}
+
+.banner-imagem {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  min-height: 420px;
+}
+
+/* Badge de turma — exclusivo do portal do aluno */
+.aluno-badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  margin-bottom: 12px;
+}
+
+/* Programas abertos */
+.programas-abertos {
+  grid-column: 2 / 16;
+  margin-top: 48px;
+}
+
+/* Título com sublinhado verde apenas embaixo do texto */
+.programas-abertos__titulo {
+  display: inline-block;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 3px solid var(--color-accent);
+}
+
+.programas-lista {
+  padding: 0;
+}
+
+/* Item de programa */
+.programa-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--color-border);
+  border-left: 3px solid transparent;
+  transition: background 0.18s, border-left-color 0.18s, transform 0.18s;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.programa-item:hover {
+  background: rgba(0, 56, 112, 0.04);
+  border-left-color: var(--color-accent);
+  transform: translateX(4px);
+}
+
+.programa-item:last-child {
+  border-bottom: none;
+}
+
+.programa-item__icone {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.programa-item__icone--aula      { background: rgba(0,56,112,0.10);   color: var(--color-primary); }
+.programa-item__icone--workshop  { background: rgba(245,158,11,0.12); color: var(--color-warning); }
+.programa-item__icone--mentoria  { background: rgba(37,176,87,0.12);  color: var(--color-accent);  }
+.programa-item__icone--evento    { background: rgba(220,38,38,0.10);  color: var(--color-danger);  }
+.programa-item__icone--atividade { background: rgba(245,158,11,0.12); color: var(--color-warning); }
+
+.programa-item__badge--aula      { background: rgba(0,56,112,0.12);   color: var(--color-primary); }
+.programa-item__badge--workshop  { background: rgba(245,158,11,0.15); color: var(--color-warning); }
+.programa-item__badge--mentoria  { background: rgba(37,176,87,0.12);  color: var(--color-accent);  }
+.programa-item__badge--evento    { background: rgba(220,38,38,0.10);  color: var(--color-danger);  }
+.programa-item__badge--atividade { background: rgba(245,158,11,0.15); color: var(--color-warning); }
+
+.programa-item__info {
+  flex: 1;
+}
+
+.programa-item__nome {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.programa-item__subtitulo {
+  font-size: 11px;
+  color: var(--color-text-support);
+  margin-top: 1px;
+}
+
+.programa-item__data {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 3px;
+}
+
+.programa-item__badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.estado-carregando {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-support);
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .banner-boas-vindas,
+  .programas-abertos {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-boas-vindas,
+  .programas-abertos {
+    grid-column: 1 / -1;
+  }
+
+  .banner-boas-vindas {
+    min-height: 280px;
+  }
+
+  .banner-imagem {
+    min-height: 280px;
+  }
+
+  .banner-texto h1 {
+    font-size: 24px;
+  }
+
+  .banner-texto p {
+    font-size: 14px;
+  }
+}

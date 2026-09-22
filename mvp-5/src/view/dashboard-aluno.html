@@ -1,0 +1,568 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .content { padding: 28px 32px; overflow-y: auto; flex: 1; background: var(--bg); }
+
+    .greeting-title { font-size: 26px; font-weight: 700; color: var(--navy); margin: 0 0 4px; }
+    .greeting-sub   { font-size: 13px; color: var(--muted); margin: 0 0 24px; }
+
+    /* Próxima mentoria */
+    .mentoria-card {
+      background: var(--brand-dark);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      color: var(--white);
+    }
+    .mentoria-badge {
+      display: inline-block;
+      background: var(--brand-yellow);
+      color: var(--navy);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .mentoria-title { font-size: 18px; font-weight: 700; margin: 0 0 8px; }
+    .mentoria-meta  { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 16px; }
+    .mentoria-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 8px; color: var(--white); font-family: inherit;
+      font-size: 12px; font-weight: 600; background: transparent; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .mentoria-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--white); }
+
+    /* Métricas */
+    .section-title { font-size: 15px; font-weight: 600; color: var(--navy); margin: 0 0 16px; }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .metric-canvas-wrap { position: relative; width: 100px; height: 100px; }
+    .metric-canvas-wrap canvas { display: block; }
+    .metric-label { font-size: 12px; color: var(--muted); text-align: center; }
+    .metric-value { font-size: 22px; font-weight: 700; color: var(--navy); text-align: center; margin-top: -4px; }
+
+    /* Programas */
+    .programas-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    .prog-row { margin-bottom: 16px; }
+    .prog-row:last-child { margin-bottom: 0; }
+    .prog-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .prog-name { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--navy); font-weight: 500; }
+    .prog-dot  { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .prog-meta { display: flex; align-items: center; gap: 10px; }
+    .prog-pct  { font-size: 13px; font-weight: 600; color: var(--navy); }
+    .prog-bar-bg { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .prog-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+
+    /* Eventos */
+    .eventos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .evento-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .evento-header {
+      padding: 16px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .evento-tipo { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; }
+    .evento-titulo { font-size: 14px; font-weight: 700; }
+    .evento-icon-wrap {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4px;
+    }
+    .evento-body { padding: 14px 20px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .evento-info { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .evento-action { padding: 0 20px 18px; }
+    .evento-btn {
+      width: 100%; padding: 10px; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer;
+      border: none; transition: opacity 0.15s;
+    }
+    .evento-btn--inscrito  { background: transparent; color: var(--brand-green); border: 1.5px solid var(--brand-green); cursor: default; }
+    .evento-btn--inscrever { background: var(--brand-dark); color: var(--white); }
+    .evento-btn--inscrever:hover { opacity: 0.87; }
+
+    .empty-state { text-align: center; padding: 40px 0; color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+      .eventos-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .content { padding: 20px 16px; }
+      .metrics-grid, .eventos-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-aluno.html" class="sidebar__nav-item active" title="Dashboard" aria-current="page">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="eventos-aluno.html" class="sidebar__nav-item" title="Eventos">
+        <i data-lucide="calendar" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="perfil-aluno.html" class="sidebar__nav-item" title="Meu Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Meu Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Dashboard</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+      <h1 class="greeting-title" id="greeting">Olá!</h1>
+      <p class="greeting-sub">Bem-vindo de volta ao seu portal</p>
+
+      <!-- Próxima mentoria -->
+      <div id="mentoria-wrap"></div>
+
+      <!-- Métricas -->
+      <div class="section-title">Suas métricas de participação</div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-canvas-wrap">
+            <canvas id="donut-freq" width="100" height="100"></canvas>
+          </div>
+          <div>
+            <div class="metric-label">Frequência</div>
+            <div class="metric-value" id="val-freq">0%</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-canvas-wrap">
+            <canvas id="donut-conteudo" width="100" height="100"></canvas>
+          </div>
+          <div>
+            <div class="metric-label">Conteúdo</div>
+            <div class="metric-value" id="val-conteudo">0%</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-canvas-wrap">
+            <canvas id="donut-mentoria" width="100" height="100"></canvas>
+          </div>
+          <div>
+            <div class="metric-label">Mentorias</div>
+            <div class="metric-value" id="val-mentoria">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programas -->
+      <div class="programas-card">
+        <div class="section-title" style="margin-bottom:18px;">Programas realizados</div>
+        <div id="programas-list"><div class="empty-state">Carregando...</div></div>
+      </div>
+
+      <!-- Próximos eventos -->
+      <div class="section-title">Próximos eventos</div>
+      <div class="eventos-grid" id="eventos-grid">
+        <div class="empty-state" style="grid-column:1/-1;">Carregando...</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+// ── Utilitários ─────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') { console.warn('[DEV] API offline.'); return null; }
+    return null;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function initials(nome = '') {
+  return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join('');
+}
+
+function logout() {
+  sessionStorage.removeItem('pulse_session');
+  localStorage.removeItem('pulse_session');
+  window.location.href = 'dashboard.html';
+}
+
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  const bg = { success: '#2A9447', error: '#D85A30', default: '#003870' }[type] || '#003870';
+  Object.assign(el.style, {
+    position:'fixed', bottom:'24px', right:'24px', zIndex:'9999',
+    background: bg, color:'#fff', padding:'12px 20px', borderRadius:'10px',
+    fontSize:'13px', fontWeight:'600', boxShadow:'0 4px 16px rgba(0,0,0,0.18)', transition:'opacity 0.3s',
+  });
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// ── Donut chart ─────────────────────────────────────────────────
+function animateDonut(id, targetPct, color, labelId) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 12;
+  let cur = 0;
+
+  function frame() {
+    cur = Math.min(cur + 1.8, targetPct);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#E2E8F0';
+    ctx.lineWidth = 10;
+    ctx.stroke();
+
+    if (cur > 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * cur / 100);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 10;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    if (labelId) document.getElementById(labelId).textContent = Math.round(cur) + '%';
+    if (cur < targetPct) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── Render Próxima Mentoria ─────────────────────────────────────
+function renderProximaMentoria(sessao, mentorNome) {
+  const wrap = document.getElementById('mentoria-wrap');
+  if (!sessao) {
+    wrap.innerHTML = `
+      <div class="mentoria-card" style="opacity:0.7;">
+        <div class="mentoria-badge">PRÓXIMA MENTORIA</div>
+        <div class="mentoria-title">Nenhuma sessão agendada</div>
+        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin:0;">Seu mentor ainda não cadastrou uma próxima sessão.</p>
+      </div>`;
+    return;
+  }
+  const data = new Date(sessao.data);
+  const dataStr = data.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'2-digit', year:'numeric' });
+  const horaStr = data.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+
+  wrap.innerHTML = `
+    <div class="mentoria-card">
+      <div class="mentoria-badge">PRÓXIMA MENTORIA</div>
+      <div class="mentoria-title">Sessão com ${escHtml(mentorNome || 'Mentor')}</div>
+      <div class="mentoria-meta">
+        <i data-lucide="calendar" width="14" height="14"></i>
+        ${escHtml(dataStr)} &bull; ${escHtml(horaStr)}
+      </div>
+      <button class="mentoria-btn" onclick="toast('Detalhes da sessão em breve.','default')">
+        <i data-lucide="external-link" width="13" height="13"></i>
+        Ver detalhes
+      </button>
+    </div>`;
+  lucide.createIcons();
+}
+
+// ── Render Programas ────────────────────────────────────────────
+const PROG_COLORS = ['#003870', '#3182CE', '#D85A30', '#33B458', '#BA7517'];
+
+// Progresso determinístico: 100% concluído, 0% evadido, senão % decorrido da
+// duração do programa (data_inicio → data_fim) em relação a hoje.
+function calcularProgresso(status, prog) {
+  if (status === 'Concluído' || status === 'Concluido') return 100;
+  if (status === 'Evadido') return 0;
+  const inicio = prog?.data_inicio ? new Date(prog.data_inicio) : null;
+  const fim    = prog?.data_fim    ? new Date(prog.data_fim)    : null;
+  if (!inicio || !fim || fim <= inicio) return 0;
+  const hoje = new Date();
+  if (hoje <= inicio) return 0;
+  if (hoje >= fim)    return 100;
+  return Math.round((hoje - inicio) / (fim - inicio) * 100);
+}
+
+function renderProgramas(inscricoes, programas) {
+  const el = document.getElementById('programas-list');
+  if (!inscricoes.length) {
+    el.innerHTML = '<div class="empty-state">Nenhum programa encontrado.</div>';
+    return;
+  }
+
+  const progMap = {};
+  programas.forEach(p => { progMap[p.id] = p; });
+
+  el.innerHTML = inscricoes.map((insc, i) => {
+    const prog = progMap[insc.id_programa];
+    const nome = prog?.nome ?? `Programa ${insc.id_programa}`;
+    const status = insc.status_conclusao || 'Em andamento';
+    const pct = calcularProgresso(status, prog);
+    const cor = PROG_COLORS[i % PROG_COLORS.length];
+    const badgeCls = status === 'Concluído' || status === 'Concluido' ? 'badge--green' : 'badge--blue';
+    return `
+      <div class="prog-row">
+        <div class="prog-header">
+          <div class="prog-name">
+            <div class="prog-dot" style="background:${cor};"></div>
+            ${escHtml(nome)}
+          </div>
+          <div class="prog-meta">
+            <span style="font-size:13px;font-weight:600;color:var(--navy);">${pct}%</span>
+            <span class="badge ${badgeCls}" style="font-size:10px;">${escHtml(status)}</span>
+          </div>
+        </div>
+        <div class="prog-bar-bg">
+          <div class="prog-bar-fill" style="width:${pct}%;background:${cor};"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── Render Eventos ──────────────────────────────────────────────
+const EVENTO_TEMAS = [
+  { tipo: 'WORKSHOP',   bg: '#EBF3FF', cor: '#003870',  txtCor: '#003870' },
+  { tipo: 'PROGRAMA',   bg: '#E6F8ED', cor: '#33B458',  txtCor: '#33B458' },
+  { tipo: 'PULSE TALKS',bg: '#FFF8E0', cor: '#BA7517',  txtCor: '#BA7517' },
+];
+
+function renderEventos(programas, inscricoes) {
+  const grid = document.getElementById('eventos-grid');
+  if (!programas.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Nenhum evento disponível.</div>';
+    return;
+  }
+
+  const inscritosIds = new Set(inscricoes.map(i => i.id_programa));
+
+  grid.innerHTML = programas.map((prog, i) => {
+    const tema = EVENTO_TEMAS[i % EVENTO_TEMAS.length];
+    const inscrito = inscritosIds.has(prog.id);
+    const btn = inscrito
+      ? `<button class="evento-btn evento-btn--inscrito" disabled>Você está inscrito</button>`
+      : `<button class="evento-btn evento-btn--inscrever" onclick="inscrever(${prog.id}, this)">Inscrever-se &rsaquo;</button>`;
+    return `
+      <div class="evento-card">
+        <div class="evento-header" style="background:${tema.bg};">
+          <div class="evento-tipo" style="color:${tema.txtCor};">${tema.tipo}</div>
+          <div class="evento-titulo" style="color:var(--navy);">${escHtml(prog.nome)}</div>
+        </div>
+        <div class="evento-body">
+          <div class="evento-info">
+            <i data-lucide="calendar" width="13" height="13"></i>
+            Consulte o calendário do programa
+          </div>
+          <div class="evento-info">
+            <i data-lucide="users" width="13" height="13"></i>
+            Inscrições abertas
+          </div>
+        </div>
+        <div class="evento-action">${btn}</div>
+      </div>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ── Inscrição ───────────────────────────────────────────────────
+let _jovemId = null;
+
+async function inscrever(idPrograma, btn) {
+  if (!_jovemId) { toast('Perfil não carregado.', 'error'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Aguarde...';
+  const res = await apiFetch(`/jovens/${_jovemId}/inscricoes/${_jovemId}/inscricao`, {
+    method: 'POST',
+    body: JSON.stringify({ id_programa: idPrograma }),
+  });
+  if (res !== null && res !== undefined) {
+    btn.className = 'evento-btn evento-btn--inscrito';
+    btn.textContent = 'Você está inscrito';
+    toast('Inscrição realizada com sucesso!', 'success');
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Inscrever-se ›';
+    toast('Não foi possível realizar a inscrição.', 'error');
+  }
+}
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ────────────────────────────────────────────────────────
+(async () => {
+  const session = getSession();
+  if (!session || session.perfil !== 'Aluno') {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  const primeiroNome = session.nome.split(' ')[0];
+  document.getElementById('greeting').textContent = `Olá, ${primeiroNome}!`;
+  document.getElementById('topbar-name').textContent = session.nome;
+  document.getElementById('topbar-avatar').textContent = initials(session.nome);
+  document.getElementById('sidebar-initials').textContent = initials(session.nome);
+
+  // Encontrar jovem
+  let _jovemData = null;
+  let jovemId = session.id_jovem;
+  if (!jovemId) {
+    const usuario = await apiFetch(`/usuarios/${session.userId}`);
+    jovemId = usuario?.id_jovem ?? null;
+  }
+  if (jovemId) {
+    _jovemData = await apiFetch(`/jovens/${jovemId}`);
+  } else {
+    const jovens = await apiFetch('/jovens');
+    _jovemData = Array.isArray(jovens) ? jovens.find(j => j.nome === session.nome) : null;
+  }
+  _jovemId = _jovemData?.id ?? null;
+
+  if (!_jovemId) {
+    renderProximaMentoria(null, '');
+    animateDonut('donut-freq', 0, '#003870', 'val-freq');
+    animateDonut('donut-conteudo', 0, '#FFD927', 'val-conteudo');
+    animateDonut('donut-mentoria', 0, '#33B458', 'val-mentoria');
+    document.getElementById('programas-list').innerHTML = '<div class="empty-state">Perfil não encontrado na base.</div>';
+    document.getElementById('eventos-grid').innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Sem dados disponíveis.</div>';
+    lucide.createIcons();
+    return;
+  }
+
+  // Chamadas paralelas
+  const [taxaFreqData, taxaEvData, inscricoesRaw, programas, usuarios] = await Promise.all([
+    apiFetch(`/frequencia/jovens/${_jovemId}/taxa-presenca-aula`),
+    apiFetch(`/frequencia/jovens/${_jovemId}/taxa-participacao-evento`),
+    apiFetch(`/jovens/${_jovemId}/inscricoes/${_jovemId}/inscricao`),
+    apiFetch('/programas'),
+    apiFetch('/usuarios'),
+  ]);
+
+  const taxaFreq    = typeof taxaFreqData === 'number' ? taxaFreqData : (taxaFreqData?.taxa ?? 0);
+  const taxaEv      = typeof taxaEvData   === 'number' ? taxaEvData   : (taxaEvData?.taxa  ?? 0);
+  const inscricoes  = Array.isArray(inscricoesRaw) ? inscricoesRaw : [];
+  const progs       = Array.isArray(programas)     ? programas     : [];
+
+  // Sessões de mentoria deste aluno
+  let proximaSessao = null, mentorNome = '';
+  const todasSessoes = [];
+
+  if (Array.isArray(usuarios)) {
+    const mentores = usuarios.filter(u => u.perfil === 'Mentor');
+    for (const mentor of mentores) {
+      const sessoes = await apiFetch(`/mentor/${mentor.id}/mentorias`).catch(() => null);
+      if (!Array.isArray(sessoes)) continue;
+      const minhas = sessoes.filter(s => s.id_jovem === _jovemId);
+      todasSessoes.push(...minhas);
+      if (!proximaSessao) {
+        const futura = minhas.find(s => new Date(s.data) > new Date());
+        if (futura) { proximaSessao = futura; mentorNome = mentor.nome; }
+      }
+    }
+  }
+
+  const presentes    = todasSessoes.filter(s => s.presente).length;
+  const taxaMentoria = todasSessoes.length > 0 ? Math.round(presentes / todasSessoes.length * 100) : 0;
+
+  // Render
+  renderProximaMentoria(proximaSessao, mentorNome);
+  animateDonut('donut-freq',     taxaFreq,    '#003870', 'val-freq');
+  animateDonut('donut-conteudo', taxaEv,      '#FFD927', 'val-conteudo');
+  animateDonut('donut-mentoria', taxaMentoria,'#33B458', 'val-mentoria');
+  renderProgramas(inscricoes, progs);
+  renderEventos(progs, inscricoes);
+
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>

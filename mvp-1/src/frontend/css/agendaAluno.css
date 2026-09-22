@@ -1,0 +1,218 @@
+/*
+ * Agenda do Aluno — estilos do calendário.
+ * Reutiliza os mesmos tokens de calendário da agenda do mentor
+ * (calendario-wrapper, calendario-grid, etc.) sem importar os estilos
+ * de modal/busca que só existem na tela do mentor.
+ */
+
+/* Cabeçalho da página */
+.page-header {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Wrapper do calendário */
+.calendario-wrapper {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 28px 32px;
+  margin-left: 48px;
+  margin-right: 48px;
+  margin-bottom: 16px;
+}
+
+/* Navegação do calendário */
+.calendario-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.calendario-nav__esquerda {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calendario-nav__btn {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.calendario-nav__btn:hover {
+  background: rgba(0, 56, 112, 0.06);
+}
+
+.calendario-nav__btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.calendario-nav__titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 160px;
+  text-align: center;
+}
+
+/* Grid do calendário */
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.calendario-dia-semana {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px 0;
+  letter-spacing: 0.03em;
+}
+
+.calendario-celula {
+  min-height: 84px;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px 10px;
+  background: var(--color-white);
+  vertical-align: top;
+  cursor: default;
+  transition: background 0.12s;
+}
+
+.calendario-celula:nth-child(7n) {
+  border-right: none;
+}
+
+.calendario-celula--ultima-linha {
+  border-bottom: none;
+}
+
+.calendario-celula--outro-mes {
+  background: #FAFAFA;
+}
+
+.calendario-celula--outro-mes .calendario-celula__dia {
+  color: #BBBBBB;
+}
+
+.calendario-celula--evento {
+  background: rgba(37, 176, 87, 0.12);
+  border-color: rgba(37, 176, 87, 0.3);
+  cursor: pointer;
+}
+
+.calendario-celula--evento:hover {
+  background: rgba(37, 176, 87, 0.2);
+}
+
+.calendario-celula__dia {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.calendario-celula--evento .calendario-celula__dia {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.evento-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.evento-aluno {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Legenda */
+.calendario-legenda {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 16px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legenda-cor {
+  width: 14px;
+  height: 14px;
+  background: rgba(37, 176, 87, 0.18);
+  border: 1.5px solid var(--color-accent);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.legenda-texto {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-support);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .calendario-wrapper,
+  .page-header {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+  }
+
+  .calendario-nav__titulo {
+    font-size: 15px;
+    min-width: 120px;
+  }
+
+  .calendario-celula {
+    min-height: 56px;
+    padding: 4px 6px;
+  }
+
+  .calendario-celula__dia {
+    font-size: 11px;
+  }
+
+  .evento-aluno {
+    display: none;
+  }
+}

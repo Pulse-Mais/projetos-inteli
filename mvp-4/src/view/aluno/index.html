@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulse Mais | Portal do Aluno</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="app-shell" id="portalApp">
+    <aside class="sidebar" aria-label="Menu lateral do portal do aluno">
+      <a class="brand" href="./index.html" aria-label="Pulse Mais" style="display:flex;justify-content:center;">
+        <img src="../coordenadora/img/logo-pulse.svg" alt="Pulse Mais">
+      </a>
+
+      <div class="student-chip">
+        <div class="avatar avatar-sidebar avatar-foto" aria-hidden="true" data-avatar-slot="sidebar">
+          <img class="avatar-imagem" alt="Foto de perfil do aluno">
+          <i data-lucide="circle-user" class="avatar-icone"></i>
+        </div>
+        <div>
+          <span>Ola, Carlos</span>
+          <small>Aluno</small>
+        </div>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-item active" type="button" data-screen="dados" aria-label="Abrir meus dados">
+          <i data-lucide="user"></i>
+          <span>Meus dados</span>
+        </button>
+        <button class="nav-item" type="button" data-screen="jornada" aria-label="Abrir jornada">
+          <i data-lucide="file-text"></i>
+          <span>Jornada</span>
+        </button>
+        <button class="nav-item" type="button" data-screen="comunicados" aria-label="Abrir comunicados">
+          <i data-lucide="message-square-dot"></i>
+          <span>Comunicados</span>
+        </button>
+        <button class="nav-item nav-item-logout" type="button" id="logoutButton" aria-label="Sair da conta">
+          <i data-lucide="log-out"></i>
+          <span>Sair</span>
+        </button>
+      </nav>
+    </aside>
+
+    <section class="content-area">
+      <section class="screen active" id="screen-dados" aria-labelledby="dadosTitle">
+        <header class="perfil-cabecalho">
+          <div class="perfil-cabecalho-info">
+            <div class="perfil-avatar avatar-foto" data-avatar-slot="perfil">
+              <img class="avatar-imagem" alt="Foto de perfil do aluno">
+              <i data-lucide="circle-user" class="avatar-icone"></i>
+            </div>
+            <div class="perfil-identidade">
+              <div class="perfil-nome-linha">
+                <h1 class="perfil-nome" id="studentName">Carlos Sales de Alcantara</h1>
+                <input id="profilePhotoInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+                <button class="perfil-acao perfil-acao--foto-inline" id="changePhotoButton" type="button" aria-label="Alterar foto de perfil">
+                  <i data-lucide="camera"></i>
+                </button>
+              </div>
+              <div class="perfil-tags">
+                <span class="perfil-tag"><i data-lucide="users"></i> Turma 1</span>
+                <span class="perfil-tag"><i data-lucide="calendar"></i> Ingresso: 2024</span>
+              </div>
+              <div class="perfil-foto-meta">
+                <p class="perfil-foto-feedback" id="photoFeedback" aria-live="polite"></p>
+              </div>
+            </div>
+          </div>
+          <div class="perfil-cabecalho-status">
+            <span class="perfil-status"><span class="ponto"></span> Capacitado</span>
+            <span class="perfil-ra">RA: <strong id="studentRa">2024001</strong></span>
+          </div>
+        </header>
+
+        <section class="perfil-card">
+          <div class="perfil-card-topo">
+            <h2 class="perfil-card-titulo"><i data-lucide="mail"></i> Informacoes de Contato</h2>
+            <button class="perfil-acao" id="editProfileButton" type="button"><i data-lucide="square-pen"></i> Editar</button>
+          </div>
+          <div class="campos">
+            <div class="campos-linha">
+              <div class="campo"><span class="campo-label">E-mail primario*</span><span class="campo-valor" id="studentEmail">carlossantos@email.com</span></div>
+              <div class="campo"><span class="campo-label">Telefone primario*</span><span class="campo-valor" id="studentPhone">(11) 98735-3004</span></div>
+            </div>
+            <div class="campos-linha">
+              <div class="campo"><span class="campo-label">E-mail secundario</span><span class="campo-valor" id="studentEmail2">carlossantos@email.com</span></div>
+              <div class="campo"><span class="campo-label">Telefone secundario</span><span class="campo-valor" id="studentPhone2">(11) 98754-3000</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="perfil-card">
+          <div class="perfil-card-topo">
+            <h2 class="perfil-card-titulo"><i data-lucide="user"></i> Dados Pessoais</h2>
+          </div>
+          <div class="campos">
+            <div class="campos-linha">
+              <div class="campo"><span class="campo-label">Genero</span><span class="campo-valor" id="gender">Masculino</span></div>
+              <div class="campo"><span class="campo-label">CEP</span><span class="campo-valor" id="cep">55443-00</span></div>
+            </div>
+            <div class="campo"><span class="campo-label">Turma - Jornada</span><span class="campo-valor" id="studentClass">Carreira Tech em Inteligencia Artificial</span></div>
+            <div class="campos-linha">
+              <div class="campo"><span class="campo-label">Renda familiar</span><span class="campo-valor" id="income">R$1610,00</span></div>
+              <div class="campo"><span class="campo-label">Data de nascimento</span><span class="campo-valor" id="birthDate">09/12/2004</span></div>
+            </div>
+            <div class="campos-linha">
+              <div class="campo"><span class="campo-label">Rua e numero</span><span class="campo-valor" id="street">Rua ABC no1</span></div>
+              <div class="campo"><span class="campo-label">CPF</span><span class="campo-valor" id="cpf">999.666.333-00</span></div>
+            </div>
+            <div class="campo"><span class="campo-label">Bairro / Estado</span><span class="campo-valor" id="district">Morumbi, Sao Paulo</span></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-editar" aria-labelledby="editarTitle">
+        <header class="perfil-cabecalho">
+          <div class="perfil-cabecalho-info">
+            <div class="perfil-avatar avatar-foto" data-avatar-slot="perfil-editar">
+              <img class="avatar-imagem" alt="Foto de perfil do aluno">
+              <i data-lucide="circle-user" class="avatar-icone"></i>
+            </div>
+            <div class="perfil-identidade">
+              <div class="perfil-nome-linha">
+                <h1 class="perfil-nome" id="editarTitle">Carlos Sales de Alcantara</h1>
+                <button class="perfil-acao perfil-acao--foto-inline" id="changePhotoButtonEdit" type="button" aria-label="Alterar foto de perfil">
+                  <i data-lucide="camera"></i>
+                </button>
+              </div>
+              <div class="perfil-tags">
+                <span class="perfil-tag"><i data-lucide="users"></i> Turma 1</span>
+                <span class="perfil-tag"><i data-lucide="calendar"></i> Ingresso: 2024</span>
+              </div>
+              <p class="perfil-foto-ajuda">PNG, JPG ou WEBP ate 2 MB.</p>
+            </div>
+          </div>
+          <div class="perfil-cabecalho-status">
+            <span class="perfil-status"><span class="ponto"></span> Capacitado</span>
+            <span class="perfil-ra">RA: 2024001</span>
+          </div>
+        </header>
+
+        <section class="perfil-card">
+          <div class="perfil-card-topo">
+            <h2 class="perfil-card-titulo"><i data-lucide="mail"></i> Informacoes de Contato</h2>
+            <button class="perfil-acao" id="cancelEditButton" type="button"><i data-lucide="undo-2"></i> Voltar</button>
+          </div>
+          <form class="editar-form" onsubmit="return false">
+            <div class="form-linha">
+              <label class="form-campo">
+                <span class="form-label">E-mail primario*</span>
+                <input id="editEmail" value="carlossantos@email.com" />
+              </label>
+              <label class="form-campo">
+                <span class="form-label">Telefone primario*</span>
+                <input id="editPhone" value="(11) 98735-3004" />
+              </label>
+            </div>
+            <div class="form-linha">
+              <label class="form-campo">
+                <span class="form-label">E-mail secundario</span>
+                <input id="editEmail2" value="carlossantos@email.com" />
+              </label>
+              <label class="form-campo">
+                <span class="form-label">Telefone secundario</span>
+                <input id="editPhone2" value="(11) 98754-3000" />
+              </label>
+            </div>
+            <div class="form-acoes">
+              <button type="button" class="btn-form btn-form--primario" id="saveEditButton">Salvar</button>
+            </div>
+          </form>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-jornada" aria-labelledby="jornadaTitle">
+        <header class="page-header with-ra">
+          <div>
+            <h1 id="jornadaTitle">Jornada</h1>
+            <p>Visao geral - Atualizado ha 12 min</p>
+          </div>
+          <span class="ra-top">RA: 2024001</span>
+        </header>
+
+        <section class="alerta-frequencia" id="alertaFrequencia" aria-live="polite" hidden>
+          <div class="alerta-frequencia-icone" aria-hidden="true">
+            <i data-lucide="triangle-alert"></i>
+          </div>
+          <div class="alerta-frequencia-conteudo">
+            <p class="alerta-frequencia-eyebrow">Aviso de frequencia</p>
+            <h2 class="alerta-frequencia-titulo" id="alertaFrequenciaTitulo">
+              Sua frequencia esta abaixo do limite definido pela instituicao.
+            </h2>
+            <p class="alerta-frequencia-texto" id="alertaFrequenciaMensagem"></p>
+          </div>
+          <dl class="alerta-frequencia-metricas">
+            <div>
+              <dt>Frequencia atual</dt>
+              <dd id="alertaFrequenciaPercentual">0%</dd>
+            </div>
+            <div>
+              <dt>Limite minimo</dt>
+              <dd id="alertaFrequenciaLimite">0%</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="filtros">
+          <div class="busca">
+            <i data-lucide="search"></i>
+            <input id="searchJornada" type="search" class="busca-input" placeholder="Buscar modulo...">
+          </div>
+          <select id="statusJornada" class="filtro-select">
+            <option value="">Todos</option>
+            <option value="concluido">Concluido</option>
+            <option value="andamento">Em andamento</option>
+            <option value="breve">Em breve</option>
+          </select>
+        </section>
+
+        <ul class="trilha" aria-label="Linha do tempo da jornada">
+          <li class="trilha-item trilha-item--breve">
+            <span class="trilha-rail"><span class="trilha-check"><i data-lucide="check"></i></span></span>
+            <div class="trilha-modulo">
+              <div class="trilha-modulo-topo">
+                <time class="trilha-data">MAR 21</time>
+                <span class="pill-status">Em breve</span>
+              </div>
+              <h3 class="trilha-titulo">Modulo 4 - Introducao a programacao (Python, Estruturas Basicas)</h3>
+              <p class="trilha-desc">Inicie sua jornada no desenvolvimento de software com Python. Aprenda a sintaxe basica, manipulacao de variaveis, lacos de repeticao e as estruturas de dados essenciais para construir logicas de programacao robustas.</p>
+            </div>
+          </li>
+
+          <li class="trilha-item trilha-item--andamento">
+            <span class="trilha-rail"><span class="trilha-check"><i data-lucide="check"></i></span></span>
+            <div class="trilha-modulo">
+              <div class="trilha-modulo-topo">
+                <time class="trilha-data">MAR 7</time>
+                <span class="pill-status">Em andamento</span>
+              </div>
+              <h3 class="trilha-titulo">Modulo 3 - Introducao a Inteligencia Artificial</h3>
+              <p class="trilha-desc">Comece aqui o seu desenvolvimento em IAs generativas, aprendendo a utiliza-la como ferramenta e nao como o fim.</p>
+            </div>
+          </li>
+
+          <li class="trilha-item trilha-item--concluido">
+            <span class="trilha-rail"><span class="trilha-check"><i data-lucide="check"></i></span></span>
+            <div class="trilha-modulo">
+              <div class="trilha-modulo-topo">
+                <time class="trilha-data">FEV 21</time>
+                <span class="pill-status">Concluido</span>
+              </div>
+              <h3 class="trilha-titulo">Modulo 2 - Lideranca Resiliente</h3>
+              <p class="trilha-desc">Desenvolva habilidades de lideranca para guiar equipes em ambientes de mudanca e incerteza. Aprenda a cultivar a resiliencia coletiva, a empatia e a capacidade de superar crises.</p>
+            </div>
+          </li>
+
+          <li class="trilha-item trilha-item--concluido">
+            <span class="trilha-rail"><span class="trilha-check"><i data-lucide="check"></i></span></span>
+            <div class="trilha-modulo">
+              <div class="trilha-modulo-topo">
+                <time class="trilha-data">FEV 7</time>
+                <span class="pill-status">Concluido</span>
+              </div>
+              <h3 class="trilha-titulo">Modulo 1 - Fortalecimento Emocional</h3>
+              <p class="trilha-desc">Fortaleca sua inteligencia emocional e aprenda estrategias de autoconhecimento para lidar com o estresse e a pressao. Uma base solida para sua saude mental e desempenho sustentavel.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="screen" id="screen-comunicados" aria-labelledby="comunicadosTitle">
+        <header class="page-header with-ra">
+          <div>
+            <h1 id="comunicadosTitle">Comunicados</h1>
+            <p>Visao geral - Atualizado ha 12 min</p>
+          </div>
+          <span class="ra-top">RA: 2024001</span>
+        </header>
+
+        <section class="filtros">
+          <div class="busca">
+            <i data-lucide="search"></i>
+            <input id="searchNotice" type="search" class="busca-input" placeholder="Buscar evento...">
+          </div>
+          <select id="monthNotice" class="filtro-select">
+            <option value="">Todos os meses</option>
+            <option value="maio">Maio</option>
+            <option value="junho">Junho</option>
+            <option value="julho">Julho</option>
+          </select>
+        </section>
+
+        <section class="event-grid" id="noticeCards" aria-label="Cards de comunicados"></section>
+        <p class="soon-message">
+          Em breve mais eventos
+          <i data-lucide="hourglass"></i>
+        </p>
+      </section>
+    </section>
+  </main>
+
+  <div class="modal-comunicado" id="noticeModal" hidden>
+    <div class="modal-comunicado-backdrop" data-modal-close="true"></div>
+    <section class="modal-comunicado-card" role="dialog" aria-modal="true" aria-labelledby="noticeModalTitle">
+      <button class="modal-comunicado-fechar" id="noticeModalClose" type="button" aria-label="Fechar comunicado">
+        <i data-lucide="x"></i>
+      </button>
+      <p class="modal-comunicado-tipo" id="noticeModalType">Comunicado</p>
+      <h2 class="modal-comunicado-titulo" id="noticeModalTitle">Titulo do comunicado</h2>
+      <div class="modal-comunicado-meta">
+        <span id="noticeModalDate">Data</span>
+        <span id="noticeModalLocation">Pulse Mais</span>
+      </div>
+      <p class="modal-comunicado-texto" id="noticeModalDescription"></p>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="script/aluno-script.js"></script>
+  <script>
+    const _origRenderNotices = window.renderNotices;
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+
+    const noticeCards = document.getElementById('noticeCards');
+    if (noticeCards) {
+      const observer = new MutationObserver(() => lucide.createIcons());
+      observer.observe(noticeCards, { childList: true });
+    }
+  </script>
+</body>
+</html>

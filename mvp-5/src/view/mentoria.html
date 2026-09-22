@@ -1,0 +1,894 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard de Mentoria — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .page-header__title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* ── Two-column layout ──────────────────────────────────────── */
+    .mentoria-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* ── Sessão card ─────────────────────────────────────────────── */
+    .sessao-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      background: var(--white);
+      margin-bottom: 12px;
+      transition: box-shadow .15s;
+    }
+    .sessao-card:last-child { margin-bottom: 0; }
+    .sessao-card:hover { box-shadow: 0 2px 12px rgba(0,56,112,.08); }
+    .sessao-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .sessao-card__pair { font-size: 14px; font-weight: 700; color: var(--navy); }
+    .sessao-card__meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--slate);
+      margin-bottom: 10px;
+    }
+    .sessao-card__meta-row { display: flex; align-items: center; gap: 5px; }
+    .sessao-card__actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+    .badge--confirmed { background: var(--green-badge-bg); color: var(--green-badge-text); }
+    .badge--concluido { background: var(--blue-light);     color: var(--blue-btn); }
+    .badge--alerta    { background: var(--error-bg);       color: var(--error-text); }
+    .badge--agendado  { background: var(--orange-light);   color: var(--orange-text); }
+
+    /* ── Mentor cards ────────────────────────────────────────────── */
+    .mentor-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: box-shadow .15s;
+      margin-bottom: 12px;
+    }
+    .mentor-card:last-child { margin-bottom: 0; }
+    .mentor-card:hover { box-shadow: 0 2px 12px rgba(0,56,112,.08); }
+    .mentor-card__head { display: flex; align-items: center; gap: 10px; }
+    .mentor-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 15px; flex-shrink: 0; color: var(--white);
+    }
+    .mentor-avatar--0 { background: var(--blue-btn); }
+    .mentor-avatar--1 { background: #0E7490; }
+    .mentor-avatar--2 { background: var(--brand-green); }
+    .mentor-avatar--3 { background: var(--orange-text); }
+    .mentor-avatar--4 { background: var(--brand-dark); }
+    .mentor-card__name { font-size: 14px; font-weight: 700; color: var(--navy); }
+    .mentor-card__role { font-size: 11px; color: var(--muted); }
+    .mentor-card__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .mentor-stat {
+      text-align: center;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 8px 4px;
+    }
+    .mentor-stat__val { font-size: 18px; font-weight: 700; color: var(--navy); line-height: 1; }
+    .mentor-stat__label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .mentor-card__freq {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .mentor-freq-bar {
+      height: 6px; border-radius: 3px; background: var(--border); overflow: hidden;
+    }
+    .mentor-freq-fill {
+      height: 100%; border-radius: 3px; transition: width .5s ease;
+    }
+    .mentor-freq-fill--ok   { background: var(--brand-green); }
+    .mentor-freq-fill--warn { background: var(--orange-text); }
+    .mentor-freq-fill--low  { background: var(--error-text); }
+    .mentor-freq-label {
+      font-size: 11px; color: var(--muted);
+      display: flex; justify-content: space-between;
+    }
+
+    /* ── Agendamento grid ────────────────────────────────────────── */
+    .agendamento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .agendamento-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      transition: box-shadow .15s;
+    }
+    .agendamento-card:hover { box-shadow: 0 2px 12px rgba(0,56,112,.08); }
+    .agendamento-card__mentor { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .agendamento-card__name { font-size: 13px; font-weight: 700; color: var(--navy); }
+    .agendamento-card__sub  { font-size: 11px; color: var(--muted); }
+    .agendamento-card__meta {
+      font-size: 11px; color: var(--slate);
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px;
+    }
+    .agendamento-card__meta-row { display: flex; align-items: center; gap: 4px; }
+    .agendamento-card__stripe {
+      height: 3px; border-radius: 2px; margin-bottom: 10px;
+    }
+    .agendamento-card--blue   .agendamento-card__stripe { background: var(--blue-btn); }
+    .agendamento-card--green  .agendamento-card__stripe { background: var(--brand-green); }
+    .agendamento-card--orange .agendamento-card__stripe { background: var(--orange-text); }
+    .agendamento-card--yellow .agendamento-card__stripe { background: var(--brand-yellow); }
+
+    .ver-mais {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 600; color: var(--blue-btn);
+      text-decoration: none; margin-top: 8px; cursor: pointer;
+    }
+    .ver-mais:hover { text-decoration: underline; }
+
+    /* ── Modal ───────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(10,22,40,.45);
+      z-index: 200; display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.hidden { display: none !important; }
+    .modal {
+      background: var(--white); border-radius: 16px;
+      padding: 28px 28px 24px; width: 100%; max-width: 520px;
+      box-shadow: 0 8px 40px rgba(10,22,40,.18);
+      display: flex; flex-direction: column;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .modal__title { font-size: 16px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+    .modal__title i { color: var(--brand-dark); }
+    .modal__close {
+      width: 32px; height: 32px; border: none; background: var(--bg);
+      border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--slate); transition: background .15s;
+    }
+    .modal__close:hover { background: var(--border); }
+    .modal__footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding-top: 16px; border-top: 1px solid var(--border); margin-top: 4px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 12px; font-weight: 600; color: var(--navy);
+      text-transform: uppercase; letter-spacing: .4px; margin-bottom: 5px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: 'Poppins', sans-serif;
+      font-size: 13px; color: var(--navy); background: var(--white);
+      outline: none; transition: border-color .15s;
+    }
+    .form-group input:focus, .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--blue-btn); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .modal-info-row {
+      display: flex; gap: 8px; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--navy);
+    }
+    .modal-info-row:last-child { border-bottom: none; }
+    .modal-info-row__label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; min-width: 100px; }
+    .modal-info-row__value { flex: 1; }
+    .modal-alert-box {
+      background: var(--error-bg); border: 1px solid var(--error-border);
+      border-radius: 10px; padding: 14px 16px; display: flex;
+      gap: 10px; margin-bottom: 16px; align-items: flex-start;
+    }
+    .modal-alert-box i { color: var(--error-text); flex-shrink: 0; margin-top: 1px; }
+    .modal-alert-box p { font-size: 13px; color: var(--error-text); line-height: 1.5; }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 1099px) { .mentoria-layout { grid-template-columns: 1fr; } .agendamento-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 599px)  { .agendamento-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html" class="sidebar__nav-item" title="Alunos">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html" class="sidebar__nav-item" title="Relatórios">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html" class="sidebar__nav-item" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item active" title="Mentoria" aria-current="page">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Mentoria</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;cursor:pointer;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="page-header">
+        <div class="page-header__title">Dashboard de Mentoria</div>
+        <span class="text-sm text-muted" style="margin-left:8px;">Sessões e vínculos ativos</span>
+      </div>
+
+      <!-- ── Layout principal ─────────────────────────────────── -->
+      <div class="mentoria-layout">
+
+        <!-- LEFT: Sessões ──────────────────────────────────────── -->
+        <div>
+          <div class="card">
+            <div class="section-header">
+              <h2 class="section-title">
+                <i data-lucide="message-square" width="16" height="16"></i>
+                Sessões de mentoria
+              </h2>
+              <button class="btn btn--primary btn--sm" onclick="openNovaSessao()">
+                <i data-lucide="plus" width="13" height="13"></i>
+                Nova sessão
+              </button>
+            </div>
+            <div id="sessoes-list">
+              <div class="skeleton" style="height:110px;border-radius:12px;margin-bottom:12px;"></div>
+              <div class="skeleton" style="height:110px;border-radius:12px;margin-bottom:12px;"></div>
+              <div class="skeleton" style="height:110px;border-radius:12px;"></div>
+            </div>
+            <a class="ver-mais" href="#">
+              Ver todas as sessões
+              <i data-lucide="arrow-right" width="13" height="13"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- RIGHT: Mentores ────────────────────────────────────── -->
+        <div>
+          <div class="card">
+            <div class="section-header">
+              <h2 class="section-title">
+                <i data-lucide="users" width="16" height="16"></i>
+                Mentores
+              </h2>
+              <span class="text-sm text-muted">Desempenho e histórico</span>
+            </div>
+            <div id="mentores-list">
+              <div class="skeleton" style="height:150px;border-radius:12px;margin-bottom:12px;"></div>
+              <div class="skeleton" style="height:150px;border-radius:12px;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.mentoria-layout -->
+
+      <!-- ── Próximas sessões agendadas ──────────────────────── -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="calendar" width="16" height="16"></i>
+            Próximas sessões agendadas
+          </h2>
+          <span class="text-sm text-muted">Agenda da semana</span>
+        </div>
+        <div class="agendamento-grid" id="agendamento-grid">
+          <div class="skeleton" style="height:150px;border-radius:12px;"></div>
+          <div class="skeleton" style="height:150px;border-radius:12px;"></div>
+          <div class="skeleton" style="height:150px;border-radius:12px;"></div>
+          <div class="skeleton" style="height:150px;border-radius:12px;"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<!-- ═══ MODAL: Nova Sessão ════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-nova-sessao" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title"><i data-lucide="plus-circle" width="18" height="18"></i>Nova Sessão de Mentoria</h2>
+      <button class="modal__close" onclick="closeAllModals()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <form id="form-nova-sessao" novalidate onsubmit="submitNovaSessao(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mentor</label>
+          <select id="ns-mentor"><option value="">Selecione...</option></select>
+        </div>
+        <div class="form-group">
+          <label>Aluno</label>
+          <select id="ns-jovem"><option value="">Selecione...</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" id="ns-data" />
+        </div>
+        <div class="form-group">
+          <label>Modalidade</label>
+          <select id="ns-modalidade">
+            <option value="presencial">Presencial</option>
+            <option value="online">Online</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" onclick="closeAllModals()">Cancelar</button>
+        <button type="submit" class="btn btn--primary" id="btn-salvar-sessao">
+          <i data-lucide="save" width="14" height="14"></i>Criar Sessão
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Acompanhar ════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-acompanhar" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title"><i data-lucide="activity" width="18" height="18"></i>Acompanhamento da Sessão</h2>
+      <button class="modal__close" onclick="closeAllModals()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <div id="acomp-info" style="margin-bottom:16px;"></div>
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">Histórico</div>
+      <div id="acomp-historico" style="font-size:13px;color:var(--slate);line-height:1.6;"></div>
+    </div>
+    <div class="form-group">
+      <label>Adicionar observação</label>
+      <textarea id="acomp-obs" placeholder="Registre uma nova observação..."></textarea>
+    </div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--outline" onclick="closeAllModals()">Fechar</button>
+      <button class="btn btn--primary" onclick="submitAcompanhar()"><i data-lucide="save" width="14" height="14"></i>Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Ver Detalhes ══════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-detalhes" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title"><i data-lucide="info" width="18" height="18"></i>Detalhes da Sessão</h2>
+      <button class="modal__close" onclick="closeAllModals()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <div id="detalhes-content"></div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--outline" onclick="closeAllModals()">Fechar</button>
+      <button class="btn btn--primary" onclick="closeAllModals(); openAcompanhar(_detCache.mentor, _detCache.aluno, _detCache.tema, _detCache.sessao||'')">
+        <i data-lucide="eye" width="14" height="14"></i>Ver acompanhamento
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Verificar Evasão ══════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-verificar" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title" style="color:var(--error-text);">
+        <i data-lucide="alert-triangle" width="18" height="18"></i>Alerta de Evasão
+      </h2>
+      <button class="modal__close" onclick="closeAllModals()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <div id="verificar-info"></div>
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;">Histórico de alertas</div>
+      <div id="verif-historico" style="font-size:13px;color:var(--slate);line-height:1.6;"></div>
+    </div>
+    <div class="form-group">
+      <label>Adicionar observação</label>
+      <textarea id="verif-obs" placeholder="Registre uma nova observação..."></textarea>
+    </div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--outline" onclick="closeAllModals()">Fechar</button>
+      <button class="btn btn--danger" onclick="submitVerificar()"><i data-lucide="save" width="14" height="14"></i>Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: Perfil do Mentor ══════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-mentor" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title"><i data-lucide="user" width="18" height="18"></i>Perfil do Mentor</h2>
+      <button class="modal__close" onclick="closeAllModals()"><i data-lucide="x" width="16" height="16"></i></button>
+    </div>
+    <div id="mentor-modal-content"></div>
+    <div class="modal__footer">
+      <button type="button" class="btn btn--outline" onclick="closeAllModals()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+
+// ── Session ────────────────────────────────────────────────────
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+}
+
+// ── apiFetch ───────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') {
+      console.warn('[DEV] API offline — usando dados mock.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(s) {
+  if (!s) return '—';
+  return new Date(s + 'T12:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+function freqCls(pct) { return pct >= 75 ? 'ok' : pct >= 50 ? 'warn' : 'low'; }
+
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
+  el.innerHTML = `<i data-lucide="${icon}" width="16" height="16"></i>${escHtml(msg)}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons({ nodes: [el] });
+  setTimeout(() => el.remove(), 3500);
+}
+
+
+// ── Search ─────────────────────────────────────────────────────
+(function() {
+  const input = document.getElementById('global-search');
+  if (!input) return;
+  input.addEventListener('input', function() {
+    const term = this.value.toLowerCase().trim();
+    document.querySelectorAll('.sessao-card').forEach(card => {
+      card.style.display = (!term || card.textContent.toLowerCase().includes(term)) ? '' : 'none';
+    });
+    document.querySelectorAll('.mentor-card').forEach(card => {
+      card.style.display = (!term || card.textContent.toLowerCase().includes(term)) ? '' : 'none';
+    });
+  });
+})();
+
+// ── Modal helpers ──────────────────────────────────────────────
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeAllModals(); });
+});
+
+// ── Nova Sessão ────────────────────────────────────────────────
+function openNovaSessao() {
+  document.getElementById('ns-data').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('modal-nova-sessao').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+async function submitNovaSessao(e) {
+  e.preventDefault();
+  const id_mentor = Number(document.getElementById('ns-mentor').value);
+  const id_jovem  = Number(document.getElementById('ns-jovem').value);
+  const data      = document.getElementById('ns-data').value;
+  if (!id_mentor || !id_jovem || !data) { toast('Preencha mentor, jovem e data.', 'error'); return; }
+
+  const btn = document.getElementById('btn-salvar-sessao');
+  btn.disabled = true;
+  try {
+    const res = await apiFetch('/mentorias', { method: 'POST', body: JSON.stringify({ id_jovem, id_mentor, data, presente: false, id_usuario: id_mentor }) });
+    if (res !== null) {
+      toast('Sessão registrada com sucesso!', 'success');
+      closeAllModals();
+      await loadAll();
+    } else {
+      toast('Erro ao registrar sessão. Verifique a conexão com o servidor.', 'error');
+    }
+  } catch (err) {
+    toast(err.message || 'Erro ao registrar sessão.', 'error');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// ── Acompanhar ─────────────────────────────────────────────────
+function openAcompanhar(mentor, aluno, tema, sessao) {
+  document.getElementById('acomp-info').innerHTML =
+    `<div class="modal-info-row"><span class="modal-info-row__label">Mentoria</span><span class="modal-info-row__value"><strong>${escHtml(mentor)} → ${escHtml(aluno)}</strong></span></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Tema</span><span class="modal-info-row__value">${escHtml(tema)}</span></div>` +
+    (sessao ? `<div class="modal-info-row"><span class="modal-info-row__label">Progresso</span><span class="modal-info-row__value">${escHtml(sessao)}</span></div>` : '');
+  document.getElementById('acomp-historico').innerHTML =
+    '<span style="color:var(--muted);">Nenhum acompanhamento registrado.</span>';
+  document.getElementById('acomp-obs').value = '';
+  document.getElementById('modal-acompanhar').classList.remove('hidden');
+  lucide.createIcons();
+}
+function submitAcompanhar() {
+  const obs = document.getElementById('acomp-obs').value.trim();
+  if (!obs) { toast('Adicione uma observação antes de salvar.', 'error'); return; }
+  closeAllModals();
+  toast('Observação registrada com sucesso!', 'success');
+}
+
+// ── Ver Detalhes ───────────────────────────────────────────────
+let _detCache = {};
+function openDetalhes(mentor, aluno, tema, data, sessao, status) {
+  _detCache = { mentor, aluno, tema, data, sessao };
+  const badgeCls = status === 'EM ANDAMENTO' ? 'badge--confirmed' : status === 'ALERTA DE EVASÃO' ? 'badge--alerta' : 'badge--concluido';
+  document.getElementById('detalhes-content').innerHTML =
+    `<div class="modal-info-row"><span class="modal-info-row__label">Mentor</span><span class="modal-info-row__value">${escHtml(mentor)}</span></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Aluno</span><span class="modal-info-row__value">${escHtml(aluno)}</span></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Tema</span><span class="modal-info-row__value">${escHtml(tema)}</span></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Data</span><span class="modal-info-row__value">${escHtml(data)}</span></div>` +
+    (sessao ? `<div class="modal-info-row"><span class="modal-info-row__label">Progresso</span><span class="modal-info-row__value">${escHtml(sessao)}</span></div>` : '') +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Status</span><span class="modal-info-row__value"><span class="badge ${badgeCls}">${escHtml(status)}</span></span></div>`;
+  document.getElementById('modal-detalhes').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+// ── Verificar Evasão ───────────────────────────────────────────
+function openVerificar(mentor, aluno) {
+  document.getElementById('verificar-info').innerHTML =
+    `<div class="modal-alert-box"><i data-lucide="alert-triangle" width="18" height="18"></i>` +
+    `<p><strong>${escHtml(aluno)}</strong> apresenta ausência nas últimas sessões com <strong>${escHtml(mentor)}</strong>.</p></div>`;
+  document.getElementById('verif-historico').innerHTML =
+    '<span style="color:var(--muted);">Nenhum histórico de alertas registrado.</span>';
+  document.getElementById('verif-obs').value = '';
+  document.getElementById('modal-verificar').classList.remove('hidden');
+  lucide.createIcons();
+}
+function submitVerificar() {
+  const obs = document.getElementById('verif-obs').value.trim();
+  if (!obs) { toast('Adicione uma observação antes de salvar.', 'error'); return; }
+  closeAllModals();
+  toast('Observação registrada com sucesso!', 'success');
+}
+
+// ── Perfil Mentor ──────────────────────────────────────────────
+function openMentorModal(nome, mentorias, jovens, taxa) {
+  const ini = initials(nome);
+  document.getElementById('mentor-modal-content').innerHTML =
+    `<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">` +
+    `<div style="width:56px;height:56px;font-size:20px;background:var(--brand-dark);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;">${ini}</div>` +
+    `<div><div style="font-size:16px;font-weight:700;color:var(--navy);">${escHtml(nome)}</div>` +
+    `<div style="font-size:12px;color:var(--muted);">Mentor · Pulse Mais</div>` +
+    `<div style="font-size:13px;color:var(--navy);margin-top:4px;">Taxa de frequência: <strong>${taxa}%</strong></div></div></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Sessões</span><span class="modal-info-row__value">${mentorias} realizadas</span></div>` +
+    `<div class="modal-info-row"><span class="modal-info-row__label">Mentorados</span><span class="modal-info-row__value">${jovens} jovens únicos</span></div>`;
+  document.getElementById('modal-mentor').classList.remove('hidden');
+  lucide.createIcons();
+}
+
+// ── Render: sessões (esquerda) ─────────────────────────────────
+function renderSessoes(sessoesPorMentor, mentores, jovens) {
+  const nomeJovem = id => jovens.find(j => String(j.id) === String(id))?.nome || `Jovem #${id}`;
+  const nomeMentor = id => mentores.find(m => String(m.id) === String(id))?.nome || `Mentor #${id}`;
+  const today = new Date();
+
+  const todas = Object.entries(sessoesPorMentor)
+    .flatMap(([idMentor, ss]) => ss.map(s => ({ ...s, idMentor: Number(idMentor) })))
+    .sort((a, b) => new Date(b.data) - new Date(a.data))
+    .slice(0, 5);
+
+  if (!todas.length) {
+    document.getElementById('sessoes-list').innerHTML =
+      `<div style="text-align:center;padding:32px 0;color:var(--muted);font-size:13px;">
+        <i data-lucide="inbox" width="28" height="28" style="display:block;margin:0 auto 8px;"></i>
+        Nenhuma sessão registrada.
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  document.getElementById('sessoes-list').innerHTML = todas.map(s => {
+    const mentor = nomeMentor(s.id_mentor || s.idMentor);
+    const aluno  = nomeJovem(s.id_jovem);
+    const data   = new Date(s.data + 'T12:00:00');
+    const futura = data > today;
+    const statusBadge = s.presente === null || s.presente === undefined
+      ? futura
+        ? `<span class="badge badge--agendado">AGENDADO</span>`
+        : `<span class="badge badge--concluido">PENDENTE</span>`
+      : (s.presente == 1 || s.presente === true)
+        ? `<span class="badge badge--concluido">CONCLUÍDO</span>`
+        : `<span class="badge badge--alerta">NÃO REALIZADA</span>`;
+    const btnAcao = (s.presente == 1 || s.presente === true)
+      ? `<button class="btn btn--blue btn--sm" onclick="openDetalhes('${escHtml(mentor)}','${escHtml(aluno)}','Sessão de mentoria','${fmtDate(s.data)}','','CONCLUÍDO')">Ver detalhes</button>`
+      : futura
+        ? `<button class="btn btn--blue btn--sm" onclick="openDetalhes('${escHtml(mentor)}','${escHtml(aluno)}','Sessão de mentoria','${fmtDate(s.data)}','','AGENDADA')">Ver detalhes</button>`
+        : `<button class="btn btn--danger btn--sm" onclick="openVerificar('${escHtml(mentor)}','${escHtml(aluno)}')"><i data-lucide="alert-triangle" width="12" height="12"></i>Verificar</button>`;
+
+    return `
+      <div class="sessao-card">
+        <div class="sessao-card__header">
+          <span class="sessao-card__pair">${escHtml(mentor)} → ${escHtml(aluno)}</span>
+          ${statusBadge}
+        </div>
+        <div class="sessao-card__meta">
+          <div class="sessao-card__meta-row"><i data-lucide="calendar" width="12" height="12"></i>${fmtDate(s.data)}</div>
+        </div>
+        <div class="sessao-card__actions">${btnAcao}</div>
+      </div>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ── Render: mentores (direita) ─────────────────────────────────
+function renderMentores(mentores, sessoesPorMentor) {
+  if (!mentores.length) {
+    document.getElementById('mentores-list').innerHTML =
+      `<div style="text-align:center;padding:32px 0;color:var(--muted);font-size:13px;">Nenhum mentor encontrado.</div>`;
+    return;
+  }
+  document.getElementById('mentores-list').innerHTML = mentores.map((m, idx) => {
+    const ss         = sessoesPorMentor[m.id] || [];
+    const jovensSet  = new Set(ss.map(s => s.id_jovem)).size;
+    const realizadas = ss.filter(s => s.presente == 1 || s.presente === true).length;
+    const pct        = ss.length > 0 ? Math.round(realizadas / ss.length * 100) : 0;
+    const cls        = freqCls(pct);
+    const statusLabel = cls === 'ok' ? 'Boa adesão' : cls === 'warn' ? 'Adesão moderada' : 'Baixa adesão';
+    const ini = initials(m.nome);
+    return `
+      <div class="mentor-card">
+        <div class="mentor-card__head">
+          <div class="mentor-avatar mentor-avatar--${idx % 5}">${ini}</div>
+          <div>
+            <div class="mentor-card__name">${escHtml(m.nome)}</div>
+            <div class="mentor-card__role">Mentor · Pulse Mais</div>
+          </div>
+        </div>
+        <div class="mentor-card__stats">
+          <div class="mentor-stat"><div class="mentor-stat__val">${ss.length}</div><div class="mentor-stat__label">Sessões</div></div>
+          <div class="mentor-stat"><div class="mentor-stat__val">${jovensSet}</div><div class="mentor-stat__label">Mentorados</div></div>
+          <div class="mentor-stat"><div class="mentor-stat__val">${pct}%</div><div class="mentor-stat__label">Frequência</div></div>
+        </div>
+        <div class="mentor-card__freq">
+          <div class="mentor-freq-bar">
+            <div class="mentor-freq-fill mentor-freq-fill--${cls}" style="width:${pct}%"></div>
+          </div>
+          <div class="mentor-freq-label">
+            <span>${statusLabel}</span><span>${realizadas}/${ss.length} sess.</span>
+          </div>
+        </div>
+        <div style="margin-top:4px;">
+          <button class="btn btn--outline btn--sm w-full" onclick="openMentorModal('${escHtml(m.nome)}',${ss.length},${jovensSet},${pct})">Ver detalhes</button>
+        </div>
+      </div>`;
+  }).join('');
+  lucide.createIcons();
+  // Animate freq bars
+  document.querySelectorAll('.mentor-freq-fill').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.transition = 'width .5s ease'; el.style.width = w; }, 60);
+  });
+}
+
+// ── Render: próximas sessões agendadas ─────────────────────────
+const STRIPE_CLASSES = ['agendamento-card--blue', 'agendamento-card--orange', 'agendamento-card--green', 'agendamento-card--yellow'];
+
+function renderAgendamentos(sessoesPorMentor, mentores, jovens) {
+  const el = document.getElementById('agendamento-grid');
+  if (!el) return;
+
+  const nomeJovem  = id => jovens.find(j => String(j.id) === String(id))?.nome || `Jovem #${id}`;
+  const nomeMentor = id => mentores.find(m => String(m.id) === String(id))?.nome || `Mentor #${id}`;
+  const hoje = new Date();
+
+  // Apenas sessões futuras ainda não realizadas, ordenadas pela data mais próxima.
+  const futuras = Object.entries(sessoesPorMentor)
+    .flatMap(([idMentor, ss]) => ss.map(s => ({ ...s, idMentor: Number(idMentor) })))
+    .filter(s => new Date(s.data + 'T12:00:00') > hoje)
+    .sort((a, b) => new Date(a.data) - new Date(b.data))
+    .slice(0, 4);
+
+  if (!futuras.length) {
+    el.innerHTML =
+      `<div style="grid-column:1/-1;text-align:center;padding:32px 0;color:var(--muted);font-size:13px;">
+        <i data-lucide="calendar-off" width="28" height="28" style="display:block;margin:0 auto 8px;"></i>
+        Nenhuma sessão agendada.
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  el.innerHTML = futuras.map((s, i) => {
+    const mentor = nomeMentor(s.id_mentor || s.idMentor);
+    const aluno  = nomeJovem(s.id_jovem);
+    const stripe = STRIPE_CLASSES[i % STRIPE_CLASSES.length];
+    const dataFmt = fmtDate(s.data);
+    return `
+      <div class="agendamento-card ${stripe}">
+        <div class="agendamento-card__stripe"></div>
+        <div class="agendamento-card__mentor">
+          <div class="mentor-avatar mentor-avatar--${i % 5}" style="width:34px;height:34px;font-size:12px;">${initials(mentor)}</div>
+          <div>
+            <div class="agendamento-card__name">${escHtml(mentor)}</div>
+            <div class="agendamento-card__sub">Mentorando: ${escHtml(aluno)}</div>
+          </div>
+        </div>
+        <div class="agendamento-card__meta">
+          <div class="agendamento-card__meta-row"><i data-lucide="calendar" width="11" height="11"></i>${escHtml(dataFmt)}</div>
+          <div class="agendamento-card__meta-row"><i data-lucide="clock" width="11" height="11"></i>Sessão de mentoria</div>
+        </div>
+        <button class="btn btn--outline btn--sm w-full" onclick="openDetalhes('${escHtml(mentor)}','${escHtml(aluno)}','Sessão de mentoria','${escHtml(dataFmt)}','','AGENDADA')">Ver detalhes</button>
+      </div>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ── populateModal ──────────────────────────────────────────────
+function populateModal(mentores, jovens) {
+  const selMentor = document.getElementById('ns-mentor');
+  const selJovem  = document.getElementById('ns-jovem');
+  while (selMentor.options.length > 1) selMentor.remove(1);
+  while (selJovem.options.length  > 1) selJovem.remove(1);
+  mentores.forEach(m => selMentor.add(new Option(m.nome, m.id)));
+  jovens.forEach(j  => selJovem.add(new Option(j.nome,  j.id)));
+}
+
+// ── loadAll ────────────────────────────────────────────────────
+async function loadAll() {
+  const [usuariosData, jovensData] = await Promise.all([
+    apiFetch('/usuarios').catch(() => null),
+    apiFetch('/jovens').catch(() => null),
+  ]);
+
+  const todosUsuarios = Array.isArray(usuariosData) ? usuariosData : [];
+  const mentores = todosUsuarios.filter(u => u.perfil === 'Mentor');
+
+  const jovens = Array.isArray(jovensData) ? jovensData : [];
+
+  const sessoesPorMentor = {};
+  await Promise.all(mentores.map(async m => {
+    const data = await apiFetch(`/mentor/${m.id}/mentorias`).catch(() => null);
+    sessoesPorMentor[m.id] = Array.isArray(data) ? data : [];
+  }));
+
+  renderSessoes(sessoesPorMentor, mentores, jovens);
+  renderMentores(mentores, sessoesPorMentor);
+  renderAgendamentos(sessoesPorMentor, mentores, jovens);
+  populateModal(mentores, jovens);
+}
+
+// ── Bootstrap ──────────────────────────────────────────────────
+(async function init() {
+  lucide.createIcons();
+
+  const session = getSession();
+  const nome = session?.nome || 'Coordenador';
+  const ini  = initials(nome);
+
+  document.getElementById('topbar-name').textContent      = nome;
+  document.getElementById('topbar-avatar').textContent    = ini;
+  document.getElementById('sidebar-initials').textContent = ini;
+
+  // Tentar obter dados atualizados do usuário via API
+  if (session?.userId) {
+    try {
+      const user = await apiFetch(`/usuarios/${session.userId}`);
+      if (user) {
+        const u = initials(user.nome);
+        document.getElementById('topbar-name').textContent      = user.nome;
+        document.getElementById('topbar-avatar').textContent    = u;
+        document.getElementById('sidebar-initials').textContent = u;
+      }
+    } catch (_) {}
+  }
+
+  await loadAll();
+})();
+</script>
+</body>
+</html>

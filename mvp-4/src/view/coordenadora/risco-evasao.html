@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risco de evasão | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span><span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link ativo"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+      <main class="conteudo pagina-operacional">
+        <header class="pagina-operacional__topo">
+          <div>
+            <h1>Alunos em risco de evasão</h1>
+            <p class="pagina-operacional__descricao">
+              Priorize ações para alunos com baixa frequência ou baixo engajamento.
+            </p>
+          </div>
+          <a href="dashboard.html" class="btn-fluxo btn-fluxo--secundario"
+            ><i data-lucide="arrow-left"></i> Dashboard</a
+          >
+        </header>
+        <section class="resumo-grade">
+          <div class="resumo-item"><span>Total em atenção</span><strong>12</strong></div>
+          <div class="resumo-item"><span>Risco alto</span><strong style="color: var(--erro)">4</strong></div>
+          <div class="resumo-item"><span>Frequência crítica</span><strong style="color: var(--alerta)">7</strong></div>
+          <div class="resumo-item"><span>Sem contato recente</span><strong>3</strong></div>
+        </section>
+        <section class="painel">
+          <div class="secao-topo">
+            <h2 class="painel-titulo"><i data-lucide="triangle-alert"></i> Lista priorizada</h2>
+            <div class="acoes-linha">
+              <select class="filtro-risco">
+                <option value="">Todos os riscos</option>
+                <option value="alto">Alto</option>
+                <option value="medio">Médio</option></select
+              ><input class="filtro-risco" id="busca-risco" placeholder="Buscar aluno..." />
+            </div>
+          </div>
+          <div style="overflow-x: auto">
+            <table class="tabela-operacional" id="tabela-risco">
+              <thead>
+                <tr>
+                  <th>Aluno</th>
+                  <th>Turma</th>
+                  <th>Frequência</th>
+                  <th>Motivo principal</th>
+                  <th>Risco</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-risco="alto">
+                  <td>Ana Souza</td>
+                  <td>2024A</td>
+                  <td>62%</td>
+                  <td>5 faltas consecutivas</td>
+                  <td><span class="status status--erro">Alto</span></td>
+                  <td>
+                    <a href="frequencia-alerta.html?aluno=Ana%20Souza" class="btn-fluxo btn-fluxo--secundario"
+                      >Ver alerta</a
+                    >
+                  </td>
+                </tr>
+                <tr data-risco="medio">
+                  <td>Bruno Lima</td>
+                  <td>2024B</td>
+                  <td>71%</td>
+                  <td>2 atividades pendentes</td>
+                  <td><span class="status status--alerta">Médio</span></td>
+                  <td>
+                    <a href="frequencia-alerta.html?aluno=Bruno%20Lima" class="btn-fluxo btn-fluxo--secundario"
+                      >Ver alerta</a
+                    >
+                  </td>
+                </tr>
+                <tr data-risco="alto">
+                  <td>Carla Dias</td>
+                  <td>2023A</td>
+                  <td>68%</td>
+                  <td>Baixo engajamento</td>
+                  <td><span class="status status--erro">Alto</span></td>
+                  <td>
+                    <a href="frequencia-alerta.html?aluno=Carla%20Dias" class="btn-fluxo btn-fluxo--secundario"
+                      >Ver alerta</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+      const busca = document.getElementById("busca-risco");
+      const select = document.querySelector("select.filtro-risco");
+      function filtrar() {
+        document
+          .querySelectorAll("#tabela-risco tbody tr")
+          .forEach(
+            (l) =>
+              (l.hidden = !(
+                l.textContent.toLowerCase().includes(busca.value.toLowerCase()) &&
+                (!select.value || l.dataset.risco === select.value)
+              )),
+          );
+      }
+      busca.addEventListener("input", filtrar);
+      select.addEventListener("change", filtrar);
+    </script>
+  </body>
+</html>

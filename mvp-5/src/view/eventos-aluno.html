@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .content { padding: 28px 32px; overflow-y: auto; flex: 1; background: var(--bg); }
+
+    .page-title { font-size: 28px; font-weight: 700; color: var(--navy); margin: 0 0 4px; }
+    .page-sub   { font-size: 13px; color: var(--muted); margin: 0 0 24px; }
+
+    .toolbar {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-input {
+      width: 100%; padding: 10px 12px 10px 38px;
+      border: 1px solid var(--border); border-radius: 10px;
+      font-family: inherit; font-size: 13px; color: var(--navy);
+      background: var(--white); outline: none;
+      transition: border-color 0.15s; box-sizing: border-box;
+    }
+    .search-input:focus { border-color: var(--brand-dark); }
+    .filter-select {
+      padding: 10px 32px 10px 14px; border: 1px solid var(--border);
+      border-radius: 10px; font-family: inherit; font-size: 13px;
+      color: var(--navy); background: var(--white);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B95A1' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      cursor: pointer; outline: none; min-width: 120px;
+    }
+    .filter-select:focus { border-color: var(--brand-dark); }
+
+    .eventos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .evento-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .evento-card:hover { box-shadow: 0 4px 20px rgba(0,56,112,0.10); border-color: transparent; }
+
+    .evento-header { padding: 20px 20px 16px; }
+    .evento-tipo { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; margin-bottom: 8px; }
+    .evento-titulo { font-size: 16px; font-weight: 700; color: var(--navy); margin: 0; line-height: 1.3; }
+
+    .evento-body {
+      padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
+      flex: 1; border-top: 1px solid var(--border);
+    }
+    .evento-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+    .evento-meta i { flex-shrink: 0; }
+
+    .evento-footer { padding: 14px 20px 20px; }
+
+    .btn-inscrito {
+      width: 100%; padding: 11px; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.04em; cursor: default;
+      border: 1.5px solid var(--brand-green); background: transparent;
+      color: var(--brand-green);
+    }
+    .btn-inscrever {
+      width: 100%; padding: 11px; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer;
+      border: none; background: var(--brand-dark); color: var(--white);
+      transition: opacity 0.15s;
+    }
+    .btn-inscrever:hover:not(:disabled) { opacity: 0.87; }
+    .btn-inscrever:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .empty-state { text-align: center; padding: 60px 0; color: var(--muted); font-size: 14px; grid-column: 1/-1; }
+    .empty-state i { display: block; margin: 0 auto 12px; }
+
+    @media (max-width: 900px) { .eventos-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .eventos-grid { grid-template-columns: 1fr; } .content { padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-aluno.html" class="sidebar__nav-item" title="Dashboard" id="nav-dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="eventos-aluno.html" class="sidebar__nav-item active" title="Eventos" aria-current="page">
+        <i data-lucide="calendar" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="perfil-aluno.html" class="sidebar__nav-item" title="Meu Perfil" id="nav-perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Meu Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Eventos</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+      <h1 class="page-title">Eventos</h1>
+      <p class="page-sub">Descubra workshops, vagas, cursos e oportunidades disponíveis</p>
+
+      <div class="toolbar">
+        <div class="search-wrap">
+          <i data-lucide="search" width="15" height="15"></i>
+          <input class="search-input" type="text" id="search-input"
+                 placeholder="Buscar eventos, vagas, cursos..."
+                 oninput="filtrar()" />
+        </div>
+        <select class="filter-select" id="filter-status" onchange="filtrar()">
+          <option value="">Todos os programas</option>
+          <option value="inscrito">Inscritos</option>
+          <option value="disponivel">Disponíveis</option>
+        </select>
+      </div>
+
+      <div class="eventos-grid" id="eventos-grid">
+        <div class="empty-state">
+          <i data-lucide="loader" width="28" height="28"></i>
+          Carregando programas...
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+let _jovemId    = null;
+let _programas  = [];
+let _inscritosIds = new Set();
+let _modoStaff  = false;
+
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') { console.warn('[DEV] API offline.'); return null; }
+    return null;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+function initials(nome = '') { return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join(''); }
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+function escHtml(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  const bg = { success:'#2A9447', error:'#D85A30', default:'#003870' }[type] || '#003870';
+  Object.assign(el.style, { position:'fixed', bottom:'24px', right:'24px', zIndex:'9999',
+    background: bg, color:'#fff', padding:'12px 20px', borderRadius:'10px',
+    fontSize:'13px', fontWeight:'600', boxShadow:'0 4px 16px rgba(0,0,0,0.18)', transition:'opacity 0.3s' });
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// Temas visuais ciclados por índice (baseados no protótipo)
+const TEMAS = [
+  { tipo: 'WORKSHOP',          bg: '#EBF3FF', tipoCor: '#003870' },
+  { tipo: 'PROGRAMA',          bg: '#E6F8ED', tipoCor: '#2A9447' },
+  { tipo: 'PULSE TALKS',       bg: '#FFF8E0', tipoCor: '#BA7517' },
+  { tipo: 'PROCESSO SELETIVO', bg: '#F3E8FF', tipoCor: '#6B21A8' },
+  { tipo: 'CURSO',             bg: '#E6F8ED', tipoCor: '#2A9447' },
+];
+
+function renderGrid(lista) {
+  const grid = document.getElementById('eventos-grid');
+  if (!lista.length) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <i data-lucide="calendar-x" width="28" height="28"></i>
+        Nenhum programa encontrado.
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  grid.innerHTML = lista.map((prog, i) => {
+    const tema     = TEMAS[i % TEMAS.length];
+    const inscrito = _inscritosIds.has(prog.id);
+    let actionBtn;
+    if (inscrito) {
+      actionBtn = `<button class="btn-inscrito" disabled>
+           <i data-lucide="check-circle" width="14" height="14" style="vertical-align:middle;margin-right:6px;"></i>PARTICIPANDO
+         </button>`;
+    } else if (_modoStaff) {
+      // Visualização por outra vertical: somente leitura, sem ação de inscrição.
+      actionBtn = `<button class="btn-inscrito" disabled style="opacity:.6;">NÃO INSCRITO</button>`;
+    } else {
+      actionBtn = `<button class="btn-inscrever" id="btn-${prog.id}" onclick="inscrever(${prog.id}, this)">INSCREVER-SE &rsaquo;</button>`;
+    }
+
+    return `
+      <div class="evento-card" data-id="${prog.id}" data-nome="${escHtml(prog.nome)}" data-inscrito="${inscrito}">
+        <div class="evento-header" style="background:${tema.bg};">
+          <div class="evento-tipo" style="color:${tema.tipoCor};">${tema.tipo}</div>
+          <h3 class="evento-titulo">${escHtml(prog.nome)}</h3>
+        </div>
+        <div class="evento-body">
+          <div class="evento-meta">
+            <i data-lucide="calendar" width="13" height="13"></i>
+            Consulte o calendário do programa
+          </div>
+          <div class="evento-meta">
+            <i data-lucide="clock" width="13" height="13"></i>
+            Duração variável
+          </div>
+          <div class="evento-meta">
+            <i data-lucide="users" width="13" height="13"></i>
+            Inscrições abertas
+          </div>
+        </div>
+        <div class="evento-footer">${actionBtn}</div>
+      </div>`;
+  }).join('');
+
+  lucide.createIcons();
+}
+
+function filtrar() {
+  const q      = document.getElementById('search-input').value.trim().toLowerCase();
+  const status = document.getElementById('filter-status').value;
+
+  let lista = _programas;
+  if (q)                        lista = lista.filter(p => p.nome.toLowerCase().includes(q));
+  if (status === 'inscrito')    lista = lista.filter(p => _inscritosIds.has(p.id));
+  if (status === 'disponivel')  lista = lista.filter(p => !_inscritosIds.has(p.id));
+
+  renderGrid(lista);
+}
+
+async function inscrever(idPrograma, btn) {
+  if (!_jovemId) { toast('Perfil não carregado.', 'error'); return; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Aguarde...'; }
+
+  const res = await apiFetch(`/jovens/${_jovemId}/inscricoes/${_jovemId}/inscricao`, {
+    method: 'POST',
+    body: JSON.stringify({ id_programa: idPrograma }),
+  });
+
+  if (res !== null && res !== undefined) {
+    _inscritosIds.add(idPrograma);
+    toast('Inscrição realizada com sucesso!', 'success');
+    filtrar();
+  } else {
+    toast('Não foi possível realizar a inscrição.', 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'INSCREVER-SE ›'; }
+  }
+}
+
+(async () => {
+  const session = getSession();
+  if (!session) { window.location.href = 'dashboard.html'; return; }
+
+  const params  = new URLSearchParams(window.location.search);
+  const idParam = params.get('id');
+  _modoStaff = !!idParam;
+
+  // Sem ?id= → somente o próprio aluno acessa seus eventos.
+  if (!_modoStaff && session.perfil !== 'Aluno') { window.location.href = 'dashboard.html'; return; }
+
+  document.getElementById('topbar-name').textContent      = session.nome;
+  document.getElementById('topbar-avatar').textContent    = initials(session.nome);
+  document.getElementById('sidebar-initials').textContent = initials(session.nome);
+
+  let _jovemData = null;
+  if (_modoStaff) {
+    // Outra vertical visualizando os eventos/programas deste aluno (somente leitura).
+    _jovemData = await apiFetch(`/jovens/${idParam}`);
+
+    const navDash = document.getElementById('nav-dashboard');
+    if (navDash) {
+      navDash.setAttribute('href', 'javascript:void(0)');
+      navDash.setAttribute('onclick', 'history.back(); return false;');
+      navDash.title = 'Voltar';
+      navDash.querySelector('.sidebar__nav-label').textContent = 'Voltar';
+      const ic = navDash.querySelector('i');
+      if (ic) ic.setAttribute('data-lucide', 'arrow-left');
+    }
+    const navPerfil = document.getElementById('nav-perfil');
+    if (navPerfil) navPerfil.setAttribute('href', `perfil-aluno.html?id=${encodeURIComponent(idParam)}`);
+
+    if (_jovemData?.nome) {
+      const sub = document.querySelector('.page-sub');
+      if (sub) sub.textContent = `Eventos e programas de ${_jovemData.nome}`;
+    }
+    lucide.createIcons();
+  } else {
+    let jovemId = session.id_jovem;
+    if (!jovemId) {
+      const usuario = await apiFetch(`/usuarios/${session.userId}`);
+      jovemId = usuario?.id_jovem ?? null;
+    }
+    if (jovemId) {
+      _jovemData = await apiFetch(`/jovens/${jovemId}`);
+    } else {
+      const jovens = await apiFetch('/jovens');
+      _jovemData = Array.isArray(jovens) ? jovens.find(j => j.nome === session.nome) : null;
+    }
+  }
+  _jovemId = _jovemData?.id ?? null;
+
+  const [programas, inscricoesRaw] = await Promise.all([
+    apiFetch('/programas'),
+    _jovemId ? apiFetch(`/jovens/${_jovemId}/inscricoes/${_jovemId}/inscricao`) : Promise.resolve(null),
+  ]);
+
+  _programas = Array.isArray(programas) ? programas : [];
+  const inscricoes = Array.isArray(inscricoesRaw) ? inscricoesRaw : [];
+  _inscritosIds = new Set(inscricoes.map(i => i.id_programa));
+
+  renderGrid(_programas);
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>

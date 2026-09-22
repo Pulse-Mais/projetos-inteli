@@ -1,0 +1,167 @@
+/* ============================================================
+   aluno-empregabilidade.css
+   Pulsar · Pulse Mais
+   Estilos específicos da tela Empregabilidade do Aluno.
+   Tokens e componentes base em aluno-layout.css.
+   Nota: .opp-board/.opp-column/* compartilhado com aluno-oportunidades.css
+         .info-field/.edit-pill compartilhado com aluno-perfil-multiplicadora.css
+         → quando aluno-layout.css absorver esses componentes, remover daqui.
+   ============================================================ */
+
+
+/* ============================================================
+   EMPREGABILIDADE — Career Status + Columns
+   ============================================================ */
+
+.career-status {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-5);
+}
+
+.career-status-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.career-actions { margin-top: var(--space-5); }
+
+/* Simple card — base para cards de competências e histórico */
+.simple-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4) var(--space-5);
+  transition:
+    box-shadow var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.simple-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #d4d7dc;
+  transform: translateY(-1px);
+}
+
+.simple-card.skill-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.skill-row-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--warning-soft);
+  color: #854d0e;
+}
+.skill-row-icon i { width: 16px; height: 16px; stroke-width: 2; }
+
+.skill-row-icon.is-course { background: var(--primary-soft); color: var(--primary); }
+.skill-row-icon.is-event  { background: var(--success-soft); color: #166534; }
+
+.skill-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.skill-row-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--foreground);
+}
+.skill-row-meta {
+  font-size: var(--text-xs);
+  color: var(--muted-foreground);
+}
+
+.simple-card-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--foreground);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.simple-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--text-sm);
+  color: var(--muted-foreground);
+}
+.simple-card-meta b { color: var(--foreground); font-weight: var(--font-weight-medium); }
+
+.simple-card-subtitle {
+  font-size: var(--text-xs);
+  color: var(--muted-foreground);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   OPP BOARD — Grade 3 colunas (compartilhado com aluno-oportunidades.css)
+   ============================================================ */
+
+.opp-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.opp-column-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-5);
+  color: #fff;
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+
+/* Cursor pointer nos cards clicáveis */
+.opp-column-body .skill-card { cursor: pointer; }
+
+/* ============================================================
+   BOTÃO PERIGO
+   ============================================================ */
+
+.btn-danger {
+  background: var(--danger, #e53e3e);
+  color: #fff;
+  border-color: transparent;
+}
+.btn-danger:hover { filter: brightness(0.9); }
+
+/* ── Modal de edição (max-width e body específicos desta tela) ── */
+.opp-modal {
+  background: var(--card, #fff);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.opp-modal-body {
+  padding: var(--space-5) var(--space-6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}

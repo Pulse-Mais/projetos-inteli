@@ -1,0 +1,429 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar — Ficha do aluno</title>
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/perfilAlunoGestao.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item is-active" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Frequências">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Frequências</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <img src="../../assets/logoPulsar.png" alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <!-- BREADCRUMB -->
+      <nav class="breadcrumb">
+        <a data-navigate="dashboard">Dashboard</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="#">Ficha do aluno</a>
+        <span class="breadcrumb__sep">/</span>
+        <span class="breadcrumb__current" id="breadcrumbNome">—</span>
+      </nav>
+
+      <!-- PROFILE HERO -->
+      <div class="profile-hero">
+        <div class="profile-hero__avatar" id="heroAvatar">--</div>
+        <div class="profile-hero__body">
+          <div class="profile-hero__name-row">
+            <h1 class="profile-hero__name" id="heroName">—</h1>
+            <div id="heroBadges"></div>
+          </div>
+          <p class="profile-hero__meta" id="heroMeta">—</p>
+        </div>
+        <div class="profile-hero__actions">
+          <button class="btn-outline" data-navigate="frequencia">
+            <i data-lucide="calendar"></i>
+            Registrar frequência
+          </button>
+          <button class="btn-outline" id="btnAdicionarPrograma">
+            <i data-lucide="folder-plus"></i>
+            Adicionar ao programa
+          </button>
+          <button class="btn-primary" data-navigate="anotacoes">
+            <i data-lucide="plus"></i>
+            Nova anotação
+          </button>
+          <div class="hero-menu" id="heroMenu">
+            <button class="btn-icon" id="btnHeroMenu" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Mais ações">
+              <i data-lucide="more-horizontal"></i>
+            </button>
+            <div class="hero-menu__dropdown" id="heroMenuDropdown" role="menu" hidden>
+              <button class="hero-menu__item" type="button" role="menuitem" id="btnEditarJovem">
+                <i data-lucide="pencil"></i> Editar cadastro
+              </button>
+              <button class="hero-menu__item is-danger" type="button" role="menuitem" id="btnExcluirJovem">
+                <i data-lucide="trash-2"></i> Excluir jovem
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERT RISCO -->
+      <div class="alert-risk" id="alertRisco" style="display:none;">
+        <div class="alert-risk__body">
+          <div class="alert-risk__icon">
+            <i data-lucide="alert-triangle"></i>
+          </div>
+          <div>
+            <p class="alert-risk__title">Risco de evasão detectado</p>
+            <p class="alert-risk__text" id="alertRiscoText"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FREQUÊNCIA ACUMULADA -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-header__left">
+            <span class="section-header__icon"><i data-lucide="calendar"></i></span>
+            <span class="section-header__title">Frequência acumulada</span>
+          </div>
+        </div>
+
+        <!-- Estado: sem matrícula ativa -->
+        <div class="freq-sem-matricula" id="freqSemMatricula" hidden>
+          <i data-lucide="folder-x"></i>
+          <p>Jovem não está matriculado em nenhum programa ativo.</p>
+        </div>
+
+        <!-- Estado: com matrícula -->
+        <div class="freq-body" id="freqBody">
+          <!-- Gauge circular -->
+          <div class="gauge-wrap">
+            <svg class="gauge-svg" viewBox="0 0 120 120" width="120" height="120">
+              <!-- Track cinza -->
+              <circle cx="60" cy="60" r="48" fill="none" stroke="#F3F4F6" stroke-width="10"/>
+              <!-- Arco progresso — dasharray calculado por JS -->
+              <circle id="gaugeArc" cx="60" cy="60" r="48" fill="none"
+                stroke="#F3F4F6" stroke-width="10"
+                stroke-linecap="round"
+                transform="rotate(-90 60 60)"/>
+            </svg>
+            <span class="gauge-pct" id="freqPct">—</span>
+          </div>
+
+          <!-- Informações de frequência -->
+          <div class="freq-info">
+            <p class="freq-info__sub" id="freqSub">—</p>
+            <p class="freq-info__main" id="freqMain">—</p>
+            <p class="freq-info__detail" id="freqDetail"></p>
+          </div>
+
+          <span class="badge-em-risco" id="freqBadgeRisco" style="display:none;">
+            <i data-lucide="trending-up"></i>
+            EM RISCO
+          </span>
+        </div>
+      </div>
+
+      <!-- ANOTAÇÕES -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-header__left">
+            <span class="section-header__icon"><i data-lucide="file-text"></i></span>
+            <span class="section-header__title">Anotações</span>
+          </div>
+          <button class="btn-nova" data-navigate="anotacoes">+ Nova</button>
+        </div>
+
+        <div class="notes-list" id="notesList"></div>
+      </div>
+
+      <!-- INFO GRID (2 colunas) -->
+      <div class="info-grid">
+
+        <!-- EMPREGABILIDADE -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-header__left">
+              <span class="section-header__icon"><i data-lucide="briefcase"></i></span>
+              <span class="section-header__title">Empregabilidade</span>
+            </div>
+            <button class="btn-nova" id="btnEditarEmprego">✎ Editar</button>
+          </div>
+
+          <div class="emp-status" id="empregoDisplay">
+            <span class="badge badge-success" id="empBadge">—</span>
+          </div>
+
+          <form class="inline-edit-form" id="formEmprego" hidden>
+            <div class="inline-edit-field">
+              <label class="inline-edit-label" for="editEmpStatus">Status de empregabilidade</label>
+              <select class="mat-select" id="editEmpStatus">
+                <option value="">Sem status</option>
+                <option value="Empregado">Empregado</option>
+                <option value="Em_formacao">Em formação</option>
+                <option value="Buscando">Buscando</option>
+                <option value="Empreendedor">Empreendedor</option>
+                <option value="Inativo">Inativo</option>
+              </select>
+            </div>
+            <div class="inline-edit-actions">
+              <button type="button" class="btn-inline-cancel" id="btnCancelarEmprego">Cancelar</button>
+              <button type="submit" class="btn-inline-save" id="btnSalvarEmprego">Salvar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- ENSINO SUPERIOR -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-header__left">
+              <span class="section-header__icon"><i data-lucide="graduation-cap"></i></span>
+              <span class="section-header__title">Ensino superior</span>
+            </div>
+          </div>
+
+          <div class="info-fields" id="ensinoFields">
+            <div class="info-field">
+              <span class="info-field__value info-field__value--empty">Sem registro de ensino superior.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTATO -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-header__left">
+              <span class="section-header__icon"><i data-lucide="user"></i></span>
+              <span class="section-header__title">Contato</span>
+            </div>
+            <button class="btn-nova" id="btnEditarContato">✎ Editar</button>
+          </div>
+
+          <div class="info-fields" id="contatoDisplay">
+            <div class="info-field">
+              <span class="info-field__label">Telefone</span>
+              <span class="info-field__value" id="contatoTelefone">—</span>
+            </div>
+            <div class="info-field">
+              <span class="info-field__label">E-mail</span>
+              <span class="info-field__value" id="contatoEmail">—</span>
+            </div>
+          </div>
+
+          <form class="inline-edit-form" id="formContato" hidden>
+            <div class="inline-edit-field">
+              <label class="inline-edit-label" for="editTelefone">Telefone</label>
+              <input class="inline-edit-input" type="tel" id="editTelefone" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric" />
+            </div>
+            <div class="inline-edit-field">
+              <label class="inline-edit-label" for="editEmail">E-mail</label>
+              <input class="inline-edit-input" type="email" id="editEmail" placeholder="email@exemplo.com" />
+            </div>
+            <div class="inline-edit-actions">
+              <button type="button" class="btn-inline-cancel" id="btnCancelarContato">Cancelar</button>
+              <button type="submit" class="btn-inline-save" id="btnSalvarContato">Salvar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- FORMAÇÃO E CERTIFICAÇÕES -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-header__left">
+              <span class="section-header__icon"><i data-lucide="award"></i></span>
+              <span class="section-header__title">Competências e certificados</span>
+            </div>
+          </div>
+
+          <div class="info-fields" id="competenciasFields"></div>
+        </div>
+
+      </div>
+      <!-- /info-grid -->
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL: Adicionar ao programa -->
+<div class="mat-backdrop" id="matBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="mat-modal">
+    <div class="mat-modal__header">
+      <h3 class="mat-modal__title">Adicionar ao programa</h3>
+      <button class="mat-modal__close" id="btnFecharMatModal" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+    </div>
+
+    <form id="formMatricula" novalidate>
+      <div class="mat-modal__body">
+        <div class="mat-field">
+          <label class="mat-label" for="matPrograma">Programa *</label>
+          <select class="mat-select" id="matPrograma" required>
+            <option value="">Selecione um programa</option>
+          </select>
+        </div>
+
+        <div class="mat-field">
+          <label class="mat-label" for="matTurma">Turma</label>
+          <select class="mat-select" id="matTurma">
+            <option value="">Sem turma específica</option>
+            <option value="Turma 1">Turma 1</option>
+            <option value="Turma 2">Turma 2</option>
+            <option value="Turma Remota">Turma Remota</option>
+          </select>
+        </div>
+
+        <p class="mat-error" id="matError" hidden></p>
+      </div>
+
+      <div class="mat-modal__footer">
+        <button type="button" class="btn btn-secondary" id="btnCancelarMat">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btnConfirmarMat">
+          <i data-lucide="check"></i>
+          Matricular
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: confirmar exclusão -->
+<div class="mat-backdrop" id="excluirBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="mat-modal">
+    <div class="mat-modal__header">
+      <h3 class="mat-modal__title">Excluir jovem</h3>
+      <button class="mat-modal__close" id="btnFecharExcluir" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+    </div>
+    <div class="mat-modal__body">
+      <p>Tem certeza que deseja excluir <strong id="excluirNome">este jovem</strong>? Esta ação remove o jovem da listagem.</p>
+    </div>
+    <div class="mat-modal__footer">
+      <button type="button" class="btn btn-secondary" id="btnCancelarExcluir">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmarExcluir">
+        <i data-lucide="trash-2"></i>
+        Excluir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: confirmar exclusão de anotação -->
+<div class="mat-backdrop" id="excluirAnotacaoBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="mat-modal">
+    <div class="mat-modal__header">
+      <h3 class="mat-modal__title">Excluir anotação</h3>
+      <button class="mat-modal__close" id="btnFecharExcluirAnotacao" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+    </div>
+    <div class="mat-modal__body">
+      <p>Tem certeza que deseja excluir esta anotação? Esta ação não pode ser desfeita.</p>
+    </div>
+    <div class="mat-modal__footer">
+      <button type="button" class="btn btn-secondary" id="btnCancelarExcluirAnotacao">Cancelar</button>
+      <button type="button" class="btn btn-danger" id="btnConfirmarExcluirAnotacao">
+        <i data-lucide="trash-2"></i>
+        Excluir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toastContainer" style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;"></div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/gestão/main.js"></script>
+<script src="../../js/gestão/perfilAlunoGestao.js"></script>
+</body>
+</html>

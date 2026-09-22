@@ -1,0 +1,110 @@
+/* ============================================================
+   importarPlanilha.css — Importar Planilha (layout simples)
+   Pulse Mais · Módulo 1AMD2
+   Depende de: global.css (tokens, reset, tipografia)
+   ============================================================ */
+
+/* ── SHELL ── */
+.app-shell { display: flex; min-height: 100vh; }
+.main-wrapper { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.page-content {
+  flex: 1; padding: var(--spacing-xl);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── IMPORT CARD ── */
+.import-card {
+  width: 100%; max-width: 560px;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.import-card__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+}
+.import-card__title {
+  font-size: 18px; font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+.btn-close {
+  width: 32px; height: 32px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border); background: var(--color-card-bg);
+  color: var(--color-text-secondary); cursor: pointer; transition: background .15s;
+}
+.btn-close:hover { background: var(--color-page-bg); }
+.btn-close svg { width: 16px; height: 16px; }
+
+.import-card__body {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex; flex-direction: column; gap: var(--spacing-lg);
+}
+
+/* ── HINT ── */
+.import-hint {
+  font-size: var(--font-size-sm); color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.import-hint strong { color: var(--color-text-primary); }
+
+/* ── FILE DROP (igual calendário) ── */
+.file-drop {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--spacing-sm); padding: var(--spacing-xl);
+  border: 2px dashed var(--color-border); border-radius: var(--radius-lg);
+  cursor: pointer; transition: border-color .2s, background .2s;
+  min-height: 120px;
+}
+.file-drop:hover { border-color: var(--color-brand); background: var(--color-brand-soft); }
+.file-drop.dragover { border-color: var(--color-brand); background: var(--color-brand-soft); }
+
+.file-drop svg { width: 32px; height: 32px; color: var(--color-text-secondary); }
+
+.file-drop__text {
+  font-size: var(--font-size-sm); color: var(--color-text-secondary); text-align: center;
+}
+.file-drop__text span { color: var(--color-brand); font-weight: var(--font-weight-semibold); }
+
+/* ── FEEDBACK ── */
+.import-feedback {
+  font-size: var(--font-size-sm); min-height: 20px;
+}
+.import-feedback.success { color: var(--color-success); }
+.import-feedback.error { color: var(--color-error); }
+
+/* ── FOOTER ── */
+.import-card__footer {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: var(--spacing-md); padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-cancelar {
+  padding: 10px var(--spacing-xl); font-family: var(--font-family);
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md); border: 1.5px solid var(--color-border);
+  background: var(--color-card-bg); color: var(--color-text-primary);
+  cursor: pointer; transition: background-color .15s;
+}
+.btn-cancelar:hover { background: var(--color-page-bg); }
+
+.btn-continuar {
+  padding: 10px var(--spacing-xl); font-family: var(--font-family);
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-md); border: none;
+  background: #94A3B8; color: #fff;
+  cursor: not-allowed; transition: background-color .15s;
+}
+.btn-continuar:not(:disabled) {
+  background: var(--color-brand); cursor: pointer;
+}
+.btn-continuar:not(:disabled):hover { background: var(--color-brand-hover); }
+
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+  .page-content { padding: var(--spacing-md); }
+}

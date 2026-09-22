@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Entrar | Pulse Mais — Standby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/coordenadora/css/tokens.css"><link rel="stylesheet" href="/coordenadora/css/base.css"><link rel="stylesheet" href="/coordenadora/css/fluxos.css">
+</head>
+<body>
+  <main class="login-pagina">
+    <section class="login-marca"><img src="/coordenadora/img/logo-pulse.svg" alt="Pulse Mais"><div><h1>Dados que acompanham cada jornada.</h1><p>Acesse indicadores, registros e informações dos alunos em um único lugar.</p></div><small>Plataforma de gestão de impacto social</small></section>
+    <section class="login-form-area"><div class="login-card"><h2>Boas-vindas</h2><p>Entre com as credenciais associadas ao seu perfil.</p><form id="form-login">
+      <label class="campo-form"><span>E-mail, RA ou RM</span><input name="identificador" autocomplete="username" required placeholder="Digite seu e-mail, RA ou RM"></label>
+      <label class="campo-form"><span>Senha</span><input type="password" name="senha" autocomplete="current-password" required placeholder="Digite sua senha"></label>
+      <label class="campo-form"><span>Perfil de acesso</span><select name="perfil" required><option value="coordenadora">Coordenadora pedagógica</option><option value="gestor">Gestor</option><option value="psicologa">Psicóloga</option><option value="aluno">Aluno</option></select></label>
+      <button class="btn-fluxo btn-fluxo--primario" type="submit">Entrar <i data-lucide="arrow-right"></i></button><p id="erro-login" role="alert" aria-live="polite"></p>
+    </form></div></section>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script><script src="/login/login.js"></script>
+</body>
+</html>

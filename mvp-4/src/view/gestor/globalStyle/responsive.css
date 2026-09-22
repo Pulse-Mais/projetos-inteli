@@ -1,0 +1,70 @@
+﻿@media (max-width: 1180px) {
+  .app-shell {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+
+  .page-header,
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .indicator-grid,
+  .charts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    gap: var(--espaco-6);
+    padding: var(--espaco-6);
+  }
+
+  .sidebar-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espaco-2);
+  }
+
+  .nav-item {
+    justify-content: center;
+    min-height: 50px;
+    padding: var(--espaco-3);
+    font-size: 0;
+  }
+
+  .nav-item .lucide {
+    width: 24px;
+    height: 24px;
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .indicator-grid,
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    display: grid;
+  }
+
+  .legend {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .chart-card {
+    min-height: 360px;
+  }
+
+  .pie-chart {
+    width: min(82%, 330px);
+  }
+}
+

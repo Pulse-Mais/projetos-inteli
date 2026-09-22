@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Meu Perfil</title>
+  <link rel="stylesheet" href="../css/perfilCoordenador.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <a href="perfilCoordenador.html" class="sidebar__avatar-link sidebar__avatar-link--ativo" aria-label="Meu Perfil (página atual)" aria-current="page">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do coordenador">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepage.html" class="sidebar__link">Homepage</a>
+        <a href="alunos.html" class="sidebar__link">Alunos</a>
+        <a href="dashboard.html" class="sidebar__link">Dashboard</a>
+        <a href="oportunidadesCoordenador.html" class="sidebar__link">Oportunidades</a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Meu Perfil</h2>
+    </div>
+
+    <div class="page-header">
+      <h1>Perfil do Coordenador</h1>
+      <p>Gerencie suas informações pessoais e profissionais.</p>
+    </div>
+
+    <div class="perfil-layout">
+      <section class="perfil-card perfil-card--main">
+        <div class="perfil-main-grid">
+
+          <!-- FOTO -->
+          <aside class="perfil-identity">
+            <div class="perfil-card__foto-container">
+              <img src="../assets/avatar.png" class="perfil-card__foto" id="perfilFoto" alt="Avatar do coordenador">
+              <button type="button" class="btn-foto" id="btnEditarFoto" onclick="document.getElementById('inputFotoCoord').click()" style="display:none;">Editar Foto</button>
+              <button type="button" class="btn-foto" id="btnRemoverFoto" onclick="limparFotoCoord()" style="display:none; background:var(--color-danger,#DC2626); border-color:var(--color-danger,#DC2626);">Remover Foto</button>
+              <input type="file" id="inputFotoCoord" accept="image/*" style="display:none;" onchange="previewFotoCoord(this)">
+            </div>
+          </aside>
+
+          <!-- IDENTIFICAÇÃO -->
+          <div class="perfil-info-top">
+            <div class="registration-section-header registration-section-header--blue">
+              <span>Identificação</span>
+            </div>
+            <article class="perfil-section">
+              <h3>Nome Completo</h3>
+              <p id="coordNome"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>E-mail</h3>
+              <p id="coordEmail"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Telefone</h3>
+              <p id="coordTelefone"></p>
+            </article>
+          </div>
+
+          <!-- CARGO -->
+          <div class="perfil-row-cargo">
+            <article class="perfil-section">
+              <h3>Cargo</h3>
+              <p id="coordCargo"></p>
+            </article>
+          </div>
+
+          <!-- PROFISSIONAL -->
+          <div class="perfil-row-pro">
+            <article class="perfil-section">
+              <h3>Área de Atuação</h3>
+              <p id="coordArea"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Data de Admissão</h3>
+              <p id="coordAdmissao"></p>
+            </article>
+          </div>
+
+          <!-- LOCALIZAÇÃO -->
+          <div class="perfil-row-loc">
+            <article class="perfil-section">
+              <h3>Cidade de Nascimento</h3>
+              <p id="coordCidade"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Estado de Nascimento</h3>
+              <p id="coordEstado"></p>
+            </article>
+          </div>
+
+        </div>
+
+        <div class="perfil-footer" style="justify-content: flex-end; margin-top: 32px;">
+          <button class="btn btn--outline" id="btnCancelarCoord" style="display:none;">Cancelar</button>
+          <button class="btn btn-verde" id="btnEditarCoord" style="min-width: 220px;">Editar Perfil</button>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/datePicker.js"></script>
+<script src="../js/perfilCoordenador.js"></script>
+</body>
+</html>

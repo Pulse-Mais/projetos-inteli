@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentação da WebAPI - Pulse Control</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fff;--bg2:#f8fafc;--bg3:#f1f5f9;--bd:#e2e8f0;--m:'IBM Plex Mono',monospace;--s:'Poppins',sans-serif}
+body{background:var(--bg);color:#111;font-family:var(--s);font-size:14px;line-height:1.6}
+header{border-bottom:1px solid var(--bd);padding:18px 40px;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--bg);z-index:100}
+.logo{font-size:18px;font-weight:700;letter-spacing:-.02em}.lp{color:#003870}.lc{color:#33b458}
+.vb{font-family:var(--m);font-size:11px;background:#e0f2f9;color:#0e7490;border:1px solid #a5d8e6;padding:2px 8px;border-radius:4px}
+.hr{margin-left:auto;font-size:12px;color:#888;font-family:var(--m)}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 61px)}
+nav{border-right:1px solid var(--bd);padding:24px 0;position:sticky;top:61px;height:calc(100vh - 61px);overflow-y:auto}
+.ng{margin-bottom:22px}.nl{font-size:12px;font-weight:700;color:#000;padding:0 20px 6px;display:block}
+nav a{display:flex;align-items:center;gap:8px;padding:5px 20px;color:#444;text-decoration:none;font-size:12px;transition:color .15s,background .15s}
+nav a:hover{color:#000;background:var(--bg2)}.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+main{padding:44px 52px;max-width:920px}
+.pt{font-family:var(--m);font-size:24px;font-weight:500;color:#000;margin-bottom:20px}
+.it{color:#111;font-size:14px;line-height:1.85;margin-bottom:14px}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0 24px}
+.il .lb{font-weight:700;color:#000;font-size:11px;display:block;margin-bottom:2px}.il .vl{font-family:var(--m);color:#0891b2;font-size:12px}
+.leg{display:flex;gap:20px;margin-bottom:36px;font-size:12px;color:#111;align-items:center}.li{display:flex;align-items:center;gap:6px}
+.tg{font-family:var(--m);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}.rs{background:#dc2626;color:#fff}.os{background:#475569;color:#fff}
+.st{font-size:15px;font-weight:700;color:#000;letter-spacing:-.02em;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--bd)}.gh{margin:44px 0 14px}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.ch{display:flex;align-items:center;gap:10px;padding:13px 18px;cursor:pointer;transition:background .15s}.ch:hover{background:var(--bg3)}
+.mb{font-family:var(--m);font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;min-width:56px;text-align:center}
+.GET{background:#33b458;color:#fff}.POST{background:#003870;color:#fff}.PATCH{background:#ffd927;color:#1a1a1a}
+.PUT{background:#b45309;color:#fff}.DELETE{background:#dc2626;color:#fff}
+.ep{font-family:var(--m);font-size:14px;color:#111;flex:1}.ep .p{color:#b8960a}
+.ed{font-size:12px;font-weight:500;color:#333;margin-left:auto;text-align:right;max-width:240px}
+.rf{font-family:var(--m);font-size:10px;font-weight:600;background:#e0f2f9;color:#0e7490;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.nw{font-family:var(--m);font-size:9px;background:#fef3c7;color:#b45309;border:1px solid #d97706;padding:1px 5px;border-radius:3px;margin-left:4px}
+.cv{color:#888;font-size:12px;transition:transform .2s;margin-left:6px}.cb{display:none;border-top:1px solid var(--bd)}.cb.open{display:block}.cv.open{transform:rotate(180deg)}
+.sc{padding:14px 18px;border-bottom:1px solid var(--bd)}.sc:last-child{border-bottom:none}.sl{font-size:11px;font-weight:700;color:#000;margin-bottom:8px}
+.fr{display:grid;grid-template-columns:176px 108px 1fr;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:12px;align-items:baseline}.fr:last-child{border-bottom:none}
+.fn{font-family:var(--m);color:#33b458;font-weight:600}.ft{font-family:var(--m);color:#b8960a;font-weight:600;font-size:11px}.fd{color:#111}
+.req{font-family:var(--m);font-size:10px;font-weight:700;background:#dc2626;color:#fff;padding:2px 5px;border-radius:3px;margin-left:3px;vertical-align:middle}
+.opt{font-family:var(--m);font-size:10px;font-weight:700;background:#475569;color:#fff;padding:2px 5px;border-radius:3px;margin-left:3px;vertical-align:middle}
+.cond{font-family:var(--m);font-size:10px;font-weight:700;background:#b45309;color:#fff;padding:2px 5px;border-radius:3px;margin-left:3px;vertical-align:middle}
+.hdr{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;border-bottom:1px solid var(--bd)}.hdr:last-child{border-bottom:none}
+.hk{font-family:var(--m);font-size:12px;color:#b8960a;min-width:220px}.hv{color:#111;font-size:12px}
+.code{background:#0d1117;border-radius:8px;padding:14px 16px;font-family:var(--m);font-size:12px;color:#e6edf3;overflow-x:auto;white-space:pre;line-height:1.7}
+.sg{display:flex;flex-wrap:wrap;gap:8px}.sb{font-family:var(--m);font-size:11px;font-weight:600;padding:4px 10px;border-radius:5px}
+.s2{background:#003870;color:#fff}.s4{background:#dc2626;color:#fff}.s5{background:#ffd927;color:#1a1a1a}
+.note{font-size:12px;color:#111;line-height:1.85}.note code{font-family:var(--m);color:#b8960a;font-weight:600;font-size:11px}
+.ks{color:#79c0ff}.kn{color:#a5d6ff}.kb{color:#ff9f1c}.knull{color:#6e7681}
+footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--bd);color:#888;font-family:var(--m);font-size:11px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><span class="lp">Pulse</span> <span class="lc">Control</span></div>
+</header>
+<div class="layout">
+<nav>
+<div class="ng"><span class="nl">Jovem</span>
+  <a href="#j1"><span class="dot" style="background:#003870"></span>POST /jovens</a>
+  <a href="#j2"><span class="dot" style="background:#33b458"></span>GET /jovens</a>
+  <a href="#j3"><span class="dot" style="background:#33b458"></span>GET /jovens/:id</a>
+  <a href="#j4"><span class="dot" style="background:#ffd927"></span>PATCH /jovens/:id</a>
+  <a href="#j5"><span class="dot" style="background:#dc2626"></span>DELETE /jovens/:id</a>
+  <a href="#j6"><span class="dot" style="background:#003870"></span>POST /jovens/:id/categoria</a>
+  <a href="#j7"><span class="dot" style="background:#33b458"></span>GET /jovens/:id/categoria</a></div>
+<div class="ng"><span class="nl">Programas</span>
+  <a href="#pr1"><span class="dot" style="background:#33b458"></span>GET /programas</a>
+  <a href="#pr2"><span class="dot" style="background:#003870"></span>POST /programas</a>
+  <a href="#pr3"><span class="dot" style="background:#33b458"></span>GET /programas/:id</a>
+  <a href="#pr4"><span class="dot" style="background:#b45309"></span>PUT /programas/:id</a>
+  <a href="#pr5"><span class="dot" style="background:#33b458"></span>GET /programas/:id/alunos</a>
+  <a href="#pr6"><span class="dot" style="background:#33b458"></span>GET /programas/:id/eventos</a></div>
+<div class="ng"><span class="nl">Frequência e Eventos</span>
+  <a href="#f1"><span class="dot" style="background:#003870"></span>POST /frequencia</a>
+  <a href="#f2"><span class="dot" style="background:#33b458"></span>GET .../frequencias-aula</a>
+  <a href="#f3"><span class="dot" style="background:#33b458"></span>GET .../taxa-presenca-aula</a>
+  <a href="#f4"><span class="dot" style="background:#33b458"></span>GET .../participacoes-evento</a>
+  <a href="#f5"><span class="dot" style="background:#33b458"></span>GET .../taxa-participacao-evento</a></div>
+<div class="ng"><span class="nl">Empregabilidade</span>
+  <a href="#em1"><span class="dot" style="background:#003870"></span>POST /jovens/:id/empregabilidade</a>
+  <a href="#em2"><span class="dot" style="background:#33b458"></span>GET /jovens/:id/empregabilidade</a></div>
+<div class="ng"><span class="nl">Ensino Superior</span>
+  <a href="#es1"><span class="dot" style="background:#003870"></span>POST /jovens/:id/ensino-superior</a>
+  <a href="#es2"><span class="dot" style="background:#33b458"></span>GET /jovens/:id/ensino-superior</a></div>
+<div class="ng"><span class="nl">Prontuário</span>
+  <a href="#p1"><span class="dot" style="background:#33b458"></span>GET /jovens/:id/prontuario</a>
+  <a href="#p2"><span class="dot" style="background:#003870"></span>POST /jovens/:id/prontuario</a>
+  <a href="#p3"><span class="dot" style="background:#b45309"></span>PUT .../prontuario/:registroId</a></div>
+<div class="ng"><span class="nl">Mentoria</span>
+  <a href="#m1"><span class="dot" style="background:#33b458"></span>GET /mentor/:id/mentorias</a>
+  <a href="#m2"><span class="dot" style="background:#33b458"></span>GET /mentorias</a>
+  <a href="#m3"><span class="dot" style="background:#003870"></span>POST /mentorias</a>
+  <a href="#m4"><span class="dot" style="background:#b45309"></span>PUT /mentorias/:id/info</a></div>
+<div class="ng"><span class="nl">Dashboard</span>
+  <a href="#d1"><span class="dot" style="background:#33b458"></span>GET /dashboard</a>
+  <a href="#d2"><span class="dot" style="background:#33b458"></span>GET /jovens/:id/dashboard</a></div>
+<div class="ng"><span class="nl">Importação / Exportação</span>
+  <a href="#ie1"><span class="dot" style="background:#003870"></span>POST /import</a>
+  <a href="#ie2"><span class="dot" style="background:#33b458"></span>GET /export</a></div>
+<div class="ng"><span class="nl">Usuários</span>
+  <a href="#u1"><span class="dot" style="background:#33b458"></span>GET /usuarios</a>
+  <a href="#u2"><span class="dot" style="background:#33b458"></span>GET /usuarios/:id</a>
+  <a href="#u3"><span class="dot" style="background:#003870"></span>POST /usuarios</a>
+  <a href="#u4"><span class="dot" style="background:#b45309"></span>PUT /usuarios/:id</a>
+  <a href="#u5"><span class="dot" style="background:#dc2626"></span>DELETE /usuarios/:id</a></div>
+</nav>
+<main>
+<h1 class="pt">Documentação da WebAPI</h1>
+<p class="it">Documentação técnica dos endpoints REST da plataforma Pulse Mais, coerente com a Matriz RF ⇒ RN ⇒ Endpoint (seção 3.1.4), os diagramas de sequência UML (seção 3.2.4), o modelo físico do banco de dados (seção 3.6.3) e a RTM (seção 3.9). Atualizada na Sprint 04 para refletir o estado real do código validado por 333 testes automatizados.</p>
+<p class="it">Todos os endpoints retornam JSON, com exceção de <code style="font-family:var(--m);color:#0e7490;font-weight:600">GET /export</code> (<code style="font-family:var(--m);color:#0e7490;font-weight:600">text/csv</code>). Erros seguem o formato <code style="font-family:var(--m);color:#dc2626;font-weight:600">{ "error": "mensagem curta" }</code>. O campo <code style="font-family:var(--m);color:#b8960a;font-weight:600">presente</code> (frequencia_aula, participacao_evento, sessao_mentoria) utiliza <code style="font-family:var(--m);color:#b8960a;font-weight:600">BOOLEAN</code> nativo desde a Sprint 04; os campos <code style="font-family:var(--m);color:#b8960a;font-weight:600">encerrado</code> e <code style="font-family:var(--m);color:#b8960a;font-weight:600">ingressou</code> permanecem <code style="font-family:var(--m);color:#b8960a;font-weight:600">SMALLINT</code> com valores 1/0. Operações de escrita sobre o Jovem exigem <code style="font-family:var(--m);color:#b8960a;font-weight:600">id_usuario</code> para rastreabilidade (422 quando ausente).</p>
+<div class="ig">
+  <div class="il"><span class="lb">Base URL</span><span class="vl">http://localhost:3000/api</span></div>
+  <div class="il"><span class="lb">Banco</span><span class="vl">Supabase · PostgreSQL + RLS</span></div>
+  <div class="il"><span class="lb">Autenticação</span><span class="vl">id_usuario explícito · sem login real (RF018)</span></div>
+  </div>
+<div class="leg"><strong>Campos:</strong>
+  <div class="li"><span class="tg rs">req</span> obrigatório</div>
+  <div class="li"><span class="tg os">opt</span> opcional</div>
+  <div class="li"><span class="tg" style="background:#b45309">cond</span> condicional</div>
+</div>
+
+<div class="gh"><div class="st">Jovem</div></div>
+<div class="card" id="j1"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/jovens</span><span class="rf">RF001 RF002 RF003 · RN01–RN06</span><span class="ed">Cadastra novo jovem + categoria inicial</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">nome<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Nome completo</span></div>
+<div class="fr"><span class="fn">email<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">E-mail único no sistema</span></div>
+<div class="fr"><span class="fn">telefone<span class="req">req</span></span><span class="ft">VARCHAR(20)</span><span class="fd">Telefone de contato</span></div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário responsável pela operação (rastreabilidade · RN07)</span></div>
+<div class="fr"><span class="fn">cpf<span class="opt">opt</span></span><span class="ft">VARCHAR(14)</span><span class="fd">XXX.XXX.XXX-XX · validado por dígitos verificadores (helper validarCpf) · único</span></div>
+<div class="fr"><span class="fn">data_nascimento<span class="opt">opt</span></span><span class="ft">DATE</span><span class="fd">DD/MM/AAAA (parsearDataBr) · idade 14–29 anos (calcularIdade · RN04b)</span></div>
+<div class="fr"><span class="fn">endereco<span class="opt">opt</span></span><span class="ft">VARCHAR(200)</span><span class="fd">Endereço completo</span></div>
+<div class="fr"><span class="fn">genero<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Gênero do jovem</span></div>
+<div class="fr"><span class="fn">renda_inicial<span class="opt">opt</span></span><span class="ft">REAL</span><span class="fd">Renda familiar per capita em R$ · imutável após criação (RN05)</span></div></div>
+<div class="sc"><p class="note">Insere o jovem e a categoria inicial <code>Conectado</code> em transação atômica (RN06); em falha na categoria, executa <code>ROLLBACK</code>. A categoria inicial registra <code>id_usuario = null</code> por ser ação do sistema. Unicidade de CPF/e-mail verificada antes do INSERT (RN01).</p></div>
+<div class="sc"><div class="sl">Response 201 · Location: /api/jovens/:id</div><div class="code">{ <span class="ks">"id"</span>: <span class="kn">42</span>, <span class="ks">"nome"</span>: <span class="ks">"João Silva"</span>, <span class="ks">"categoria_atual"</span>: <span class="ks">"Conectado"</span>, <span class="ks">"criado_em"</span>: <span class="ks">"2026-06-10T14:00:00Z"</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">400 Body malformado ou JSON inválido</span><span class="sb s4">401 Perfil não identificado na requisição</span><span class="sb s4">403 Gestão sem permissão de escrita</span><span class="sb s4">409 CPF ou e-mail duplicado</span><span class="sb s4">422 Campo obrigatório/id_usuario ausente, CPF inválido, idade fora de 14–29</span></div></div>
+</div></div>
+
+<div class="card" id="j2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens</span><span class="rf">RF012 · RN21</span><span class="ed">Lista jovens com filtros AND</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params (todos opcionais · combinados em AND)</div>
+<div class="fr"><span class="fn">categoria_atual</span><span class="ft">string</span><span class="fd">Conectado | Capacitado | Transformado</span></div>
+<div class="fr"><span class="fn">status_global</span><span class="ft">string</span><span class="fd">Ativo | Formado | Evadido | Inativo</span></div></div>
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"nome"</span>: <span class="ks">"Maria"</span>, <span class="ks">"categoria_atual"</span>: <span class="ks">"Capacitado"</span>, <span class="ks">"status_global"</span>: <span class="ks">"Ativo"</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · array vazio se sem resultado</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="j3"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span></span><span class="rf">RF009 RF013 · RN16 RN22</span><span class="ed">Perfil consolidado · Portal do Aluno</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><p class="note">Atende também ao Portal do Aluno (RF013 - RN22): o jovem acessa o próprio registro por esta rota. Nenhuma seção exibe dados de outro jovem (RN16). As rotas <code>/alunos/:id</code> da Sprint 03 foram substituídas por esta.</p></div>
+<div class="sc"><div class="code">{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"nome"</span>: <span class="ks">"Maria Souza"</span>, <span class="ks">"email"</span>: <span class="ks">"maria@email.com"</span>,
+  <span class="ks">"telefone"</span>: <span class="ks">"11999999999"</span>, <span class="ks">"cpf"</span>: <span class="ks">"111.222.333-44"</span>,
+  <span class="ks">"data_nascimento"</span>: <span class="ks">"2000-01-01"</span>, <span class="ks">"genero"</span>: <span class="ks">"Feminino"</span>,
+  <span class="ks">"renda_inicial"</span>: <span class="kn">800.00</span>, <span class="ks">"categoria_atual"</span>: <span class="ks">"Capacitado"</span>,
+  <span class="ks">"status_global"</span>: <span class="ks">"Ativo"</span>, <span class="ks">"criado_em"</span>: <span class="ks">"2026-01-10T00:00:00Z"</span>, <span class="ks">"atualizado_em"</span>: <span class="knull">null</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="j4"><div class="ch" onclick="t(this)"><span class="mb PATCH">PATCH</span><span class="ep">/jovens/<span class="p">:id</span></span><span class="rf">RF002 RF013 · RN04 RN04b RN05 RN18 RN22</span><span class="ed">Atualiza dados cadastrais</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON · campos parciais)</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário responsável · 422 quando ausente</span></div>
+<div class="fr"><span class="fn">nome / email / telefone<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Apenas os campos enviados são atualizados</span></div>
+<div class="fr"><span class="fn">data_nascimento<span class="opt">opt</span></span><span class="ft">DATE</span><span class="fd">DD/MM/AAAA · idade 14–29 (RN04, RN04b)</span></div>
+<div class="fr"><span class="fn">endereco / genero<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Dados complementares</span></div></div>
+<div class="sc"><p class="note"><code>renda_inicial</code> é imutável: excluída do tipo <code>JovemAtualizacao</code>, o TypeScript impede o envio em compilação (RN05). O Portal do Aluno usa esta rota para o jovem atualizar os próprios dados (RN22).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · jovem atualizado</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Gestão sem permissão de escrita</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 Campo inválido ou id_usuario ausente</span></div></div>
+</div></div>
+
+<div class="card" id="j5"><div class="ch" onclick="t(this)"><span class="mb DELETE">DELETE</span><span class="ep">/jovens/<span class="p">:id</span></span><span class="rf">RF009 · RN16 RN18</span><span class="ed">Soft delete do jovem</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário responsável · 422 quando ausente</span></div></div>
+<div class="sc"><p class="note">Executa <em>soft delete</em>,o registro não é removido fisicamente, preservando o histórico, e registra a ação em <code>historico_acoes</code> (auditoria). Perfil Coordenação não exclui permanentemente (RN18).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">204 No Content</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 id_usuario ausente ou inválido</span></div></div>
+</div></div>
+
+<div class="card" id="j6"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/jovens/<span class="p">:id</span>/categoria</span><span class="rf">RF003 · RN06 RN07</span><span class="ed">Registra progressão de categoria</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">categoria_adquirida<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Conectado | Capacitado | Transformado (enum)</span></div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário responsável pela progressão (RN07)</span></div></div>
+<div class="sc"><p class="note">Insere o registro com <code>categoria_anterior</code> e <code>id_usuario</code> (colunas adicionadas ao schema na S04) e atualiza <code>jovem.categoria_atual</code>,histórico de progressão auditável (RN07).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 Enum inválido ou campos ausentes</span></div></div>
+</div></div>
+
+<div class="card" id="j7"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span>/categoria</span><span class="rf">RF003 · RN07</span><span class="ed">Histórico de categorias do jovem</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"categoria_adquirida"</span>: <span class="ks">"Capacitado"</span>, <span class="ks">"categoria_anterior"</span>: <span class="ks">"Conectado"</span>, <span class="ks">"id_usuario"</span>: <span class="kn">3</span>, <span class="ks">"data_inclusao"</span>: <span class="ks">"2026-04-01T00:00:00Z"</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · ordem cronológica</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Programas </div></div>
+<div class="card" id="pr1"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/programas</span><span class="rf">RF004 · RN08</span><span class="ed">Lista programas</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"nome"</span>: <span class="ks">"Pulse Tech"</span>, <span class="ks">"data_inicio"</span>: <span class="ks">"2026-02-01"</span>, <span class="ks">"data_fim"</span>: <span class="knull">null</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · array de programas</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="pr2"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/programas</span><span class="rf">RF004 · RN08</span><span class="ed">Cria programa</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">nome<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Nome do programa</span></div>
+<div class="fr"><span class="fn">data_inicio<span class="req">req</span></span><span class="ft">DATE</span><span class="fd">Data de início</span></div>
+<div class="fr"><span class="fn">data_fim<span class="opt">opt</span></span><span class="ft">DATE</span><span class="fd">Data de encerramento</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">400 Campo obrigatório ausente (BadRequest)</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="pr3"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/programas/<span class="p">:id</span></span><span class="rf">RF004 · RN08</span><span class="ed">Detalha programa</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Programa não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="pr4"><div class="ch" onclick="t(this)"><span class="mb PUT">PUT</span><span class="ep">/programas/<span class="p">:id</span></span><span class="rf">RF004 · RN08</span><span class="ed">Atualiza programa</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">nome / data_inicio / data_fim</span><span class="ft">—</span><span class="fd">Campos do programa a atualizar</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · programa atualizado</span><span class="sb s4">400 Campo inválido</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Programa não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="pr5"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/programas/<span class="p">:id</span>/alunos</span><span class="rf">RF004 · RN08</span><span class="ed">Jovens inscritos no programa</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · array de jovens</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Programa não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="pr6"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/programas/<span class="p">:id</span>/eventos</span><span class="rf">RF004 · RN08</span><span class="ed">Eventos vinculados ao programa</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · array de eventos</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Programa não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Frequência e Eventos </div></div>
+<div class="card" id="f1"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/frequencia</span><span class="rf">RF004 RF005 · RN08 RN09 RN10</span><span class="ed">Registro unificado: aula ou evento</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">tipo<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">"aula" | "evento" - direciona a tabela de destino</span></div>
+<div class="fr"><span class="fn">id_jovem<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">FK jovem(id)</span></div>
+<div class="fr"><span class="fn">presente<span class="req">req</span></span><span class="ft">BOOLEAN</span><span class="fd">true | false - tipo nativo desde a Sprint 04</span></div>
+<div class="fr"><span class="fn">id_aula + aula<span class="opt">tipo aula</span></span><span class="ft">INTEGER · VARCHAR(100)</span><span class="fd">Obrigatórios quando tipo = "aula"</span></div>
+<div class="fr"><span class="fn">id_evento + evento<span class="opt">tipo evento</span></span><span class="ft">INTEGER · VARCHAR(100)</span><span class="fd">Obrigatórios quando tipo = "evento"</span></div>
+<div class="fr"><span class="fn">data<span class="req">req</span></span><span class="ft">DATE</span><span class="fd">Data da atividade · registros sem data são rejeitados (RN08)</span></div></div>
+<div class="sc"><div class="sl">Exemplo (tipo aula)</div><div class="code">{ <span class="ks">"tipo"</span>: <span class="ks">"aula"</span>, <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"id_aula"</span>: <span class="kn">5</span>, <span class="ks">"aula"</span>: <span class="ks">"Lógica de Programação"</span>, <span class="ks">"data"</span>: <span class="ks">"2026-06-05"</span>, <span class="ks">"presente"</span>: <span class="kb">true</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">422 presente não booleano, tipo inválido ou campos do tipo ausentes</span></div></div>
+</div></div>
+
+<div class="card" id="f2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/frequencia/jovens/<span class="p">:id</span>/frequencias-aula</span><span class="rf">RF005 · RN09</span><span class="ed">Histórico de frequência em aulas</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">10</span>, <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"aula"</span>: <span class="ks">"Lógica de Programação"</span>, <span class="ks">"data"</span>: <span class="ks">"2026-06-05"</span>, <span class="ks">"presente"</span>: <span class="kb">true</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="f3"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/frequencia/jovens/<span class="p">:id</span>/taxa-presenca-aula</span><span class="rf">RF005 RF011 · RN09 RN10</span><span class="ed">Taxa de presença + alerta de evasão</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><p class="note">Taxa calculada em SQL com <code>COUNT FILTER (WHERE presente)</code>, arredondada para uma casa decimal (RN09). Abaixo de 75%, o alerta de evasão é sinalizado automaticamente (RN10).</p></div>
+<div class="sc"><div class="code">{ <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"taxa_presenca"</span>: <span class="kn">68.4</span>, <span class="ks">"alerta_evasao"</span>: <span class="kb">true</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="f4"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/frequencia/jovens/<span class="p">:id</span>/participacoes-evento</span><span class="rf">RF004 · RN08</span><span class="ed">Participações do jovem em eventos</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">7</span>, <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"evento"</span>: <span class="ks">"Demo Day 2026"</span>, <span class="ks">"data"</span>: <span class="ks">"2026-05-10"</span>, <span class="ks">"presente"</span>: <span class="kb">true</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="f5"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/frequencia/jovens/<span class="p">:id</span>/taxa-participacao-evento</span><span class="rf">RF004 · RN08</span><span class="ed">Taxa de participação em eventos</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">{ <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"taxa_participacao"</span>: <span class="kn">80.0</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Empregabilidade</div></div>
+<div class="card" id="em1"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/jovens/<span class="p">:id</span>/empregabilidade</span><span class="rf">RF006 RF014 · RN12 RN13</span><span class="ed">Registra novo vínculo empregatício</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">situacao<span class="req">req</span></span><span class="ft">VARCHAR(20)</span><span class="fd">Empregado | Procurando (enum)</span></div>
+<div class="fr"><span class="fn">vinculo<span class="opt">opt</span></span><span class="ft">VARCHAR(20)</span><span class="fd">Jovem Aprendiz | Estagio | Efetivado (RN13)</span></div>
+<div class="fr"><span class="fn">empresa<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Nome da empresa</span></div>
+<div class="fr"><span class="fn">area_atuacao<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Área de atuação</span></div>
+<div class="fr"><span class="fn">renda_atual<span class="opt">opt</span></span><span class="ft">REAL</span><span class="fd">Renda mensal em R$</span></div></div>
+<div class="sc"><p class="note">O vínculo anterior é marcado com <code>encerrado = 1</code> (SMALLINT) antes do novo INSERT, em transação, o histórico nunca é deletado (RN12, RF014).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 Enum de situação/vínculo inválido</span></div></div>
+</div></div>
+
+<div class="card" id="em2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span>/empregabilidade</span><span class="rf">RF006 · RN12</span><span class="ed">Histórico de vínculos do jovem</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">2</span>, <span class="ks">"situacao"</span>: <span class="ks">"Empregado"</span>, <span class="ks">"vinculo"</span>: <span class="ks">"Efetivado"</span>, <span class="ks">"empresa"</span>: <span class="ks">"TechCorp"</span>, <span class="ks">"renda_atual"</span>: <span class="kn">3200.00</span>, <span class="ks">"encerrado"</span>: <span class="kn">0</span> }]</div></div>
+<div class="sc"><p class="note"><code>encerrado</code> permanece <code>SMALLINT</code>: <code>0</code> = vínculo ativo, <code>1</code> = encerrado (não foi convertido a BOOLEAN na S04).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Ensino Superior</div></div>
+<div class="card" id="es1"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/jovens/<span class="p">:id</span>/ensino-superior</span><span class="rf">RF007 · RN14</span><span class="ed">Registra acesso ao ensino superior</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">ingressou<span class="req">req</span></span><span class="ft">SMALLINT</span><span class="fd">1 (ingressou) | 0 (não ingressou), permanece SMALLINT</span></div>
+<div class="fr"><span class="fn">instituicao<span class="cond">cond</span></span><span class="ft">VARCHAR</span><span class="fd">Obrigatória quando ingressou = 1 (RN14)</span></div>
+<div class="fr"><span class="fn">situacao<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Bolsista | Pagante (enum)</span></div>
+<div class="fr"><span class="fn">periodo<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Período de ingresso</span></div></div>
+<div class="sc"><p class="note">Somente jovens com <code>categoria_atual = Transformado</code> podem registrar ingresso (RN14).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 Jovem não Transformado ou instituição ausente</span></div></div>
+</div></div>
+
+<div class="card" id="es2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span>/ensino-superior</span><span class="rf">RF007 · RN14</span><span class="ed">Registros de ensino superior do jovem</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"ingressou"</span>: <span class="kn">1</span>, <span class="ks">"instituicao"</span>: <span class="ks">"FATEC SP"</span>, <span class="ks">"situacao"</span>: <span class="ks">"Bolsista"</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Prontuário - registros de acompanhamento </div></div>
+<div class="card" id="p1"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span>/prontuario</span><span class="rf">RF010 · RN17 RN19 RN19b</span><span class="ed">Lista registros · filtro por perfil</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário solicitante · define a visibilidade · 422 quando ausente</span></div></div>
+<div class="sc"><p class="note">Perfil <code>Psicologo</code> recebe todos os registros (incluindo <code>Restrito_Psicologia</code>); <code>Coordenacao</code>/<code>Gestao</code> recebem apenas <code>Publico_Equipe</code> (RN17, RN19). Cada acesso gera registro assíncrono em <code>historico_acoes</code> (RN19b). Absorve as antigas rotas de <code>/registro-acompanhamento</code> da Sprint 03.</p></div>
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"tipo_registro"</span>: <span class="ks">"Mentoria"</span>, <span class="ks">"visibilidade"</span>: <span class="ks">"Publico_Equipe"</span>, <span class="ks">"conteudo"</span>: <span class="ks">"..."</span>, <span class="ks">"data_registro"</span>: <span class="ks">"2026-06-01T10:00:00Z"</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil não autorizado</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 id_usuario ausente ou inválido</span></div></div>
+</div></div>
+
+<div class="card" id="p2"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/jovens/<span class="p">:id</span>/prontuario</span><span class="rf">RF010 · RN17 RN19 RN19b</span><span class="ed">Cria registro de acompanhamento</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Autor do registro</span></div>
+<div class="fr"><span class="fn">tipo_registro<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Acompanhamento_Psicologico | Mentoria | Atendimento_Equipe</span></div>
+<div class="fr"><span class="fn">conteudo<span class="req">req</span></span><span class="ft">TEXT</span><span class="fd">Conteúdo do registro</span></div>
+<div class="fr"><span class="fn">visibilidade<span class="opt">opt</span></span><span class="ft">VARCHAR</span><span class="fd">Publico_Equipe | Restrito_Psicologia</span></div></div>
+<div class="sc"><p class="note"><code>tipo_registro = Acompanhamento_Psicologico</code> força <code>visibilidade = Restrito_Psicologia</code>, sobrescrevendo o payload (RN19). Auditoria disparada após a criação com <code>id_usuario</code>, <code>id_jovem_afetado</code> e <code>tabela_afetada</code> (RN19b).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil não autorizado</span><span class="sb s4">404 Jovem não encontrado</span><span class="sb s4">422 Payload inválido</span></div></div>
+</div></div>
+
+<div class="card" id="p3"><div class="ch" onclick="t(this)"><span class="mb PUT">PUT</span><span class="ep">/jovens/<span class="p">:id</span>/prontuario/<span class="p">:registroId</span></span><span class="rf">RF010 · RN17 RN19</span><span class="ed">Atualiza registro existente</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Usuário responsável pela atualização</span></div>
+<div class="fr"><span class="fn">tipo_registro / conteudo / visibilidade<span class="opt">opt</span></span><span class="ft">—</span><span class="fd">Campos a atualizar</span></div></div>
+<div class="sc"><p class="note">A mudança de tipo para <code>Acompanhamento_Psicologico</code> força <code>Restrito_Psicologia</code> também em atualizações (RN19).</p></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · registro atualizado</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil não autorizado</span><span class="sb s4">404 Registro não encontrado</span><span class="sb s4">422 Campo inválido</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Mentoria </div></div>
+<div class="card" id="m1"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/mentor/<span class="p">:id</span>/mentorias</span><span class="rf">RF019 · RN24</span><span class="ed">Sessões do mentor</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><p class="note">O mentor acessa apenas jovens com vínculo ativo em <code>vinculo_mentoria</code>; dados restritos a cadastrais básicos e histórico de sessões (RN24). Substitui a rota <code>GET /mentores/:id/jovens</code> da Sprint 03.</p></div>
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">3</span>, <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"data_sessao"</span>: <span class="ks">"2026-06-08"</span>, <span class="ks">"presente"</span>: <span class="kb">true</span>, <span class="ks">"anotacoes"</span>: <span class="ks">"..."</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Mentor não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="m2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/mentorias</span><span class="rf">RF019 · RN24</span><span class="ed">Sessões por jovem (query)</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params</div>
+<div class="fr"><span class="fn">id_jovem<span class="opt">opt</span></span><span class="ft">INTEGER</span><span class="fd">Filtra as sessões de um jovem específico</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · array de sessões</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="m3"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/mentorias</span><span class="rf">RF019 · RN25</span><span class="ed">Cria sessão de mentoria</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Deve ter perfil Mentor validado antes do INSERT (RN25)</span></div>
+<div class="fr"><span class="fn">id_jovem<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Jovem com vínculo ativo com o mentor</span></div>
+<div class="fr"><span class="fn">data_sessao<span class="req">req</span></span><span class="ft">DATE</span><span class="fd">Data da sessão</span></div>
+<div class="fr"><span class="fn">presente<span class="opt">opt</span></span><span class="ft">BOOLEAN</span><span class="fd">true | false, tipo nativo desde a Sprint 04</span></div>
+<div class="fr"><span class="fn">anotacoes<span class="opt">opt</span></span><span class="ft">TEXT</span><span class="fd">Registro da sessão</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Usuário sem perfil Mentor</span><span class="sb s4">422 Vínculo inexistente ou payload inválido</span></div></div>
+</div></div>
+
+<div class="card" id="m4"><div class="ch" onclick="t(this)"><span class="mb PUT">PUT</span><span class="ep">/mentorias/<span class="p">:id</span>/info</span><span class="rf">RF019 · RN25</span><span class="ed">Atualiza dados da sessão</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">id_usuario<span class="req">req</span></span><span class="ft">INTEGER</span><span class="fd">Perfil Mentor validado antes de consultar a sessão</span></div>
+<div class="fr"><span class="fn">presente / anotacoes / data_sessao<span class="opt">opt</span></span><span class="ft">—</span><span class="fd">Campos a atualizar</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · sessão atualizada</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Usuário sem perfil Mentor</span><span class="sb s4">404 Sessão não encontrada</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Dashboard</div></div>
+<div class="card" id="d1"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/dashboard</span><span class="rf">RF008 RF015 · RN15 RN15b</span><span class="ed">Indicadores consolidados</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params</div>
+<div class="fr"><span class="fn">id_usuario<span class="opt">opt</span></span><span class="ft">INTEGER</span><span class="fd">Usuário solicitante (diagrama de sequência da Gestão)</span></div></div>
+<div class="sc"><p class="note">Indicadores computados on-the-fly via <code>Promise.all</code>, sem cache (RN15b). Inclui a contagem de computadores doados não devolvidos via <code>computadorDoadoRepository.totalNaoDevolvidos</code>.</p></div>
+<div class="sc"><div class="code">{ <span class="ks">"total_ativos"</span>: <span class="kn">120</span>, <span class="ks">"total_bolsistas"</span>: <span class="kn">14</span>, <span class="ks">"total_empregados"</span>: <span class="kn">38</span>,
+  <span class="ks">"indice_evasao"</span>: <span class="kn">8.3</span>, <span class="ks">"frequencia_media"</span>: <span class="kn">82.5</span>, <span class="ks">"computadores_doados"</span>: <span class="kn">22</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="d2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/jovens/<span class="p">:id</span>/dashboard</span><span class="rf">RF011 · RN10 RN20</span><span class="ed">Indicadores individuais do jovem</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">{ <span class="ks">"id_jovem"</span>: <span class="kn">1</span>, <span class="ks">"percentual_presenca"</span>: <span class="kn">68.4</span>, <span class="ks">"alerta_evasao"</span>: <span class="kb">true</span>, <span class="ks">"total_eventos"</span>: <span class="kn">4</span>, <span class="ks">"total_mentorias"</span>: <span class="kn">3</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Jovem não encontrado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Importação</div></div>
+<div class="card" id="ie1"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/import</span><span class="rf">RF016 · RN11 RN23</span><span class="ed">Importa jovens via CSV (upsert)</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">multipart/form-data</span></div></div>
+<div class="sc"><div class="sl">Form data</div>
+<div class="fr"><span class="fn">arquivo<span class="req">req</span></span><span class="ft">file (.csv)</span><span class="fd">CSV com header: nome, email, telefone, cpf, renda_inicial...</span></div></div>
+<div class="sc"><p class="note">Cada linha é associada ao jovem pelo CPF via UPSERT <code>ON CONFLICT (cpf) DO UPDATE</code> com <code>atualizado_em = NOW()</code> (RN11). Linhas sem <code>cpf</code> ou <code>nome</code> são puladas com erro acumulado, sem abortar; duplicatas/inconsistências são sinalizadas no relatório (RN23).</p></div>
+<div class="sc"><div class="code">{ <span class="ks">"importados"</span>: <span class="kn">48</span>, <span class="ks">"erros"</span>: [{ <span class="ks">"linha"</span>: <span class="kn">7</span>, <span class="ks">"motivo"</span>: <span class="ks">"campos obrigatórios ausentes"</span> }] }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · com relatório de erros por linha</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">403 Perfil sem permissão</span><span class="sb s4">422 Arquivo ausente ou CSV vazio</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Exportação</div></div>
+<div class="card" id="ie2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/export</span><span class="rf">RF017 · RN21 RN15b</span><span class="ed">Exporta relatório CSV com filtros</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sl">Query params (todos opcionais · combinados em AND)</div>
+<div class="fr"><span class="fn">categoria_atual</span><span class="ft">string</span><span class="fd">Conectado | Capacitado | Transformado</span></div>
+<div class="fr"><span class="fn">status_global</span><span class="ft">string</span><span class="fd">Ativo | Formado | Evadido | Inativo</span></div></div>
+<div class="sc"><p class="note">Computado direto na consulta, sem cache (RN15b), com <code>LEFT JOIN empregabilidade</code> filtrando <code>encerrado = 0</code>, apenas o vínculo ativo entra no relatório. Sem resultados, retorna CSV vazio com status 200.</p></div>
+<div class="sc"><div class="sl">Response 200 · headers</div>
+<div class="hdr"><span class="hk">Content-Type</span><span class="hv">text/csv</span></div>
+<div class="hdr"><span class="hk">Content-Disposition</span><span class="hv">attachment; filename=relatorio.csv</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · arquivo CSV</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="gh"><div class="st">Usuários </div></div>
+<div class="card" id="u1"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/usuarios</span><span class="rf">RF018 · RN18</span><span class="ed">Lista usuários do sistema</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">[{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"nome"</span>: <span class="ks">"Joana Moura"</span>, <span class="ks">"email"</span>: <span class="ks">"joana@pulsemais.org"</span>, <span class="ks">"perfil"</span>: <span class="ks">"Coordenacao"</span> }]</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span></div></div>
+</div></div>
+
+<div class="card" id="u2"><div class="ch" onclick="t(this)"><span class="mb GET">GET</span><span class="ep">/usuarios/<span class="p">:id</span></span><span class="rf">RF018 · RN18</span><span class="ed">Detalha usuário</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="code">{ <span class="ks">"id"</span>: <span class="kn">1</span>, <span class="ks">"nome"</span>: <span class="ks">"Joana Moura"</span>, <span class="ks">"email"</span>: <span class="ks">"joana@pulsemais.org"</span>, <span class="ks">"perfil"</span>: <span class="ks">"Coordenacao"</span>, <span class="ks">"id_jovem"</span>: <span class="knull">null</span> }</div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Usuário não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="u3"><div class="ch" onclick="t(this)"><span class="mb POST">POST</span><span class="ep">/usuarios</span><span class="rf">RF018 · RN17 RN18</span><span class="ed">Cria usuário do sistema</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">nome<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Mínimo 2 caracteres (BadRequest se menor)</span></div>
+<div class="fr"><span class="fn">email<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Formato válido · único (409 se duplicado)</span></div>
+<div class="fr"><span class="fn">perfil<span class="req">req</span></span><span class="ft">VARCHAR</span><span class="fd">Gestao | Coordenacao | Psicologo | Mentor | Aluno (enum)</span></div>
+<div class="fr"><span class="fn">id_jovem<span class="cond">cond</span></span><span class="ft">INTEGER</span><span class="fd">Obrigatório quando perfil = Aluno</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">201 Created</span><span class="sb s4">400 Campo inválido (BadRequest)</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">409 E-mail duplicado</span></div></div>
+</div></div>
+
+<div class="card" id="u4"><div class="ch" onclick="t(this)"><span class="mb PUT">PUT</span><span class="ep">/usuarios/<span class="p">:id</span></span><span class="rf">RF018 · RN18</span><span class="ed">Atualiza usuário</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="hdr"><span class="hk">Content-Type</span><span class="hv">application/json</span></div></div>
+<div class="sc"><div class="sl">Body (JSON)</div>
+<div class="fr"><span class="fn">nome / email / perfil<span class="opt">opt</span></span><span class="ft">—</span><span class="fd">Campos a atualizar · mesmas validações do POST</span></div></div>
+<div class="sc"><div class="sg"><span class="sb s2">200 OK · usuário atualizado</span><span class="sb s4">400 Campo inválido</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Usuário não encontrado</span></div></div>
+</div></div>
+
+<div class="card" id="u5"><div class="ch" onclick="t(this)"><span class="mb DELETE">DELETE</span><span class="ep">/usuarios/<span class="p">:id</span></span><span class="rf">RF018 · RN18</span><span class="ed">Remove usuário</span><span class="cv">▼</span></div>
+<div class="cb">
+<div class="sc"><div class="sg"><span class="sb s2">204 No Content</span><span class="sb s4">401 Perfil não identificado</span><span class="sb s4">404 Usuário não encontrado</span></div></div>
+</div></div>
+
+</main></div>
+<script>function t(h){const b=h.nextElementSibling,c=h.querySelector('.cv'),o=b.classList.contains('open');b.classList.toggle('open',!o);c.classList.toggle('open',!o)}</script>
+</body></html>

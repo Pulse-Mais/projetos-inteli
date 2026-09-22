@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turmas — Coordenadora | Pulse Mais</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/turmas.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar">
+            <i data-lucide="circle-user"></i>
+          </span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span>
+            <span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link">
+            <i data-lucide="chart-bar"></i>
+            Dashboard
+          </a>
+          <a href="turmas.html" class="nav-link ativo">
+            <i data-lucide="users"></i>
+            Turmas
+          </a>
+          <a href="registros.html" class="nav-link">
+            <i data-lucide="clipboard-check"></i>
+            Registros
+          </a>
+          <a href="comunicados.html" class="nav-link">
+            <i data-lucide="message-square-dot"></i>
+            Comunicados
+          </a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+
+      <main class="conteudo">
+        <header class="pagina-cabecalho">
+          <div>
+            <h1>Turmas</h1>
+            <p class="pagina-subtitulo">Acompanhe o progresso das 4 turmas ativas · 87 alunos no total</p>
+          </div>
+          <a href="cadastro-turma.html" class="btn-fluxo btn-fluxo--primario"><i data-lucide="plus"></i> Nova turma</a>
+        </header>
+
+        <section class="filtros">
+          <div class="busca">
+            <i data-lucide="search"></i>
+            <input type="text" class="busca-input" placeholder="Buscar turma..." />
+          </div>
+          <select class="filtro-select">
+            <option value="">Status: todas</option>
+            <option value="ativas">Ativas</option>
+            <option value="inativas">Inativas</option>
+          </select>
+          <select class="filtro-select">
+            <option value="az">Ordenar: A-Z</option>
+            <option value="za">Ordenar: Z-A</option>
+            <option value="mais-alunos">Mais alunos</option>
+          </select>
+        </section>
+
+        <section class="lista-turmas">
+          <a href="alunos.html" class="turma-linha" data-fixo="1">
+            <div class="turma-marca turma-marca--azul-escuro">G</div>
+            <div class="turma-detalhes">
+              <h3 class="turma-nome">GERAL</h3>
+              <p class="turma-info">
+                <span><i data-lucide="users"></i> 87 Alunos</span>
+                <span class="turma-info-separador">·</span>
+                <span><i data-lucide="folder"></i> 3 Turmas</span>
+              </p>
+            </div>
+          </a>
+          <a href="alunos.html?turma=Turma%201" class="turma-linha" data-status="ativa" data-alunos="28">
+            <div class="turma-marca turma-marca--verde">T1</div>
+            <div class="turma-detalhes">
+              <h3 class="turma-nome">TURMA 1</h3>
+              <p class="turma-info">
+                <span><i data-lucide="users"></i> 28 Alunos</span>
+                <span class="turma-info-separador">·</span>
+                <span><i data-lucide="user"></i> Resp: Diogo Duarte</span>
+              </p>
+            </div>
+          </a>
+          <a href="alunos.html?turma=Turma%202" class="turma-linha" data-status="ativa" data-alunos="26">
+            <div class="turma-marca turma-marca--azul">T2</div>
+            <div class="turma-detalhes">
+              <h3 class="turma-nome">TURMA 2</h3>
+              <p class="turma-info">
+                <span><i data-lucide="users"></i> 26 Alunos</span>
+                <span class="turma-info-separador">·</span>
+                <span><i data-lucide="user"></i> Resp: Eduardo Moura</span>
+              </p>
+            </div>
+          </a>
+          <a href="alunos.html?turma=Turma%203" class="turma-linha" data-status="ativa" data-alunos="33">
+            <div class="turma-marca turma-marca--amarelo">T3</div>
+            <div class="turma-detalhes">
+              <h3 class="turma-nome">TURMA 3</h3>
+              <p class="turma-info">
+                <span><i data-lucide="users"></i> 33 Alunos</span>
+                <span class="turma-info-separador">·</span>
+                <span><i data-lucide="user"></i> Resp: Denise Ghattas</span>
+              </p>
+            </div>
+          </a>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/coordenadora-api.js"></script>
+    <script type="text/plain" data-script-legado-turmas>
+      lucide.createIcons();
+
+      // ===== Busca + filtro + ordenação das turmas =====
+      // TODO (back-end): no futuro a filtragem/ordenação pode vir da API
+      const listaTurmas  = document.querySelector('.lista-turmas');
+      const inputBusca   = document.querySelector('.busca-input');
+      const selects      = document.querySelectorAll('.filtro-select');
+      const selectStatus = selects[0];   // todas / ativas / inativas
+      const selectOrdem  = selects[1];   // az / za / mais-alunos
+      const ehGeral  = (linha) => linha.dataset.fixo === '1';
+      const nomeDe   = (linha) => linha.querySelector('.turma-nome').textContent.trim();
+      const alunosDe = (linha) => parseInt(linha.dataset.alunos || '0', 10);
+
+      function aplicarTurmas() {
+        const termo  = (inputBusca.value || '').trim().toLowerCase();
+        const status = selectStatus.value;
+        const ordem  = selectOrdem.value;
+
+        const linhas = Array.from(listaTurmas.querySelectorAll('.turma-linha'));
+        const geral  = linhas.filter(ehGeral);
+        const demais = linhas.filter((l) => !ehGeral(l));
+
+        // GERAL fica sempre visível; nas demais aplicamos busca + status
+        geral.forEach((l) => { l.style.display = ''; });
+        demais.forEach((linha) => {
+          const casaBusca = nomeDe(linha).toLowerCase().includes(termo);
+          const casaStatus =
+            !status ||
+            (status === 'ativas'   && linha.dataset.status === 'ativa') ||
+            (status === 'inativas' && linha.dataset.status === 'inativa');
+          linha.style.display = (casaBusca && casaStatus) ? '' : 'none';
+        });
+
+        // Ordena as demais (GERAL nunca entra na ordenação)
+        demais.sort((a, b) => {
+          if (ordem === 'za')          return nomeDe(b).localeCompare(nomeDe(a), 'pt-BR');
+          if (ordem === 'mais-alunos') return alunosDe(b) - alunosDe(a);
+          return nomeDe(a).localeCompare(nomeDe(b), 'pt-BR'); // az (padrão)
+        });
+
+        // Reescreve a ordem no DOM: GERAL primeiro, depois as demais
+        geral.forEach((l) => listaTurmas.appendChild(l));
+        demais.forEach((l) => listaTurmas.appendChild(l));
+      }
+
+      inputBusca.addEventListener('input', aplicarTurmas);
+      selectStatus.addEventListener('change', aplicarTurmas);
+      selectOrdem.addEventListener('change', aplicarTurmas);
+    </script>
+    <script src="js/turmas.js"></script>
+  </body>
+</html>

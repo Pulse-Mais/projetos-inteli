@@ -1,0 +1,126 @@
+/* ============================================================
+   SOLICITAÇÕES DE CADASTRO — seção dentro de telaJovens.html
+   Depende de: global.css, telaJovens.css (tokens e .btn/.section-card já definidos)
+   Só adiciona o que não existe nas folhas acima.
+   ============================================================ */
+
+/* Garante que hidden vença display:flex nos painéis de estado */
+[hidden] { display: none !important; }
+
+/* ── Cabeçalho da seção ── */
+.sol-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+.sol-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+.sol-header .section-card__title { margin-bottom: 0; }
+
+.sol-timestamp {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* ── Painéis de estado (loading / erro / vazio) ── */
+.sol-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+.sol-state--error { color: var(--color-error); }
+
+.sol-state-icon {
+  width: 36px;
+  height: 36px;
+  stroke-width: 1.5;
+  opacity: .5;
+}
+
+@keyframes sol-spin { to { transform: rotate(360deg); } }
+.sol-spin { animation: sol-spin 1s linear infinite; }
+
+/* ── Lista de solicitações ── */
+.sol-list { display: flex; flex-direction: column; }
+
+.sol-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.sol-item:last-child { border-bottom: none; }
+
+/* Info do aluno */
+.sol-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.sol-item-nome {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.sol-item-email,
+.sol-item-data {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+.sol-item-error {
+  font-size: var(--font-size-caption);
+  color: var(--color-error);
+  margin-top: 2px;
+}
+
+/* Botões de ação */
+.sol-item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* Rejeitar: variante de erro sobre .btn.btn-secondary existente */
+.sol-btn-rejeitar {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+.sol-btn-rejeitar:hover {
+  background: var(--color-error-soft);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Ícone do botão Aprovar */
+.sol-btn-aprovar i { width: 16px; height: 16px; }
+
+/* ── Responsive ── */
+@media (max-width: 540px) {
+  .sol-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  .sol-item-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

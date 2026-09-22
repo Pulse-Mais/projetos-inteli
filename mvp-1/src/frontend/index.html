@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Login</title>
+  <meta name="description" content="Plataforma de gestão de alunos da Pulse Mais. Faça login para acessar.">
+  <link rel="icon" type="image/png" href="/assets/logoAzul.png">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Painel esquerdo: identidade visual -->
+  <div class="left">
+    <img src="/assets/pulseConnect.png" alt="Pulse Connect" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+  </div>
+
+  <!-- Painel direito: formulário de login -->
+  <div class="right">
+    <h2>BEM-VINDO(A)!</h2>
+    <p class="subtitulo">Faça login para acessar sua conta</p>
+
+    <form id="loginForm">
+
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="seuemail@pulsemais.org"
+          required
+        >
+      </div>
+
+      <!-- Mensagem de erro (fica oculta até ser ativada pelo JS) -->
+      <p class="mensagem-erro" id="mensagemErro">
+        E-mail não encontrado. Verifique e tente novamente.
+      </p>
+
+      <button type="submit" class="btn-entrar" id="btnEntrar">
+        Entrar
+      </button>
+
+    </form>
+  </div>
+
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,921 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configurações — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <style>
+    /* ── Configurações ───────────────────────────────────────────── */
+    .cfg-account { display:flex; align-items:center; gap:16px; padding-bottom:18px; border-bottom:1px solid var(--border); }
+    .cfg-account__avatar {
+      width:56px; height:56px; border-radius:50%; background:var(--navy); color:var(--white);
+      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px; flex-shrink:0;
+    }
+    .cfg-account__info { flex:1; display:flex; flex-direction:column; gap:3px; }
+    .cfg-account__name { font-size:16px; font-weight:700; color:var(--navy); }
+    .cfg-account__email { font-size:13px; color:var(--muted); }
+    .cfg-fields { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+    .cfg-field { display:flex; flex-direction:column; gap:6px; }
+    .cfg-field label { font-size:12.5px; font-weight:600; color:var(--navy); }
+    .cfg-field input {
+      font-family:inherit; font-size:13.5px; color:var(--navy); background:var(--bg);
+      border:1px solid var(--border); border-radius:9px; padding:10px 12px;
+    }
+    .cfg-field input:disabled { color:var(--muted); cursor:not-allowed; }
+    .cfg-hint { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted); margin:16px 0 0; }
+    .cfg-pref { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--border); }
+    .cfg-pref:last-child { border-bottom:none; padding-bottom:0; }
+    .cfg-pref__label { font-size:14px; font-weight:600; color:var(--navy); }
+    .cfg-pref__desc { font-size:12.5px; color:var(--muted); margin-top:2px; max-width:520px; }
+    .cfg-switch {
+      width:42px; height:24px; border-radius:999px; background:var(--border); border:none; position:relative;
+      cursor:pointer; flex-shrink:0; transition:background .15s ease;
+    }
+    .cfg-switch::after {
+      content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%;
+      background:var(--white); transition:transform .15s ease; box-shadow:0 1px 3px rgba(0,0,0,.2);
+    }
+    .cfg-switch.is-on { background:var(--brand-green); }
+    .cfg-switch.is-on::after { transform:translateX(18px); }
+    @media (max-width:600px) { .cfg-fields { grid-template-columns:1fr; } }
+  </style>
+  <script src="lucide.min.js"></script>
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       LOGIN SCREEN
+       ══════════════════════════════════════════════════════════ */
+    .login-screen {
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .login-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 580px;
+      box-shadow: 0 4px 24px rgba(10, 22, 40, 0.07);
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .login-brand__logo {
+      width: 44px;
+      height: 44px;
+      background: var(--brand-dark);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-yellow);
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .login-brand__name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .login-brand__sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .login-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 0 0 4px;
+    }
+
+    .login-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 20px;
+    }
+
+    .login-users {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .login-user-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      background: var(--white);
+    }
+
+    .login-user-card:hover {
+      border-color: var(--brand-dark);
+      background: var(--bg);
+    }
+
+    .login-user-card:active {
+      background: var(--border);
+    }
+
+    .login-user-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .login-user-avatar--gestao      { background: var(--brand-dark); }
+    .login-user-avatar--coordenacao { background: var(--blue-btn); }
+    .login-user-avatar--psicologo   { background: var(--green-badge-text); }
+    .login-user-avatar--mentor      { background: var(--orange-text); }
+    .login-user-avatar--aluno       { background: var(--brand-green); }
+
+    .login-user-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .login-user-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 16px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .login-footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       DASHBOARD HOME
+       ══════════════════════════════════════════════════════════ */
+    .hero-card {
+      background: var(--brand-dark);
+      border-radius: 14px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .hero-card__left {
+      min-width: 0;
+    }
+
+    .hero-card__greeting {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 4px;
+    }
+
+    .hero-card__sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.65);
+      margin: 0 0 16px;
+    }
+
+    .hero-card__avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--brand-yellow);
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .hero-card__actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .nav-tile {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .nav-tile:hover {
+      border-color: var(--brand-dark);
+      box-shadow: 0 2px 10px rgba(0, 56, 112, 0.08);
+    }
+
+    .nav-tile__icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-tile__icon--dark   { background: var(--brand-dark);    color: var(--brand-yellow); }
+    .nav-tile__icon--green  { background: var(--green-badge-bg); color: var(--green-badge-text); }
+    .nav-tile__icon--blue   { background: var(--blue-light);    color: var(--blue-btn); }
+    .nav-tile__icon--orange { background: var(--orange-light);  color: var(--orange-text); }
+    .nav-tile__icon--yellow { background: var(--brand-yellow);  color: var(--navy); }
+    .nav-tile__icon--red    { background: var(--error-bg);      color: var(--error-text); }
+
+
+
+    .nav-tile__text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .nav-tile__label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 3px;
+      line-height: 1.2;
+    }
+
+    .nav-tile__desc {
+      font-size: 12px;
+      color: #5A6573;
+      line-height: 1.2;
+    }
+
+    .activity-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .empty-feed {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .logout-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: none;
+      transition: background 0.15s;
+    }
+
+    .logout-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    @media (max-width: 899px) {
+      .nav-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-card { flex-direction: column; align-items: flex-start; }
+      .hero-card__avatar { display: none; }
+    }
+
+    @media (max-width: 599px) {
+      .nav-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .hero-card { padding: 20px; }
+      .hero-card__greeting { font-size: 16px; }
+      .login-users { grid-template-columns: 1fr; }
+      .login-box { padding: 28px 20px; }
+    }
+
+    @media (max-width: 400px) {
+      .nav-grid { grid-template-columns: 1fr; }
+      .nav-tile { padding: 14px; }
+      .nav-tile__desc { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LOGIN SCREEN — exibido quando não há sessão
+     ══════════════════════════════════════════════════════════════ -->
+<div id="login-screen" class="login-screen" style="display:none;">
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="login-brand__logo">PC</div>
+      <div>
+        <div class="login-brand__name">Pulse Control</div>
+        <div class="login-brand__sub">Gestão socioeducacional</div>
+      </div>
+    </div>
+
+    <div class="login-title">Selecione seu perfil</div>
+    <p class="login-subtitle">Escolha o usuário com quem deseja acessar o sistema.</p>
+
+    <div class="login-users" id="login-users">
+      <!-- Skeletons enquanto carrega -->
+      <div class="skeleton" style="height:66px; border-radius:10px;"></div>
+      <div class="skeleton" style="height:66px; border-radius:10px;"></div>
+      <div class="skeleton" style="height:66px; border-radius:10px;"></div>
+      <div class="skeleton" style="height:66px; border-radius:10px;"></div>
+    </div>
+
+    <div class="login-footer">
+      Ambiente de desenvolvimento — sem autenticação real
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     APP SHELL — exibido quando há sessão
+     ══════════════════════════════════════════════════════════════ -->
+<div class="app" id="app-shell" style="display:none;">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav" id="sidebar-nav"></nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini active" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Configurações</span>
+      </div>
+      <div class="topbar__actions">
+
+        <a class="topbar__user" id="topbar-user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Conta -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="user-circle" width="16" height="16"></i>
+            Conta
+          </h2>
+        </div>
+        <div class="cfg-account">
+          <div class="cfg-account__avatar" id="cfg-avatar">--</div>
+          <div class="cfg-account__info">
+            <div class="cfg-account__name" id="cfg-nome">—</div>
+            <div class="cfg-account__email" id="cfg-email">—</div>
+            <span id="cfg-badge"></span>
+          </div>
+          <button class="logout-link" onclick="logout()">
+            <i data-lucide="log-out" width="12" height="12"></i>
+            Trocar perfil
+          </button>
+        </div>
+        <div class="cfg-fields">
+          <div class="cfg-field">
+            <label>Nome</label>
+            <input type="text" id="field-nome" />
+          </div>
+          <div class="cfg-field">
+            <label>E-mail</label>
+            <input type="email" id="field-email" />
+          </div>
+          <div class="cfg-field">
+            <label>Perfil de acesso</label>
+            <input type="text" id="field-perfil" disabled />
+          </div>
+          <div class="cfg-field">
+            <label>ID do usuário</label>
+            <input type="text" id="field-id" disabled />
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+          <button id="btn-salvar-perfil" onclick="salvarPerfil()"
+                  style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--brand-dark);color:var(--white);border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;">
+            <i data-lucide="save" width="14" height="14"></i>
+            Salvar alterações
+          </button>
+        </div>
+      </div>
+
+      <!-- Dados e exportação -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="database" width="16" height="16"></i>
+            Dados e exportação
+          </h2>
+        </div>
+        <div class="cfg-pref">
+          <div class="cfg-pref__text">
+            <div class="cfg-pref__label">Exportar base de jovens (CSV)</div>
+            <div class="cfg-pref__desc">Baixa um arquivo com os jovens cadastrados e filtros aplicados</div>
+          </div>
+          <button class="btn btn--secondary" onclick="exportarCsv()">
+            <i data-lucide="download" width="14" height="14"></i>
+            Exportar
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script>
+/* ================================================================
+   dashboard.html — Pulse Control
+   Pessoa 1 | Endpoints: GET /usuarios, GET /usuarios/:id
+   ================================================================ */
+
+const API = 'http://localhost:3000/api';
+
+// ── Constantes de perfil ───────────────────────────────────────
+const PERFIL_META = {
+  Gestao:      { cls: 'badge--yellow',     label: 'Gestão',       avatarCls: 'login-user-avatar--gestao'      },
+  Coordenacao: { cls: 'badge--blue',       label: 'Coordenação',  avatarCls: 'login-user-avatar--coordenacao' },
+  Psicologo:   { cls: 'badge--green-soft', label: 'Psicólogo(a)', avatarCls: 'login-user-avatar--psicologo'   },
+  Mentor:      { cls: 'badge--orange',     label: 'Mentor(a)',    avatarCls: 'login-user-avatar--mentor'      },
+  Aluno:       { cls: 'badge--green',      label: 'Aluno(a)',     avatarCls: 'login-user-avatar--aluno'       },
+};
+
+// ── Tiles de acesso rápido por perfil ─────────────────────────
+const NAV_TILES = {
+  Gestao: [
+    { href: 'perfil-coordenador.html', icon: 'user-circle',     iconCls: 'nav-tile__icon--dark',   label: 'Perfil',        desc: 'Seu perfil'     },
+    { href: 'alunos.html',                icon: 'users',            iconCls: 'nav-tile__icon--blue',   label: 'Jovens',           desc: 'Consultar perfis'           },
+    { href: 'relatorios.html',            icon: 'bar-chart-2',        iconCls: 'nav-tile__icon--green',  label: 'Relatórios',       desc: 'Exportar dados'             },
+    { href: 'programas.html',             icon: 'book-open',        iconCls: 'nav-tile__icon--orange', label: 'Programas',        desc: 'Visualizar programas'       },
+  ],
+  Coordenacao: [
+    { href: 'alunos.html',                icon: 'users',            iconCls: 'nav-tile__icon--dark',   label: 'Jovens',           desc: 'Cadastrar e gerenciar'      },
+    { href: 'frequencia.html',            icon: 'calendar-check',   iconCls: 'nav-tile__icon--green',  label: 'Frequência',       desc: 'Registrar presenças'        },
+    { href: 'empregabilidade.html',       icon: 'briefcase',        iconCls: 'nav-tile__icon--blue',   label: 'Empregabilidade',  desc: 'Histórico de empregos'      },
+    { href: 'ensino-superior.html',       icon: 'graduation-cap',   iconCls: 'nav-tile__icon--orange', label: 'Ensino Superior',  desc: 'Ingresso e situação'        },
+    { href: 'registro-acompanhamento.html', icon: 'clipboard-list', iconCls: 'nav-tile__icon--yellow', label: 'Registros',        desc: 'Acompanhamentos'            },
+    { href: 'relatorios.html',            icon: 'file-text',        iconCls: 'nav-tile__icon--red',    label: 'Relatórios',       desc: 'Exportar dados'             },
+  ],
+  Psicologo: [
+    { href: 'alunos.html',                icon: 'users',            iconCls: 'nav-tile__icon--dark',   label: 'Jovens',           desc: 'Consultar perfis'           },
+    { href: 'registro-acompanhamento.html', icon: 'clipboard-list', iconCls: 'nav-tile__icon--green',  label: 'Prontuários',      desc: 'Registros psicológicos'     },
+  ],
+  Mentor: [
+    { href: 'mentoria.html',              icon: 'message-square',   iconCls: 'nav-tile__icon--dark',   label: 'Mentorias',        desc: 'Sessões e vínculos'         },
+    { href: 'alunos.html',                icon: 'users',            iconCls: 'nav-tile__icon--blue',   label: 'Jovens vinculados',desc: 'Consultar perfis'           },
+  ],
+  Aluno: [
+    { href: 'perfil-aluno.html',          icon: 'user-circle',      iconCls: 'nav-tile__icon--dark',   label: 'Meu perfil',       desc: 'Ver e editar dados'         },
+    { href: 'frequencia.html',            icon: 'calendar-check',   iconCls: 'nav-tile__icon--green',  label: 'Frequência',       desc: 'Minhas presenças'           },
+    { href: 'mentoria.html',              icon: 'message-square',   iconCls: 'nav-tile__icon--orange', label: 'Mentorias',        desc: 'Minhas sessões'             },
+  ],
+};
+
+// ── Session ────────────────────────────────────────────────────
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session')
+      || localStorage.getItem('pulse_session');
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return null;
+}
+
+function saveSession(usuario) {
+  const s = { userId: usuario.id, perfil: usuario.perfil, nome: usuario.nome, id_jovem: usuario.id_jovem ?? null };
+  sessionStorage.setItem('pulse_session', JSON.stringify(s));
+}
+
+function logout() {
+  sessionStorage.removeItem('pulse_session');
+  localStorage.removeItem('pulse_session');
+  window.location.href = 'dashboard.html';
+}
+
+// ── apiFetch ───────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    const isNetErr = err instanceof TypeError || err.name === 'AbortError';
+    if (isNetErr) {
+      console.warn('[DEV] API indisponível.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
+  el.innerHTML = `<i data-lucide="${icon}" width="16" height="16"></i>${msg}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons({ nodes: [el] });
+  setTimeout(() => el.remove(), 3500);
+}
+
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function fmtRelativo(iso) {
+  if (!iso) return '—';
+  const diff = Date.now() - new Date(iso).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 60)  return `há ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24)    return `há ${h}h`;
+  const d = Math.floor(h / 24);
+  return `há ${d} dia${d > 1 ? 's' : ''}`;
+}
+
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; }
+function setHTML(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+function badgePerfil(perfil) {
+  const m = PERFIL_META[perfil] || { cls: 'badge--blue', label: perfil };
+  return `<span class="badge ${m.cls}">${m.label}</span>`;
+}
+
+// ── Login ──────────────────────────────────────────────────────
+async function renderLogin() {
+  const grid = document.getElementById('login-users');
+
+  const usuarios = await apiFetch('/usuarios');
+  if (!Array.isArray(usuarios) || !usuarios.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--muted);">
+        <i data-lucide="wifi-off" width="32" height="32" style="display:block;margin:0 auto 12px;opacity:.4;"></i>
+        <div style="font-size:14px;">Não foi possível carregar os usuários.</div>
+        <div style="font-size:12px;margin-top:4px;">Verifique se o servidor da API está em execução.</div>
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  grid.innerHTML = usuarios.map(u => {
+    const m = PERFIL_META[u.perfil] || { cls: 'badge--blue', label: u.perfil, avatarCls: '' };
+    return `
+      <div class="login-user-card"
+           onclick="selectUser(${u.id}, '${escHtml(u.nome)}', '${u.perfil}')">
+        <div class="login-user-avatar ${m.avatarCls}">${initials(u.nome)}</div>
+        <div class="login-user-info">
+          <div class="login-user-name">${escHtml(u.nome)}</div>
+          <span class="badge ${m.cls}" style="font-size:10px; padding:2px 8px;">${m.label}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  lucide.createIcons();
+}
+
+async function selectUser(id, nome, perfil) {
+  saveSession({ id, nome, perfil });
+  toast(`Bem-vindo(a), ${nome.split(' ')[0]}!`, 'success');
+  await new Promise(r => setTimeout(r, 400));
+  document.getElementById('login-screen').style.display = 'none';
+  renderDashboard({ userId: id, nome, perfil });
+}
+
+// ── Sidebar dinâmica por perfil ────────────────────────────────
+const SIDEBAR_ITEMS = {
+  Gestao: [
+    { href: 'dashboard.html',          icon: 'layout-dashboard', label: 'Dashboard'         },
+    { href: 'alunos.html',             icon: 'users',            label: 'Alunos'            },
+    { href: 'perfil-coordenador.html', icon: 'user-circle',      label: 'Perfil'            },
+    { href: 'relatorios.html',         icon: 'bar-chart-2',      label: 'Relatórios'        },
+    { href: 'programas.html',          icon: 'book-open',        label: 'Programas'         },
+  ],
+  Coordenacao: [
+    { href: 'dashboard.html',          icon: 'layout-dashboard', label: 'Dashboard'         },
+    { href: 'alunos.html',             icon: 'users',            label: 'Alunos'            },
+    { href: 'perfil-coordenador.html', icon: 'user-circle',      label: 'Perfil'            },
+    { href: 'relatorios.html',         icon: 'bar-chart-2',      label: 'Relatórios'        },
+    { href: 'programas.html',          icon: 'book-open',        label: 'Programas'         },
+    { href: 'mentoria.html',           icon: 'message-square',   label: 'Mentoria'          },
+  ],
+  Psicologo: [
+    { href: 'dashboard-psicologo.html', icon: 'layout-dashboard', label: 'Painel do Psicólogo' },
+    { href: 'perfil-psicologo.html',    icon: 'user-circle',      label: 'Perfil'              },
+  ],
+  Mentor: [
+    { href: 'dashboard-mentor.html', icon: 'layout-dashboard', label: 'Dashboard' },
+    { href: 'perfil-mentor.html',    icon: 'user-circle',      label: 'Perfil'    },
+  ],
+  Aluno: [
+    { href: 'dashboard-aluno.html', icon: 'layout-dashboard', label: 'Dashboard' },
+    { href: 'eventos-aluno.html',   icon: 'calendar',         label: 'Eventos'   },
+    { href: 'perfil-aluno.html',    icon: 'user-circle',      label: 'Meu Perfil'},
+  ],
+};
+
+function renderSidebar(perfil) {
+  const nav = document.getElementById('sidebar-nav');
+  if (!nav) return;
+  const items = SIDEBAR_ITEMS[perfil] || SIDEBAR_ITEMS.Coordenacao;
+  nav.innerHTML = items.map(item => `
+    <a href="${item.href}" class="sidebar__nav-item" title="${item.label}">
+      <i data-lucide="${item.icon}" width="20" height="20"></i>
+      <span class="sidebar__nav-label">${item.label}</span>
+    </a>`).join('');
+  lucide.createIcons();
+}
+
+// ── Dashboard ──────────────────────────────────────────────────
+async function renderDashboard(session) {
+  document.getElementById('app-shell').style.display = '';
+
+  const ini = initials(session.nome);
+  setText('topbar-name', session.nome);
+  setHTML('topbar-avatar', ini);
+  setHTML('sidebar-initials', ini);
+
+  renderSidebar(session.perfil);
+  await renderConfig(session);
+  renderActivity();
+  lucide.createIcons();
+}
+
+/* ── Configurações ────────────────────────────────────────────────
+   Carrega os dados do usuário logado via GET /usuarios/:id.
+   Nome e e-mail são editáveis e salvos via PUT /usuarios/:id (salvarPerfil).
+   ───────────────────────────────────────────────────────────────── */
+async function renderConfig(session) {
+  const idUsuario  = session.userId ?? 1;
+  const ini        = initials(session.nome);
+  const perfilMeta = PERFIL_META[session.perfil] || { label: session.perfil };
+
+  let nome = session.nome, email = '—';
+  let u = null;
+  try { u = await apiFetch(`/usuarios/${idUsuario}`); }
+  catch (err) { console.warn('[config] usuário:', err.message || err); }
+  if (u) { nome = u.nome ?? nome; email = u.email ?? email; }
+
+  setHTML('cfg-avatar', ini);
+  setText('cfg-nome', nome);
+  setText('cfg-email', email);
+  setHTML('cfg-badge', badgePerfil(session.perfil));
+
+  const f = (id, v) => { const el = document.getElementById(id); if (el) el.value = v ?? '—'; };
+  f('field-nome', nome);
+  f('field-email', email);
+  f('field-perfil', perfilMeta.label);
+  f('field-id', String(idUsuario));
+}
+
+async function salvarPerfil() {
+  const session = getSession();
+  if (!session) { toast('Sessão expirada. Faça login novamente.', 'error'); return; }
+  const idUsuario = session.userId;
+
+  const nome  = document.getElementById('field-nome').value.trim();
+  const email = document.getElementById('field-email').value.trim();
+  if (!nome)  { toast('Nome é obrigatório.', 'error'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Formato de e-mail inválido.', 'error'); return; }
+
+  const btn = document.getElementById('btn-salvar-perfil');
+  if (btn) btn.disabled = true;
+
+  const res = await apiFetch(`/usuarios/${idUsuario}`, {
+    method: 'PUT',
+    body: JSON.stringify({ nome, email }),
+  });
+
+  if (btn) btn.disabled = false;
+
+  if (res) {
+    // Atualiza a sessão e o cabeçalho com os novos dados
+    const novaSessao = { ...session, nome: res.nome ?? nome };
+    sessionStorage.setItem('pulse_session', JSON.stringify(novaSessao));
+    if (localStorage.getItem('pulse_session')) {
+      localStorage.setItem('pulse_session', JSON.stringify(novaSessao));
+    }
+    setText('cfg-nome', res.nome ?? nome);
+    setText('cfg-email', res.email ?? email);
+    setHTML('cfg-avatar', initials(res.nome ?? nome));
+    const tn = document.getElementById('topbar-name');
+    if (tn) tn.textContent = res.nome ?? nome;
+    const ta = document.getElementById('topbar-avatar');
+    if (ta) ta.textContent = initials(res.nome ?? nome);
+    toast('Perfil atualizado com sucesso!', 'success');
+  } else {
+    toast('Não foi possível salvar. Verifique os dados (o e-mail pode já estar em uso).', 'error');
+  }
+}
+
+async function exportarCsv() {
+  try {
+    const res = await fetch(`${API}/export`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'jovens.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    toast('Exportação iniciada.', 'success');
+  } catch (err) {
+    toast('Não foi possível exportar agora.', 'error');
+  }
+}
+
+const ICON_MAP_ACTIVITY = {
+  jovem: { icon: 'user-plus', cls: '--green' }, categoria: { icon: 'tag', cls: '--blue' },
+  empregabilidade: { icon: 'briefcase', cls: '--orange' },
+  registro_acompanhamento: { icon: 'clipboard-list', cls: '--blue' },
+  frequencia_aula: { icon: 'calendar-check', cls: '--green' },
+  sessao_mentoria: { icon: 'message-square', cls: '--orange' },
+  ensino_superior: { icon: 'graduation-cap', cls: '--blue' },
+};
+const ACAO_LABEL_MAP = { INSERT: 'Novo registro', UPDATE: 'Atualização', DELETE: 'Remoção' };
+const TABELA_LABEL_MAP = {
+  jovem: 'Jovem', categoria: 'Categoria', empregabilidade: 'Empregabilidade',
+  registro_acompanhamento: 'Registro de acompanhamento', frequencia_aula: 'Frequência',
+  sessao_mentoria: 'Sessão de mentoria', ensino_superior: 'Ensino superior',
+};
+
+function renderActivityItems(items) {
+  const feed = document.getElementById('activity-feed');
+  if (!feed) return;
+  if (!items.length) {
+    feed.innerHTML = `
+      <div class="empty-feed">
+        <i data-lucide="inbox" width="24" height="24" style="display:block; margin:0 auto 8px;"></i>
+        Nenhuma atividade recente.
+      </div>
+    `;
+    lucide.createIcons();
+    return;
+  }
+  feed.innerHTML = items.map(a => {
+    const m   = ICON_MAP_ACTIVITY[a.tabela_afetada] || { icon: 'activity', cls: '--blue' };
+    const lbl = TABELA_LABEL_MAP[a.tabela_afetada] || a.tabela_afetada;
+    return `
+      <div class="activity-card activity-card${m.cls}">
+        <div class="activity-card__icon">
+          <i data-lucide="${m.icon}" width="16" height="16"></i>
+        </div>
+        <div class="activity-card__body">
+          <div class="activity-card__title">${escHtml(ACAO_LABEL_MAP[a.acao] || a.acao)} — ${escHtml(lbl)}</div>
+          <div class="activity-card__desc">Jovem ID ${escHtml(String(a.id_jovem_afetado ?? '—'))}</div>
+          <div class="activity-card__meta">
+            <i data-lucide="clock" width="11" height="11"></i>
+            ${fmtRelativo(a.data_hora)}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  lucide.createIcons();
+}
+
+async function renderActivity() {
+  let items;
+  try { items = await apiFetch('/historico?limit=10'); } catch (_) {}
+  renderActivityItems(Array.isArray(items) ? items : []);
+}
+
+// ── Bootstrap ──────────────────────────────────────────────────
+(async function init() {
+  lucide.createIcons();
+
+  const session = getSession();
+  if (session && session.userId && session.perfil) {
+    document.getElementById('app-shell').style.display    = '';
+    document.getElementById('login-screen').style.display = 'none';
+    renderDashboard(session);
+  } else {
+    document.getElementById('app-shell').style.display    = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    renderLogin();
+  }
+})();
+</script>
+</body>
+</html>

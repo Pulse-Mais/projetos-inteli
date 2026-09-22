@@ -1,0 +1,235 @@
+﻿/* Cabeçalho da página */
+.page-header {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+.page-header .voltar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-support);
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+.page-header .voltar-link:hover {
+  color: var(--color-primary);
+}
+
+.page-header .voltar-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Card principal */
+.dados-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 28px 32px;
+  margin-left: 48px;
+  margin-right: 48px;
+  margin-bottom: 28px;
+}
+
+/* Grid do perfil do aluno */
+.dados-aluno-grid {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Placeholder do avatar */
+.aluno-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-md);
+  background: rgba(37, 176, 87, 0.12);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.aluno-avatar svg {
+  width: 90px;
+  height: 90px;
+  color: rgba(37, 176, 87, 0.6);
+}
+
+/* Grid de campos readonly */
+.campos-readonly-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  align-content: start;
+}
+
+.campo-readonly {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.campo-readonly__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.campo-readonly__valor {
+  background: var(--color-gray);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  min-height: 40px;
+}
+
+/* Cabeçalho do histórico */
+.historico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.historico-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Tabela de histórico */
+.tabela-historico {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.tabela-historico thead tr {
+  background: var(--color-primary);
+}
+
+.tabela-historico th {
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 13px 18px;
+  text-align: left;
+}
+
+.tabela-historico td {
+  padding: 13px 18px;
+  font-size: 14px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tabela-historico tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela-historico tbody tr:hover td {
+  background: var(--color-gray);
+}
+
+/* Coluna de ações na tabela */
+.td-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+
+.btn-acao:hover {
+  background: rgba(0, 56, 112, 0.06);
+}
+
+.btn-acao svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.btn-acao--sm {
+  padding: 3px 8px;
+  font-size: 13px;
+  min-width: 28px;
+  justify-content: center;
+}
+
+.badge--presente { background: rgba(37,176,87,0.15); color: var(--color-accent); }
+.badge--ausente  { background: rgba(220,38,38,0.15); color: var(--color-danger); }
+
+/* Estado vazio na tabela */
+.historico-vazio {
+  text-align: center;
+  padding: 32px 20px;
+  font-size: 14px;
+  color: var(--color-text-support);
+}
+
+/* Rodapé do card */
+.acoes-rodape {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .dados-card,
+  .page-header {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .dados-aluno-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .campos-readonly-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tabela-historico th,
+  .tabela-historico td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720">
+  <rect width="1100" height="720" fill="#202020"/>
+  <rect x="18" y="18" width="1064" height="684" rx="8" fill="#262626" stroke="#444"/>
+  <text x="46" y="58" fill="#f2f2f2" font-family="Arial, sans-serif" font-size="25" font-weight="700">Endpoints</text>
+
+  <g font-family="Arial, sans-serif" font-size="21" fill="#eeeeee">
+    <g transform="translate(48 92)">
+      <text x="0" y="0" fill="#bdbdbd">⌄</text><text x="30" y="0">▢</text><text x="62" y="0">RF01</text>
+      <text x="72" y="38" fill="#8ab4f8" font-size="15" font-weight="700">PATCH</text><text x="142" y="38">Atualiza dados aluno</text>
+      <text x="72" y="72" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="72">Dados de um aluno</text>
+    </g>
+
+    <g transform="translate(48 198)">
+      <text x="0" y="0" fill="#bdbdbd">⌄</text><text x="30" y="0">▢</text><text x="62" y="0">RF02</text>
+      <text x="72" y="38" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="38">Informações de gestor</text>
+      <text x="72" y="72" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="72">Dados dos alunos do gestor</text>
+      <text x="72" y="106" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="106">Dados de um aluno para um gestor</text>
+    </g>
+
+    <rect x="32" y="326" width="500" height="34" fill="#28446d" stroke="#74a9ff" stroke-width="2"/>
+    <g transform="translate(48 350)">
+      <text x="0" y="0" fill="#bdbdbd">⌄</text><text x="30" y="0">▢</text><text x="62" y="0">RF03</text>
+      <text x="72" y="38" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="38">Dados de uma coordenadora</text>
+      <text x="72" y="72" fill="#83d8b0" font-size="15" font-weight="700">GET</text><text x="122" y="72">Alunos para uma coordenadora</text>
+      <text x="72" y="106" fill="#ffd166" font-size="15" font-weight="700">POST</text><text x="130" y="106">Registra frequência de um aluno</text>
+      <text x="72" y="140" fill="#8ab4f8" font-size="15" font-weight="700">PATCH</text><text x="142" y="140">Atualiza frequência de um aluno</text>
+    </g>
+
+    <g transform="translate(600 92)">
+      <text x="0" y="0" fill="#bdbdbd">›</text><text x="30" y="0">▢</text><text x="62" y="0">RF04</text>
+      <text x="0" y="44" fill="#bdbdbd">›</text><text x="30" y="44">▢</text><text x="62" y="44">RF05</text>
+      <text x="0" y="88" fill="#bdbdbd">›</text><text x="30" y="88">▢</text><text x="62" y="88">RF06</text>
+      <text x="0" y="132" fill="#bdbdbd">›</text><text x="30" y="132">▢</text><text x="62" y="132">RF07</text>
+      <text x="0" y="176" fill="#bdbdbd">›</text><text x="30" y="176">▢</text><text x="62" y="176">RF08</text>
+      <text x="0" y="220" fill="#bdbdbd">›</text><text x="30" y="220">▢</text><text x="62" y="220">RF09</text>
+      <text x="0" y="264" fill="#bdbdbd">›</text><text x="30" y="264">▢</text><text x="62" y="264">RF10</text>
+      <text x="0" y="308" fill="#bdbdbd">›</text><text x="30" y="308">▢</text><text x="62" y="308">RF11</text>
+      <text x="0" y="352" fill="#bdbdbd">›</text><text x="30" y="352">▢</text><text x="62" y="352">RF12</text>
+      <text x="0" y="396" fill="#bdbdbd">›</text><text x="30" y="396">▢</text><text x="62" y="396">RF13</text>
+      <text x="0" y="440" fill="#bdbdbd">›</text><text x="30" y="440">▢</text><text x="62" y="440">RF14</text>
+      <text x="0" y="484" fill="#bdbdbd">›</text><text x="30" y="484">▢</text><text x="62" y="484">RF15</text>
+      <text x="0" y="528" fill="#bdbdbd">›</text><text x="30" y="528">▢</text><text x="62" y="528">RF16</text>
+      <text x="0" y="572" fill="#bdbdbd">›</text><text x="30" y="572">▢</text><text x="62" y="572">RF17</text>
+    </g>
+  </g>
+
+  <rect x="585" y="65" width="2" height="610" fill="#3f3f3f"/>
+  <text x="48" y="678" fill="#bdbdbd" font-family="Arial, sans-serif" font-size="18">Testes individuais organizados por requisito funcional no Postman</text>
+</svg>

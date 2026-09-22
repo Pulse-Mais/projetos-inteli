@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Frequência</title>
+  <link rel="stylesheet" href="../css/frequencia.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Seção superior: avatar, nome e navegação -->
+    <div class="sidebar__top">
+      <a href="perfilCoordenador.html" class="sidebar__avatar-link" aria-label="Acessar Meu Perfil">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do coordenador">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepage.html" class="sidebar__link">Homepage</a>
+        <a href="alunos.html" class="sidebar__link ativo">Alunos</a>
+        <a href="dashboard.html" class="sidebar__link">Dashboard</a>
+        <a href="oportunidadesCoordenador.html" class="sidebar__link">Oportunidades</a>
+      </nav>
+    </div>
+
+    <!-- Espaçador flexível -->
+    <div class="sidebar__spacer"></div>
+
+    <!-- Seção inferior: logo e logout -->
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Frequência</h2>
+    </div>
+
+    <div class="page-header">
+      <a id="linkVoltarPerfil" href="perfilAluno.html" style="display:inline-flex; align-items:center; gap:6px; color:var(--color-text-support); font-size:13px; text-decoration:none; margin-bottom:12px;">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Voltar ao Perfil
+      </a>
+      <h1>Registro de Frequência</h1>
+      <p id="subtituloFrequencia">Aluna: Ana Beatriz — Conectadas 2025</p>
+    </div>
+
+    <div class="perfil-layout">
+      <section class="perfil-card">
+        
+        <!-- Cabeçalho de resumo de frequência -->
+        <div class="freq-header">
+          <div style="flex: 1; max-width: 400px;">
+            <p class="freq-label">Frequência média</p>
+            <p class="freq-percentual" id="percentualFreq">—%</p>
+            <div class="barra-progresso">
+              <div class="barra-progresso__fill" id="barraFreq" style="width:0%"></div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:13px; font-weight:600; color:var(--color-text-support); text-transform: uppercase;">Aulas registradas</p>
+            <p style="font-size:32px; font-weight:700; color:var(--color-primary); margin: 4px 0;" id="totalRegistradas">0</p>
+            <p style="font-size:12px; color:var(--color-text-support);">de <span id="totalAulas">0</span> aulas</p>
+          </div>
+        </div>
+
+        <!-- Lista de aulas -->
+        <div style="margin-top: 32px;">
+          <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+            <h3 style="font-size:14px; font-weight:700; color:var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em;">Lista de Aulas</h3>
+            <div class="form-group" style="min-width:260px; margin-bottom:0;">
+              <label for="selectCurso">Curso</label>
+              <select id="selectCurso" class="combo-busca" disabled>
+                <option value="">Carregando programa do aluno...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="lista-aulas" id="listaAulas">
+            <p class="estado-carregando">Selecione um curso para ver as aulas.</p>
+          </div>
+        </div>
+
+        <!-- Rodapé com botão salvar -->
+        <div class="frequencia-footer">
+          <button class="btn btn--accent" id="btnSalvar" style="min-width: 200px; justify-content: center;">
+            Salvar Frequência
+          </button>
+        </div>
+
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/comboBox.js"></script>
+<script src="../js/frequencia.js"></script>
+</body>
+</html>

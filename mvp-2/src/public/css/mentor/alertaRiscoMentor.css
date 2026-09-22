@@ -1,0 +1,280 @@
+/* ============================================================
+   alertaRiscoMentor.css — Estilos específicos do Alerta de Risco
+   Layout base: mentor-layout.css
+   ============================================================ */
+
+/* ---------------- Heading card ---------------- */
+.risk-heading-card {
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.risk-heading-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--radius-md);
+  background: var(--destructive-soft);
+  color: var(--destructive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ---------------- Student summary ---------------- */
+.student-summary-card {
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.student-avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.student-summary-card h2 {
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--space-1);
+}
+
+.student-summary-card p {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* ---------------- Section title ---------------- */
+.section-title {
+  margin: var(--space-2) 0 var(--space-5);
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ---------------- Risk grid ---------------- */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+.risk-metric-card {
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.risk-metric-card h3 {
+  margin: 0 0 var(--space-4);
+  color: var(--foreground);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.risk-metric-card p,
+.risk-metric-card small {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.risk-metric-card small {
+  display: block;
+  margin-top: var(--space-4);
+}
+
+/* Attendance bar */
+.attendance-row {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.attendance-track {
+  height: 13px;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  overflow: hidden;
+}
+
+.attendance-track span {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  display: block;
+}
+
+.attendance-row strong {
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Pending count */
+.pending-value {
+  color: var(--primary);
+  display: block;
+  font-size: 50px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  margin-top: var(--space-2);
+}
+
+/* ---------------- Actions ---------------- */
+.risk-actions {
+  margin-top: var(--space-5);
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* ---------------- Escalation card ---------------- */
+.escalation-card {
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.escalation-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.escalation-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.escalation-card h2 {
+  margin: 0 0 var(--space-1);
+  color: var(--foreground);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.escalation-card-desc {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.escalation-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-background);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.escalation-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.escalation-textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+.escalation-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-3);
+  gap: var(--space-3);
+}
+
+.escalation-char-count {
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+}
+
+.escalation-feedback {
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.escalation-feedback[hidden] { display: none; }
+
+.escalation-feedback.is-success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.escalation-feedback.is-error {
+  background: var(--destructive-soft);
+  color: var(--destructive);
+  border: 1px solid var(--destructive);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 800px) {
+  .risk-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .risk-heading-card,
+  .student-summary-card,
+  .escalation-card { padding: var(--space-5); }
+  .risk-actions { flex-direction: column; }
+  .risk-actions .btn { width: 100%; justify-content: center; }
+}

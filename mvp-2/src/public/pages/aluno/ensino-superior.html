@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil · Pulsar</title>
+
+  <link rel="stylesheet" href="../../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-ensinoSuperior.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-empregabilidade.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-perfil.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <div class="shell">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <button class="sidebar-toggle" id="sidebar-toggle-btn"
+                aria-label="Fixar menu expandido" title="Fixar menu">
+          <i data-lucide="panel-left"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+
+        <a href="dashboard.html" class="sidebar-item" title="Dashboard">
+          <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+          <span class="sidebar-item-label">Dashboard</span>
+        </a>
+
+        <a href="perfil.html" class="sidebar-item" title="Meu Perfil">
+          <span class="sidebar-item-icon"><i data-lucide="user"></i></span>
+          <span class="sidebar-item-label">Meu Perfil</span>
+        </a>
+
+        <a href="oportunidades.html" class="sidebar-item" title="Oportunidades">
+          <span class="sidebar-item-icon"><i data-lucide="history"></i></span>
+          <span class="sidebar-item-label">Oportunidades</span>
+        </a>
+
+        <a href="empregabilidade.html" class="sidebar-item" title="Empregabilidade">
+          <span class="sidebar-item-icon"><i data-lucide="briefcase"></i></span>
+          <span class="sidebar-item-label">Empregabilidade</span>
+        </a>
+
+        <a href="ensino-superior.html" class="sidebar-item is-active"
+           aria-current="page" title="Ensino Superior">
+          <span class="sidebar-item-icon"><i data-lucide="graduation-cap"></i></span>
+          <span class="sidebar-item-label">Ensino Superior</span>
+          <span class="sidebar-item-bar" aria-hidden="true"></span>
+        </a>
+
+      </nav>
+    </aside>
+    <!-- /SIDEBAR -->
+
+    <!-- ===== SHELL MAIN ===== -->
+    <div class="shell-main">
+
+      <!-- HEADER / TOPBAR -->
+      <header class="topbar">
+        <a class="topbar-logo" href="dashboard.html">
+          <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+        </a>
+        <div class="topbar-spacer"></div>
+
+        <div class="topbar-actions">
+          <div class="avatar-menu" id="avatar-menu">
+            <button class="avatar-trigger" id="avatar-trigger"
+                    aria-haspopup="menu" aria-expanded="false">
+              <span class="avatar">
+                <i data-lucide="user"></i>
+              </span>
+              <span class="avatar-meta">
+                <span class="avatar-name"></span>
+                <span class="avatar-role"></span>
+              </span>
+              <i data-lucide="chevron-down" class="avatar-chevron"></i>
+            </button>
+
+            <div class="avatar-dropdown" role="menu" hidden>
+              <a class="dropdown-item" role="menuitem" href="perfil.html">
+                <i data-lucide="user"></i> Meu perfil
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item is-danger" role="menuitem" href="#">
+                <i data-lucide="log-out"></i> Sair
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- /HEADER -->
+
+      <!-- CONTENT -->
+          <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+        <div class="shell-container">
+
+          <!-- CARD PRINCIPAL DO ALUNO -->
+          <div class="card">
+
+            <!-- HERO -->
+            <section class="hero">
+              <div class="hero-body">
+                <h1 class="hero-title">Status de Ensino Superior</h1>
+                <div class="hero-badges">
+                  <span class="badge badge-success" id="es-status-badge" hidden></span>
+                  <span class="badge badge-warning" id="es-pendencias-badge" style="display:none">— Pendências</span>
+                </div>
+              </div>
+            </section>
+            <!-- /HERO -->
+
+            <!-- BOTÕES DE AÇÃO -->
+            <div class="grid-3 mt-6">
+              <button class="btn btn-secondary btn-block" id="btn-es-editar">
+                <i data-lucide="edit"></i> Editar informações
+              </button>
+              <button class="btn btn-success btn-block" id="btn-verificar-status">
+                <i data-lucide="check-circle"></i> Verificar Status
+              </button>
+              <button class="btn btn-warning btn-block" id="btn-pendencias">
+                <i data-lucide="alert-triangle"></i> Pendências
+              </button>
+            </div>
+            <!-- /BOTÕES -->
+
+            <!-- FORMULÁRIO DE EDIÇÃO DE ENSINO SUPERIOR (oculto por padrão) -->
+            <form id="es-form" hidden class="mt-6">
+              <div class="cert-form-grid">
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-curso">Curso:</label>
+                  <input class="info-field-input" id="es-input-curso" type="text" placeholder="Ex: Análise e Desenvolvimento de Sistemas" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-inst">Instituição:</label>
+                  <input class="info-field-input" id="es-input-inst" type="text" placeholder="Ex: FATEC" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-status">Status:</label>
+                  <select class="info-field-input" id="es-input-status">
+                    <option value="">Selecione...</option>
+                    <option value="Cursando">Cursando</option>
+                    <option value="Trancado">Trancado</option>
+                    <option value="Concluido">Concluído</option>
+                    <option value="Desistente">Desistente</option>
+                  </select>
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-bolsa">Modalidade de Bolsa:</label>
+                  <select class="info-field-input" id="es-input-bolsa">
+                    <option value="">Selecione...</option>
+                    <option value="Integral">Integral</option>
+                    <option value="Parcial">Parcial</option>
+                    <option value="ProUni">ProUni</option>
+                    <option value="FIES">FIES</option>
+                    <option value="Institucional">Institucional</option>
+                    <option value="Sem_bolsa">Sem bolsa</option>
+                    <option value="Outra">Outra</option>
+                  </select>
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-semestre">Semestre Atual:</label>
+                  <input class="info-field-input" id="es-input-semestre" type="text" placeholder="Ex: 3° Semestre" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-matricula">Número de Matrícula:</label>
+                  <input class="info-field-input" id="es-input-matricula" type="text" placeholder="Ex: 202400123" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-inicio">Data de Início:</label>
+                  <input class="info-field-input" id="es-input-inicio" type="date" data-date-limit="past" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="es-input-conclusao">Data de Conclusão (prevista):</label>
+                  <input class="info-field-input" id="es-input-conclusao" type="date" />
+                </div>
+              </div>
+              <p class="perfil-form-erro" id="es-erro" hidden></p>
+              <div class="perfil-form-actions">
+                <button type="submit" class="btn btn-primary" id="es-btn-salvar">Salvar</button>
+                <button type="button" class="btn btn-ghost" id="es-btn-cancelar">Cancelar</button>
+              </div>
+            </form>
+            <!-- /FORMULÁRIO DE EDIÇÃO -->
+
+            <!-- PAINEL DE STATUS (oculto por padrão) -->
+            <div class="status-detail" id="status-detail" hidden>
+              <div class="status-detail-header">
+                <h3 class="status-detail-title">
+                  <i data-lucide="info"></i> Resumo do Status
+                </h3>
+                <button class="status-detail-close" id="btn-fechar-status" aria-label="Fechar">
+                  <i data-lucide="x"></i>
+                </button>
+              </div>
+              <div class="status-detail-grid">
+                <div class="status-detail-item">
+                  <span class="status-detail-label">Status</span>
+                  <span class="status-detail-value" id="sd-status">—</span>
+                </div>
+                <div class="status-detail-item">
+                  <span class="status-detail-label">Curso</span>
+                  <span class="status-detail-value" id="sd-curso">—</span>
+                </div>
+                <div class="status-detail-item">
+                  <span class="status-detail-label">Instituição</span>
+                  <span class="status-detail-value" id="sd-instituicao">—</span>
+                </div>
+                <div class="status-detail-item">
+                  <span class="status-detail-label">Semestre</span>
+                  <span class="status-detail-value" id="sd-semestre">—</span>
+                </div>
+                <div class="status-detail-item">
+                  <span class="status-detail-label">Bolsa</span>
+                  <span class="status-detail-value" id="sd-bolsa">—</span>
+                </div>
+              </div>
+              <div class="status-detail-disciplinas">
+                <span class="status-detail-label">Disciplinas</span>
+                <div class="status-disc-row">
+                  <span class="disc-chip is-success" id="sd-disc-aprovadas">0 aprovadas</span>
+                  <span class="disc-chip is-warning" id="sd-disc-andamento">0 em andamento</span>
+                  <span class="disc-chip is-danger"  id="sd-disc-reprovadas">0 reprovadas</span>
+                </div>
+              </div>
+            </div>
+            <!-- /PAINEL DE STATUS -->
+
+            <!-- PAINEL DE PENDÊNCIAS (oculto por padrão) -->
+            <div class="status-detail pend-detail" id="pend-detail" hidden>
+              <div class="status-detail-header">
+                <h3 class="status-detail-title">
+                  <i data-lucide="alert-triangle"></i> Pendências
+                </h3>
+                <button class="status-detail-close" id="btn-fechar-pend" aria-label="Fechar">
+                  <i data-lucide="x"></i>
+                </button>
+              </div>
+              <div id="pend-list">
+                <p class="pend-loading">Carregando...</p>
+              </div>
+            </div>
+            <!-- /PAINEL DE PENDÊNCIAS -->
+
+            <!-- STAT CARDS -->
+            <div class="grid-2 mt-6">
+              <div class="stat-card is-success">
+                <div class="stat-icon">
+                  <i data-lucide="calendar"></i>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-label">Semestre Atual</span>
+                  <span class="stat-value" id="es-semestre">—</span>
+                </div>
+              </div>
+              <div class="stat-card is-warning">
+                <div class="stat-icon">
+                  <i data-lucide="graduation-cap"></i>
+                </div>
+                <div class="stat-body">
+                  <span class="stat-label">Disciplinas Ativas</span>
+                  <span class="stat-value" id="es-disciplinas-count">—</span>
+                </div>
+              </div>
+            </div>
+            <!-- /STAT CARDS -->
+
+            <!-- INFO ROWS -->
+            <div class="mt-6">
+              <div class="info-row">
+                <span class="info-row-label">Número da Matrícula:</span>
+                <span class="info-row-value" id="es-matricula">—</span>
+              </div>
+              <div class="info-row">
+                <span class="info-row-icon"><i data-lucide="graduation-cap"></i></span>
+                <span class="info-row-label">Curso:</span>
+                <span class="info-row-value" id="es-curso">—</span>
+              </div>
+              <div class="info-row">
+                <span class="info-row-icon"><i data-lucide="map-pin"></i></span>
+                <span class="info-row-label">Instituição:</span>
+                <span class="info-row-value" id="es-instituicao">—</span>
+              </div>
+            </div>
+            <!-- /INFO ROWS -->
+
+          </div><!-- /card -->
+
+          <!-- SEÇÃO: HISTÓRICO + CERTIFICADOS -->
+          <div class="row mt-8">
+
+            <!-- HISTÓRICO ACADÊMICO -->
+            <div class="list-card">
+              <div class="list-card-header">
+                <h2 class="list-card-title">Disciplinas:</h2>
+                <button class="btn btn-primary btn-sm" id="btn-add-disc">
+                  <i data-lucide="plus"></i> Adicionar
+                </button>
+              </div>
+
+              <!-- FORMULÁRIO NOVA DISCIPLINA -->
+              <form id="disc-form" hidden>
+                <div class="cert-form-grid">
+                  <div class="info-field">
+                    <label class="info-field-label" for="disc-nome">Nome da disciplina:</label>
+                    <input class="info-field-input" id="disc-nome" type="text" placeholder="Ex: Cálculo I" />
+                  </div>
+                  <div class="info-field">
+                    <label class="info-field-label" for="disc-status">Status:</label>
+                    <select class="info-field-input" id="disc-status">
+                      <option value="">Selecione...</option>
+                      <option value="Em_andamento">Cursando</option>
+                      <option value="Aprovado">Aprovado</option>
+                      <option value="Reprovado">Reprovado</option>
+                      <option value="Trancado">Trancado</option>
+                    </select>
+                  </div>
+                  <div class="info-field">
+                    <label class="info-field-label" for="disc-semestre">Semestre:</label>
+                    <input class="info-field-input" id="disc-semestre" type="number" min="1" max="20" placeholder="Ex: 3" />
+                  </div>
+                </div>
+                <p class="perfil-form-erro" id="disc-erro" hidden></p>
+                <div class="perfil-form-actions">
+                  <button type="submit" class="btn btn-primary" id="disc-btn-salvar">Salvar</button>
+                  <button type="button" class="btn btn-ghost" id="disc-btn-cancelar">Cancelar</button>
+                </div>
+              </form>
+
+              <div class="list-card-body" id="es-historico-list">
+                <div class="list-item"><span>Carregando...</span></div>
+              </div>
+            </div>
+            <!-- /HISTÓRICO -->
+
+            <!-- CERTIFICADOS -->
+            <div class="list-card">
+              <div class="list-card-header">
+                <h2 class="list-card-title">Certificados:</h2>
+                <button class="btn btn-primary btn-sm" id="btn-add-cert">
+                  <i data-lucide="plus"></i> Adicionar
+                </button>
+              </div>
+
+              <!-- FORMULÁRIO NOVO CERTIFICADO -->
+              <form id="cert-form" hidden>
+                <div class="cert-form-grid">
+                  <div class="info-field">
+                    <label class="info-field-label" for="cert-nome">Nome do certificado:</label>
+                    <input class="info-field-input" id="cert-nome" type="text" placeholder="Ex: Excel Avançado" />
+                  </div>
+                  <div class="info-field">
+                    <label class="info-field-label" for="cert-inst">Instituição:</label>
+                    <input class="info-field-input" id="cert-inst" type="text" placeholder="Ex: Senac" />
+                  </div>
+                  <div class="info-field">
+                    <label class="info-field-label" for="cert-data">Data de conclusão:</label>
+                    <input class="info-field-input" id="cert-data" type="date" data-date-limit="past" />
+                  </div>
+                  <div class="info-field">
+                    <label class="info-field-label" for="cert-link">Link do documento (opcional):</label>
+                    <input class="info-field-input" id="cert-link" type="url" placeholder="https://..." />
+                  </div>
+                </div>
+                <p class="perfil-form-erro" id="cert-erro" hidden></p>
+                <div class="perfil-form-actions">
+                  <button type="submit" class="btn btn-primary" id="cert-btn-salvar">Salvar</button>
+                  <button type="button" class="btn btn-ghost" id="cert-btn-cancelar">Cancelar</button>
+                </div>
+              </form>
+
+              <div class="list-card-body" id="es-certificados-list">
+                <div class="list-item"><span>Carregando...</span></div>
+              </div>
+            </div>
+            <!-- /CERTIFICADOS -->
+
+          </div><!-- /row -->
+
+        </div><!-- /shell-container -->
+      </main>
+      <!-- /CONTENT -->
+
+    </div><!-- /shell-main -->
+
+
+  </div><!-- /shell -->
+
+  <!-- MODAL EDIÇÃO CERTIFICADO -->
+  <div class="perfil-modal-overlay" id="edit-cert-modal" aria-modal="true" role="dialog">
+    <div class="perfil-modal" style="max-width:480px">
+      <div class="perfil-modal-header">
+        <h2 class="perfil-modal-title">Editar Certificado</h2>
+        <button class="perfil-modal-close" id="edit-cert-close" aria-label="Fechar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="perfil-modal-body">
+        <form id="edit-cert-form">
+          <div class="info-field">
+            <label class="info-field-label" for="edit-cert-nome">Nome:</label>
+            <input class="info-field-input" id="edit-cert-nome" type="text" />
+          </div>
+          <div class="info-field">
+            <label class="info-field-label" for="edit-cert-inst">Instituição:</label>
+            <input class="info-field-input" id="edit-cert-inst" type="text" />
+          </div>
+          <div class="info-field">
+            <label class="info-field-label" for="edit-cert-data">Data de conclusão:</label>
+            <input class="info-field-input" id="edit-cert-data" type="date" data-date-limit="past" />
+          </div>
+          <div class="info-field">
+            <label class="info-field-label" for="edit-cert-link">Link do documento:</label>
+            <input class="info-field-input" id="edit-cert-link" type="url" placeholder="https://..." />
+          </div>
+          <p class="perfil-form-erro" id="edit-cert-erro" hidden></p>
+          <div class="perfil-form-actions" style="justify-content:space-between">
+            <button type="button" class="btn btn-ghost" style="color:var(--danger,#e53e3e)" id="edit-cert-excluir">
+              <i data-lucide="trash-2"></i> Excluir
+            </button>
+            <div style="display:flex;gap:var(--space-3,0.75rem)">
+              <button type="submit" class="btn btn-primary" id="edit-cert-salvar">Salvar</button>
+              <button type="button" class="btn btn-ghost" id="edit-cert-cancelar">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /MODAL -->
+
+  <!-- MODAL EDIÇÃO DISCIPLINA -->
+  <div class="perfil-modal-overlay" id="edit-disc-modal" aria-modal="true" role="dialog">
+    <div class="perfil-modal" style="max-width:480px">
+      <div class="perfil-modal-header">
+        <h2 class="perfil-modal-title">Editar Disciplina</h2>
+        <button class="perfil-modal-close" id="edit-disc-close" aria-label="Fechar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="perfil-modal-body">
+        <form id="edit-disc-form">
+          <div class="info-field">
+            <label class="info-field-label" for="edit-disc-nome">Nome:</label>
+            <input class="info-field-input" id="edit-disc-nome" type="text" />
+          </div>
+          <div class="info-field">
+            <label class="info-field-label" for="edit-disc-status">Status:</label>
+            <select class="info-field-input" id="edit-disc-status">
+              <option value="">Selecione...</option>
+              <option value="Em_andamento">Cursando</option>
+              <option value="Aprovado">Aprovado</option>
+              <option value="Reprovado">Reprovado</option>
+              <option value="Trancado">Trancado</option>
+            </select>
+          </div>
+          <div class="info-field">
+            <label class="info-field-label" for="edit-disc-semestre">Semestre:</label>
+            <input class="info-field-input" id="edit-disc-semestre" type="number" min="1" max="20" />
+          </div>
+          <p class="perfil-form-erro" id="edit-disc-erro" hidden></p>
+          <div class="perfil-form-actions" style="justify-content:space-between">
+            <button type="button" class="btn btn-ghost" style="color:var(--danger,#e53e3e)" id="edit-disc-excluir">
+              <i data-lucide="trash-2"></i> Excluir
+            </button>
+            <div style="display:flex;gap:var(--space-3,0.75rem)">
+              <button type="submit" class="btn btn-primary" id="edit-disc-salvar">Salvar</button>
+              <button type="button" class="btn btn-ghost" id="edit-disc-cancelar">Cancelar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /MODAL DISCIPLINA -->
+
+  <script src="../../js/api.js"></script>
+<script src="../../js/dateLimits.js"></script>
+  <script src="../../js/mainJovem.js"></script>
+  <script src="../../js/aluno/ensinoSuperior.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

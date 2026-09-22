@@ -1,0 +1,1769 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos e Programas — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+/* ============================================================
+   Pulse Control — Design System Universal (inline)
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Poppins', sans-serif; }
+
+:root {
+  --brand-dark:   #003870;
+  --brand-green:  #33B458;
+  --brand-yellow: #FFD927;
+  --navy:         #0A1628;
+  --slate:        #4A5568;
+  --muted:        #8B95A1;
+  --bg:           #F4F6F8;
+  --white:        #FFFFFF;
+  --border:       #E2E8F0;
+  --green-badge-bg:   #EAF3DE;
+  --green-badge-text: #2A9447;
+  --green-card-border:#C6E8B3;
+  --blue-btn:     #3182CE;
+  --blue-light:   #E6F1FB;
+  --blue-mid:     #B5D4F4;
+  --blue-border:  #85B7EB;
+  --yellow-text:  #7A5A0F;
+  --orange-light: #FAEEDA;
+  --orange-text:  #BA7517;
+  --orange-border:#F0DDB7;
+  --error-bg:     #FAECE7;
+  --error-text:   #D85A30;
+  --error-border: #F3C4B5;
+  --sidebar-w: 80px;
+  --topbar-h:  56px;
+}
+
+/* ── App shell ─────────────────────────────────────────────── */
+.app  { display: flex; height: 100vh; overflow: hidden; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── Sidebar ───────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w); min-width: var(--sidebar-w);
+  background: var(--brand-dark);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0; z-index: 100; overflow: hidden;
+  transition: width .25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar:hover { width: 220px; }
+.sidebar__logo {
+  width: 100%; height: var(--topbar-h);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.12); flex-shrink: 0;
+}
+.sidebar__logo-text { color: var(--white); font-weight: 700; font-size: 13px; letter-spacing: .5px; }
+.sidebar__nav {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: stretch; padding: 16px 0; gap: 4px; width: 100%;
+}
+.sidebar__nav-item {
+  width: 100%; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0; gap: 0;
+  border-radius: 10px; color: rgba(255,255,255,0.55);
+  cursor: pointer; transition: background .15s, color .15s;
+  text-decoration: none; position: relative;
+}
+.sidebar:hover .sidebar__nav-item {
+  justify-content: flex-start; padding: 0 16px; gap: 12px;
+}
+.sidebar__nav-label {
+  font-size: 13px; font-weight: 500; white-space: nowrap;
+  opacity: 0; width: 0; overflow: hidden;
+  transition: opacity .15s ease .05s;
+}
+.sidebar:hover .sidebar__nav-label { opacity: 1; width: auto; }
+.sidebar__nav-item:hover  { background: rgba(255,255,255,0.1);  color: var(--white); }
+.sidebar__nav-item.active { background: rgba(255,255,255,0.15); color: var(--white); }
+.sidebar__nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%); width: 3px; height: 24px;
+  background: var(--brand-yellow); border-radius: 0 2px 2px 0;
+}
+.sidebar__bottom { padding: 16px 0; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+.sidebar__avatar-mini {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--brand-yellow);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; color: var(--navy); cursor: pointer;
+}
+
+/* ── Topbar ────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h); min-height: var(--topbar-h);
+  background: var(--white); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 24px; gap: 16px; z-index: 50;
+}
+.topbar__breadcrumb { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.topbar__breadcrumb span { color: var(--navy); font-weight: 500; }
+.topbar__search { flex: 1; max-width: 480px; margin: 0 auto; position: relative; }
+.topbar__search input {
+  width: 100%; height: 34px; background: var(--bg);
+  border: none; border-radius: 8px; padding: 0 12px 0 36px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--navy); outline: none;
+}
+.topbar__search input::placeholder { color: var(--muted); }
+.topbar__search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.topbar__actions { display: flex; align-items: center; gap: 12px; }
+.topbar__icon-btn {
+  width: 34px; height: 34px; border-radius: 8px; border: none;
+  background: transparent; color: var(--slate);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s;
+}
+.topbar__icon-btn:hover { background: var(--bg); }
+.topbar__user { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: background .15s; }
+.topbar__user:hover { background: var(--bg); }
+.topbar__user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--brand-yellow);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: var(--navy);
+}
+.topbar__user-name { font-size: 13px; font-weight: 500; color: var(--navy); }
+
+/* ── Content ───────────────────────────────────────────────── */
+.content {
+  flex: 1; overflow-y: auto; background: var(--bg);
+  padding: 24px; display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── Card ──────────────────────────────────────────────────── */
+.card { background: var(--white); border-radius: 12px; padding: 20px 24px; border: 1px solid var(--border); }
+
+/* ── Section header ────────────────────────────────────────── */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-size: 14px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+.section-title i { color: var(--brand-dark); }
+
+/* ── Badges ────────────────────────────────────────────────── */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge--yellow     { background: var(--brand-yellow);    color: var(--navy); }
+.badge--green      { background: var(--brand-green);     color: var(--navy); }
+.badge--green-soft { background: var(--green-badge-bg);  color: var(--green-badge-text); }
+.badge--blue       { background: var(--blue-light);      color: var(--blue-btn); }
+.badge--red        { background: var(--error-bg);        color: var(--error-text); }
+.badge--orange     { background: var(--orange-light);    color: var(--orange-text); }
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+  border-radius: 8px; font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 600; line-height: 1.0;
+  cursor: pointer; border: none; transition: opacity .15s, background .15s; text-decoration: none;
+}
+.btn:hover          { opacity: .88; }
+.btn--primary       { background: var(--brand-yellow); color: var(--navy); }
+.btn--blue          { background: var(--blue-btn);     color: var(--white); }
+.btn--outline       { background: transparent; color: var(--navy);  border: 1px solid var(--border); }
+.btn--danger        { background: #DC2626; color: var(--white); }
+.btn--sm            { font-size: 12px; padding: 6px 12px; }
+
+/* ── Toast ─────────────────────────────────────────────────── */
+#toast-container { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 8px; z-index: 9999; }
+.toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; background: var(--navy); color: var(--white); font-size: 13px; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,.2); animation: slideIn .2s ease; max-width: 320px; }
+.toast--success { background: #166534; }
+.toast--error   { background: #991b1b; }
+@keyframes slideIn { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes spin    { from { transform: rotate(0deg); }  to   { transform: rotate(360deg); } }
+
+/* ── Info field (detalhe modal) ────────────────────────────── */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+.info-field { margin-bottom: 14px; }
+.info-field__label { font-size: 12px; color: var(--muted); margin-bottom: 2px; font-weight: 500; text-transform: uppercase; letter-spacing: .4px; }
+.info-field__value { font-size: 14px; font-weight: 400; line-height: 1.5; color: var(--navy); display: flex; align-items: center; gap: 6px; }
+
+/* ── Utilities ─────────────────────────────────────────────── */
+.hidden     { display: none !important; }
+.text-sm    { font-size: 12px; }
+.text-muted { color: var(--muted); }
+
+/* ── Empty state ───────────────────────────────────────────── */
+.empty-state { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px 0; color: var(--muted); font-size: 13px; }
+
+/* ══════════════════════════════════════════════════════════════
+   ESTILOS ESPECÍFICOS — Programas & Eventos
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Filter tabs ───────────────────────────────────────────── */
+.filter-tabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.filter-tab {
+  padding: 5px 14px; border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--white); color: var(--slate);
+  font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+}
+.filter-tab:hover  { background: var(--bg); }
+.filter-tab.active { background: var(--brand-dark); color: var(--white); border-color: var(--brand-dark); font-weight: 600; }
+
+/* ── Program card ──────────────────────────────────────────── */
+.program-card {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.program-card:last-child { border-bottom: none; padding-bottom: 0; }
+.program-card:first-child { padding-top: 0; }
+
+.program-card__icon {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  background: var(--blue-mid); color: var(--blue-btn);
+  display: flex; align-items: center; justify-content: center;
+}
+.program-card__body { flex: 1; min-width: 0; }
+.program-card__name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.program-card__desc { font-size: 13px; color: var(--slate); line-height: 1.5; margin-bottom: 6px; }
+.program-card__indicators {
+  font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-bottom: 10px;
+}
+.program-card__actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+/* ── Event card ────────────────────────────────────────────── */
+.event-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--white);
+  cursor: pointer; transition: box-shadow .15s, border-color .15s;
+  margin-bottom: 10px;
+}
+.event-card:last-child { margin-bottom: 0; }
+.event-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,.07); border-color: var(--blue-mid); }
+
+.event-card__thumb {
+  width: 6px; min-width: 6px; align-self: stretch;
+  border-radius: 3px; background: var(--blue-mid);
+}
+.event-card__thumb--workshop  { background: var(--blue-mid); }
+.event-card__thumb--mentoria  { background: var(--green-card-border); }
+.event-card__thumb--pulsetalk { background: var(--orange-border); }
+.event-card__thumb--hackathon { background: var(--error-border); }
+
+.event-card__body { flex: 1; min-width: 0; }
+.event-card__title { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.event-card__badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+.event-card__meta { font-size: 12px; color: var(--slate); display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+.event-card__sub  { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+
+.event-card__arrow { color: var(--muted); flex-shrink: 0; }
+
+/* ── Modal ─────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10, 22, 40, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 16px;
+}
+.modal {
+  background: var(--white); border-radius: 14px;
+  width: 100%; max-width: 560px; max-height: 90vh;
+  overflow-y: auto; padding: 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+}
+.modal__header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.modal__title { font-size: 16px; font-weight: 700; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+.modal__close {
+  width: 32px; height: 32px; border-radius: 8px; border: none;
+  background: var(--bg); color: var(--slate);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .15s; flex-shrink: 0;
+}
+.modal__close:hover { background: var(--border); }
+.modal__footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* ── Form ──────────────────────────────────────────────────── */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.form-group:last-child { margin-bottom: 0; }
+.form-row .form-group { margin-bottom: 0; }
+.form-group label { font-size: 12px; font-weight: 600; color: var(--navy); }
+.required { color: var(--error-text); }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  height: 38px; padding: 0 12px;
+  border: 1px solid var(--border); border-radius: 8px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--navy);
+  background: var(--white); outline: none;
+  transition: border-color .15s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--blue-btn); box-shadow: 0 0 0 3px rgba(49,130,206,0.12); }
+.form-group textarea { height: 80px; padding: 10px 12px; resize: vertical; }
+.form-group select   { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238B95A1' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.input--error { border-color: var(--error-text) !important; }
+
+.form-group__error { font-size: 11px; color: var(--error-text); display: none; }
+.form-group__error.visible { display: block; }
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 599px) {
+  .app { flex-direction: column; }
+  .sidebar { order: 2; width: 100%; min-width: 100%; height: var(--topbar-h); flex-direction: row; position: sticky; bottom: 0; z-index: 100; padding: 0 4px; border-top: 1px solid rgba(255,255,255,0.1); }
+  .sidebar__logo { display: none; }
+  .sidebar__nav  { flex-direction: row; flex: 1; padding: 0; justify-content: space-around; align-items: center; }
+  .sidebar__nav-item { width: 44px; height: 44px; }
+  .sidebar__nav-item.active::before { display: none; }
+  .sidebar__nav-item.active::after  { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--brand-yellow); }
+  .sidebar__bottom { flex-direction: row; padding: 0 4px; align-items: center; gap: 0; }
+  .main { order: 1; }
+  .topbar { padding: 0 12px; gap: 8px; }
+  .topbar__search { display: none; }
+  .topbar__user-name { display: none; }
+  .topbar__actions { gap: 4px; }
+  .content { padding: 12px; gap: 12px; }
+  .card { padding: 14px 16px; }
+  .section-header { flex-wrap: wrap; gap: 8px; }
+  .form-row { grid-template-columns: 1fr; }
+  .event-card { padding: 10px 12px; }
+  .modal { padding: 16px; }
+  #toast-container { left: 12px; right: 12px; bottom: calc(var(--topbar-h) + 10px); }
+  .toast { max-width: 100%; }
+}
+
+@media (max-width: 400px) {
+  .content { padding: 10px; gap: 10px; }
+  .card { padding: 12px 14px; }
+  .badge { padding: 2px 8px; font-size: 10px; }
+  .btn { padding: 7px 12px; font-size: 12px; }
+  .btn--sm { padding: 5px 10px; font-size: 11px; }
+}
+  </style>
+  <script src="lucide.min.js"></script>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- ── Sidebar (cópia exata de perfil-coordenador.html) ──────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav">
+      <a href="dashboard.html"          class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html"             class="sidebar__nav-item" title="Alunos">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html"         class="sidebar__nav-item" title="Relatórios">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html"          class="sidebar__nav-item active" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item" id="sidebar-nav-mentoria" title="Mentoria">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ──────────────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Eventos e Programas</span>
+      </div>
+
+      <div class="topbar__actions">
+        <a class="topbar__user" id="topbar-user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Área de conteúdo -->
+    <main class="content">
+
+      <!-- ══════════════════════════════════════════════════════════
+           SEÇÃO — PROGRAMAS
+           ══════════════════════════════════════════════════════════ -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="book-open" width="16" height="16"></i>
+            Programas
+          </h2>
+          <button class="btn btn--primary btn--sm" onclick="openModal()">
+            <i data-lucide="plus" width="14" height="14"></i>
+            Novo Programa
+          </button>
+        </div>
+
+        <!-- Lista de programas — renderizada via JS -->
+        <div class="programs-list" id="programs-list">
+          <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+            <i data-lucide="loader-2" width="16" height="16"
+               style="animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></i>
+            Carregando programas...
+          </div>
+        </div>
+
+        <div id="programs-empty" class="empty-state hidden">
+          <i data-lucide="book-open" width="32" height="32"></i>
+          Nenhum programa encontrado.
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════
+           SEÇÃO — EVENTOS
+           ══════════════════════════════════════════════════════════ -->
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">
+            <i data-lucide="calendar" width="16" height="16"></i>
+            Eventos
+          </h2>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span class="text-sm text-muted" id="events-count">—</span>
+            <button class="btn btn--primary btn--sm" onclick="openEventModal()">
+              <i data-lucide="plus" width="14" height="14"></i>
+              Novo Evento
+            </button>
+          </div>
+        </div>
+
+        <!-- Filtros de tipo (sem barra de busca — a busca global fica na topbar) -->
+        <div class="filter-tabs" id="filter-tabs" style="margin-bottom:16px;">
+          <button class="filter-tab active" data-filter="todos">Todos</button>
+          <button class="filter-tab" data-filter="workshop">Workshops</button>
+          <button class="filter-tab" data-filter="mentoria">Mentorias</button>
+          <button class="filter-tab" data-filter="pulsetalk">Pulse Talks</button>
+          <button class="filter-tab" data-filter="hackathon">Hackathons</button>
+        </div>
+
+        <!-- Lista de eventos — renderizada via JS -->
+        <div class="events-list" id="events-list">
+          <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">
+            <i data-lucide="loader-2" width="16" height="16"
+               style="animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></i>
+            Carregando eventos...
+          </div>
+        </div>
+
+        <div id="events-empty" class="empty-state hidden">
+          <i data-lucide="calendar" width="32" height="32"></i>
+          Nenhum evento encontrado.
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /.main -->
+</div><!-- /.app -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL — Novo Programa  (POST /programas)
+     Campos obrigatórios: nome, data_inicio  (RN)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-title">
+        <i data-lucide="plus-circle" width="18" height="18"></i>
+        Novo Programa
+      </h2>
+      <button class="modal__close" onclick="closeModal()" title="Fechar">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+
+    <form id="form-programa" novalidate>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-nome">Nome <span class="required">*</span></label>
+          <input type="text" id="input-nome" name="nome"
+                 placeholder="Ex: Programa Pulse Mais" />
+          <div class="form-group__error" id="err-nome">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+          <label for="input-data-inicio">Data de início <span class="required">*</span></label>
+          <input type="date" id="input-data-inicio" name="data_inicio" />
+          <div class="form-group__error" id="err-data-inicio">Campo obrigatório.</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="input-tipo">Tipo</label>
+          <select id="input-tipo" name="tipo">
+            <option value="">Selecione...</option>
+            <option value="workshop">Workshop</option>
+            <option value="mentoria">Mentoria</option>
+            <option value="pulsetalk">Pulse Talk</option>
+            <option value="hackathon">Hackathon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="input-modalidade">Modalidade</label>
+          <select id="input-modalidade" name="modalidade">
+            <option value="">Selecione...</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="input-local">Local</label>
+        <input type="text" id="input-local" name="local"
+               placeholder="Ex: Online via Zoom / Campus São Paulo" />
+      </div>
+
+      <div class="form-group">
+        <label for="input-descricao">Descrição</label>
+        <textarea id="input-descricao" name="descricao"
+                  placeholder="Descreva brevemente o programa..."></textarea>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" onclick="closeModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary" id="btn-submit">
+          <i data-lucide="save" width="14" height="14"></i>
+          Criar Programa
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL — Novo Evento  (POST /eventos)
+     Campos obrigatórios: nome, data  (RN)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-evento-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="modal-evento-title">
+  <div class="modal">
+
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-evento-title">
+        <i data-lucide="plus-circle" width="18" height="18"></i>
+        Novo Evento
+      </h2>
+      <button class="modal__close" onclick="closeEventModal()" title="Fechar">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+
+    <form id="form-evento" novalidate>
+
+      <div class="form-group">
+        <label for="ev-nome">Nome <span class="required">*</span></label>
+        <input type="text" id="ev-nome" name="nome"
+               placeholder="Ex: Workshop de Entrevistas Técnicas" />
+        <div class="form-group__error" id="err-ev-nome">Campo obrigatório.</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ev-tipo">Tipo</label>
+          <select id="ev-tipo" name="tipo">
+            <option value="">Selecione...</option>
+            <option value="workshop">Workshop</option>
+            <option value="mentoria">Mentoria</option>
+            <option value="pulsetalk">Pulse Talk</option>
+            <option value="hackathon">Hackathon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="ev-status">Status</label>
+          <select id="ev-status" name="status">
+            <option value="">Selecione...</option>
+            <option value="CONFIRMADO">Confirmado</option>
+            <option value="EM ANDAMENTO">Em andamento</option>
+            <option value="INSCRIÇÕES ABERTAS">Inscrições abertas</option>
+            <option value="ENCERRADO">Encerrado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ev-data">Data <span class="required">*</span></label>
+          <input type="date" id="ev-data" name="data" />
+          <div class="form-group__error" id="err-ev-data">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+          <label for="ev-hora">Horário</label>
+          <input type="time" id="ev-hora" name="hora" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ev-local">Local</label>
+          <input type="text" id="ev-local" name="local"
+                 placeholder="Ex: Online via Zoom" />
+        </div>
+        <div class="form-group">
+          <label for="ev-modalidade">Modalidade</label>
+          <select id="ev-modalidade" name="modalidade">
+            <option value="">Selecione...</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" onclick="closeEventModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary" id="btn-submit-evento">
+          <i data-lucide="save" width="14" height="14"></i>
+          Criar Evento
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL — Editar Programa  (PUT /programas/:id)
+     Pré-preenchido com dados do programa selecionado
+     ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-edit-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="modal-edit-title">
+  <div class="modal">
+
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-edit-title">
+        <i data-lucide="pencil" width="18" height="18"></i>
+        Editar Programa
+      </h2>
+      <button class="modal__close" onclick="closeEditModal()" title="Fechar">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+
+    <form id="form-editar-programa" novalidate>
+      <input type="hidden" id="edit-id" name="id" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-nome">Nome <span class="required">*</span></label>
+          <input type="text" id="edit-nome" name="nome" placeholder="Nome do programa" />
+          <div class="form-group__error" id="err-edit-nome">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+          <label for="edit-data-inicio">Data de início <span class="required">*</span></label>
+          <input type="date" id="edit-data-inicio" name="data_inicio" />
+          <div class="form-group__error" id="err-edit-data">Campo obrigatório.</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-tipo">Tipo</label>
+          <select id="edit-tipo" name="tipo">
+            <option value="">Selecione...</option>
+            <option value="workshop">Workshop</option>
+            <option value="mentoria">Mentoria</option>
+            <option value="pulsetalk">Pulse Talk</option>
+            <option value="hackathon">Hackathon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-modalidade">Modalidade</label>
+          <select id="edit-modalidade" name="modalidade">
+            <option value="">Selecione...</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="edit-local">Local</label>
+        <input type="text" id="edit-local" name="local"
+               placeholder="Ex: Online via Zoom / Campus São Paulo" />
+      </div>
+
+      <div class="form-group">
+        <label for="edit-descricao">Descrição</label>
+        <textarea id="edit-descricao" name="descricao"
+                  placeholder="Descreva brevemente o programa..."></textarea>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" onclick="closeEditModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary" id="btn-submit-edit">
+          <i data-lucide="save" width="14" height="14"></i>
+          Salvar Alterações
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL — Detalhe Evento  (leitura — GET /eventos/:id)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-detalhe-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="modal-detalhe-title">
+  <div class="modal">
+
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-detalhe-title">
+        <i data-lucide="calendar" width="18" height="18"></i>
+        Detalhe do Evento
+      </h2>
+      <button class="modal__close" onclick="closeDetalheModal()" title="Fechar">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+
+    <!-- Thumbnail colorida por tipo -->
+    <div id="detalhe-thumb" style="height:6px;border-radius:4px;margin-bottom:20px;background:var(--blue-mid);"></div>
+
+    <div class="info-grid" id="detalhe-body">
+      <!-- preenchido por JS -->
+    </div>
+
+    <div class="modal__footer">
+      <button type="button" class="btn btn--outline" onclick="closeDetalheModal()">
+        Fechar
+      </button>
+      <button type="button" class="btn btn--blue btn--sm" id="btn-editar-evento"
+              onclick="handleEditarEvento()">
+        <i data-lucide="pencil" width="14" height="14"></i>
+        Editar Evento
+      </button>
+    </div>
+
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     MODAL — Editar Evento  (PUT /eventos/:id)
+     ══════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="modal-edit-evento-overlay"
+     role="dialog" aria-modal="true" aria-labelledby="modal-edit-evento-title">
+  <div class="modal">
+
+    <div class="modal__header">
+      <h2 class="modal__title" id="modal-edit-evento-title">
+        <i data-lucide="pencil" width="18" height="18"></i>
+        Editar Evento
+      </h2>
+      <button class="modal__close" onclick="closeEditEventModal()" title="Fechar">
+        <i data-lucide="x" width="16" height="16"></i>
+      </button>
+    </div>
+
+    <form id="form-editar-evento" novalidate>
+      <input type="hidden" id="edit-ev-id" name="id" />
+
+      <div class="form-group">
+        <label for="edit-ev-nome">Nome <span class="required">*</span></label>
+        <input type="text" id="edit-ev-nome" name="nome" placeholder="Nome do evento" />
+        <div class="form-group__error" id="err-edit-ev-nome">Campo obrigatório.</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-ev-tipo">Tipo</label>
+          <select id="edit-ev-tipo" name="tipo">
+            <option value="">Selecione...</option>
+            <option value="workshop">Workshop</option>
+            <option value="mentoria">Mentoria</option>
+            <option value="pulsetalk">Pulse Talk</option>
+            <option value="hackathon">Hackathon</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-ev-status">Status</label>
+          <select id="edit-ev-status" name="status">
+            <option value="">Selecione...</option>
+            <option value="CONFIRMADO">Confirmado</option>
+            <option value="EM ANDAMENTO">Em andamento</option>
+            <option value="INSCRIÇÕES ABERTAS">Inscrições abertas</option>
+            <option value="ENCERRADO">Encerrado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-ev-data">Data <span class="required">*</span></label>
+          <input type="date" id="edit-ev-data" name="data" />
+          <div class="form-group__error" id="err-edit-ev-data">Campo obrigatório.</div>
+        </div>
+        <div class="form-group">
+          <label for="edit-ev-hora">Horário</label>
+          <input type="time" id="edit-ev-hora" name="hora" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-ev-local">Local</label>
+          <input type="text" id="edit-ev-local" name="local"
+                 placeholder="Ex: Online via Zoom" />
+        </div>
+        <div class="form-group">
+          <label for="edit-ev-modalidade">Modalidade</label>
+          <select id="edit-ev-modalidade" name="modalidade">
+            <option value="">Selecione...</option>
+            <option value="online">Online</option>
+            <option value="presencial">Presencial</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--outline" onclick="closeEditEventModal()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn--primary" id="btn-submit-edit-evento">
+          <i data-lucide="save" width="14" height="14"></i>
+          Salvar Alterações
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /.modal -->
+</div><!-- /.modal-overlay -->
+
+<!-- Toast container (obrigatório em toda página) -->
+<div id="toast-container"></div>
+
+<script>
+/* ================================================================
+   Eventos e Programas — Pulse Control
+   Pessoa 5 | Endpoints:
+     GET  /programas
+     POST /programas                (obrigatórios: nome, data_inicio)
+     GET  /programas/:id
+     GET  /programas/:id/eventos
+     GET  /programas/:id/alunos
+     PUT  /programas/:id
+     POST /participacoes-evento     (RN08: SMALLINT 1/0)
+     GET  /participacoes-evento
+     POST /jovens/:id/inscricoes    (RN11: 409 = já inscrito)
+     GET  /jovens/:id/inscricoes
+   ================================================================ */
+
+const API = 'http://localhost:3000/api';
+
+/* ── Mock de desenvolvimento ──────────────────────────────────────────────
+   Ativo automaticamente quando a API não responde (TypeError / AbortError).
+   ──────────────────────────────────────────────────────────────────────── */
+const MOCK_EVENTOS = [
+  { id: 1, tipo: 'workshop',  nome: 'Workshop: Entrevistas técnicas - Pulse Talks',
+    status: 'CONFIRMADO',         data: '23 jun', hora: '19:00',
+    local: 'Online via Zoom',     inscritos: 342, extra: '78% presença confirmada' },
+  { id: 2, tipo: 'mentoria',  nome: 'Mentoria coletiva - Banco de Dados',
+    status: 'EM ANDAMENTO',       data: '25 mai', hora: '10:00',
+    local: 'Sala 3 — Campus São Paulo', inscritos: 28, extra: 'Presença obrigatória' },
+  { id: 3, tipo: 'pulsetalk', nome: 'Pulse Talks - IA no mercado de trabalho',
+    status: 'INSCRIÇÕES ABERTAS', data: '01 jun', hora: '14:00',
+    local: 'Online via YouTube Live', inscritos: 89, extra: 'Vagas abertas' },
+  { id: 4, tipo: 'hackathon', nome: 'Hackathon Pulse 2025 - Trilha Web',
+    status: 'CONFIRMADO',         data: '07 jul', hora: '09:00 até 09 jun · 18:00',
+    local: 'Presencial',          inscritos: 48, extra: 'Equipes de 3 a 5 pessoas' },
+  { id: 5, tipo: 'workshop',  nome: 'Workshop: Construção de portfólio',
+    status: 'ENCERRADO',          data: '10 mai', hora: '15:00',
+    local: 'Online',              inscritos: 210, extra: '91% de presença' },
+  { id: 6, tipo: 'mentoria',  nome: 'Mentoria: Carreira em Tech - Turma Noturna',
+    status: 'INSCRIÇÕES ABERTAS', data: '30 jun', hora: '19:30',
+    local: 'Online',              inscritos: 22,  extra: null },
+];
+
+const MOCK_PROGRAMAS = [
+  { id: 1, nome: 'Programa Pulse Mais',
+    descricao: 'Jornada de 6 meses em habilidades técnicas e socioemocionais com foco em tecnologia.',
+    indicadores: '68 participantes · 51 formados · 2 turmas' },
+  { id: 2, nome: 'Programa de Mentoria',
+    descricao: '3 edições em 2025, com 12 sessões de mentoria por jovem por voluntários da Pulse Mais.',
+    indicadores: '57 jovens formados · 3 edições · 12 sessões/jovem' },
+  { id: 3, nome: 'Pulsar',
+    descricao: 'Rede de ex-alunos formados para sustentação nos primeiros passos de carreira.',
+    indicadores: 'Rede de ex-alunos · ecossistema de carreira' },
+  { id: 4, nome: 'Formação Líder Mentor (Fellipelli)',
+    descricao: 'Capacitação de mentores voluntários em parceria com a Fellipelli — 8 módulos, 2 turmas.',
+    indicadores: '178 mentores formados · 8 módulos · 2 turmas' },
+  { id: 5, nome: 'Rede de Mentores',
+    descricao: 'Programa de voluntariado com mentorias, eventos e engajamento contínuo.',
+    indicadores: '130 mentorias · +3.200h voluntariado · 3 eventos · +110 engajados' },
+  { id: 6, nome: 'Pulse+ Carreira (Speed Mentoring)',
+    descricao: 'Sessões temáticas de 30min com parceiros: Google, Linx, SAP, Softtek.',
+    indicadores: '+100 jovens impactados · 3 edições · 30 min/sessão' },
+  { id: 7, nome: 'Rede de Talentos',
+    descricao: 'Comunidade de ex-alunos conectada às atividades da Pulse Mais ao longo do ano.',
+    indicadores: 'Comunidade de ex-alunos · atividades anuais' },
+];
+
+/* ── Session ────────────────────────────────────────────────────────────── */
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session')
+              || localStorage.getItem('pulse_session');
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return { userId: 1, perfil: 'Coordenacao', nome: 'Joana Moura' }; // fallback dev
+}
+
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+
+/* ── apiFetch ───────────────────────────────────────────────────────────── */
+// Sempre use esta função. NUNCA use fetch() diretamente.
+// Aborta em 600 ms; cai no mock se a API estiver fora do ar.
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    const isNetErr = err instanceof TypeError || err.name === 'AbortError';
+    if (isNetErr) {
+      console.warn('[DEV] API indisponível — usando dados mock.');
+      return null; // caller faz fallback para MOCK_*
+    }
+    throw err;
+  }
+}
+
+/* ── Toast ──────────────────────────────────────────────────────────────── */
+function toast(msg, type = 'default') {
+  const icon = type === 'success' ? 'check-circle'
+             : type === 'error'   ? 'alert-circle'
+             : 'info';
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+  el.innerHTML = `<i data-lucide="${icon}" width="16" height="16"></i>${escHtml(msg)}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons({ nodes: [el] });
+  setTimeout(() => el.remove(), 3500);
+}
+
+/* ── Helpers ────────────────────────────────────────────────────────────── */
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2)
+             .map(p => p[0].toUpperCase()).join('');
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('pt-BR',
+    { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val ?? '—';
+}
+function setHTML(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
+
+/* ── Mapeamentos de badges ──────────────────────────────────────────────── */
+const TIPO_BADGE = {
+  workshop:  { label: 'WORKSHOP',   cls: 'badge--blue'       },
+  mentoria:  { label: 'MENTORIA',   cls: 'badge--green-soft' },
+  pulsetalk: { label: 'PULSE TALK', cls: 'badge--orange'     },
+  hackathon: { label: 'HACKATHON',  cls: 'badge--red'        },
+};
+const STATUS_BADGE = {
+  'CONFIRMADO':         'badge--green',
+  'EM ANDAMENTO':       'badge--orange',
+  'INSCRIÇÕES ABERTAS': 'badge--blue',
+  'ENCERRADO':          'badge--yellow',
+};
+const THUMB_CLASS = {
+  workshop:  'event-card__thumb--workshop',
+  mentoria:  'event-card__thumb--mentoria',
+  pulsetalk: 'event-card__thumb--pulsetalk',
+  hackathon: 'event-card__thumb--hackathon',
+};
+
+/* ── Render: lista de eventos ───────────────────────────────────────────── */
+function renderEvents(eventos) {
+  const list  = document.getElementById('events-list');
+  const empty = document.getElementById('events-empty');
+
+  setText('events-count',
+    `${eventos.length} evento${eventos.length !== 1 ? 's' : ''}`);
+
+  if (!eventos.length) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  const tipoBadge   = t => TIPO_BADGE[t]   || { label: t.toUpperCase(), cls: 'badge--blue' };
+  const statusBadge = s => STATUS_BADGE[s] || 'badge--blue';
+
+  list.innerHTML = eventos.map(ev => `
+    <div class="event-card"
+         data-tipo="${escHtml(ev.tipo)}"
+         data-id="${ev.id}"
+         role="button"
+         tabindex="0"
+         onclick="handleEventClick(${ev.id})"
+         onkeydown="if(event.key==='Enter')handleEventClick(${ev.id})">
+      <div class="event-card__thumb ${THUMB_CLASS[ev.tipo] || ''}"></div>
+      <div class="event-card__body">
+        <div class="event-card__title">${escHtml(ev.nome)}</div>
+        <div class="event-card__badges">
+          <span class="badge ${tipoBadge(ev.tipo).cls}">${tipoBadge(ev.tipo).label}</span>
+          <span class="badge ${statusBadge(ev.status)}">${escHtml(ev.status)}</span>
+        </div>
+        <div class="event-card__meta">
+          <i data-lucide="calendar" width="12" height="12"></i>
+          ${escHtml(ev.data)} · ${escHtml(ev.hora)} · ${escHtml(ev.local)}
+        </div>
+        <div class="event-card__sub">
+          <i data-lucide="users" width="11" height="11"></i>
+          ${ev.inscritos} inscrito${ev.inscritos !== 1 ? 's' : ''}${ev.extra ? ' · ' + escHtml(ev.extra) : ''}
+        </div>
+      </div>
+      <div class="event-card__arrow">
+        <i data-lucide="chevron-right" width="16" height="16"></i>
+      </div>
+    </div>
+  `).join('');
+
+  lucide.createIcons();
+}
+
+/* ── Render: lista de programas ─────────────────────────────────────────── */
+function renderPrograms(programas) {
+  const list  = document.getElementById('programs-list');
+  const empty = document.getElementById('programs-empty');
+
+  if (!programas.length) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+
+  list.innerHTML = programas.map(p => `
+    <div class="program-card" data-id="${p.id}">
+      <div class="program-card__icon">
+        <i data-lucide="book-open" width="20" height="20"></i>
+      </div>
+      <div class="program-card__body">
+        <div class="program-card__name">${escHtml(p.nome)}</div>
+        <div class="program-card__desc">${escHtml(p.descricao)}</div>
+        <div class="program-card__indicators">
+          <i data-lucide="bar-chart-2" width="12" height="12"></i>
+          ${escHtml(p.indicadores)}
+        </div>
+        <div class="program-card__actions">
+          <button class="btn btn--outline btn--sm" onclick="handleDetalhes(${p.id})">
+            <i data-lucide="info" width="12" height="12"></i>
+            Detalhes
+          </button>
+          <button class="btn btn--outline btn--sm" onclick="handleEventosVinculados(${p.id})">
+            <i data-lucide="calendar" width="12" height="12"></i>
+            Eventos vinculados
+          </button>
+          <button class="btn btn--outline btn--sm" onclick="handleAlunosInscritos(${p.id})">
+            <i data-lucide="users" width="12" height="12"></i>
+            Alunos inscritos
+          </button>
+          <button class="btn btn--blue btn--sm" onclick="handleEditar(${p.id})">
+            <i data-lucide="pencil" width="12" height="12"></i>
+            Editar
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  lucide.createIcons();
+}
+
+/* ── Filtros ──────────────────────────────────────────────
+   O filtro de tipo (filter-tabs) aplica-se apenas aos eventos e combina
+   com a busca global.
+   ──────────────────────────────────────────────────────────────────────── */
+let allEvents   = [];
+let allPrograms = [];
+
+// Retorna o termo de busca global normalizado
+function globalQuery() {
+  return (document.getElementById('global-search')?.value || '').toLowerCase().trim();
+}
+
+// Filtra e re-renderiza eventos (tipo + busca global)
+function applyEventFilters() {
+  const activeTab = document.querySelector('.filter-tab.active')?.dataset.filter || 'todos';
+  const q = globalQuery();
+
+  let filtered = allEvents;
+
+  if (activeTab !== 'todos') {
+    filtered = filtered.filter(ev => ev.tipo === activeTab);
+  }
+  if (q) {
+    filtered = filtered.filter(ev =>
+      ev.nome.toLowerCase().includes(q)  ||
+      ev.tipo.toLowerCase().includes(q)  ||
+      ev.data.toLowerCase().includes(q)  ||
+      (ev.local  && ev.local.toLowerCase().includes(q))  ||
+      (ev.extra  && ev.extra.toLowerCase().includes(q))
+    );
+  }
+
+  renderEvents(filtered);
+}
+
+// Filtra e re-renderiza programas (busca global)
+function applyProgramFilters() {
+  const q = globalQuery();
+
+  const filtered = q
+    ? allPrograms.filter(p =>
+        p.nome.toLowerCase().includes(q)        ||
+        p.descricao.toLowerCase().includes(q)   ||
+        p.indicadores.toLowerCase().includes(q)
+      )
+    : allPrograms;
+
+  renderPrograms(filtered);
+}
+
+// Ponto de entrada chamado pela topbar search e pelo filtro de tipo
+function applyFilters() {
+  applyEventFilters();
+  applyProgramFilters();
+}
+
+/* ── Handlers de ação ───────────────────────────────────────────────────── */
+
+// Abre modal de detalhe ao clicar em qualquer parte do event-card
+function handleEventClick(id) {
+  const ev = allEvents.find(e => e.id === id);
+  if (!ev) return;
+  openDetalheModal(ev);
+}
+
+async function handleDetalhes(id) {
+  try {
+    const data = await apiFetch(`/programas/${id}`);
+    const p = data || MOCK_PROGRAMAS.find(p => p.id === id);
+    toast(p?.nome || `Programa #${id}`);
+  } catch (err) {
+    toast(err.message || 'Erro ao buscar detalhes.', 'error');
+  }
+}
+
+async function handleEventosVinculados(id) {
+  try {
+    await apiFetch(`/programas/${id}/eventos`);
+    toast('Eventos vinculados carregados.', 'success');
+  } catch (err) {
+    toast(err.message || 'Erro ao buscar eventos vinculados.', 'error');
+  }
+}
+
+async function handleAlunosInscritos(id) {
+  try {
+    await apiFetch(`/programas/${id}/alunos`);
+    toast('Alunos inscritos carregados.', 'success');
+  } catch (err) {
+    toast(err.message || 'Erro ao buscar alunos.', 'error');
+  }
+}
+
+// Abre modal de edição pré-preenchido
+async function handleEditar(id) {
+  let p = null;
+  try {
+    const data = await apiFetch(`/programas/${id}`);
+    p = data || MOCK_PROGRAMAS.find(x => x.id === id);
+  } catch (_) {
+    p = MOCK_PROGRAMAS.find(x => x.id === id);
+  }
+  if (!p) { toast('Programa não encontrado.', 'error'); return; }
+  openEditModal(p);
+}
+
+/* ── Modal helpers ──────────────────────────────────────────────────────── */
+function clearFormErrors() {
+  document.querySelectorAll('.form-group__error')
+          .forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('.input--error')
+          .forEach(el => el.classList.remove('input--error'));
+}
+
+function openOverlay(id) {
+  document.getElementById(id).classList.remove('hidden');
+  lucide.createIcons();
+}
+function closeOverlay(id) {
+  document.getElementById(id).classList.add('hidden');
+}
+
+/* ── Modal: Novo Programa ────────────────────────────────────────────────── */
+function openModal() {
+  document.getElementById('form-programa').reset();
+  clearFormErrors();
+  openOverlay('modal-overlay');
+  document.getElementById('input-nome').focus();
+}
+function closeModal() { closeOverlay('modal-overlay'); }
+
+/* ── Modal: Novo Evento ──────────────────────────────────────────────────── */
+function openEventModal() {
+  document.getElementById('form-evento').reset();
+  clearFormErrors();
+  openOverlay('modal-evento-overlay');
+  document.getElementById('ev-nome').focus();
+}
+function closeEventModal() { closeOverlay('modal-evento-overlay'); }
+
+/* ── Modal: Editar Programa ──────────────────────────────────────────────── */
+function openEditModal(p) {
+  document.getElementById('form-editar-programa').reset();
+  clearFormErrors();
+
+  document.getElementById('edit-id').value          = p.id;
+  document.getElementById('edit-nome').value         = p.nome || '';
+  document.getElementById('edit-data-inicio').value  = p.data_inicio || '';
+  document.getElementById('edit-tipo').value         = p.tipo || '';
+  document.getElementById('edit-modalidade').value   = p.modalidade || '';
+  document.getElementById('edit-local').value        = p.local || '';
+  document.getElementById('edit-descricao').value    = p.descricao || '';
+
+  openOverlay('modal-edit-overlay');
+  document.getElementById('edit-nome').focus();
+}
+function closeEditModal() { closeOverlay('modal-edit-overlay'); }
+
+/* ── Modal: Detalhe Evento ───────────────────────────────────────────────── */
+const THUMB_BG = {
+  workshop:  'var(--blue-mid)',
+  mentoria:  'var(--green-badge-bg)',
+  pulsetalk: 'var(--orange-light)',
+  hackathon: 'var(--error-bg)',
+};
+
+let _currentEventId = null;
+
+function openDetalheModal(ev) {
+  _currentEventId = ev.id;
+
+  // Barra de cor por tipo
+  document.getElementById('detalhe-thumb').style.background =
+    THUMB_BG[ev.tipo] || 'var(--blue-mid)';
+
+  // Título
+  document.getElementById('modal-detalhe-title').innerHTML =
+    `<i data-lucide="calendar" width="18" height="18"></i> ${escHtml(ev.nome)}`;
+
+  const tipoBadge   = TIPO_BADGE[ev.tipo]   || { label: ev.tipo?.toUpperCase() || '—', cls: 'badge--blue' };
+  const statusClass = STATUS_BADGE[ev.status] || 'badge--blue';
+
+  document.getElementById('detalhe-body').innerHTML = `
+    <div class="info-field">
+      <span class="info-field__label">Tipo</span>
+      <span class="info-field__value">
+        <span class="badge ${tipoBadge.cls}">${tipoBadge.label}</span>
+      </span>
+    </div>
+    <div class="info-field">
+      <span class="info-field__label">Status</span>
+      <span class="info-field__value">
+        <span class="badge ${statusClass}">${escHtml(ev.status || '—')}</span>
+      </span>
+    </div>
+    <div class="info-field">
+      <span class="info-field__label">Data</span>
+      <span class="info-field__value">${escHtml(ev.data || '—')}</span>
+    </div>
+    <div class="info-field">
+      <span class="info-field__label">Horário</span>
+      <span class="info-field__value">${escHtml(ev.hora || '—')}</span>
+    </div>
+    <div class="info-field">
+      <span class="info-field__label">Local</span>
+      <span class="info-field__value">${escHtml(ev.local || '—')}</span>
+    </div>
+    <div class="info-field">
+      <span class="info-field__label">Inscritos</span>
+      <span class="info-field__value">${ev.inscritos ?? '—'}</span>
+    </div>
+    ${ev.extra ? `
+    <div class="info-field">
+      <span class="info-field__label">Observação</span>
+      <span class="info-field__value">${escHtml(ev.extra)}</span>
+    </div>` : ''}
+  `;
+
+  openOverlay('modal-detalhe-overlay');
+  lucide.createIcons();
+}
+function closeDetalheModal() { closeOverlay('modal-detalhe-overlay'); _currentEventId = null; }
+
+// Botão "Editar Evento" no modal de detalhe — abre modal de edição
+async function handleEditarEvento() {
+  if (!_currentEventId) return;
+  const ev = allEvents.find(e => e.id === _currentEventId);
+  if (!ev) { toast('Evento não encontrado.', 'error'); return; }
+  closeDetalheModal();
+  openEditEventModal(ev);
+}
+
+/* ── Modal: Editar Evento ────────────────────────────────────────────────── */
+function openEditEventModal(ev) {
+  document.getElementById('form-editar-evento').reset();
+  clearFormErrors();
+
+  document.getElementById('edit-ev-id').value        = ev.id;
+  document.getElementById('edit-ev-nome').value      = ev.nome       || '';
+  document.getElementById('edit-ev-tipo').value      = ev.tipo       || '';
+  document.getElementById('edit-ev-status').value    = ev.status     || '';
+  document.getElementById('edit-ev-hora').value      = ev.hora       || '';
+  document.getElementById('edit-ev-local').value     = ev.local      || '';
+  document.getElementById('edit-ev-modalidade').value = ev.modalidade || '';
+  // data: converte "23 mai" → não é ISO, deixa em branco se não for ISO
+  if (ev.data && ev.data.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    document.getElementById('edit-ev-data').value = ev.data;
+  }
+
+  openOverlay('modal-edit-evento-overlay');
+  document.getElementById('edit-ev-nome').focus();
+}
+function closeEditEventModal() { closeOverlay('modal-edit-evento-overlay'); }
+
+/* ── Fechar overlays ao clicar fora ou pressionar Escape ─────────────────── */
+['modal-overlay', 'modal-evento-overlay', 'modal-edit-overlay', 'modal-detalhe-overlay', 'modal-edit-evento-overlay']
+  .forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+  });
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeModal();
+  closeEventModal();
+  closeEditModal();
+  closeDetalheModal();
+  closeEditEventModal();
+});
+
+/* ── Submissão do formulário — POST /programas ──────────────────────────── */
+document.getElementById('form-programa').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  clearFormErrors();
+
+  const nome       = document.getElementById('input-nome').value.trim();
+  const dataInicio = document.getElementById('input-data-inicio').value.trim();
+
+  // Validação client-side: campos obrigatórios (RN)
+  let valid = true;
+  if (!nome) {
+    document.getElementById('err-nome').classList.add('visible');
+    document.getElementById('input-nome').classList.add('input--error');
+    valid = false;
+  }
+  if (!dataInicio) {
+    document.getElementById('err-data-inicio').classList.add('visible');
+    document.getElementById('input-data-inicio').classList.add('input--error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const payload = {
+    nome,
+    data_inicio: dataInicio,
+    tipo:       document.getElementById('input-tipo').value       || null,
+    modalidade: document.getElementById('input-modalidade').value || null,
+    local:      document.getElementById('input-local').value.trim()      || null,
+    descricao:  document.getElementById('input-descricao').value.trim()  || null,
+  };
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'Criando…';
+
+  try {
+    const created = await apiFetch('/programas', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    toast('Programa criado com sucesso!', 'success');
+    closeModal();
+
+    // Adiciona na lista local e re-renderiza
+    const novo = created || {
+      id: Date.now(),
+      nome: payload.nome,
+      descricao: payload.descricao || '',
+      indicadores: `Iniciando · ${fmtDate(payload.data_inicio)}`,
+    };
+    MOCK_PROGRAMAS.push(novo);
+    renderPrograms(MOCK_PROGRAMAS);
+
+  } catch (err) {
+    // RN11: HTTP 409 → jovem já inscrito neste programa
+    if (err.status === 409) {
+      toast('Jovem já inscrito neste programa.', 'error');
+    } else {
+      toast(err.message || 'Erro ao criar programa.', 'error');
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="save" width="14" height="14"></i> Criar Programa';
+    lucide.createIcons({ nodes: [btn] });
+  }
+});
+
+/* ── Submissão — POST /eventos ──────────────────────────────────────────── */
+document.getElementById('form-evento').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  clearFormErrors();
+
+  const nome = document.getElementById('ev-nome').value.trim();
+  const data = document.getElementById('ev-data').value.trim();
+
+  let valid = true;
+  if (!nome) {
+    document.getElementById('err-ev-nome').classList.add('visible');
+    document.getElementById('ev-nome').classList.add('input--error');
+    valid = false;
+  }
+  if (!data) {
+    document.getElementById('err-ev-data').classList.add('visible');
+    document.getElementById('ev-data').classList.add('input--error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const payload = {
+    nome,
+    data,
+    tipo:       document.getElementById('ev-tipo').value      || null,
+    status:     document.getElementById('ev-status').value    || null,
+    hora:       document.getElementById('ev-hora').value      || null,
+    local:      document.getElementById('ev-local').value.trim()     || null,
+    modalidade: document.getElementById('ev-modalidade').value || null,
+  };
+
+  const btn = document.getElementById('btn-submit-evento');
+  btn.disabled = true;
+  btn.textContent = 'Criando…';
+
+  try {
+    const created = await apiFetch('/eventos', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+
+    toast('Evento criado com sucesso!', 'success');
+    closeEventModal();
+
+    const novo = created || {
+      id: Date.now(),
+      tipo:      payload.tipo      || 'workshop',
+      nome:      payload.nome,
+      status:    payload.status    || 'CONFIRMADO',
+      data:      new Date(payload.data).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }),
+      hora:      payload.hora      || '',
+      local:     payload.local     || '',
+      inscritos: 0,
+      extra:     null,
+    };
+    allEvents.push(novo);
+    MOCK_EVENTOS.push(novo);
+    applyEventFilters();
+
+  } catch (err) {
+    toast(err.message || 'Erro ao criar evento.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="save" width="14" height="14"></i> Criar Evento';
+    lucide.createIcons({ nodes: [btn] });
+  }
+});
+
+/* ── Submissão — PUT /programas/:id ─────────────────────────────────────── */
+document.getElementById('form-editar-programa').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  clearFormErrors();
+
+  const id   = document.getElementById('edit-id').value;
+  const nome = document.getElementById('edit-nome').value.trim();
+  const dataInicio = document.getElementById('edit-data-inicio').value.trim();
+
+  let valid = true;
+  if (!nome) {
+    document.getElementById('err-edit-nome').classList.add('visible');
+    document.getElementById('edit-nome').classList.add('input--error');
+    valid = false;
+  }
+  if (!dataInicio) {
+    document.getElementById('err-edit-data').classList.add('visible');
+    document.getElementById('edit-data-inicio').classList.add('input--error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const payload = {
+    nome,
+    data_inicio: dataInicio,
+    tipo:        document.getElementById('edit-tipo').value        || null,
+    modalidade:  document.getElementById('edit-modalidade').value  || null,
+    local:       document.getElementById('edit-local').value.trim()       || null,
+    descricao:   document.getElementById('edit-descricao').value.trim()   || null,
+  };
+
+  const btn = document.getElementById('btn-submit-edit');
+  btn.disabled = true;
+  btn.textContent = 'Salvando…';
+
+  try {
+    await apiFetch(`/programas/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+
+    toast('Programa atualizado com sucesso!', 'success');
+    closeEditModal();
+
+    // Atualiza localmente
+    const idx = allPrograms.findIndex(p => String(p.id) === String(id));
+    if (idx !== -1) {
+      allPrograms[idx] = { ...allPrograms[idx], ...payload };
+      renderPrograms(allPrograms);
+    }
+    const mockIdx = MOCK_PROGRAMAS.findIndex(p => String(p.id) === String(id));
+    if (mockIdx !== -1) Object.assign(MOCK_PROGRAMAS[mockIdx], payload);
+
+  } catch (err) {
+    toast(err.message || 'Erro ao atualizar programa.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="save" width="14" height="14"></i> Salvar Alterações';
+    lucide.createIcons({ nodes: [btn] });
+  }
+});
+
+/* ── Submissão — PUT /eventos/:id ───────────────────────────────────────── */
+document.getElementById('form-editar-evento').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  clearFormErrors();
+
+  const id   = document.getElementById('edit-ev-id').value;
+  const nome = document.getElementById('edit-ev-nome').value.trim();
+  const data = document.getElementById('edit-ev-data').value.trim();
+
+  let valid = true;
+  if (!nome) {
+    document.getElementById('err-edit-ev-nome').classList.add('visible');
+    document.getElementById('edit-ev-nome').classList.add('input--error');
+    valid = false;
+  }
+  if (!data) {
+    document.getElementById('err-edit-ev-data').classList.add('visible');
+    document.getElementById('edit-ev-data').classList.add('input--error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  const payload = {
+    nome,
+    data,
+    tipo:        document.getElementById('edit-ev-tipo').value        || null,
+    status:      document.getElementById('edit-ev-status').value      || null,
+    hora:        document.getElementById('edit-ev-hora').value        || null,
+    local:       document.getElementById('edit-ev-local').value.trim()       || null,
+    modalidade:  document.getElementById('edit-ev-modalidade').value  || null,
+  };
+
+  const btn = document.getElementById('btn-submit-edit-evento');
+  btn.disabled = true;
+  btn.textContent = 'Salvando…';
+
+  try {
+    await apiFetch(`/eventos/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+
+    toast('Evento atualizado com sucesso!', 'success');
+    closeEditEventModal();
+
+    // Atualiza localmente
+    const idx = allEvents.findIndex(ev => String(ev.id) === String(id));
+    if (idx !== -1) {
+      allEvents[idx] = { ...allEvents[idx], ...payload };
+      applyEventFilters();
+    }
+    const mockIdx = MOCK_EVENTOS.findIndex(ev => String(ev.id) === String(id));
+    if (mockIdx !== -1) Object.assign(MOCK_EVENTOS[mockIdx], payload);
+
+  } catch (err) {
+    toast(err.message || 'Erro ao atualizar evento.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="save" width="14" height="14"></i> Salvar Alterações';
+    lucide.createIcons({ nodes: [btn] });
+  }
+});
+
+/* ── Carga de dados ─────────────────────────────────────────────────────── */
+async function loadEvents() {
+  try {
+    const data = await apiFetch('/eventos');
+    allEvents = Array.isArray(data) ? data : MOCK_EVENTOS;
+  } catch (_) {
+    allEvents = MOCK_EVENTOS;
+  }
+  renderEvents(allEvents);
+}
+
+async function loadPrograms() {
+  try {
+    const data = await apiFetch('/programas');
+    allPrograms = Array.isArray(data) ? data : MOCK_PROGRAMAS;
+  } catch (_) {
+    allPrograms = MOCK_PROGRAMAS;
+  }
+  renderPrograms(allPrograms);
+}
+
+/* ── Navegação da sidebar — guard para páginas ainda não disponíveis ────── */
+// Intercepta cliques em links do sidebar. Se o arquivo .html não existir no
+// servidor, exibe um toast em vez de mostrar "Cannot GET /...".
+document.querySelectorAll('.sidebar__nav-item[href]').forEach(link => {
+  link.addEventListener('click', async function(e) {
+    const href = this.getAttribute('href');
+    // Não intercepta a própria página nem âncoras
+    if (!href || href === '#' || href === 'programas.html') return;
+    e.preventDefault();
+    try {
+      const res = await fetch(href, { method: 'HEAD' });
+      if (res.ok) {
+        window.location.href = href;
+      } else {
+        toast(`Página "${href}" ainda não disponível nesta versão.`, 'default');
+      }
+    } catch (_) {
+      // Em file:// protocol o fetch falha — navega diretamente
+      window.location.href = href;
+    }
+  });
+});
+
+/* ── Bootstrap ──────────────────────────────────────────────────────────── */
+(async function init() {
+  lucide.createIcons();
+  const session = getSession();
+
+  // Preenche topbar e sidebar com dados do usuário logado
+  try {
+    const res  = await apiFetch(`/usuarios/${session.userId}`);
+    const user = res || { nome: session.nome };
+    const ini  = initials(user.nome);
+    setText('topbar-name', user.nome);
+    setHTML('topbar-avatar', ini);
+    setHTML('sidebar-initials', ini);
+    lucide.createIcons();
+  } catch (err) {
+    console.warn('Não foi possível carregar dados do usuário:', err);
+  }
+
+  // Carrega eventos e programas em paralelo
+  await Promise.all([loadEvents(), loadPrograms()]);
+
+  // Filtro de tipo — afeta apenas os eventos, combina com busca global
+  document.getElementById('filter-tabs').addEventListener('click', function(e) {
+    const tab = e.target.closest('.filter-tab');
+    if (!tab) return;
+    this.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    applyEventFilters();
+  });
+
+  // Busca global na topbar — filtra eventos E programas simultaneamente
+  document.getElementById('global-search').addEventListener('input', applyFilters);
+
+})();
+</script>
+
+<script>
+(function() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    const s = raw ? JSON.parse(raw) : null;
+    if (s && s.perfil === 'Gestao') {
+      const el = document.getElementById('sidebar-nav-mentoria');
+      if (el) el.style.display = 'none';
+    }
+  } catch(_) {}
+})();
+</script></body>
+</html>

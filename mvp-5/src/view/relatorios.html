@@ -1,0 +1,1130 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard de Impacto — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    /* ── KPI cards ─────────────────────────────────────────────── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .kpi-card__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .kpi-card__icon--orange { background: var(--orange-light); color: var(--orange-text); }
+    .kpi-card__icon--blue   { background: var(--blue-light);   color: var(--blue-btn); }
+    .kpi-card__icon--green  { background: var(--green-badge-bg); color: var(--green-badge-text); }
+    .kpi-card__icon--red    { background: var(--error-bg);     color: var(--error-text); }
+    .kpi-card__icon--yellow { background: #FFF9DC;             color: #7A5A0F; }
+    .kpi-card__label  { font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 4px; }
+    .kpi-card__value  { font-size: 32px; font-weight: 700; color: var(--navy); line-height: 1.1; margin-bottom: 4px; }
+    .kpi-card__sub    { font-size: 11px; color: var(--muted); }
+    .kpi-card__sub--green { color: var(--green-badge-text); font-weight: 600; }
+
+    /* ── Tab switcher ──────────────────────────────────────────── */
+    .dash-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .dash-tab {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--slate);
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .dash-tab:hover { border-color: var(--brand-dark); color: var(--brand-dark); }
+    .dash-tab.active { background: var(--brand-dark); border-color: var(--brand-dark); color: var(--white); }
+
+    /* ── Section title ─────────────────────────────────────────── */
+    .dash-section-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .dash-section-sub   { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+    /* ── Charts row ────────────────────────────────────────────── */
+    .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .chart-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+    }
+    .chart-card__title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .chart-card__sub   { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .chart-wrap { position: relative; }
+
+    /* ── Donut legend ──────────────────────────────────────────── */
+    .donut-row { display: flex; align-items: center; gap: 24px; }
+    .donut-canvas-wrap { flex-shrink: 0; width: 160px; height: 160px; }
+    .donut-legend { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+    .donut-legend-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--navy); }
+    .donut-legend-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .donut-legend-label { flex: 1; }
+    .donut-legend-val  { font-weight: 700; color: var(--navy); }
+
+    /* ── Donut trio (engajamento) ──────────────────────────────── */
+    .donut-trio {
+      display: flex; justify-content: space-around; align-items: flex-end;
+      gap: 16px; padding: 8px 0;
+    }
+    .donut-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .donut-item__label { font-size: 12px; font-weight: 600; color: var(--navy); }
+    .donut-item__pct   { font-size: 22px; font-weight: 700; color: var(--navy); }
+    .donut-item__sub   { font-size: 11px; color: var(--muted); }
+
+    /* ── Horizontal bar (evasão) ───────────────────────────────── */
+    .hbar-list { display: flex; flex-direction: column; gap: 10px; }
+    .hbar-row  { display: flex; flex-direction: column; gap: 4px; }
+    .hbar-row__label { display: flex; justify-content: space-between; font-size: 12px; color: var(--navy); font-weight: 500; }
+    .hbar-row__pct   { font-weight: 700; }
+    .hbar-track { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+    .hbar-fill  { height: 100%; border-radius: 4px; transition: width .5s ease; }
+    .hbar-fill--green  { background: var(--brand-green); }
+    .hbar-fill--yellow { background: var(--brand-yellow); }
+    .hbar-fill--orange { background: #F6A623; }
+    .hbar-fill--red    { background: #E05050; }
+    .hbar-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+
+    /* ── Part grid (eventos) ───────────────────────────────────── */
+    .part-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .part-item { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+    .part-item__head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .part-item__icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .part-item__icon--blue   { background: var(--blue-light);    color: var(--blue-btn); }
+    .part-item__icon--green  { background: var(--green-badge-bg); color: var(--green-badge-text); }
+    .part-item__icon--orange { background: var(--orange-light);  color: var(--orange-text); }
+    .part-item__icon--red    { background: var(--error-bg);      color: var(--error-text); }
+    .part-item__name { font-size: 13px; font-weight: 600; color: var(--navy); }
+    .part-item__sub  { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .part-bar-track  { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .part-bar-fill   { height: 100%; border-radius: 3px; transition: width .5s ease; }
+
+    /* ── Aulas grid ────────────────────────────────────────────── */
+    .aulas-grid { display: flex; justify-content: space-around; gap: 12px; flex-wrap: wrap; }
+    .aula-item  { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .aula-item__label { font-size: 12px; font-weight: 600; color: var(--navy); text-align: center; }
+    .aula-item__pct   { font-size: 20px; font-weight: 700; color: var(--navy); }
+
+    /* ── Tab panels ────────────────────────────────────────────── */
+    .dash-panel        { display: none; }
+    .dash-panel.active { display: block; }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 899px) {
+      .kpi-grid   { grid-template-columns: repeat(2, 1fr); }
+      .charts-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 599px) {
+      .kpi-grid        { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .kpi-card__value { font-size: 24px; }
+      .donut-row       { flex-direction: column; align-items: center; }
+      .part-grid       { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 400px) {
+      .kpi-grid  { grid-template-columns: 1fr 1fr; }
+      .kpi-card  { padding: 14px; }
+      .kpi-card__value { font-size: 20px; }
+    }
+
+    /* ── CSV action bar ─────────────────────────────────────────── */
+    .csv-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .csv-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .csv-btn--export {
+      border: 1.5px solid var(--brand-dark);
+      background: var(--white);
+      color: var(--brand-dark);
+    }
+    .csv-btn--export:hover { background: var(--brand-dark); color: var(--white); }
+    .csv-btn--import {
+      border: 1.5px solid var(--green-badge-text);
+      background: var(--white);
+      color: var(--green-badge-text);
+    }
+    .csv-btn--import:hover { background: var(--green-badge-text); color: var(--white); }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html" class="sidebar__nav-item" title="Alunos">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html" class="sidebar__nav-item active" title="Relatórios" aria-current="page">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html" class="sidebar__nav-item" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item" id="sidebar-nav-mentoria" title="Mentoria">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Dashboard de Impacto</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;cursor:pointer;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Carregando...</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Tab switcher + filtro por ano -->
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="dash-tabs">
+          <button class="dash-tab active" id="tab-renda"       onclick="switchTab('renda')">Renda e empregabilidade</button>
+          <button class="dash-tab"        id="tab-engajamento" onclick="switchTab('engajamento')">Engajamento e alcance</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <label for="filtro-programa-rel" style="font-size:13px;color:var(--muted);font-weight:600;">Programa:</label>
+          <select id="filtro-programa-rel" onchange="recarregarPorPrograma()"
+                  style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);">
+            <option value="">Todos os programas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════
+           PAINEL: RENDA E EMPREGABILIDADE
+           ════════════════════════════════════════════════════════ -->
+      <div class="dash-panel active" id="panel-renda">
+
+        <div class="csv-actions">
+          <button class="csv-btn csv-btn--export" onclick="exportRendaCSV()">
+            <i data-lucide="download" width="14" height="14"></i> Exportar CSV
+          </button>
+          <button class="csv-btn csv-btn--import" onclick="document.getElementById('import-renda-input').click()">
+            <i data-lucide="upload" width="14" height="14"></i> Importar CSV
+          </button>
+          <input type="file" id="import-renda-input" accept=".csv" style="display:none" onchange="handleRendaImport(this)">
+        </div>
+
+        <div class="dash-section-title">Renda e Empregabilidade</div>
+        <div class="dash-section-sub">Indicadores de impacto e transformação profissional</div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--orange">
+              <i data-lucide="briefcase" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Total empregados</div>
+            <div class="kpi-card__value" id="kpi-renda-empregados">—</div>
+            <div class="kpi-card__sub"   id="kpi-renda-empregados-sub">de — transformados</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--blue">
+              <i data-lucide="trending-up" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Taxa de empregabilidade</div>
+            <div class="kpi-card__value" id="kpi-renda-taxa">—</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--green">
+              <i data-lucide="dollar-sign" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Delta médio de renda</div>
+            <div class="kpi-card__value" id="kpi-renda-delta">—</div>
+            <div class="kpi-card__sub">entrada vs saída</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--red">
+              <i data-lucide="users-2" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Tempo médio até emprego</div>
+            <div class="kpi-card__value" id="kpi-renda-tempo">—</div>
+            <div class="kpi-card__sub">após conclusão</div>
+          </div>
+        </div>
+
+        <!-- Evolução + Distribuição -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-card__title">Evolução de Empregabilidade</div>
+            <div class="chart-card__sub">Alunos empregados por ano de formação</div>
+            <div class="chart-wrap" style="height:220px;">
+              <canvas id="chart-evolucao"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card__title">Distribuição por Área</div>
+            <div class="chart-card__sub">Áreas de atuação dos alunos empregados</div>
+            <div class="donut-row" style="padding-top:8px;">
+              <div class="donut-canvas-wrap">
+                <canvas id="chart-area"></canvas>
+              </div>
+              <div class="donut-legend" id="donut-legend">
+                <!-- Preenchido por JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delta de Renda -->
+        <div class="chart-card" style="margin-bottom:16px;">
+          <div class="chart-card__title">Delta de Renda: Entrada vs Saída</div>
+          <div class="chart-card__sub">Comparação da faixa salarial antes e depois do programa</div>
+          <div class="chart-wrap" style="height:220px;">
+            <canvas id="chart-delta"></canvas>
+          </div>
+        </div>
+
+        <!-- Progressão Mensal -->
+        <div class="chart-card">
+          <div class="chart-card__title">Progressão Mensal de Empregados</div>
+          <div class="chart-card__sub" id="chart-progressao-sub">Crescimento de alunos empregados</div>
+          <div class="chart-wrap" style="height:220px;">
+            <canvas id="chart-progressao"></canvas>
+          </div>
+        </div>
+
+      </div><!-- /#panel-renda -->
+
+      <!-- ════════════════════════════════════════════════════════
+           PAINEL: ENGAJAMENTO E ALCANCE
+           ════════════════════════════════════════════════════════ -->
+      <div class="dash-panel" id="panel-engajamento">
+
+        <div class="csv-actions">
+          <button class="csv-btn csv-btn--export" onclick="exportEngajCSV()">
+            <i data-lucide="download" width="14" height="14"></i> Exportar CSV
+          </button>
+          <button class="csv-btn csv-btn--import" onclick="document.getElementById('import-engaj-input').click()">
+            <i data-lucide="upload" width="14" height="14"></i> Importar CSV
+          </button>
+          <input type="file" id="import-engaj-input" accept=".csv" style="display:none" onchange="handleEngajImport(this)">
+        </div>
+
+        <div class="dash-section-title">Conectados · Capacitados · Transformados</div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--blue">
+              <i data-lucide="users-2" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Conectados</div>
+            <div class="kpi-card__value" id="kpi-eng-conectados">—</div>
+            <div class="kpi-card__sub">jovens na base</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--orange">
+              <i data-lucide="graduation-cap" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Em capacitação</div>
+            <div class="kpi-card__value" id="kpi-eng-capacitados">—</div>
+            <div class="kpi-card__sub">jovens na base</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--green">
+              <i data-lucide="briefcase" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Transformados</div>
+            <div class="kpi-card__value" id="kpi-eng-transformados">—</div>
+            <div class="kpi-card__sub">jovens na base</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-card__icon kpi-card__icon--red">
+              <i data-lucide="trending-up" width="20" height="20"></i>
+            </div>
+            <div class="kpi-card__label">Taxa de sucesso</div>
+            <div class="kpi-card__value" id="kpi-eng-taxa">—</div>
+            <div class="kpi-card__sub">transformados / total</div>
+          </div>
+        </div>
+
+        <!-- Turmas + Evasão -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-card__title">Frequência por turma</div>
+            <div class="donut-trio" id="trio-donuts">
+              <!-- Renderizado por JS -->
+            </div>
+            <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;">
+              % de presença nas aulas por turma
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card__title">Presença por módulo</div>
+            <div class="hbar-list" style="margin-top:12px;" id="evasao-hbar">
+              <!-- Renderizado por JS -->
+            </div>
+            <div class="hbar-meta">
+              <span style="width:8px;height:8px;border-radius:50%;background:#E05050;display:inline-block;"></span>
+              Meta: 90% por módulo
+            </div>
+          </div>
+        </div>
+
+        <!-- Participação Eventos + Aulas -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-card__title">Participação em eventos</div>
+            <div class="part-grid" style="margin-top:12px;" id="part-eventos">
+              <!-- Renderizado por JS -->
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card__title" style="display:flex;justify-content:space-between;align-items:center;">
+              Participação em aulas
+              <span style="font-size:12px;font-weight:400;color:var(--blue-btn);">Detalhe por trilha</span>
+            </div>
+            <div class="aulas-grid" style="margin-top:16px;" id="aulas-donuts">
+              <!-- Renderizado por JS -->
+            </div>
+            <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;">
+              média de todas as turmas
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /#panel-engajamento -->
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+/* ================================================================
+   relatorios.html — Pulse Control
+   Dashboard de Impacto: Renda e Engajamento
+   ================================================================ */
+
+Chart.defaults.font.family = "'Poppins', sans-serif";
+Chart.defaults.font.size = 11;
+
+const API = 'http://localhost:3000/api';
+
+// ── Estado ─────────────────────────────────────────────────────
+let _dadosRenda  = null;
+let _dadosEngaj  = null;
+let _rendaInited = false;
+let engajamentoInit = false;
+const _charts = {};
+
+// ── Dados de demonstração (fallback quando a API está indisponível) ──
+// Garantem que ambas as abas do relatório funcionem sem conexão, mesma
+// estratégia de mock adotada nas demais páginas.
+const MOCK_RENDA = {
+  totalEmpregados: 10, totalTransformados: 7, taxaEmpregabilidade: 100, taxaVariacao: 12,
+  deltaMedioRenda: 1385, tempoMedioEmprego: 4,
+  evolucaoPorAno: [{ ano: '2024', count: 4 }, { ano: '2025', count: 7 }, { ano: '2026', count: 10 }],
+  distribuicaoPorArea: [{ area: 'Tecnologia', count: 5 }, { area: 'Administração', count: 3 }, { area: 'Comercial', count: 2 }],
+  deltaRenda: [
+    { faixa: 'Até R$1.500', entrada: 26, saida: 3 },
+    { faixa: 'R$1.500 – R$2.500', entrada: 1, saida: 3 },
+    { faixa: 'R$2.500 – R$3.500', entrada: 0, saida: 4 },
+    { faixa: 'Acima de R$5.000', entrada: 2, saida: 0 },
+  ],
+  progressaoMensal: [{ mes: '2026-01', count: 2 }, { mes: '2026-02', count: 3 }, { mes: '2026-03', count: 5 }],
+};
+const MOCK_ENGAJ = {
+  conectados: 17, capacitados: 8, transformados: 7, taxaSucesso: 21.9,
+  turmas: [
+    { turma: 'Trilha Tech 2025', taxa: 82 },
+    { turma: 'Jovem Aprendiz Digital 2025', taxa: 76 },
+    { turma: 'Liderança e Soft Skills 2025', taxa: 68 },
+  ],
+  evasaoModulos: [
+    { modulo: 'Módulo 1 — Fundamentos', taxa: 6 },
+    { modulo: 'Módulo 2 — Programação', taxa: 12 },
+    { modulo: 'Módulo 3 — Projeto Final', taxa: 18 },
+  ],
+  participacaoEventos: [
+    { tipo: 'Workshops', taxa: 84 },
+    { tipo: 'Mentorias', taxa: 72 },
+    { tipo: 'Feiras de carreira', taxa: 65 },
+    { tipo: 'Hackathons', taxa: 58 },
+  ],
+  participacaoAulas: [
+    { trilha: 'Lógica', taxa: 88 },
+    { trilha: 'Front-end', taxa: 79 },
+    { trilha: 'Back-end', taxa: 74 },
+    { trilha: 'Soft skills', taxa: 81 },
+  ],
+};
+
+function _newChart(id, config) {
+  if (_charts[id]) _charts[id].destroy();
+  _charts[id] = new Chart(document.getElementById(id), config);
+  return _charts[id];
+}
+
+
+// ── Session ────────────────────────────────────────────────────
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+}
+
+// ── apiFetch ───────────────────────────────────────────────────
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') return null;
+    throw err;
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; }
+function setHTML(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = `toast toast--${type}`;
+  const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
+  el.innerHTML = `<i data-lucide="${icon}" width="16" height="16"></i>${escHtml(msg)}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons({ nodes: [el] });
+  setTimeout(() => el.remove(), 3500);
+}
+
+
+// ── Empty state ────────────────────────────────────────────────
+function showEmptyState(panelId, msg) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  panel.innerHTML = `
+    <div style="text-align:center;padding:64px 0;color:var(--muted);">
+      <i data-lucide="wifi-off" width="32" height="32" style="display:block;margin:0 auto 12px;"></i>
+      <div style="font-size:14px;">${msg}</div>
+    </div>`;
+  lucide.createIcons();
+}
+
+// ── Tab switch ─────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.dash-tab, .dash-panel').forEach(el => el.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  document.getElementById(`panel-${tab}`).classList.add('active');
+  if (tab === 'engajamento' && !engajamentoInit) {
+    initEngajamentoCharts(_dadosEngaj || MOCK_ENGAJ);
+    engajamentoInit = true;
+  }
+}
+
+// ── Recarrega as duas seções filtrando por programa ────────────
+async function recarregarPorPrograma() {
+  const programa = document.getElementById('filtro-programa-rel')?.value || '';
+  const qs = programa ? `?programa=${encodeURIComponent(programa)}` : '';
+  try { _dadosRenda = await apiFetch(`/dashboard/empregabilidade${qs}`); } catch (_) { _dadosRenda = null; }
+  try { _dadosEngaj = await apiFetch(`/dashboard/engajamento${qs}`); } catch (_) { _dadosEngaj = null; }
+
+  // Fallback para dados de demonstração quando a API está indisponível.
+  _dadosRenda = _dadosRenda || MOCK_RENDA;
+  _dadosEngaj = _dadosEngaj || MOCK_ENGAJ;
+
+  // Força re-render de ambos os painéis
+  _rendaInited = false;
+  engajamentoInit = false;
+
+  if (_dadosRenda) { initRendaCharts(_dadosRenda); _rendaInited = true; }
+  else showEmptyState('panel-renda', 'Sem dados de empregabilidade para o ano selecionado.');
+
+  // Só re-renderiza engajamento se o painel estiver visível (lazy nas demais)
+  if (document.getElementById('panel-engajamento').classList.contains('active')) {
+    if (_dadosEngaj) { initEngajamentoCharts(_dadosEngaj); engajamentoInit = true; }
+    else showEmptyState('panel-engajamento', 'Sem dados de engajamento para o ano selecionado.');
+  }
+}
+
+// ── Donut canvas helpers ───────────────────────────────────────
+function _drawDonut(ctx, size, pct, color) {
+  const cx = size / 2, cy = size / 2, r = size * 0.38, lineW = size * 0.12;
+  ctx.clearRect(0, 0, size, size);
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = lineW; ctx.stroke();
+  const start = -Math.PI / 2;
+  const end   = start + (pct / 100) * Math.PI * 2;
+  ctx.beginPath(); ctx.arc(cx, cy, r, start, end);
+  ctx.strokeStyle = color; ctx.lineWidth = lineW; ctx.lineCap = 'round'; ctx.stroke();
+}
+
+function drawDonutAnimated(canvas, targetPct, color, duration = 900) {
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const startTime = performance.now();
+  function frame(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    _drawDonut(ctx, size, targetPct * eased, color);
+    if (t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+// ── Renda charts ───────────────────────────────────────────────
+function initRendaCharts(d) {
+  const AREA_CORES = ['#003870', '#33B458', '#FFD927', '#B5D4F4', '#4A5568'];
+  const MESES_PT   = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  // KPIs
+  setText('kpi-renda-empregados',     Number(d.totalEmpregados || 0).toLocaleString('pt-BR'));
+  setText('kpi-renda-empregados-sub', `de ${Number(d.totalTransformados || 0).toLocaleString('pt-BR')} transformados`);
+  setText('kpi-renda-taxa',           `${d.taxaEmpregabilidade ?? 0}%`);
+  const variacao = d.taxaVariacao ?? 0;
+  setText('kpi-renda-variacao', variacao >= 0 ? `↑ ${variacao}% vs ano anterior` : `↓ ${Math.abs(variacao)}% vs ano anterior`);
+  const delta = d.deltaMedioRenda || 0;
+  setText('kpi-renda-delta', `+R$ ${Number(Math.round(delta)).toLocaleString('pt-BR')}`);
+  const tempo = Number(d.tempoMedioEmprego || 0);
+  setText('kpi-renda-tempo', tempo > 0 ? `${tempo} meses` : '—');
+
+  // Evolução
+  const evolucao = d.evolucaoPorAno || [];
+  _newChart('chart-evolucao', {
+    type: 'bar',
+    data: {
+      labels: evolucao.map(r => r.ano),
+      datasets: [{ data: evolucao.map(r => r.count), backgroundColor: '#003870', borderRadius: 4, barThickness: 32 }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#E2E8F0' }, ticks: { color: '#8B95A1' } },
+        x: { grid: { display: false }, ticks: { color: '#8B95A1' } },
+      },
+    },
+  });
+
+  // Distribuição por área (donut)
+  const areas = d.distribuicaoPorArea || [];
+  _newChart('chart-area', {
+    type: 'doughnut',
+    data: {
+      labels: areas.map(r => r.area),
+      datasets: [{ data: areas.map(r => r.count), backgroundColor: AREA_CORES, borderWidth: 0, hoverOffset: 4 }],
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { display: false } } },
+  });
+  setHTML('donut-legend', areas.map((r, i) => `
+    <div class="donut-legend-item">
+      <span class="donut-legend-dot" style="background:${AREA_CORES[i] || '#ccc'};"></span>
+      <span class="donut-legend-label">${escHtml(r.area)}</span>
+      <span class="donut-legend-val">${r.count}</span>
+    </div>
+  `).join(''));
+
+  // Delta de renda — entrada (renda inicial) vs saída (renda atual) por faixa salarial.
+  const deltaRenda = d.deltaRenda || [];
+  _newChart('chart-delta', {
+    type: 'bar',
+    data: {
+      labels: deltaRenda.map(r => r.faixa),
+      datasets: [
+        { label: 'Entrada', data: deltaRenda.map(r => r.entrada), backgroundColor: '#B5D4F4', borderRadius: 4 },
+        { label: 'Saída',   data: deltaRenda.map(r => r.saida),   backgroundColor: '#33B458', borderRadius: 4 },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', align: 'end', labels: { boxWidth: 10, boxHeight: 10, useBorderRadius: true, borderRadius: 3 } } },
+      scales: {
+        x: { beginAtZero: true, grid: { color: '#E2E8F0' }, ticks: { color: '#8B95A1' } },
+        y: { grid: { display: false }, ticks: { color: '#4A5568', font: { size: 11 } } },
+      },
+    },
+  });
+
+  // Progressão mensal
+  const prog = d.progressaoMensal || [];
+  const progLabels = prog.map(r => {
+    const parts = (r.mes || '').split('-');
+    return parts.length >= 2 ? MESES_PT[parseInt(parts[1]) - 1] || r.mes : r.mes;
+  });
+  _newChart('chart-progressao', {
+    type: 'line',
+    data: {
+      labels: progLabels,
+      datasets: [{
+        data: prog.map(r => r.count),
+        borderColor: '#003870', backgroundColor: 'rgba(0,56,112,0.06)',
+        tension: 0.3, fill: true,
+        pointBackgroundColor: '#003870', pointRadius: 5, pointHoverRadius: 7,
+      }],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#E2E8F0' }, ticks: { color: '#8B95A1' } },
+        x: { grid: { display: false }, ticks: { color: '#8B95A1' } },
+      },
+    },
+  });
+}
+
+// ── Engajamento charts ─────────────────────────────────────────
+function initEngajamentoCharts(d) {
+  const TRIO_COLORS  = ['#003870', '#FFD927', '#33B458', '#3182CE', '#F6A623'];
+  const AULA_COLORS  = ['#003870', '#33B458', '#FFD927', '#B5D4F4'];
+  const EVENTO_ICONS = [
+    { icon: 'briefcase',   cls: 'part-item__icon--blue'   },
+    { icon: 'users-2',     cls: 'part-item__icon--green'  },
+    { icon: 'trending-up', cls: 'part-item__icon--orange' },
+    { icon: 'briefcase',   cls: 'part-item__icon--red'    },
+  ];
+  const EVENTO_COLORS = [
+    'var(--blue-btn)', 'var(--brand-green)', 'var(--orange-text)', 'var(--error-text)',
+  ];
+
+  // KPIs
+  setText('kpi-eng-conectados',    Number(d.conectados).toLocaleString('pt-BR'));
+  setText('kpi-eng-capacitados',   Number(d.capacitados).toLocaleString('pt-BR'));
+  setText('kpi-eng-transformados', Number(d.transformados).toLocaleString('pt-BR'));
+  setText('kpi-eng-taxa',          `${d.taxaSucesso}%`);
+
+  // Trio donuts — turmas
+  const trioEl = document.getElementById('trio-donuts');
+  trioEl.innerHTML = d.turmas.slice(0, 3).map((t, i) => `
+    <div class="donut-item">
+      <canvas id="donut-turma-${i}" width="120" height="120" style="width:120px;height:120px;"></canvas>
+      <div class="donut-item__label">${escHtml(t.turma)}</div>
+      <div class="donut-item__pct">${t.taxa}%</div>
+      <div class="donut-item__sub">${t.taxa >= 75 ? 'Acima da meta' : 'Abaixo da meta'}</div>
+    </div>
+  `).join('');
+  d.turmas.slice(0, 3).forEach((t, i) => {
+    drawDonutAnimated(document.getElementById(`donut-turma-${i}`), t.taxa, TRIO_COLORS[i] || '#003870');
+  });
+
+  // Evasão hbar
+  const evasaoEl = document.getElementById('evasao-hbar');
+  evasaoEl.innerHTML = d.evasaoModulos.map(m => {
+    const cls = m.taxa <= 10 ? 'hbar-fill--green' : m.taxa <= 15 ? 'hbar-fill--yellow' : 'hbar-fill--red';
+    return `
+      <div class="hbar-row">
+        <div class="hbar-row__label">
+          <span>${escHtml(m.modulo)}</span>
+          <span class="hbar-row__pct">${m.taxa}%</span>
+        </div>
+        <div class="hbar-track">
+          <div class="hbar-fill ${cls}" style="width:0%;"></div>
+        </div>
+      </div>`;
+  }).join('');
+  // Animate hbar
+  evasaoEl.querySelectorAll('.hbar-fill').forEach((el, i) => {
+    const target = `${d.evasaoModulos[i]?.taxa ?? 0}%`;
+    setTimeout(() => { el.style.transition = 'width 0.9s ease'; el.style.width = target; }, 60);
+  });
+
+  // Part-grid — eventos
+  setHTML('part-eventos', d.participacaoEventos.map((e, i) => {
+    const ico   = EVENTO_ICONS[i % EVENTO_ICONS.length];
+    const color = EVENTO_COLORS[i % EVENTO_COLORS.length];
+    return `
+      <div class="part-item">
+        <div class="part-item__head">
+          <div class="part-item__icon ${ico.cls}">
+            <i data-lucide="${ico.icon}" width="14" height="14"></i>
+          </div>
+          <span class="part-item__name">${escHtml(e.tipo)}</span>
+        </div>
+        <div class="part-item__sub">${e.taxa}% de participação</div>
+        <div class="part-bar-track">
+          <div class="part-bar-fill" style="width:0%;background:${color};"></div>
+        </div>
+      </div>`;
+  }).join(''));
+  lucide.createIcons();
+  document.querySelectorAll('#part-eventos .part-bar-fill').forEach((el, i) => {
+    const target = `${d.participacaoEventos[i]?.taxa ?? 0}%`;
+    setTimeout(() => { el.style.transition = 'width 0.9s ease'; el.style.width = target; }, 120);
+  });
+
+  // Aulas donuts
+  const aulasEl = document.getElementById('aulas-donuts');
+  aulasEl.innerHTML = d.participacaoAulas.map((a, i) => `
+    <div class="aula-item">
+      <canvas id="donut-aula-${i}" width="100" height="100" style="width:100px;height:100px;"></canvas>
+      <div class="aula-item__label">${escHtml(a.trilha)}</div>
+      <div class="aula-item__pct">${a.taxa}%</div>
+    </div>
+  `).join('');
+  d.participacaoAulas.forEach((a, i) => {
+    drawDonutAnimated(document.getElementById(`donut-aula-${i}`), a.taxa, AULA_COLORS[i % AULA_COLORS.length]);
+  });
+}
+
+// ── CSV helpers ────────────────────────────────────────────────
+function _parseCSVLine(line) {
+  const result = [];
+  let inQ = false, cur = '';
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQ && line[i + 1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+function _parseCSVSections(text) {
+  const lines = text.replace(/^﻿/, '').split('\n').map(l => l.trim()).filter(l => l);
+  const sections = {};
+  let current = null, headers = null;
+  for (const line of lines) {
+    if (line.startsWith('===')) {
+      current = line.replace(/===/g, '').trim();
+      sections[current] = [];
+      headers = null;
+      continue;
+    }
+    if (!current) continue;
+    const cols = _parseCSVLine(line);
+    if (!headers) { headers = cols; continue; }
+    sections[current].push(Object.fromEntries(headers.map((h, i) => [h, cols[i] ?? ''])));
+  }
+  return sections;
+}
+
+function _downloadCSV(rows, filename) {
+  const content = rows.map(row =>
+    Array.isArray(row)
+      ? row.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')
+      : String(row)
+  ).join('\r\n');
+  const blob = new Blob(['﻿' + content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Export: Renda ───────────────────────────────────────────────
+function exportRendaCSV() {
+  if (!_dadosRenda) { toast('Nenhum dado disponível para exportar.', 'error'); return; }
+  const d = _dadosRenda;
+  const rows = [
+    ['=== KPIs ==='],
+    ['Total Empregados', 'Total Transformados', 'Taxa Empregabilidade (%)', 'Taxa Variação (%)', 'Delta Médio Renda (R$)', 'Tempo Médio até Emprego (meses)'],
+    [d.totalEmpregados ?? 0, d.totalTransformados ?? 0, d.taxaEmpregabilidade ?? 0, d.taxaVariacao ?? 0, Math.round(d.deltaMedioRenda ?? 0), d.tempoMedioEmprego ?? 0],
+    [],
+    ['=== Evolução por Ano ==='],
+    ['Ano', 'Empregados'],
+    ...(d.evolucaoPorAno || []).map(r => [r.ano, r.count]),
+    [],
+    ['=== Distribuição por Área ==='],
+    ['Área', 'Count'],
+    ...(d.distribuicaoPorArea || []).map(r => [r.area, r.count]),
+    [],
+    ['=== Delta de Renda ==='],
+    ['Faixa', 'Entrada', 'Saída'],
+    ...(d.deltaRenda || []).map(r => [r.faixa, r.entrada, r.saida]),
+    [],
+    ['=== Progressão Mensal ==='],
+    ['Mês', 'Empregados'],
+    ...(d.progressaoMensal || []).map(r => [r.mes, r.count]),
+  ];
+  _downloadCSV(rows, 'relatorio-renda-empregabilidade.csv');
+  toast('CSV exportado com sucesso!', 'success');
+}
+
+// ── Import: Renda ───────────────────────────────────────────────
+function handleRendaImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const s = _parseCSVSections(e.target.result);
+      const kpi = s['KPIs']?.[0] || {};
+      _dadosRenda = {
+        totalEmpregados:    Number(kpi['Total Empregados'] ?? 0),
+        totalTransformados: Number(kpi['Total Transformados'] ?? 0),
+        taxaEmpregabilidade: Number(kpi['Taxa Empregabilidade (%)'] ?? 0),
+        taxaVariacao:       Number(kpi['Taxa Variação (%)'] ?? 0),
+        deltaMedioRenda:    Number(kpi['Delta Médio Renda (R$)'] ?? 0),
+        tempoMedioEmprego:  Number(kpi['Tempo Médio até Emprego (meses)'] ?? 0),
+        evolucaoPorAno:     (s['Evolução por Ano'] || []).map(r => ({ ano: r['Ano'], count: Number(r['Empregados']) })),
+        distribuicaoPorArea:(s['Distribuição por Área'] || []).map(r => ({ area: r['Área'], count: Number(r['Count']) })),
+        deltaRenda:         (s['Delta de Renda'] || []).map(r => ({ faixa: r['Faixa'], entrada: Number(r['Entrada']), saida: Number(r['Saída']) })),
+        progressaoMensal:   (s['Progressão Mensal'] || []).map(r => ({ mes: r['Mês'], count: Number(r['Empregados']) })),
+      };
+      initRendaCharts(_dadosRenda);
+      _rendaInited = true;
+      toast('CSV importado com sucesso!', 'success');
+    } catch (_) { toast('Erro ao importar: formato de CSV inválido.', 'error'); }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ── Export: Engajamento ─────────────────────────────────────────
+function exportEngajCSV() {
+  if (!_dadosEngaj) { toast('Nenhum dado disponível para exportar.', 'error'); return; }
+  const d = _dadosEngaj;
+  const rows = [
+    ['=== KPIs ==='],
+    ['Conectados', 'Capacitados', 'Transformados', 'Taxa Sucesso (%)'],
+    [d.conectados ?? 0, d.capacitados ?? 0, d.transformados ?? 0, d.taxaSucesso ?? 0],
+    [],
+    ['=== Frequência por Turma ==='],
+    ['Turma', 'Taxa (%)'],
+    ...(d.turmas || []).map(t => [t.turma, t.taxa]),
+    [],
+    ['=== Evasão por Módulo ==='],
+    ['Módulo', 'Taxa (%)'],
+    ...(d.evasaoModulos || []).map(m => [m.modulo, m.taxa]),
+    [],
+    ['=== Participação em Eventos ==='],
+    ['Tipo', 'Taxa (%)'],
+    ...(d.participacaoEventos || []).map(e => [e.tipo, e.taxa]),
+    [],
+    ['=== Participação em Aulas ==='],
+    ['Trilha', 'Taxa (%)'],
+    ...(d.participacaoAulas || []).map(a => [a.trilha, a.taxa]),
+  ];
+  _downloadCSV(rows, 'relatorio-engajamento-alcance.csv');
+  toast('CSV exportado com sucesso!', 'success');
+}
+
+// ── Import: Engajamento ─────────────────────────────────────────
+function handleEngajImport(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const s = _parseCSVSections(e.target.result);
+      const kpi = s['KPIs']?.[0] || {};
+      _dadosEngaj = {
+        conectados:          Number(kpi['Conectados'] ?? 0),
+        capacitados:         Number(kpi['Capacitados'] ?? 0),
+        transformados:       Number(kpi['Transformados'] ?? 0),
+        taxaSucesso:         Number(kpi['Taxa Sucesso (%)'] ?? 0),
+        turmas:              (s['Frequência por Turma'] || []).map(r => ({ turma: r['Turma'], taxa: Number(r['Taxa (%)']) })),
+        evasaoModulos:       (s['Evasão por Módulo'] || []).map(r => ({ modulo: r['Módulo'], taxa: Number(r['Taxa (%)']) })),
+        participacaoEventos: (s['Participação em Eventos'] || []).map(r => ({ tipo: r['Tipo'], taxa: Number(r['Taxa (%)']) })),
+        participacaoAulas:   (s['Participação em Aulas'] || []).map(r => ({ trilha: r['Trilha'], taxa: Number(r['Taxa (%)']) })),
+      };
+      engajamentoInit = false;
+      if (document.getElementById('panel-engajamento').classList.contains('active')) {
+        initEngajamentoCharts(_dadosEngaj);
+        engajamentoInit = true;
+      }
+      toast('CSV importado com sucesso!', 'success');
+    } catch (_) { toast('Erro ao importar: formato de CSV inválido.', 'error'); }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+
+// ── Bootstrap ──────────────────────────────────────────────────
+(async function init() {
+  lucide.createIcons();
+
+  const session = getSession();
+  if (session) {
+    const ini = initials(session.nome || 'Usuário');
+    setText('topbar-name', session.nome || 'Usuário');
+    setHTML('topbar-avatar', ini);
+    setHTML('sidebar-initials', ini);
+
+    try {
+      const user = await apiFetch(`/usuarios/${session.userId}`);
+      if (user) {
+        const u = initials(user.nome);
+        setText('topbar-name', user.nome);
+        setHTML('topbar-avatar', u);
+        setHTML('sidebar-initials', u);
+      }
+    } catch (_) {}
+  }
+
+  // Popula o filtro de programa
+  try {
+    const programas = await apiFetch('/programas');
+    if (Array.isArray(programas)) {
+      const sel = document.getElementById('filtro-programa-rel');
+      programas.forEach(pr => {
+        const opt = document.createElement('option');
+        opt.value = pr.id;
+        opt.textContent = pr.nome;
+        sel.appendChild(opt);
+      });
+    }
+  } catch (_) {}
+
+  // Verificar imports vindos do dashboard (localStorage)
+  const _pendingRenda = localStorage.getItem('pulse_import_renda');
+  if (_pendingRenda) {
+    localStorage.removeItem('pulse_import_renda');
+    try {
+      const s = _parseCSVSections(_pendingRenda);
+      const kpi = s['KPIs']?.[0] || {};
+      _dadosRenda = {
+        totalEmpregados: Number(kpi['Total Empregados'] ?? 0), totalTransformados: Number(kpi['Total Transformados'] ?? 0),
+        taxaEmpregabilidade: Number(kpi['Taxa Empregabilidade (%)'] ?? 0), taxaVariacao: Number(kpi['Taxa Variação (%)'] ?? 0),
+        deltaMedioRenda: Number(kpi['Delta Médio Renda (R$)'] ?? 0), tempoMedioEmprego: Number(kpi['Tempo Médio até Emprego (meses)'] ?? 0),
+        evolucaoPorAno: (s['Evolução por Ano'] || []).map(r => ({ ano: r['Ano'], count: Number(r['Empregados']) })),
+        distribuicaoPorArea: (s['Distribuição por Área'] || []).map(r => ({ area: r['Área'], count: Number(r['Count']) })),
+        deltaRenda: (s['Delta de Renda'] || []).map(r => ({ faixa: r['Faixa'], entrada: Number(r['Entrada']), saida: Number(r['Saída']) })),
+        progressaoMensal: (s['Progressão Mensal'] || []).map(r => ({ mes: r['Mês'], count: Number(r['Empregados']) })),
+      };
+    } catch (_) {}
+  }
+  if (!_dadosRenda) {
+    try { _dadosRenda = await apiFetch('/dashboard/empregabilidade'); } catch (_) {}
+  }
+
+  const _pendingEngaj = localStorage.getItem('pulse_import_engaj');
+  if (_pendingEngaj) {
+    localStorage.removeItem('pulse_import_engaj');
+    try {
+      const s = _parseCSVSections(_pendingEngaj);
+      const kpi = s['KPIs']?.[0] || {};
+      _dadosEngaj = {
+        conectados: Number(kpi['Conectados'] ?? 0), capacitados: Number(kpi['Capacitados'] ?? 0),
+        transformados: Number(kpi['Transformados'] ?? 0), taxaSucesso: Number(kpi['Taxa Sucesso (%)'] ?? 0),
+        turmas: (s['Frequência por Turma'] || []).map(r => ({ turma: r['Turma'], taxa: Number(r['Taxa (%)']) })),
+        evasaoModulos: (s['Evasão por Módulo'] || []).map(r => ({ modulo: r['Módulo'], taxa: Number(r['Taxa (%)']) })),
+        participacaoEventos: (s['Participação em Eventos'] || []).map(r => ({ tipo: r['Tipo'], taxa: Number(r['Taxa (%)']) })),
+        participacaoAulas: (s['Participação em Aulas'] || []).map(r => ({ trilha: r['Trilha'], taxa: Number(r['Taxa (%)']) })),
+      };
+    } catch (_) {}
+  }
+  if (!_dadosEngaj) {
+    try { _dadosEngaj = await apiFetch('/dashboard/engajamento'); } catch (_) {}
+  }
+
+  // Fallback para dados de demonstração quando a API está indisponível.
+  if (!_dadosRenda || !_dadosEngaj) {
+    console.warn('[DEV] Relatório carregado com dados de demonstração (API indisponível).');
+  }
+  _dadosRenda = _dadosRenda || MOCK_RENDA;
+  _dadosEngaj = _dadosEngaj || MOCK_ENGAJ;
+
+  // Renderiza aba ativa (Renda por padrão)
+  if (_dadosRenda) {
+    initRendaCharts(_dadosRenda);
+    _rendaInited = true;
+  } else {
+    showEmptyState('panel-renda', 'Sem dados de empregabilidade. Verifique a conexão com o servidor.');
+  }
+
+  lucide.createIcons();
+})();
+</script>
+<script>
+(function() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    const s = raw ? JSON.parse(raw) : null;
+    if (s && s.perfil === 'Gestao') {
+      const el = document.getElementById('sidebar-nav-mentoria');
+      if (el) el.style.display = 'none';
+    }
+  } catch(_) {}
+})();
+</script></body>
+</html>

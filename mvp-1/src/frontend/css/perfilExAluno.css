@@ -1,0 +1,149 @@
+/* Perfil do ex-aluno: mesmo layout de perfilCoordenador.css, grid de 16 colunas com alternância entre visualização e edição */
+@import url('../css/perfil.css');
+
+/* Foto (avatar) da sidebar com bordas arredondadas — seção do Ex-Aluno */
+.sidebar__avatar {
+  border-radius: var(--radius-lg);
+}
+
+/* Alinhamento de margens laterais conforme o padrão */
+.page-header,
+.perfil-layout {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+.perfil-main-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 24px 32px;
+  align-items: start;
+}
+
+/* Linha 1 */
+.perfil-identity {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.perfil-info-top {
+  grid-column: span 12;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Linhas de largura total */
+.perfil-row-cargo,
+.perfil-row-pro,
+.perfil-row-loc {
+  grid-column: 1 / 17;
+  width: 100%;
+}
+
+.perfil-row-pro,
+.perfil-row-loc {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.perfil-card__foto-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Botão de editar foto */
+.btn-foto {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-foto:hover {
+  background: #1e8e46;
+  border-color: #1e8e46;
+}
+
+.btn-foto--danger {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  margin-top: 8px;
+}
+
+.btn-foto--danger:hover {
+  opacity: 0.88;
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Botão verde de ação (Editar / Salvar) */
+.btn-verde {
+  background-color: var(--color-accent) !important;
+  color: white !important;
+  border-color: var(--color-accent) !important;
+}
+
+.btn-verde:hover {
+  background-color: #1e8e46 !important;
+}
+
+/* Modo de edição estilizado igual ao "Meu Perfil" do aluno ativo: campos sem
+   caixa, só com linha inferior, que fica verde (cor de destaque) no foco.
+   Sobrescreve .form-input-edit (definido em perfil.css, importado acima) só
+   nesta página — não afeta perfilAluno.html nem perfilCoordenador.html. */
+.perfil-card .form-input-edit {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #c9cdd4;
+  border-radius: 0;
+  padding: 0 0 4px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.perfil-card .form-input-edit:focus {
+  border-bottom-color: var(--color-accent);
+}
+
+/* Foto do perfil sempre quadrada (mesmo recorte usado no avatar da sidebar),
+   independente da proporção da imagem enviada. */
+.perfil-card__foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  max-height: none;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+/* Mensagem de feedback no rodapé do card */
+.perfil-feedback {
+  font-size: 13px;
+  font-weight: 600;
+  margin-right: auto;
+}
+
+.perfil-feedback--ok   { color: var(--color-accent); }
+.perfil-feedback--erro { color: var(--color-danger); }

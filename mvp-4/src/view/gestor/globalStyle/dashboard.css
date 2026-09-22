@@ -1,0 +1,246 @@
+/* Painel do gráfico (Evolução da Jornada) — alinhado à coordenadora (tokens).
+   A visualização (pizza + barras em CSS) e os dados são mantidos; só o visual
+   foi padronizado com os tokens de cor, tipografia, raio e sombra. */
+
+.dashboard-panel {
+  padding: var(--espaco-5);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--branco);
+  box-shadow: var(--sombra-sm);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espaco-6);
+  align-items: flex-start;
+  margin-bottom: var(--espaco-6);
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  font-size: var(--texto-xl);
+  font-weight: var(--peso-semibold);
+  line-height: 1.25;
+  color: var(--texto-principal);
+}
+
+.dashboard-header p {
+  margin: var(--espaco-1) 0 0;
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+}
+
+.legend {
+  display: flex;
+  gap: var(--espaco-5);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  color: var(--texto-secundario);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot.blue {
+  background: var(--cor-secundaria);
+}
+
+.dot.green {
+  background: var(--sucesso);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-6);
+}
+
+.chart-card {
+  position: relative;
+  min-height: 442px;
+  padding: var(--espaco-5);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--branco);
+  box-shadow: var(--sombra-sm);
+}
+
+.month-pill {
+  position: absolute;
+  top: var(--espaco-4);
+  right: var(--espaco-4);
+  z-index: 2;
+  padding: var(--espaco-2) var(--espaco-4);
+  border-radius: var(--raio-sm);
+  color: var(--branco);
+  background: var(--cor-primaria-escura);
+  box-shadow: var(--sombra-md);
+  font-size: var(--texto-base);
+  font-weight: var(--peso-medio);
+}
+
+.pie-card {
+  display: grid;
+  place-items: center;
+}
+
+.pie-chart {
+  position: relative;
+  width: min(73%, 410px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: conic-gradient(var(--cor-secundaria) 0 31%, var(--sucesso) 31% 100%);
+  box-shadow: var(--sombra-lg);
+}
+
+.pie-chart::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.72);
+}
+
+.pie-label {
+  position: absolute;
+  z-index: 1;
+  color: var(--branco);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-regular);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.pie-label.employed {
+  left: 20%;
+  bottom: 30%;
+}
+
+.pie-label.unemployed {
+  top: 39%;
+  right: 12%;
+}
+
+.bars-card {
+  display: grid;
+  align-content: end;
+}
+
+.bar-chart {
+  position: relative;
+  height: 320px;
+  margin: 48px 18px 4px 42px;
+}
+
+.chart-axis {
+  position: absolute;
+  inset: 0 0 40px 0;
+  border-left: 2px solid var(--cinza-borda);
+  border-bottom: 2px solid var(--cinza-borda);
+}
+
+.axis-label {
+  position: absolute;
+  left: -34px;
+  transform: translateY(50%);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  color: var(--texto-secundario);
+}
+
+.y200 {
+  top: -8px;
+}
+
+.y150 {
+  top: 64px;
+}
+
+.y100 {
+  top: 137px;
+}
+
+.y50 {
+  top: 210px;
+}
+
+.y0 {
+  bottom: 33px;
+}
+
+.bar-group {
+  --bar-height: 8px;
+  position: absolute;
+  bottom: 0;
+  display: grid;
+  justify-items: center;
+  width: 31%;
+  height: 280px;
+}
+
+.bar-group .bar {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  border-radius: var(--raio-sm) var(--raio-sm) 0 0;
+}
+
+.bar-value {
+  position: absolute;
+  bottom: calc(40px + var(--bar-height) + 6px);
+  z-index: 1;
+  font-size: var(--texto-base);
+  font-weight: var(--peso-medio);
+  color: var(--texto-principal);
+}
+
+.bar-name {
+  position: absolute;
+  bottom: 0;
+  min-width: 150px;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+.employed-bar {
+  left: 14%;
+}
+
+.employed-bar .bar {
+  height: 174px;
+  background: var(--sucesso);
+}
+
+.unemployed-bar {
+  right: 13%;
+}
+
+.unemployed-bar .bar {
+  height: 78px;
+  background: var(--cor-secundaria);
+}
+
+.chart-caption {
+  margin: var(--espaco-2) 0 0;
+  color: var(--texto-secundario);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-regular);
+  text-align: center;
+}

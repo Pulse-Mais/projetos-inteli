@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dados importados | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+    <style>
+      .aviso-e-acoes {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      .aviso-e-acoes .aviso {
+        flex: 10;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .aviso-e-acoes .acoes-form {
+        flex: 2;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span><span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link ativo"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+      <main class="conteudo pagina-operacional">
+        <header class="pagina-operacional__topo">
+          <div>
+            <h1>Prévia dos dados importados</h1>
+            <p class="pagina-operacional__descricao" id="nome-arquivo">
+              alunos_2026.csv · confira os dados antes de salvar
+            </p>
+          </div>
+          <a href="alunos.html" class="btn-fluxo btn-fluxo--secundario"
+            ><i data-lucide="arrow-left"></i> Cancelar importação</a
+          >
+        </header>
+        <section class="resumo-grade">
+          <div class="resumo-item"><span>Linhas processadas</span><strong>0</strong></div>
+          <div class="resumo-item">
+            <span>Prontas para importar</span><strong style="color: var(--sucesso)">0</strong>
+          </div>
+          <div class="resumo-item"><span>Com conflito</span><strong style="color: var(--alerta)">0</strong></div>
+          <div class="resumo-item"><span>Formato inválido</span><strong style="color: var(--erro)">0</strong></div>
+        </section>
+        <div class="aviso-e-acoes">
+          <div class="aviso">
+            <i data-lucide="triangle-alert"></i
+            ><span>Nenhum dado será salvo até você confirmar explicitamente a importação.</span>
+          </div>
+          <button class="btn-fluxo btn-fluxo--primario" id="confirmar-importacao">
+            <i data-lucide="database"></i>Confirmar 0 registros
+          </button>
+        </div>
+        <section class="painel">
+          <div style="overflow-x: auto">
+            <table class="tabela-operacional" id="tabela-importacao">
+              <thead>
+                <tr>
+                  <th>Linha</th>
+                  <th>Nome</th>
+                  <th>RA</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Validação</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/fluxos.js"></script>
+    <script src="js/coordenadora-api.js"></script>
+    <script src="js/importacao-csv.js"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

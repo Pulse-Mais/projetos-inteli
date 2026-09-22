@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nova turma | Pulse Mais</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/fluxos.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <a href="dashboard.html" aria-label="Pulse Mais"><img src="img/logo-pulse.svg" alt="Pulse Mais" class="sidebar-logo" /></a>
+        <div class="sidebar-user">
+          <span class="sidebar-user-avatar"><i data-lucide="circle-user"></i></span>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-nome">Olá, Mariana</span><span class="sidebar-user-cargo">Coord. Pedagógica</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="dashboard.html" class="nav-link"><i data-lucide="chart-bar"></i> Dashboard</a>
+          <a href="turmas.html" class="nav-link ativo"><i data-lucide="users"></i> Turmas</a>
+          <a href="registros.html" class="nav-link"><i data-lucide="clipboard-check"></i> Registros</a>
+          <a href="comunicados.html" class="nav-link"><i data-lucide="message-square-dot"></i> Comunicados</a>
+          <button type="button" id="logoutButton" class="nav-link nav-link-logout" aria-label="Sair da conta">
+            <i data-lucide="log-out"></i>
+            Sair
+          </button>
+        </nav>
+      </aside>
+      <main class="conteudo pagina-operacional">
+        <header class="pagina-operacional__topo">
+          <div>
+            <h1>Cadastrar nova turma</h1>
+            <p class="pagina-operacional__descricao">Defina o período, responsável e capacidade da nova jornada.</p>
+          </div>
+          <a href="turmas.html" class="btn-fluxo btn-fluxo--secundario"><i data-lucide="arrow-left"></i> Voltar</a>
+        </header>
+        <form class="painel" id="form-turma">
+          <h2 class="painel-titulo"><i data-lucide="users-round"></i> Dados da turma</h2>
+          <div class="form-grade">
+            <label class="campo-form"
+              ><span>Nome da turma*</span><input name="nome" placeholder="Ex.: Turma Sistemas Web 2026" required
+            /></label>
+            <label class="campo-form"
+              ><span>Responsável*</span><input name="responsavel" placeholder="Nome do responsável" required
+            /></label>
+            <label class="campo-form"><span>Data de início*</span><input type="date" name="inicio" required /></label>
+            <label class="campo-form"><span>Previsão de término*</span><input type="date" name="fim" required /></label>
+            <label class="campo-form"
+              ><span>Capacidade*</span><input type="number" name="capacidade" min="1" max="100" value="30" required
+            /></label>
+            <label class="campo-form"
+              ><span>Status</span
+              ><select name="status">
+                <option>Planejada</option>
+                <option>Ativa</option>
+              </select></label
+            >
+            <label class="campo-form campo-form--largo"
+              ><span>Descrição</span
+              ><textarea name="descricao" placeholder="Objetivo, trilha ou observações sobre a turma"></textarea>
+            </label>
+          </div>
+          <div class="acoes-form">
+            <a href="turmas.html" class="btn-fluxo btn-fluxo--secundario">Cancelar</a
+            ><button class="btn-fluxo btn-fluxo--primario" type="submit">
+              <i data-lucide="save"></i> Cadastrar turma
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="js/fluxos.js"></script>
+    <script>
+      lucide.createIcons();
+      document.getElementById("form-turma").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const ok = await PulseModal.confirm({
+          titulo: "Cadastrar nova turma?",
+          texto: "Confira período, responsável e capacidade antes de continuar.",
+          confirmar: "Cadastrar turma",
+        });
+        if (ok) location.href = "turmas.html";
+      });
+    </script>
+  </body>
+</html>

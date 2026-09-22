@@ -1,0 +1,37 @@
+/* Perfil do ex-aluno (visão do coordenador) */
+
+.exaluno-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(0, 56, 112, 0.08);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.perfil-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.conquistas-lista-card__header--acoes {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .conquistas-lista-card__header--acoes {
+    flex-direction: column;
+  }
+
+  .conquistas-lista-card__header--acoes .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

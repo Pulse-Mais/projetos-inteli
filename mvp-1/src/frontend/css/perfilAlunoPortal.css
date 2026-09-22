@@ -1,0 +1,169 @@
+/* Margens laterais */
+.page-header,
+.perfil-layout {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Grade 16 colunas igual ao coordenador */
+.perfil-main-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 24px 32px;
+  align-items: start;
+}
+
+/* Coluna da foto — span 4 */
+.perfil-identity {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Coluna dos dados — span 12 */
+.perfil-info-top {
+  grid-column: span 12;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Rows de largura total */
+.perfil-row-cargo,
+.perfil-row-pro,
+.perfil-row-loc {
+  grid-column: 1 / 17;
+  width: 100%;
+}
+
+.perfil-row-pro,
+.perfil-row-loc {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* Botões de foto */
+.btn-foto {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: opacity 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-foto:hover { opacity: 0.88; }
+
+.btn-foto--danger {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Botão verde de ação */
+.btn-verde {
+  background-color: var(--color-accent) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-accent) !important;
+}
+
+.btn-verde:hover {
+  background-color: #1e8e46 !important;
+  opacity: 1 !important;
+}
+
+/* Input dentro dos cards — substitui o <p> no modo edição */
+.perfil-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #c9cdd4;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: transparent;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.perfil-input:focus {
+  border-bottom-color: var(--color-accent);
+}
+
+/* Mensagem de erro inline */
+.form-erro {
+  font-size: 12px;
+  color: var(--color-danger);
+  margin-top: 2px;
+  display: none;
+}
+
+/* Feedbacks de sucesso e erro */
+.feedback-sucesso,
+.feedback-erro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.feedback-sucesso {
+  background: rgba(37, 176, 87, 0.1);
+  color: var(--color-success-text);
+  border: 1px solid rgba(37, 176, 87, 0.3);
+}
+
+.feedback-erro {
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--color-danger);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .page-header,
+  .perfil-layout {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .perfil-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .perfil-row-pro,
+  .perfil-row-loc,
+  .perfil-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-footer {
+    flex-direction: column;
+  }
+
+  .perfil-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,372 @@
+﻿/* Cabeçalho da página */
+.page-header {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Wrapper do calendário */
+.calendario-wrapper {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 28px 32px;
+  margin-left: 48px;
+  margin-right: 48px;
+  margin-bottom: 16px;
+}
+
+/* Navegação do calendário */
+.calendario-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.calendario-nav__esquerda {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.calendario-nav__btn {
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.calendario-nav__btn:hover {
+  background: rgba(0, 56, 112, 0.06);
+}
+
+.calendario-nav__btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.calendario-nav__titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 160px;
+  text-align: center;
+}
+
+/* Grid do calendário */
+.calendario-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+  grid-auto-rows: 100px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.calendario-dia-semana {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px 0;
+  letter-spacing: 0.03em;
+}
+
+.calendario-celula {
+  overflow: hidden;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 8px 10px;
+  background: var(--color-white);
+  cursor: default;
+  transition: background 0.12s;
+}
+
+/* Remove borda direita das últimas células de cada linha */
+.calendario-celula:nth-child(7n) {
+  border-right: none;
+}
+
+/* Remove borda inferior das células da última linha — feito via JS */
+.calendario-celula--ultima-linha {
+  border-bottom: none;
+}
+
+.calendario-celula--outro-mes {
+  background: #FAFAFA;
+}
+
+.calendario-celula--outro-mes .calendario-celula__dia {
+  color: #BBBBBB;
+}
+
+.calendario-celula--evento {
+  background: rgba(37, 176, 87, 0.12);
+  border-color: rgba(37, 176, 87, 0.3);
+  cursor: pointer;
+}
+
+.calendario-celula--evento:hover {
+  filter: brightness(0.94);
+}
+
+.calendario-celula__dia {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.calendario-celula--evento .calendario-celula__dia {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.evento-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.evento-aluno {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Tooltip flutuante de evento */
+.evento-tooltip {
+  position: fixed;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  max-width: 260px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.12s;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.evento-tooltip.visivel {
+  opacity: 1;
+}
+
+.evento-tooltip__item + .evento-tooltip__item {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+.evento-tooltip__tipo {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+
+.evento-tooltip__nome {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Legenda */
+.calendario-legenda {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 16px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legenda-cor {
+  width: 14px;
+  height: 14px;
+  background: rgba(37, 176, 87, 0.18);
+  border: 1.5px solid var(--color-accent);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.legenda-texto {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-support);
+}
+
+/* Busca de alunos no modal */
+.modal-section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.pills-grupo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: 5px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--color-primary);
+  background: var(--color-white);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pill:hover {
+  background: rgba(0, 56, 112, 0.06);
+}
+
+.pill.ativo {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.resultados-busca {
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 20px;
+  max-height: 160px;
+  overflow-y: auto;
+  display: none;
+}
+
+.resultados-busca.visivel {
+  display: block;
+}
+
+.resultado-item {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.resultado-item:last-child {
+  border-bottom: none;
+}
+
+.resultado-item:hover {
+  background: var(--color-gray);
+}
+
+.resultado-item.selecionado {
+  background: rgba(37, 176, 87, 0.12);
+}
+
+.resultado-item__nome {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.resultado-item__detalhe {
+  font-size: 12px;
+  color: var(--color-text-support);
+}
+
+.aluno-selecionado-info {
+  background: rgba(37, 176, 87, 0.1);
+  border: 1.5px solid rgba(37, 176, 87, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+  display: none;
+}
+
+.aluno-selecionado-info.visivel {
+  display: block;
+}
+
+/* Grid 2 colunas: data e horário */
+.form-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .calendario-wrapper,
+  .page-header {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+  }
+
+  .calendario-nav__titulo {
+    font-size: 15px;
+    min-width: 120px;
+  }
+
+  .calendario-grid {
+    grid-auto-rows: 60px;
+  }
+
+  .calendario-celula {
+    padding: 4px 6px;
+  }
+
+  .calendario-celula__dia {
+    font-size: 11px;
+  }
+
+  .evento-aluno {
+    display: none;
+  }
+
+  .form-2col {
+    grid-template-columns: 1fr;
+  }
+}

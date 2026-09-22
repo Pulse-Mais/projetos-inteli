@@ -1,0 +1,79 @@
+<svg width="1200" height="220" viewBox="0 0 1200 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Banner de boas-vindas do projeto Nexus</title>
+  <desc id="desc">Painel com estilo LED exibindo mensagem animada de boas-vindas ao projeto Nexus.</desc>
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#99CCFF" stop-opacity="0.42"/>
+      <stop offset="55%" stop-color="#5696D6" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0C253D" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="ledGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="2.4" fill="#99CCFF" opacity="0.16"/>
+    </pattern>
+    <filter id="textGlow" x="-20%" y="-120%" width="140%" height="340%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="screenClip">
+      <rect x="24" y="42" width="1152" height="136" rx="18"/>
+    </clipPath>
+  </defs>
+
+  <rect x="14" y="18" width="1172" height="184" rx="24" fill="none" stroke="#99CCFF" stroke-opacity="0.8" stroke-width="2"/>
+  <rect x="24" y="42" width="1152" height="136" rx="18" fill="none" stroke="#5696D6" stroke-opacity="0.9" stroke-width="2"/>
+  <rect x="24" y="42" width="1152" height="136" rx="18" fill="url(#ledGrid)" opacity="0.75"/>
+  <ellipse cx="600" cy="110" rx="520" ry="82" fill="url(#glow)" opacity="0.8"/>
+
+  <g clip-path="url(#screenClip)">
+    <text x="600" y="125"
+      font-family="'Courier New', Consolas, monospace"
+      font-size="42"
+      font-weight="700"
+      letter-spacing="1"
+      text-anchor="middle"
+      fill="#99CCFF"
+      filter="url(#textGlow)"
+      opacity="0">
+      Olá, sejam bem-vindos!
+      <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.08;0.28;0.36;1" dur="18s" repeatCount="indefinite"/>
+    </text>
+    <text x="600" y="125"
+      font-family="'Courier New', Consolas, monospace"
+      font-size="42"
+      font-weight="700"
+      letter-spacing="1"
+      text-anchor="middle"
+      fill="#99CCFF"
+      filter="url(#textGlow)"
+      opacity="0">
+      Somos o grupo, NEXUS!
+      <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.34;0.42;0.62;0.7;1" dur="18s" repeatCount="indefinite"/>
+    </text>
+    <text x="600" y="107"
+      font-family="'Courier New', Consolas, monospace"
+      font-size="30"
+      font-weight="700"
+      letter-spacing="1"
+      text-anchor="middle"
+      fill="#99CCFF"
+      filter="url(#textGlow)"
+      opacity="0">
+      <tspan x="600" dy="0">Leia nosso WAD</tspan>
+      <tspan x="600" dy="42">para entender mais sobre nossa proposta!</tspan>
+      <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.66;0.74;0.94;1" dur="18s" repeatCount="indefinite"/>
+    </text>
+  </g>
+
+  <circle cx="70" cy="110" r="5" fill="#F4B400">
+    <animate attributeName="opacity" values="1;0.25;1" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1130" cy="110" r="5" fill="#F4B400">
+    <animate attributeName="opacity" values="0.25;1;0.25" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="600" y="196" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#5696D6" opacity="0.9">
+    Projeto Nexus
+  </text>
+</svg>

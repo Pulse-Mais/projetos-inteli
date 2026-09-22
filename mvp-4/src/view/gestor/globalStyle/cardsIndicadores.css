@@ -1,0 +1,85 @@
+/* Cards de indicadores (KPIs) — alinhado à coordenadora (tokens) */
+
+.indicator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-5);
+}
+
+.indicator-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  padding: var(--espaco-5);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--branco);
+  box-shadow: var(--sombra-sm);
+}
+
+/* Card clicavel (indicador que e link, ex.: Risco de Evasao): feedback de hover */
+a.indicator-card {
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+a.indicator-card:hover {
+  box-shadow: var(--sombra-md);
+  transform: translateY(-2px);
+}
+
+/* Borda colorida no tom do tema */
+.metric-blue   { border-color: var(--cor-secundaria); }
+.metric-green  { border-color: var(--sucesso); }
+.metric-yellow { border-color: var(--alerta); }
+.metric-red    { border-color: var(--erro); }
+
+/* Ícone dentro de um quadradinho arredondado com fundo claro do tema */
+.indicator-card .card-icon {
+  width: 40px;
+  height: 40px;
+  padding: 9px;
+  border-radius: var(--raio-sm);
+}
+
+.metric-blue   .card-icon { color: var(--cor-primaria); background-color: var(--cor-secundaria-clara); }
+.metric-green  .card-icon { color: var(--sucesso);      background-color: var(--sucesso-fundo); }
+.metric-yellow .card-icon { color: var(--alerta);       background-color: var(--alerta-fundo); }
+.metric-red    .card-icon { color: var(--erro);         background-color: var(--erro-fundo); }
+
+/* Rótulo, valor e subtítulo */
+.indicator-card h2 {
+  margin: 0;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  line-height: 1.25;
+  text-transform: none;
+  color: var(--texto-secundario);
+}
+
+.indicator-card strong {
+  font-size: 1.75rem;
+  font-weight: var(--peso-bold);
+  line-height: 1.1;
+  color: var(--texto-principal);
+}
+
+.indicator-card p {
+  margin: 0;
+  font-size: var(--texto-xs);
+  color: var(--texto-secundario);
+}
+
+/* Selo de variação no canto do card */
+.badge {
+  position: absolute;
+  top: var(--espaco-5);
+  right: var(--espaco-5);
+  padding: 2px var(--espaco-2);
+  border-radius: var(--raio-full);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  line-height: 1.4;
+}
+
+.badge.positive { color: var(--sucesso); background-color: var(--sucesso-fundo); }
+.badge.danger   { color: var(--erro);    background-color: var(--erro-fundo); }

@@ -1,0 +1,701 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão de Alunos - Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <link rel="stylesheet" href="css/alunos.css" />
+  <script src="lucide.min.js"></script>
+</head>
+
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-text">PC</span>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard.html" class="sidebar__nav-item" title="Dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="alunos.html" class="sidebar__nav-item active" title="Alunos" aria-current="page">
+        <i data-lucide="users" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Alunos</span>
+      </a>
+      <a href="perfil-coordenador.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+      <a href="relatorios.html" class="sidebar__nav-item" title="Relatórios">
+        <i data-lucide="bar-chart-2" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Relatórios</span>
+      </a>
+      <a href="programas.html" class="sidebar__nav-item" title="Programas">
+        <i data-lucide="book-open" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Programas</span>
+      </a>
+      <a href="mentoria.html" class="sidebar__nav-item" id="sidebar-nav-mentoria" title="Mentoria">
+        <i data-lucide="message-square" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Mentoria</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">Perfil</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Alunos</span>
+      </div>
+
+      <div class="topbar__actions">
+        <a class="topbar__user" id="topbar-user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content alunos-page">
+      <section class="alunos-heading" aria-labelledby="alunos-title">
+        <div>
+          <h1 id="alunos-title">Gestão de Alunos</h1>
+          <p>Visualize, edite e gerencie todos os alunos da plataforma</p>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn--outline" id="btn-exportar" type="button">
+            <i data-lucide="download" width="15" height="15"></i>
+            Exportar CSV
+          </button>
+          <button class="btn btn--outline" id="btn-importar" type="button">
+            <i data-lucide="upload" width="15" height="15"></i>
+            Importar CSV
+          </button>
+          <a href="cadastrar-aluno.html" class="btn btn--blue">
+            <i data-lucide="plus" width="15" height="15"></i>
+            Criar Novo Aluno
+          </a>
+        </div>
+      </section>
+
+      <section class="card alunos-card" aria-label="Lista de alunos">
+        <div class="alunos-toolbar">
+          <label class="alunos-search" for="alunos-search">
+            <i data-lucide="search" width="17" height="17"></i>
+            <input
+              id="alunos-search"
+              type="search"
+              placeholder="Buscar por nome, email"
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="filter-wrap">
+            <button class="btn btn--outline alunos-filter" id="alunos-filter" type="button">
+              <i data-lucide="sliders-horizontal" width="15" height="15"></i>
+              Filtros
+              <span class="filter-badge hidden" id="filter-badge">0</span>
+            </button>
+
+            <div class="filter-dropdown hidden" id="filter-dropdown">
+              <div class="filter-dropdown__header">
+                <span class="filter-dropdown__title">Filtros</span>
+                <button type="button" class="filter-dropdown__clear" id="filter-clear">Limpar tudo</button>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Categoria</div>
+                <div class="filter-pills">
+                  <button class="filter-pill" data-tipo="categoria" data-valor="Conectado">Conectado</button>
+                  <button class="filter-pill" data-tipo="categoria" data-valor="Capacitado">Capacitado</button>
+                  <button class="filter-pill" data-tipo="categoria" data-valor="Transformado">Transformado</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Status</div>
+                <div class="filter-pills">
+                  <button class="filter-pill" data-tipo="status" data-valor="Ativo">Ativo</button>
+                  <button class="filter-pill" data-tipo="status" data-valor="Inativo">Inativo</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Situação de trabalho</div>
+                <div class="filter-pills">
+                  <button class="filter-pill" data-tipo="trabalho" data-valor="Empregado">Empregado</button>
+                  <button class="filter-pill" data-tipo="trabalho" data-valor="Procurando">Procurando</button>
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <div class="filter-group__label">Ensino superior</div>
+                <div class="filter-pills">
+                  <button class="filter-pill" data-tipo="ensino" data-valor="Concluido">Concluído</button>
+                  <button class="filter-pill" data-tipo="ensino" data-valor="Cursando">Cursando</button>
+                  <button class="filter-pill" data-tipo="ensino" data-valor="Não possui">Não possui</button>
+                </div>
+              </div>
+
+              <div class="filter-group" id="filter-group-programa" style="display:none;">
+                <div class="filter-group__label">Programa em curso</div>
+                <div class="filter-pills" id="filter-pills-programa"></div>
+              </div>
+
+              <div class="filter-group" id="filter-group-ano" style="display:none;">
+                <div class="filter-group__label">Ano de ingresso</div>
+                <div class="filter-pills" id="filter-pills-ano"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="alunos-table">
+            <thead>
+              <tr>
+                <th scope="col">Aluno</th>
+                <th scope="col">Contato</th>
+                <th scope="col">Programa</th>
+                <th scope="col">Status</th>
+                <th scope="col">Frequência</th>
+                <th scope="col">Nota</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="alunos-tbody">
+              <!-- As linhas serão inseridas pela camada de dados/mocks. -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alunos-footer">
+          <p id="alunos-count" aria-live="polite">Nenhum aluno carregado</p>
+
+          <nav class="alunos-pagination" id="alunos-pagination" aria-label="Paginação dos alunos">
+            <button class="alunos-page-button" id="alunos-prev" type="button" disabled>Anterior</button>
+            <div class="alunos-page-numbers" id="alunos-page-numbers"></div>
+            <button class="alunos-page-button" id="alunos-next" type="button" disabled>Próximo</button>
+          </nav>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Modal de importação CSV -->
+<div class="modal-overlay" id="modal-importar" onclick="fecharModalExt(event)" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,22,40,0.45);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:520px;box-shadow:0 8px 40px rgba(0,0,0,0.18);">
+    <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px;">Importar alunos via CSV</div>
+    <p style="font-size:13px;color:var(--muted);margin:0 0 20px;">
+      Selecione um arquivo <code>.csv</code> com os dados dos alunos.
+      <a id="link-template" href="#" onclick="baixarTemplate(event)"
+         style="color:var(--brand-dark);font-weight:600;text-decoration:none;">
+        <i data-lucide="file-down" width="12" height="12" style="vertical-align:middle;margin-right:2px;"></i>
+        Baixar modelo
+      </a>
+    </p>
+
+    <label style="display:block;border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:border-color .15s;" id="drop-zone">
+      <i data-lucide="upload-cloud" width="32" height="32" style="color:var(--muted);display:block;margin:0 auto 10px;"></i>
+      <span style="font-size:13px;color:var(--muted);" id="drop-label">Clique ou arraste o arquivo aqui</span>
+      <input type="file" id="input-csv" accept=".csv,text/csv" style="display:none;" />
+    </label>
+
+    <div id="import-resultado" style="display:none;margin-top:16px;"></div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button onclick="fecharModal()" style="padding:9px 18px;border:1px solid var(--border);border-radius:8px;background:transparent;font-family:inherit;font-size:13px;color:var(--navy);cursor:pointer;">Cancelar</button>
+      <button id="btn-enviar-csv" onclick="enviarCsv()"
+              style="padding:9px 18px;background:var(--brand-dark);border:none;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;color:#fff;cursor:pointer;opacity:0.4;pointer-events:none;">
+        <i data-lucide="upload" width="14" height="14" style="vertical-align:middle;margin-right:4px;"></i>
+        Importar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   alunos.html — Gestão de Alunos (vertical Coordenador)
+   Endpoint: GET /api/jovens  (lista; filtros client-side)
+   ================================================================ */
+const API = 'http://localhost:3000/api';
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return { userId: 1, perfil: 'Coordenacao', nome: 'Joana Moura' };
+}
+
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+
+async function apiFetch(path, options = {}) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') {
+      console.warn('[alunos] API indisponível — usando dados mock.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+function initials(nome = '') {
+  return nome.split(' ').filter(Boolean).slice(0, 2).map(p => p[0].toUpperCase()).join('');
+}
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+const CAT_COLOR = { Conectado: '#003870', Capacitado: '#caa402', Transformado: '#33B458' };
+const STATUS_COLOR = { Ativo: '#33B458', Formado: '#003870', Evadido: '#e06b2c', Inativo: '#5b6b7d' };
+function pill(text, color) {
+  return `<span style="display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;
+    color:${color};background:${color}1a;">${escHtml(text || '—')}</span>`;
+}
+
+/* ── Estado ──────────────────────────────────────────────────── */
+let TODOS = [];
+let TAXAS         = new Map(); // id_jovem → taxa %
+let INSCRICOES_MAP = new Map(); // id_jovem → [{id_programa, nome, ano}]
+let PROGRAMAS_MAP  = new Map(); // id_programa → programa
+let EMP_MAP        = new Map(); // id_jovem → situacao de trabalho (registro mais recente)
+let ES_MAP         = new Map(); // id_jovem → situacao de ensino superior (registro mais recente)
+let FILTROS = { categorias: new Set(), statuses: new Set(), programas: new Set(), anos: new Set(), trabalho: new Set(), ensino: new Set() };
+let pagina = 1;
+const POR_PAGINA = 8;
+
+async function carregar() {
+  const [jovensData, programasData] = await Promise.all([
+    apiFetch('/jovens'),
+    apiFetch('/programas'),
+  ]);
+  TODOS = Array.isArray(jovensData) ? jovensData : [];
+  PROGRAMAS_MAP = new Map(
+    (Array.isArray(programasData) ? programasData : []).map(p => [p.id, p])
+  );
+
+  // Frequência + inscrições + emprego + ensino superior por aluno em paralelo
+  const resultados = await Promise.all(
+    TODOS.map(async j => {
+      const [freqData, inscData, empData, esData] = await Promise.all([
+        apiFetch(`/frequencia/jovens/${j.id}/frequencias-aula`).catch(() => null),
+        apiFetch(`/jovens/${j.id}/inscricoes/${j.id}/inscricao`).catch(() => null),
+        apiFetch(`/jovens/${j.id}/empregabilidade`).catch(() => null),
+        apiFetch(`/jovens/${j.id}/ensino-superior`).catch(() => null),
+      ]);
+
+      let taxa = null;
+      if (Array.isArray(freqData) && freqData.length) {
+        const pres = freqData.filter(r => r.presente === true || r.presente === 1).length;
+        taxa = Math.round(pres / freqData.length * 100);
+      }
+
+      const inscricoes = (Array.isArray(inscData) ? inscData : []).map(insc => {
+        const prog = PROGRAMAS_MAP.get(insc.id_programa);
+        const raw  = insc.data_matricula || prog?.data_inicio || null;
+        const ano  = raw ? new Date(raw).getFullYear() : null;
+        return { id_programa: insc.id_programa, nome: prog?.nome ?? `Programa ${insc.id_programa}`, ano };
+      });
+
+      // Registro mais recente (a API ordena por data DESC)
+      const emp = Array.isArray(empData) && empData.length ? empData[0].situacao : null;
+      const es  = Array.isArray(esData)  && esData.length  ? esData[0].situacao  : null;
+
+      return { id: j.id, taxa, inscricoes, emp, es };
+    })
+  );
+
+  TAXAS          = new Map(resultados.map(r => [r.id, r.taxa]));
+  INSCRICOES_MAP = new Map(resultados.map(r => [r.id, r.inscricoes]));
+  EMP_MAP        = new Map(resultados.map(r => [r.id, r.emp]));
+  ES_MAP         = new Map(resultados.map(r => [r.id, r.es]));
+
+  buildDynamicFilters();
+  pagina = 1;
+  render();
+}
+
+function buildDynamicFilters() {
+  const nomesSet = new Set(); // "Nome do programa"
+  const anosSet  = new Set(); // "2024"
+
+  for (const inscricoes of INSCRICOES_MAP.values()) {
+    for (const insc of inscricoes) {
+      if (insc.nome) nomesSet.add(insc.nome);
+      if (insc.ano)  anosSet.add(String(insc.ano));
+    }
+  }
+
+  // Grupo Programa em curso (o nome do programa já identifica a turma/ano)
+  const grpProg  = document.getElementById('filter-group-programa');
+  const pillsProg = document.getElementById('filter-pills-programa');
+  if (nomesSet.size) {
+    pillsProg.innerHTML = [...nomesSet]
+      .sort()
+      .map(nome => `<button class="filter-pill" data-tipo="programa" data-valor="${escHtml(nome)}">${escHtml(nome)}</button>`)
+      .join('');
+    grpProg.style.display = '';
+  }
+
+  // Grupo Ano de ingresso
+  const grpAno  = document.getElementById('filter-group-ano');
+  const pillsAno = document.getElementById('filter-pills-ano');
+  if (anosSet.size) {
+    pillsAno.innerHTML = [...anosSet]
+      .sort()
+      .map(ano => `<button class="filter-pill" data-tipo="ano" data-valor="${escHtml(ano)}">${escHtml(ano)}</button>`)
+      .join('');
+    grpAno.style.display = '';
+  }
+}
+
+function filtrados() {
+  const q = (document.getElementById('alunos-search').value || '').trim().toLowerCase();
+  return TODOS.filter(j => {
+    if (q && !(j.nome || '').toLowerCase().includes(q) && !(j.email || '').toLowerCase().includes(q)) return false;
+    if (FILTROS.categorias.size && !FILTROS.categorias.has(j.categoria_atual)) return false;
+    if (FILTROS.statuses.size   && !FILTROS.statuses.has(j.status_global))     return false;
+
+    const inscricoes = INSCRICOES_MAP.get(j.id) ?? [];
+
+    if (FILTROS.programas.size) {
+      const ok = inscricoes.some(insc => FILTROS.programas.has(insc.nome));
+      if (!ok) return false;
+    }
+
+    if (FILTROS.anos.size) {
+      const ok = inscricoes.some(insc => FILTROS.anos.has(String(insc.ano)));
+      if (!ok) return false;
+    }
+
+    if (FILTROS.trabalho.size && !FILTROS.trabalho.has(EMP_MAP.get(j.id))) return false;
+    if (FILTROS.ensino.size   && !FILTROS.ensino.has(ES_MAP.get(j.id)))    return false;
+
+    return true;
+  });
+}
+
+function setDoFiltro(tipo) {
+  return tipo === 'categoria' ? FILTROS.categorias
+       : tipo === 'status'    ? FILTROS.statuses
+       : tipo === 'programa'  ? FILTROS.programas
+       : tipo === 'trabalho'  ? FILTROS.trabalho
+       : tipo === 'ensino'    ? FILTROS.ensino
+       :                        FILTROS.anos;
+}
+
+function atualizarFiltroUI() {
+  const total = FILTROS.categorias.size + FILTROS.statuses.size
+              + FILTROS.programas.size  + FILTROS.anos.size
+              + FILTROS.trabalho.size   + FILTROS.ensino.size;
+  const badge = document.getElementById('filter-badge');
+  badge.textContent = total;
+  badge.classList.toggle('hidden', total === 0);
+  document.querySelectorAll('.filter-pill').forEach(p => {
+    p.classList.toggle('active', setDoFiltro(p.dataset.tipo).has(p.dataset.valor));
+  });
+}
+
+function bindFiltros() {
+  const btn      = document.getElementById('alunos-filter');
+  const dropdown = document.getElementById('filter-dropdown');
+
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', () => dropdown.classList.add('hidden'));
+  dropdown.addEventListener('click', e => e.stopPropagation());
+
+  // Delegação: captura pills estáticos e os dinâmicos adicionados depois
+  dropdown.addEventListener('click', e => {
+    const pill = e.target.closest('.filter-pill');
+    if (!pill) return;
+    const set = setDoFiltro(pill.dataset.tipo);
+    if (set.has(pill.dataset.valor)) set.delete(pill.dataset.valor);
+    else                             set.add(pill.dataset.valor);
+    atualizarFiltroUI();
+    pagina = 1;
+    render();
+  });
+
+  document.getElementById('filter-clear').addEventListener('click', () => {
+    FILTROS.categorias.clear();
+    FILTROS.statuses.clear();
+    FILTROS.programas.clear();
+    FILTROS.anos.clear();
+    FILTROS.trabalho.clear();
+    FILTROS.ensino.clear();
+    atualizarFiltroUI();
+    pagina = 1;
+    render();
+  });
+}
+
+function render() {
+  const lista = filtrados();
+  const totalPag = Math.max(1, Math.ceil(lista.length / POR_PAGINA));
+  if (pagina > totalPag) pagina = totalPag;
+  const slice = lista.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA);
+  const tbody = document.getElementById('alunos-tbody');
+
+  if (!slice.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:28px;">
+      Nenhum aluno encontrado.</td></tr>`;
+  } else {
+    tbody.innerHTML = slice.map(j => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;
+              display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">${initials(j.nome)}</span>
+            <span style="font-weight:600;color:var(--navy);">${escHtml(j.nome)}</span>
+          </div>
+        </td>
+        <td>
+          <div style="color:var(--navy);">${escHtml(j.email || '—')}</div>
+          <div style="font-size:12px;color:var(--muted);">${escHtml(j.telefone || '—')}</div>
+        </td>
+        <td>${(() => {
+          const inscricoes = INSCRICOES_MAP.get(j.id) ?? [];
+          const ativa = inscricoes[0];
+          return ativa
+            ? `<span style="font-size:12px;color:var(--navy);font-weight:500;">${escHtml(ativa.nome)}</span>
+               ${ativa.ano ? `<div style="font-size:11px;color:var(--muted);">${ativa.ano}</div>` : ''}`
+            : `<span style="color:var(--muted);font-size:12px;">—</span>`;
+        })()}</td>
+        <td>${pill(j.status_global, STATUS_COLOR[j.status_global] || '#5b6b7d')}</td>
+        <td style="color:var(--muted);">${TAXAS.has(j.id) && TAXAS.get(j.id) != null ? TAXAS.get(j.id) + '%' : '—'}</td>
+        <td style="color:var(--muted);">—</td>
+        <td>
+          <a href="perfil-aluno.html?id=${j.id}" class="btn btn--outline" title="Ver perfil"
+             style="padding:6px 10px;">
+            <i data-lucide="eye" width="15" height="15"></i>
+          </a>
+        </td>
+      </tr>`).join('');
+  }
+
+  const count = document.getElementById('alunos-count');
+  count.textContent = lista.length
+    ? `${lista.length} aluno(s) · página ${pagina} de ${totalPag}`
+    : 'Nenhum aluno carregado';
+
+  document.getElementById('alunos-prev').disabled = pagina <= 1;
+  document.getElementById('alunos-next').disabled = pagina >= totalPag;
+  document.getElementById('alunos-page-numbers').textContent = `${pagina} / ${totalPag}`;
+
+  lucide.createIcons();
+}
+
+/* ── Exportar ─────────────────────────────────────────────────── */
+function exportarCsv() {
+  const params = new URLSearchParams();
+
+  // Repassa filtros ativos para o backend
+  if (FILTROS.categorias.size === 1) params.set('categoria_atual', [...FILTROS.categorias][0]);
+  if (FILTROS.statuses.size === 1)   params.set('status_global',   [...FILTROS.statuses][0]);
+
+  // Filtro de programa: resolve o id_programa a partir do nome selecionado
+  if (FILTROS.programas.size === 1) {
+    const nome = [...FILTROS.programas][0];
+    const prog = [...PROGRAMAS_MAP.values()].find(p => p.nome === nome);
+    if (prog) params.set('id_programa', String(prog.id));
+    if (FILTROS.anos.size === 1) params.set('ano_matricula', [...FILTROS.anos][0]);
+  } else if (FILTROS.anos.size === 1) {
+    params.set('ano_matricula', [...FILTROS.anos][0]);
+  }
+
+  const qs = params.toString();
+  window.open(`${API}/export${qs ? '?' + qs : ''}`, '_blank');
+}
+
+/* ── Modal de importar ───────────────────────────────────────── */
+let _arquivoCsv = null;
+
+function abrirModalImportar() {
+  _arquivoCsv = null;
+  document.getElementById('drop-label').textContent = 'Clique ou arraste o arquivo aqui';
+  document.getElementById('import-resultado').style.display = 'none';
+  document.getElementById('import-resultado').innerHTML = '';
+  const btnEnviar = document.getElementById('btn-enviar-csv');
+  btnEnviar.style.opacity = '0.4';
+  btnEnviar.style.pointerEvents = 'none';
+  document.getElementById('modal-importar').style.display = 'flex';
+  lucide.createIcons();
+}
+
+function fecharModal() {
+  document.getElementById('modal-importar').style.display = 'none';
+}
+
+function fecharModalExt(e) {
+  if (e.target === document.getElementById('modal-importar')) fecharModal();
+}
+
+function baixarTemplate(e) {
+  e.preventDefault();
+  window.open(`${API}/export/template`, '_blank');
+}
+
+function bindImportar() {
+  const input   = document.getElementById('input-csv');
+  const dropZone = document.getElementById('drop-zone');
+
+  const selecionarArquivo = (file) => {
+    if (!file || !file.name.endsWith('.csv')) {
+      alert('Selecione um arquivo .csv válido.');
+      return;
+    }
+    _arquivoCsv = file;
+    document.getElementById('drop-label').textContent = file.name;
+    const btn = document.getElementById('btn-enviar-csv');
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'auto';
+  };
+
+  input.addEventListener('change', () => { if (input.files[0]) selecionarArquivo(input.files[0]); });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--brand-dark)'; });
+  dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'var(--border)'; });
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.style.borderColor = 'var(--border)';
+    const file = e.dataTransfer?.files[0];
+    if (file) { selecionarArquivo(file); input.files = e.dataTransfer.files; }
+  });
+  dropZone.addEventListener('click', () => input.click());
+}
+
+async function enviarCsv() {
+  if (!_arquivoCsv) return;
+  const session  = getSession();
+  const userId   = session?.userId ?? 1;
+  const btnEnviar = document.getElementById('btn-enviar-csv');
+  const resultado = document.getElementById('import-resultado');
+
+  btnEnviar.textContent = 'Enviando...';
+  btnEnviar.style.opacity = '0.6';
+  btnEnviar.style.pointerEvents = 'none';
+
+  const form = new FormData();
+  form.append('arquivo', _arquivoCsv);
+
+  try {
+    const res = await fetch(`${API}/import?id_usuario=${userId}`, { method: 'POST', body: form });
+    const json = await res.json();
+
+    const { importados = 0, atualizados = 0, erros = [] } = json;
+    const total = importados + atualizados;
+
+    let html = `
+      <div style="border-radius:8px;padding:14px 16px;margin-bottom:${erros.length ? '10px' : '0'};
+           background:${total > 0 ? '#E6F8ED' : '#FFF3E0'};
+           border:1px solid ${total > 0 ? '#33B458' : '#BA7517'};">
+        <div style="font-size:13px;font-weight:600;color:${total > 0 ? '#2A9447' : '#8B5E00'};">
+          ${total > 0
+            ? `✓ ${importados} novo(s) importado(s)${atualizados ? `, ${atualizados} atualizado(s)` : ''}`
+            : 'Nenhum registro processado com sucesso.'}
+        </div>
+      </div>`;
+
+    if (erros.length) {
+      html += `
+        <div style="border-radius:8px;padding:14px 16px;background:#FEF2F2;border:1px solid #F87171;max-height:180px;overflow-y:auto;">
+          <div style="font-size:12px;font-weight:700;color:#B91C1C;margin-bottom:8px;">
+            ${erros.length} erro(s) encontrado(s):
+          </div>
+          <ul style="margin:0;padding-left:18px;font-size:12px;color:#7F1D1D;display:flex;flex-direction:column;gap:3px;">
+            ${erros.map(e => `<li>Linha ${e.linha}: ${escHtml(e.mensagem)}</li>`).join('')}
+          </ul>
+        </div>`;
+    }
+
+    resultado.innerHTML = html;
+    resultado.style.display = 'block';
+
+    if (total > 0) carregar(); // Atualiza tabela
+
+  } catch {
+    resultado.innerHTML = `<div style="color:#B91C1C;font-size:13px;">Falha ao conectar com a API.</div>`;
+    resultado.style.display = 'block';
+  } finally {
+    btnEnviar.innerHTML = '<i data-lucide="upload" width="14" height="14" style="vertical-align:middle;margin-right:4px;"></i>Importar';
+    btnEnviar.style.opacity = '1';
+    btnEnviar.style.pointerEvents = 'auto';
+    lucide.createIcons();
+  }
+}
+
+/* ── Bootstrap ───────────────────────────────────────────────── */
+(function init() {
+  const s = getSession();
+  const ini = initials(s.nome);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('topbar-name', s.nome);
+  set('topbar-avatar', ini);
+  set('sidebar-initials', ini);
+
+  document.getElementById('alunos-search').addEventListener('input', () => { pagina = 1; render(); });
+  document.getElementById('alunos-prev').addEventListener('click', () => { pagina--; render(); });
+  document.getElementById('alunos-next').addEventListener('click', () => { pagina++; render(); });
+
+  document.getElementById('btn-exportar').addEventListener('click', exportarCsv);
+  document.getElementById('btn-importar').addEventListener('click', abrirModalImportar);
+
+  bindFiltros();
+  bindImportar();
+  lucide.createIcons();
+  carregar();
+})();
+</script>
+<script>
+(function() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    const s = raw ? JSON.parse(raw) : null;
+    if (s && s.perfil === 'Gestao') {
+      const el = document.getElementById('sidebar-nav-mentoria');
+      if (el) el.style.display = 'none';
+    }
+  } catch(_) {}
+})();
+</script></body>
+</html>

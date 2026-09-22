@@ -1,0 +1,349 @@
+/* ============================================================
+   CURSOS E BOLSAS — GESTÃO
+   Usa os tokens e componentes do global.css.
+   Só define regras que não têm equivalente lá.
+   ============================================================ */
+
+/* Garante que o atributo hidden sempre oculte, mesmo com display:flex */
+[hidden] { display: none !important; }
+
+/* ── Shell ── */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-page-bg);
+}
+
+.main-wrapper {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.page-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ── Breadcrumb ── */
+.breadcrumb {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+/* ── Título da página ── */
+.page-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: calc(var(--spacing-xs) * -1);
+}
+
+.page-title {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
+  white-space: nowrap;
+}
+
+/* ── Section card ── */
+.section-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+}
+
+.section-card__title {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ── Formulário ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-group--full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
+}
+
+.form-label-optional {
+  font-weight: var(--font-weight-regular);
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 0.7;
+}
+
+.field-error {
+  font-size: var(--font-size-caption);
+  color: var(--color-error);
+  margin-top: 2px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  justify-content: flex-end;
+}
+
+.form-feedback {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.form-feedback--success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.form-feedback--error {
+  background: var(--color-error-soft);
+  color: var(--color-error);
+}
+
+/* ── Cabeçalho da listagem ── */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.list-header .section-card__title {
+  margin-bottom: 0;
+}
+
+.list-filters {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.filter-select {
+  height: 36px;
+  padding: 0 28px 0 var(--spacing-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background: var(--color-input-bg)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E")
+    no-repeat right 8px center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.filter-select:focus { border-color: var(--color-brand); }
+
+/* ── Estados (loading / erro / vazio) ── */
+.state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl) 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.state-panel--error { color: var(--color-error); }
+
+.state-icon {
+  width: 40px;
+  height: 40px;
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin { animation: spin 1s linear infinite; }
+
+/* ── Grid de cards de oportunidades ── */
+.oportunidades-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* ── Card de oportunidade ── */
+.op-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  transition: box-shadow 0.15s;
+}
+
+.op-card:hover {
+  box-shadow: var(--shadow-modal);
+}
+
+.op-card--encerrada {
+  opacity: 0.65;
+}
+
+.op-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.op-card-badges {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.op-card-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.op-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.op-card-meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+.op-card-meta-row i {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.op-card-link {
+  font-size: var(--font-size-caption);
+  color: var(--color-brand);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+.op-card-link:hover { text-decoration: underline; }
+
+.op-card-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.btn-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn-acao:hover { background: var(--color-page-bg); border-color: #d1d5db; }
+
+.btn-acao--danger {
+  color: var(--color-error);
+  border-color: var(--color-error-soft);
+}
+.btn-acao--danger:hover {
+  background: var(--color-error-soft);
+  border-color: var(--color-error);
+}
+
+.btn-acao--reopen {
+  color: var(--color-success);
+  border-color: var(--color-success-soft);
+}
+.btn-acao--reopen:hover {
+  background: var(--color-success-soft);
+  border-color: var(--color-success);
+}
+
+.btn-acao i {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .page-content { padding: var(--spacing-md); }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group--full { grid-column: 1; }
+}
+
+@media (max-width: 540px) {
+  .oportunidades-grid { grid-template-columns: 1fr; }
+  .section-card { padding: var(--spacing-md); }
+  .list-filters { flex-wrap: wrap; }
+}

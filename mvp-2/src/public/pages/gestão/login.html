@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login · Pulsar</title>
+
+  <link rel="stylesheet" href="../../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-login.css" />
+</head>
+<body>
+
+  <div class="login-page">
+    <div class="login-shell">
+
+      <!-- BRAND -->
+      <div class="pulsar-brand">
+        <svg class="pulsar-logo"
+             width="44" height="56"
+             viewBox="0 0 44 56"
+             aria-label="Pulsar" role="img">
+          <rect x="0"  y="0"  width="10" height="56" rx="5" fill="#003d82" />
+          <rect x="17" y="16" width="10" height="40" rx="5" fill="#16a34a" />
+          <rect x="34" y="7"  width="10" height="49" rx="5" fill="#eab308" />
+        </svg>
+        <h1 class="pulsar-wordmark">Pulsar</h1>
+      </div>
+      <!-- /BRAND -->
+
+      <!-- ===== FORM DE LOGIN ===== -->
+      <div id="login-panel">
+        <form class="login-card" id="login-form" novalidate>
+          <h2 class="login-title">Login</h2>
+
+          <div class="login-field">
+            <label for="login-user" class="login-label">E-mail</label>
+            <input id="login-user" name="login-user" type="text"
+                   autocomplete="username" class="login-input" />
+          </div>
+
+          <div class="login-field">
+            <label for="login-pwd" class="login-label">Senha</label>
+            <input id="login-pwd" name="login-pwd" type="password"
+                   autocomplete="current-password" class="login-input" />
+          </div>
+
+          <button type="submit" class="login-submit">Entrar</button>
+
+          <div class="pulsar-footer-bars" aria-hidden="true">
+            <span class="bar bar-blue"></span>
+            <span class="bar bar-green"></span>
+            <span class="bar bar-yellow"></span>
+          </div>
+        </form>
+      </div>
+      <!-- /FORM DE LOGIN -->
+
+    </div>
+  </div>
+
+  <script src="../../js/api.js"></script>
+  <script src="../../js/aluno/login.js"></script>
+</body>
+</html>

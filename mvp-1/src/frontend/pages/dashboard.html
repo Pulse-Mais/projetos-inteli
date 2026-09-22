@@ -1,0 +1,455 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Dashboard</title>
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <!-- Chart.js: biblioteca para criar gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <a href="perfilCoordenador.html" class="sidebar__avatar-link" aria-label="Acessar Meu Perfil">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do coordenador">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepage.html" class="sidebar__link">Homepage</a>
+        <a href="alunos.html" class="sidebar__link">Alunos</a>
+        <a href="dashboard.html" class="sidebar__link ativo">Dashboard</a>
+        <a href="oportunidadesCoordenador.html" class="sidebar__link">Oportunidades</a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo">
+        <img src="/assets/logoAzul.png" alt="Pulse Mais">
+      </div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Dashboard</h2>
+    </div>
+
+    <div class="page-header" style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <div>
+        <h1>Dashboard Institucional</h1>
+        <p>Acompanhamento de impacto e engajamento dos alunos Pulse Mais.</p>
+      </div>
+      <div class="page-header__acoes">
+        <button type="button" class="btn btn--accent" id="btnImportarPlanilha">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 12l-4-4m4 4l4-4M4 20h16"/></svg>
+          Importar Planilha
+        </button>
+        <button type="button" class="btn btn--outline" id="btnGerenciarProgramas">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s4.832.477 6 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          Gerenciar Programas, Cursos e Aulas
+        </button>
+        <button type="button" class="btn btn--outline" id="btnRegistrarAtividades">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Atividades dos Alunos
+        </button>
+        <button type="button" class="btn btn--outline" id="btnRegistrarEventos">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"/></svg>
+          Presença em Eventos
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="dashboard-filters">
+      <div class="dash-filter-group">
+        <button class="dash-filter-btn active" data-category="todas">Todas</button>
+        <button class="dash-filter-btn" data-category="conectado">Conectado</button>
+        <button class="dash-filter-btn" data-category="capacitado">Capacitado</button>
+        <button class="dash-filter-btn" data-category="transformado">Transformado</button>
+      </div>
+      <select class="dash-filter-select" id="filtroAno">
+        <option value="todos">Todos os anos</option>
+      </select>
+    </div>
+
+    <div class="dashboard-content">
+      
+      <!-- SEÇÃO: INDICADORES DE IMPACTO -->
+      <section class="dashboard-section">
+        <h2>Indicadores de Impacto</h2>
+        
+        <div class="indicadores-grid">
+          <article class="indicador-card indicador-card--blue">
+            <span class="indicador-card__valor" id="valConectados">1.247</span>
+            <span class="indicador-card__label">Conectados</span>
+          </article>
+          <article class="indicador-card indicador-card--green">
+            <span class="indicador-card__valor" id="valCapacitados">892</span>
+            <span class="indicador-card__label">Capacitados</span>
+          </article>
+          <article class="indicador-card indicador-card--blue">
+            <span class="indicador-card__valor" id="valTransformados">534</span>
+            <span class="indicador-card__label">Transformados</span>
+          </article>
+          <article class="indicador-card indicador-card--green">
+            <span class="indicador-card__valor" id="valMentores">—</span>
+            <span class="indicador-card__label">Mentores</span>
+          </article>
+        </div>
+
+        <div class="graficos-container">
+          <div class="grafico-card">
+            <h3>Distribuição de Alunos</h3>
+            <div id="graficoPizzaWrapper" class="grafico-canvas-wrapper">
+              <canvas id="graficoPizza"></canvas>
+              <p id="graficoPizzaSemDados" class="grafico-sem-dados">Nenhum aluno para os filtros selecionados.</p>
+            </div>
+          </div>
+          <div class="grafico-card">
+            <h3>Alunos por Programa</h3>
+            <div id="graficoBarrasWrapper" class="grafico-canvas-wrapper">
+              <canvas id="graficoBarras"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO: TAXA DE EVASÃO -->
+      <section class="dashboard-section">
+        <h2>Taxa de Evasão e Atenção</h2>
+        
+        <div class="evasao-card">
+          <table class="evasao-table">
+            <thead>
+              <tr>
+                <th>Aluno(a)</th>
+                <th>Programa</th>
+                <th>Frequência</th>
+                <th>Priorização</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaEvasao">
+              <!-- Populado dinamicamente por dashboard.js via GET /alunos -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: Gerenciar Programas, Cursos e Aulas -->
+<div class="modal-azul" id="modalGerenciarProgramas">
+  <div class="modal-azul__content" style="max-width:920px;">
+
+    <div class="modal-azul__header">
+      <h3 id="tituloModalGerenciar">Gerenciar Programas</h3>
+      <button class="modal-azul__fechar" id="btnFecharGerenciar" aria-label="Fechar modal">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+
+    <div class="modal-azul__body">
+
+      <!-- VISTA: PROGRAMAS -->
+      <div id="vistaProgramas">
+        <form id="formPrograma" class="gerenciar-form-row">
+          <input type="hidden" id="programaEditId">
+          <div class="form-group" style="flex:2 1 220px;">
+            <label for="programaTitulo">Título *</label>
+            <input type="text" id="programaTitulo" placeholder="Ex: Pulse Mais 2025.1" required>
+          </div>
+          <div class="form-group" style="flex:1 1 140px;">
+            <label for="programaTipo">Tipo *</label>
+            <select id="programaTipo" required>
+              <option value="Pulse Mais">Pulse Mais</option>
+              <option value="Mentoria">Mentoria</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1 1 130px;">
+            <label for="programaInicio">Início *</label>
+            <input type="date" id="programaInicio" required>
+          </div>
+          <div class="form-group" style="flex:1 1 130px;">
+            <label for="programaFim">Fim *</label>
+            <input type="date" id="programaFim" required>
+          </div>
+          <div class="gerenciar-form-acoes">
+            <button type="button" class="btn btn--outline" id="btnCancelarEdicaoPrograma" style="display:none;">Cancelar</button>
+            <button type="submit" class="btn btn--accent" id="btnSalvarPrograma">+ Adicionar Programa</button>
+          </div>
+        </form>
+
+        <p id="erroPrograma" class="gerenciar-erro" style="display:none;"></p>
+        <div id="listaProgramasGerenciar"><p class="estado-carregando">Carregando programas...</p></div>
+      </div>
+
+      <!-- VISTA: CURSOS -->
+      <div id="vistaCursos" style="display:none;">
+        <button type="button" class="gerenciar-voltar" id="btnVoltarProgramas">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Voltar aos Programas
+        </button>
+        <h4 id="subtituloCursos" class="gerenciar-subtitulo"></h4>
+
+        <form id="formCurso" class="gerenciar-form-row">
+          <input type="hidden" id="cursoEditId">
+          <div class="form-group" style="flex:2 1 220px;">
+            <label for="cursoTitulo">Título do curso *</label>
+            <input type="text" id="cursoTitulo" placeholder="Ex: Desenvolvimento Web" required>
+          </div>
+          <div class="form-group" style="flex:0 1 100px;">
+            <label for="cursoOrdem">Ordem</label>
+            <input type="number" id="cursoOrdem" min="1" value="1">
+          </div>
+          <div class="gerenciar-form-acoes">
+            <button type="button" class="btn btn--outline" id="btnCancelarEdicaoCurso" style="display:none;">Cancelar</button>
+            <button type="submit" class="btn btn--accent" id="btnSalvarCurso">+ Adicionar Curso</button>
+          </div>
+        </form>
+
+        <p id="erroCurso" class="gerenciar-erro" style="display:none;"></p>
+        <div id="listaCursosGerenciar"></div>
+      </div>
+
+      <!-- VISTA: AULAS -->
+      <div id="vistaAulas" style="display:none;">
+        <button type="button" class="gerenciar-voltar" id="btnVoltarCursos">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Voltar aos Cursos
+        </button>
+        <h4 id="subtituloAulas" class="gerenciar-subtitulo"></h4>
+
+        <form id="formAula" class="gerenciar-form-row">
+          <input type="hidden" id="aulaEditId">
+          <div class="form-group" style="flex:0 1 90px;">
+            <label for="aulaNumero">Número *</label>
+            <input type="number" id="aulaNumero" min="1" required>
+          </div>
+          <div class="form-group" style="flex:2 1 220px;">
+            <label for="aulaTitulo">Título da aula *</label>
+            <input type="text" id="aulaTitulo" placeholder="Ex: Introdução ao HTML" required>
+          </div>
+          <div class="form-group" style="flex:1 1 140px;">
+            <label for="aulaData">Data</label>
+            <input type="date" id="aulaData">
+          </div>
+          <div class="gerenciar-form-acoes">
+            <button type="button" class="btn btn--outline" id="btnCancelarEdicaoAula" style="display:none;">Cancelar</button>
+            <button type="submit" class="btn btn--accent" id="btnSalvarAula">+ Adicionar Aula</button>
+          </div>
+        </form>
+
+        <p id="erroAula" class="gerenciar-erro" style="display:none;"></p>
+        <div id="listaAulasGerenciar"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Importar Planilha de Alunos -->
+<div class="modal-azul" id="modalImportarPlanilha">
+  <div class="modal-azul__content" style="max-width:760px;">
+
+    <div class="modal-azul__header">
+      <h3>Importar Planilha de Alunos</h3>
+      <button class="modal-azul__fechar" id="btnFecharImportar" aria-label="Fechar modal">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+
+    <div class="modal-azul__body">
+      <p style="font-size:13px; color:var(--color-text-support); margin-bottom:16px;">
+        Envie um arquivo <strong>.csv</strong> ou <strong>.xlsx</strong> com os dados dos alunos. Diferente do cadastro manual, <strong>nenhuma coluna é obrigatória</strong> — preencha apenas o que tiver disponível e os alunos serão adicionados ao Dashboard e à listagem automaticamente.
+      </p>
+
+      <details style="margin-bottom:20px;">
+        <summary style="cursor:pointer; font-size:13px; font-weight:600; color:var(--color-primary);">Ver colunas reconhecidas</summary>
+        <ul style="font-size:13px; color:var(--color-text-support); margin-top:8px; padding-left:20px; line-height:1.7;">
+          <li><strong>Nome</strong> — ex: "Nome" ou "Nome completo"</li>
+          <li><strong>Email</strong></li>
+          <li><strong>CPF</strong></li>
+          <li><strong>Telefone</strong></li>
+          <li><strong>Data de Nascimento</strong></li>
+          <li><strong>Cidade</strong> e <strong>Estado</strong> (de nascimento)</li>
+          <li><strong>Programa</strong> — se o título já existir no sistema, o aluno é matriculado automaticamente</li>
+          <li><strong>Data de Ingresso</strong></li>
+          <li><strong>Escolaridade</strong> e <strong>Status Profissional</strong></li>
+          <li><strong>Estágio da Jornada</strong> — Conectado / Capacitado / Transformado / Mentor</li>
+          <li><strong>Observações</strong></li>
+        </ul>
+      </details>
+
+      <div class="form-group">
+        <label for="inputArquivoPlanilha">Arquivo (.csv ou .xlsx)</label>
+        <input type="file" id="inputArquivoPlanilha" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+      </div>
+
+      <p id="erroImportar" class="gerenciar-erro" style="display:none;"></p>
+
+      <div id="resultadoImportar" style="display:none; margin-top:20px;"></div>
+
+      <div class="modal-azul__actions">
+        <button type="button" class="btn btn--accent" id="btnEnviarImportar">Importar Alunos</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Atividades dos Alunos (entregue/pendente/atrasado) -->
+<div class="modal-azul" id="modalAtividades">
+  <div class="modal-azul__content" style="max-width:920px;">
+
+    <div class="modal-azul__header">
+      <h3 id="tituloModalAtividades">Atividades dos Alunos</h3>
+      <button class="modal-azul__fechar" id="btnFecharAtividades" aria-label="Fechar modal">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+
+    <div class="modal-azul__body">
+
+      <!-- VISTA: ATIVIDADES DO PROGRAMA -->
+      <div id="vistaAtividades">
+        <div class="form-group" style="max-width:420px; margin-bottom:20px;">
+          <label for="selectProgramaAtividade">Programa</label>
+          <select id="selectProgramaAtividade" class="combo-busca">
+            <option value="">Carregando programas...</option>
+          </select>
+        </div>
+
+        <div id="blocoAtividadesPrograma" style="display:none;">
+          <form id="formAtividade" class="gerenciar-form-row">
+            <input type="hidden" id="atividadeEditId">
+            <div class="form-group" style="flex:2 1 220px;">
+              <label for="atividadeNome">Nome *</label>
+              <input type="text" id="atividadeNome" placeholder="Ex: Projeto Final" required>
+            </div>
+            <div class="form-group" style="flex:1 1 160px;">
+              <label for="atividadeDataEntrega">Data de entrega *</label>
+              <input type="date" id="atividadeDataEntrega" required>
+            </div>
+            <div class="form-group" style="flex:2 1 220px;">
+              <label for="atividadeDescricao">Descrição</label>
+              <input type="text" id="atividadeDescricao" placeholder="Opcional">
+            </div>
+            <div class="gerenciar-form-acoes">
+              <button type="button" class="btn btn--outline" id="btnCancelarEdicaoAtividade" style="display:none;">Cancelar</button>
+              <button type="submit" class="btn btn--accent" id="btnSalvarAtividade">+ Adicionar Atividade</button>
+            </div>
+          </form>
+
+          <p id="erroAtividade" class="gerenciar-erro" style="display:none;"></p>
+          <div id="listaAtividadesGerenciar"></div>
+        </div>
+      </div>
+
+      <!-- VISTA: ENTREGAS DE UMA ATIVIDADE -->
+      <div id="vistaEntregas" style="display:none;">
+        <button type="button" class="gerenciar-voltar" id="btnVoltarAtividades">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Voltar às atividades
+        </button>
+        <h4 class="gerenciar-subtitulo" id="subtituloEntregas"></h4>
+        <div id="listaEntregasGerenciar"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Presença em Eventos -->
+<div class="modal-azul" id="modalEventos">
+  <div class="modal-azul__content" style="max-width:920px;">
+
+    <div class="modal-azul__header">
+      <h3 id="tituloModalEventos">Presença em Eventos</h3>
+      <button class="modal-azul__fechar" id="btnFecharEventos" aria-label="Fechar modal">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+      </button>
+    </div>
+
+    <div class="modal-azul__body">
+
+      <!-- VISTA: LISTA DE EVENTOS -->
+      <div id="vistaEventosLista">
+        <form id="formEvento" class="gerenciar-form-row">
+          <input type="hidden" id="eventoEditId">
+          <div class="form-group" style="flex:2 1 200px;">
+            <label for="eventoNome">Nome *</label>
+            <input type="text" id="eventoNome" placeholder="Ex: Feira de Profissões" required>
+          </div>
+          <div class="form-group" style="flex:1 1 150px;">
+            <label for="eventoDataDia">Data *</label>
+            <input type="date" id="eventoDataDia" required>
+          </div>
+          <div class="form-group" style="flex:1 1 110px;">
+            <label for="eventoDataHora">Hora *</label>
+            <input type="time" id="eventoDataHora" required>
+          </div>
+          <div class="form-group" style="flex:1 1 170px;">
+            <label for="eventoLocal">Local *</label>
+            <input type="text" id="eventoLocal" placeholder="Ex: Auditório" required>
+          </div>
+          <div class="gerenciar-form-acoes">
+            <button type="button" class="btn btn--outline" id="btnCancelarEdicaoEvento" style="display:none;">Cancelar</button>
+            <button type="submit" class="btn btn--accent" id="btnSalvarEvento">+ Adicionar Evento</button>
+          </div>
+        </form>
+
+        <p id="erroEvento" class="gerenciar-erro" style="display:none;"></p>
+        <div id="listaEventosGerenciar"></div>
+      </div>
+
+      <!-- VISTA: PRESENÇAS DE UM EVENTO -->
+      <div id="vistaPresencas" style="display:none;">
+        <button type="button" class="gerenciar-voltar" id="btnVoltarEventos">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          Voltar aos eventos
+        </button>
+        <h4 class="gerenciar-subtitulo" id="subtituloPresencas"></h4>
+
+        <div class="form-group" style="max-width:300px;">
+          <label for="buscaAlunoPresenca">Buscar aluno</label>
+          <input type="text" id="buscaAlunoPresenca" placeholder="Digite o nome...">
+        </div>
+
+        <div id="listaPresencasGerenciar" style="margin-top:12px;"></div>
+
+        <div class="modal-azul__actions">
+          <button type="button" class="btn btn--accent" id="btnSalvarPresencas">Salvar Presenças</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../js/datePicker.js"></script>
+<script src="../js/comboBox.js"></script>
+<script src="../js/gerenciarProgramas.js"></script>
+<script src="../js/registrarAtividades.js"></script>
+<script src="../js/registrarEventos.js"></script>
+<script src="../js/importarPlanilha.js"></script>
+<script src="../js/dashboard.js"></script>
+</body>
+</html>

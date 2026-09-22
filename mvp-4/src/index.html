@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus API — Documentação</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161b28;
+    --border: #1e2535;
+    --border2: #252d3f;
+    --accent: #4f9eff;
+    --accent2: #7c5dfa;
+    --accent3: #00d9a0;
+    --text: #d6e0f0;
+    --text-muted: #5a6a85;
+    --text-dim: #8899b4;
+    --get: #4f9eff;
+    --post: #00d9a0;
+    --put: #f0a742;
+    --patch: #c77dff;
+    --delete: #ff5c7a;
+    --rf-badge: #1e2d4a;
+    --rf-text: #4f9eff;
+    --gutter: 280px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--gutter);
+    min-height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--accent3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .sidebar-section {
+    padding: 20px 16px 8px;
+  }
+
+  .sidebar-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 12.5px;
+    font-weight: 500;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover { background: var(--border); color: var(--text); }
+  .nav-item.active { background: rgba(79, 158, 255, 0.1); color: var(--accent); }
+
+  .nav-method {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    min-width: 38px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .nav-method.get    { background: rgba(79,158,255,.15); color: var(--get); }
+  .nav-method.post   { background: rgba(0,217,160,.15);  color: var(--post); }
+  .nav-method.put    { background: rgba(240,167,66,.15); color: var(--put); }
+  .nav-method.patch  { background: rgba(199,125,255,.15);color: var(--patch); }
+  .nav-method.delete { background: rgba(255,92,122,.15); color: var(--delete); }
+
+  .nav-path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ── MAIN ── */
+  .main { margin-left: var(--gutter); flex: 1; min-width: 0; }
+
+  /* ── HEADER ── */
+  .top-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .top-title {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .top-title span { color: var(--accent); }
+
+  .version-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(79,158,255,.12);
+    color: var(--accent);
+    border: 1px solid rgba(79,158,255,.25);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CONTENT ── */
+  .content { max-width: 900px; margin: 0 auto; padding: 48px 48px 80px; }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em { font-style: normal; color: var(--accent); }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 640px;
+    margin-bottom: 24px;
+  }
+
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .meta-item strong { color: var(--text-dim); }
+
+  .meta-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent3);
+    flex-shrink: 0;
+  }
+
+  /* ── RF SECTION ── */
+  .rf-section { margin-bottom: 64px; scroll-margin-top: 80px; }
+
+  .rf-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rf-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--rf-badge);
+    color: var(--rf-text);
+    border: 1px solid rgba(79,158,255,.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rf-title { font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.01em; line-height: 1.3; }
+
+  .rf-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    line-height: 1.6;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── ENDPOINT CARD ── */
+  .endpoint-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    scroll-margin-top: 80px;
+    transition: border-color 0.2s;
+  }
+
+  .endpoint-card:hover { border-color: var(--border2); }
+
+  .endpoint-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--surface2);
+    transition: background 0.15s;
+  }
+
+  .endpoint-head:hover { background: #191f2f; }
+
+  .method-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 5px;
+    min-width: 54px;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .method-badge.get    { background: rgba(79,158,255,.15); color: var(--get);    border: 1px solid rgba(79,158,255,.25); }
+  .method-badge.post   { background: rgba(0,217,160,.15);  color: var(--post);   border: 1px solid rgba(0,217,160,.25); }
+  .method-badge.put    { background: rgba(240,167,66,.15); color: var(--put);    border: 1px solid rgba(240,167,66,.25); }
+  .method-badge.patch  { background: rgba(199,125,255,.15);color: var(--patch);  border: 1px solid rgba(199,125,255,.3); }
+  .method-badge.delete { background: rgba(255,92,122,.15); color: var(--delete); border: 1px solid rgba(255,92,122,.25); }
+
+  .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: #fff; flex: 1; }
+  .endpoint-summary { font-size: 12px; color: var(--text-muted); text-align: right; max-width: 260px; }
+
+  .chevron { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.2s; }
+
+  .endpoint-body { display: none; border-top: 1px solid var(--border); padding: 24px 20px; }
+  .endpoint-body.open { display: block; }
+  .endpoint-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── INSIDE ENDPOINT ── */
+  .ep-grid { display: grid; grid-template-columns: 140px 1fr; gap: 0; }
+
+  .ep-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    padding-top: 14px;
+  }
+
+  .ep-value {
+    padding: 12px 0 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .ep-grid .ep-label:last-of-type,
+  .ep-grid .ep-value:last-of-type { border-bottom: none; }
+
+  pre {
+    background: #090c12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: #8899b4;
+    margin: 4px 0;
+  }
+
+  .json-key     { color: #7c9cbf; }
+  .json-str     { color: #6fbf8a; }
+  .json-num     { color: #c77dff; }
+  .json-bool    { color: #f0a742; }
+  .json-null    { color: #ff5c7a; }
+  .json-comment { color: #3a4a62; font-style: italic; }
+
+  .params-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    margin: 4px 0;
+  }
+
+  .params-table th {
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,.2);
+  }
+
+  .params-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba(30,37,53,.6);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+
+  .params-table tr:last-child td { border-bottom: none; }
+
+  .param-name  { color: #fff; }
+  .param-type  { color: var(--patch); }
+  .req-tag {
+    font-size: 9px;
+    background: rgba(255,92,122,.15);
+    color: var(--delete);
+    border: 1px solid rgba(255,92,122,.2);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  .status-list  { display: flex; flex-direction: column; gap: 6px; margin: 4px 0; }
+
+  .status-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+  }
+
+  .status-code { font-weight: 700; min-width: 36px; flex-shrink: 0; }
+  .s2  { color: var(--post); }
+  .s4  { color: var(--put); }
+  .s40 { color: var(--delete); }
+  .s5  { color: #ff5c7a; }
+  .status-text { color: var(--text-muted); font-size: 11px; }
+
+  .rf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--rf-badge);
+    color: var(--rf-text);
+    border: 1px solid rgba(79,158,255,.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 4px;
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .base-url-block {
+    background: #090c12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .base-url-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .base-url-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    flex: 1;
+  }
+
+  .header-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    background: rgba(0,0,0,.2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin: 4px 0;
+  }
+
+  .ep-value p { margin-bottom: 6px; }
+  .ep-value p:last-child { margin-bottom: 0; }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .overview-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .ov-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .ov-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .section-divider {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    margin: 48px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .inline-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: rgba(79,158,255,.1);
+    color: var(--accent);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* NEW badge for newly added endpoints */
+  .new-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    background: rgba(0,217,160,.15);
+    color: var(--accent3);
+    border: 1px solid rgba(0,217,160,.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+    margin-left: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="brand-tag">Pulse Mais · Nexus</span>
+    <div class="brand-name">API Docs</div>
+    <div class="brand-sub">Documentação WebAPI — Sprint 1–5</div>
+  </div>
+
+  <!-- RF001–005 incluindo autenticação -->
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF004 · Autenticação <span class="new-badge">NEW</span></div>
+    <a class="nav-item" href="#post-login">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/auth/login</span>
+    </a>
+    <a class="nav-item" href="#post-logout">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/auth/logout</span>
+    </a>
+    <a class="nav-item" href="#get-auth-me">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/auth/me</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF001–005 · Alunos</div>
+    <a class="nav-item" href="#get-aluno-ra">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/alunos/:ra</span>
+    </a>
+    <a class="nav-item" href="#patch-aluno-ra">
+      <span class="nav-method patch">PATCH</span>
+      <span class="nav-path">/alunos/:ra</span>
+    </a>
+    <a class="nav-item" href="#get-gestor-rm">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestor/:rm</span>
+    </a>
+    <a class="nav-item" href="#get-gestor-alunos">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestor/:rm/alunos</span>
+    </a>
+    <a class="nav-item" href="#get-gestor-alunos-ra">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestor/:rm/alunos/:ra</span>
+    </a>
+    <a class="nav-item" href="#get-gestor-filtros">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestor/:rm/alunos/filtros</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">Coordenadora</div>
+    <a class="nav-item" href="#get-coord-rm">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/coordenadora/:rm</span>
+    </a>
+    <a class="nav-item" href="#get-coord-alunos">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/coordenadora/:rm/alunos</span>
+    </a>
+    <a class="nav-item" href="#get-coord-filtros">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/coordenadora/:rm/alunos/filtros</span>
+    </a>
+    <a class="nav-item" href="#post-coord-eventos">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/coordenadora/:rm/eventos</span>
+    </a>
+    <a class="nav-item" href="#post-coord-freq">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">…/frequencias</span>
+    </a>
+    <a class="nav-item" href="#patch-coord-freq">
+      <span class="nav-method patch">PATCH</span>
+      <span class="nav-path">…/frequencias/:id_aula</span>
+    </a>
+    <a class="nav-item" href="#post-coord-obs">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">…/observacoes</span>
+    </a>
+    <a class="nav-item" href="#get-coord-relatorios">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">…/relatorios</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF006 · Turmas</div>
+    <a class="nav-item" href="#get-turmas">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestao/turmas</span>
+    </a>
+    <a class="nav-item" href="#get-turmas-id">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestao/turmas/:id</span>
+    </a>
+    <a class="nav-item" href="#post-turmas">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestao/turmas</span>
+    </a>
+    <a class="nav-item" href="#put-turmas-id">
+      <span class="nav-method put">PUT</span>
+      <span class="nav-path">/gestao/turmas/:id</span>
+    </a>
+    <a class="nav-item" href="#post-turmas-alunos">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestao/turmas/:id/alunos</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF007 / RF012 · Jornada &amp; Alertas Aluno</div>
+    <a class="nav-item" href="#get-jornada">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/aluno/:ra/jornada</span>
+    </a>
+    <a class="nav-item" href="#get-certificados">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/aluno/:ra/certificados</span>
+    </a>
+    <a class="nav-item" href="#get-aluno-alertas">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/aluno/:ra/alertas</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF008 · Frequência</div>
+    <a class="nav-item" href="#post-freq-aulas">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestao/alunos/:ra/frequencia/aulas</span>
+    </a>
+    <a class="nav-item" href="#get-freq-aulas">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestao/alunos/:ra/frequencia/aulas</span>
+    </a>
+    <a class="nav-item" href="#post-freq-eventos">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestao/alunos/:ra/frequencia/eventos</span>
+    </a>
+    <a class="nav-item" href="#get-freq-turma">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestao/turmas/:id/frequencia</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF009 · Empregabilidade</div>
+    <a class="nav-item" href="#post-emprego">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/alunos/:ra/emprego</span>
+    </a>
+    <a class="nav-item" href="#patch-emprego">
+      <span class="nav-method patch">PATCH</span>
+      <span class="nav-path">/alunos/:ra/emprego/:id_emprego</span>
+    </a>
+    <a class="nav-item" href="#get-emprego">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/alunos/:ra/emprego</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF010 · Dashboard</div>
+    <a class="nav-item" href="#get-dashboard">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/dashboard</span>
+    </a>
+    <a class="nav-item" href="#get-dashboard-freq">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/dashboard/frequencia</span>
+    </a>
+    <a class="nav-item" href="#get-dashboard-emp">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/dashboard/empregabilidade</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF011–014 / RF019 · Alertas &amp; Saúde</div>
+    <a class="nav-item" href="#get-alertas">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/gestao/alertas</span>
+    </a>
+    <a class="nav-item" href="#patch-resolver-alerta">
+      <span class="nav-method patch">PATCH</span>
+      <span class="nav-path">â€¦/alertas/:id/resolver</span>
+    </a>
+    <a class="nav-item" href="#get-psi-rm">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/psicologa/:rm</span>
+    </a>
+    <a class="nav-item" href="#get-psi-alunos">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">/psicologa/:rm/alunos</span>
+    </a>
+    <a class="nav-item" href="#post-prontuario">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">…/relatorios</span>
+    </a>
+    <a class="nav-item" href="#get-prontuario">
+      <span class="nav-method get">GET</span>
+      <span class="nav-path">…/relatorios</span>
+    </a>
+    <a class="nav-item" href="#patch-prontuario">
+      <span class="nav-method patch">PATCH</span>
+      <span class="nav-path">…/relatorios/:id</span>
+    </a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-section-title">RF015–017 · Comunicados &amp; CSV</div>
+    <a class="nav-item" href="#post-comunicados">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestor/comunicados</span>
+    </a>
+    <a class="nav-item" href="#post-importacao">
+      <span class="nav-method post">POST</span>
+      <span class="nav-path">/gestor/importacao</span>
+    </a>
+  </div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+  <div class="top-bar">
+    <span class="top-title">Nexus · <span>WebAPI Reference</span></span>
+    <span class="version-pill">v1.0 · 2026</span>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-eyebrow">Documentação da API REST</div>
+      <h1>Nexus <em>WebAPI</em></h1>
+      <p class="hero-desc">
+        Documentação completa dos endpoints da plataforma Nexus, desenvolvida para a Pulse Mais.
+        Todos os endpoints seguem arquitetura REST, retornam JSON e estão vinculados aos Requisitos Funcionais (RF) e Regras de Negócio (RN) definidos no WAD.
+      </p>
+      <div class="hero-meta">
+        <div class="meta-item"><div class="meta-dot"></div><strong>Formato:</strong> JSON</div>
+        <div class="meta-item"><div class="meta-dot"></div><strong>Autenticação:</strong> Session-based</div>
+        <div class="meta-item"><div class="meta-dot"></div><strong>Banco:</strong> PostgreSQL</div>
+        <div class="meta-item"><div class="meta-dot"></div><strong>Runtime:</strong> Node.js</div>
+      </div>
+    </div>
+
+    <!-- BASE URL -->
+    <div class="base-url-block">
+      <span class="base-url-label">Base URL</span>
+      <span class="base-url-value">http://localhost:3000/api/v1</span>
+    </div>
+
+    <!-- OVERVIEW — atualizado com novos endpoints -->
+    <div class="overview-grid">
+      <div class="overview-card"><div class="ov-num">45</div><div class="ov-label">Endpoints</div></div>
+      <div class="overview-card"><div class="ov-num">19</div><div class="ov-label">Req. Funcionais</div></div>
+      <div class="overview-card"><div class="ov-num">23</div><div class="ov-label">Regras de Negócio</div></div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF004  AUTENTICAÇÃO  (NEW)               -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Autenticação · RF004 <span class="new-badge" style="font-size:10px;margin-left:4px">NEW</span></div>
+
+    <div class="rf-section" id="rf004">
+      <div class="rf-header">
+        <div class="rf-badge">RF004</div>
+        <div>
+          <div class="rf-title">Autenticação e Controle de Sessão</div>
+          <div class="rf-desc">Login com e-mail e senha, gerenciamento de sessão via cookie e verificação de perfil ativo. Perfis: aluno, coordenador, gestor, psicólogo (RN001).</div>
+        </div>
+      </div>
+
+      <!-- POST /auth/login -->
+      <div class="endpoint-card" id="post-login">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/auth/login</span>
+          <span class="endpoint-summary">Autenticar usuário</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">
+              Valida credenciais e inicia sessão. Ao autenticar com sucesso, o servidor define o cookie <span class="inline-code">session_id</span> e retorna o perfil do usuário com seu papel (<span class="inline-code">role</span>).
+              Usuários com <span class="inline-code">status = false</span> são bloqueados (RN001).
+            </div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json</div></div>
+
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"email"</span>: <span class="json-str">"carlos@email.com"</span>,
+  <span class="json-key">"senha"</span>: <span class="json-str">"Senha@123"</span>
+}</pre>
+              <table class="params-table" style="margin-top:10px">
+                <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">email</td><td class="param-type">string</td><td><span class="req-tag">Sim</span></td><td>E-mail cadastrado (primário)</td></tr>
+                  <tr><td class="param-name">senha</td><td class="param-type">string</td><td><span class="req-tag">Sim</span></td><td>Senha da conta</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"message"</span>: <span class="json-str">"Login realizado com sucesso."</span>,
+  <span class="json-key">"usuario"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-num">101</span>,
+    <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales"</span>,
+    <span class="json-key">"email"</span>: <span class="json-str">"carlos@email.com"</span>,
+    <span class="json-key">"role"</span>: <span class="json-str">"aluno"</span>  <span class="json-comment">// "aluno" | "coordenador" | "gestor" | "psicologo"</span>
+  }
+}
+<span class="json-comment">// Set-Cookie: session_id=&lt;token&gt;; HttpOnly; Path=/</span></pre>
+            </div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Autenticado — cookie de sessão definido</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes ou formato inválido</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Credenciais inválidas</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Usuário inativo (RN001)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF004</span> <span class="rf-link">RN001</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST /auth/logout -->
+      <div class="endpoint-card" id="post-logout">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/auth/logout</span>
+          <span class="endpoint-summary">Encerrar sessão</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Invalida a sessão ativa do usuário no servidor e limpa o cookie <span class="inline-code">session_id</span> no cliente.</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><em style="color:var(--text-muted)">Nenhum body necessário.</em></div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Logout realizado com sucesso."</span> }</pre></div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Sessão encerrada</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Sessão inexistente ou já expirada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF004</span> <span class="rf-link">RN001</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GET /auth/me -->
+      <div class="endpoint-card" id="get-auth-me">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/auth/me</span>
+          <span class="endpoint-summary">Dados da sessão atual</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">
+              Retorna os dados básicos do usuário autenticado na sessão corrente, incluindo seu <span class="inline-code">role</span>.
+              Usado pelo frontend para verificar autenticação e direcionar rotas protegidas.
+            </div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"id"</span>: <span class="json-num">101</span>,
+  <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales"</span>,
+  <span class="json-key">"email"</span>: <span class="json-str">"carlos@email.com"</span>,
+  <span class="json-key">"role"</span>: <span class="json-str">"aluno"</span>
+}</pre>
+            </div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Dados da sessão retornados</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado — sessão ausente ou expirada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF004</span> <span class="rf-link">RN001</span> <span class="rf-link">RN010</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF001–005  ALUNOS                        -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Alunos · RF001–005</div>
+
+    <div class="rf-section" id="rf001-005-alunos">
+      <div class="rf-header">
+        <div class="rf-badge">RF001 / RF002 / RF003 / RF005</div>
+        <div>
+          <div class="rf-title">Perfil, cadastro e edição de alunos</div>
+          <div class="rf-desc">Visualização e edição de dados cadastrais (pelo aluno e pelo gestor/coord). Aluno edita apenas contatos; gestor/coord pode editar dados completos e alterar status (RN010, RN011).</div>
+        </div>
+      </div>
+
+      <!-- GET /aluno -->
+      <div class="endpoint-card" id="get-aluno-ra">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/alunos/:ra</span>
+          <span class="endpoint-summary">Buscar aluno por RA</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna os dados do aluno da sessão ativa. Aluno só acessa seus próprios dados (RN001, RN010).</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value">
+              <div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div>
+            </div>
+
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><em style="color:var(--text-muted)">Nenhum.</em></div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"ra"</span>: <span class="json-num">101</span>,
+  <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales"</span>,
+  <span class="json-key">"email_primario"</span>: <span class="json-str">"carlos@email.com"</span>,
+  <span class="json-key">"email_secundario"</span>: <span class="json-str">"carlos2@email.com"</span>,
+  <span class="json-key">"tel_primario"</span>: <span class="json-str">"11999990000"</span>,
+  <span class="json-key">"tel_secundario"</span>: <span class="json-str">"11988880000"</span>,
+  <span class="json-key">"genero"</span>: <span class="json-str">"Masculino"</span>,
+  <span class="json-key">"data_nasc"</span>: <span class="json-str">"2003-05-10"</span>,
+  <span class="json-key">"data_ingresso"</span>: <span class="json-str">"2026-02-01"</span>,
+  <span class="json-key">"status"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"ex_aluno"</span>: <span class="json-bool">false</span>
+}</pre>
+            </div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">OK — dados retornados</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF001</span> <span class="rf-link">RN001</span> <span class="rf-link">RN010</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATCH /aluno -->
+      <div class="endpoint-card" id="patch-aluno-ra">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/alunos/:ra</span>
+          <span class="endpoint-summary">Atualizar dados do aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Permite ao <strong>próprio aluno</strong> atualizar e-mails e telefones. Dados de jornada, frequência ou empregabilidade são bloqueados para edição pelo aluno (RN011).</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"email_primario"</span>: <span class="json-str">"novo@email.com"</span>,
+  <span class="json-key">"email_secundario"</span>: <span class="json-str">"outro@email.com"</span>,  <span class="json-comment">// opcional</span>
+  <span class="json-key">"tel_primario"</span>: <span class="json-str">"11999990001"</span>,
+  <span class="json-key">"tel_secundario"</span>: <span class="json-str">"11988880001"</span>           <span class="json-comment">// opcional</span>
+}</pre>
+              <table class="params-table" style="margin-top:10px">
+                <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">email_primario</td><td class="param-type">string</td><td><span class="req-tag">Sim</span></td><td>E-mail principal</td></tr>
+                  <tr><td class="param-name">email_secundario</td><td class="param-type">string</td><td>Não</td><td>E-mail secundário</td></tr>
+                  <tr><td class="param-name">tel_primario</td><td class="param-type">string</td><td><span class="req-tag">Sim</span></td><td>Telefone principal</td></tr>
+                  <tr><td class="param-name">tel_secundario</td><td class="param-type">string</td><td>Não</td><td>Telefone secundário</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Dados atualizados com sucesso."</span> }</pre></div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Dados atualizados</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes ou formato inválido</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Tentativa de alterar campo bloqueado (RN011)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF001</span> <span class="rf-link">RF005</span> <span class="rf-link">RN010</span> <span class="rf-link">RN011</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GET /gestor/alunos -->
+      <div class="endpoint-card" id="get-gestor-alunos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestor/:rm/alunos</span>
+          <span class="endpoint-summary">Listar alunos do gestor</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Lista alunos cadastrados. Acessível por gestores e coordenadores (RN001, RN004). Suporta paginação.</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">page</td><td class="param-type">integer</td><td>Página (padrão: 1)</td></tr>
+                  <tr><td class="param-name">limit</td><td class="param-type">integer</td><td>Itens por página (padrão: 20)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"ra"</span>: <span class="json-num">101</span>,
+      <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales"</span>,
+      <span class="json-key">"status"</span>: <span class="json-bool">true</span>,
+      <span class="json-key">"id_turma"</span>: <span class="json-num">1</span>,
+      <span class="json-key">"ex_aluno"</span>: <span class="json-bool">false</span>
+    }
+  ],
+  <span class="json-key">"pagination"</span>: { <span class="json-key">"page"</span>: <span class="json-num">1</span>, <span class="json-key">"limit"</span>: <span class="json-num">20</span>, <span class="json-key">"total"</span>: <span class="json-num">87</span> }
+}</pre>
+            </div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Lista retornada</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF002</span> <span class="rf-link">RF003</span> <span class="rf-link">RN001</span> <span class="rf-link">RN004</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST /gestor/alunos -->
+      <div class="endpoint-card" id="post-gestor-alunos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestor/:rm/alunos</span>
+          <span class="endpoint-summary">Cadastrar novo aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Cadastra um novo aluno na plataforma. Acessível apenas por coordenadores e gestores.</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"nome"</span>: <span class="json-str">"Ana Lima"</span>,
+  <span class="json-key">"cpf"</span>: <span class="json-str">"123.456.789-00"</span>,
+  <span class="json-key">"data_nasc"</span>: <span class="json-str">"2004-03-15"</span>,
+  <span class="json-key">"email_primario"</span>: <span class="json-str">"ana@email.com"</span>,
+  <span class="json-key">"tel_primario"</span>: <span class="json-str">"11977770000"</span>,
+  <span class="json-key">"genero"</span>: <span class="json-str">"Feminino"</span>,
+  <span class="json-key">"data_ingresso"</span>: <span class="json-str">"2026-02-01"</span>,
+  <span class="json-key">"id_turma"</span>: <span class="json-num">1</span>,
+  <span class="json-key">"categoria"</span>: <span class="json-str">"Ativo"</span>
+}</pre>
+            </div>
+
+            <span class="ep-label">Resposta 201</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Aluno cadastrado com sucesso."</span>, <span class="json-key">"ra"</span>: <span class="json-num">102</span> }</pre></div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Aluno criado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">CPF ou e-mail já cadastrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF002</span> <span class="rf-link">RF003</span> <span class="rf-link">RN001</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GET /gestor/alunos/:id -->
+      <div class="endpoint-card" id="get-gestor-alunos-ra">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestor/:rm/alunos/:ra</span>
+          <span class="endpoint-summary">Perfil completo do aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna o perfil completo de um aluno específico para gestores e coordenadores. Inclui dados pessoais, turma e status de empregabilidade.</div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Path params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody><tr><td class="param-name">id</td><td class="param-type">integer</td><td>RA do aluno</td></tr></tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Perfil retornado</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF002</span> <span class="rf-link">RF003</span> <span class="rf-link">RN004</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-gestor-filtros-dup" style="display:none">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestor/:rm/alunos/filtros</span>
+          <span class="endpoint-summary">Filtrar alunos (gestor)</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">
+              Permite ao <strong>gestor ou coordenador</strong> editar dados cadastrais completos de um aluno (nome, e-mail, telefone, turma, gênero, data de nascimento).
+              Campos de jornada e prontuário psicológico não são editáveis por este endpoint (RN011).
+              Diferente do <span class="inline-code">PATCH /aluno</span>, este endpoint não é acessível pelo próprio aluno.
+            </div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Path params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody><tr><td class="param-name">id</td><td class="param-type">integer</td><td>RA do aluno</td></tr></tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales Atualizado"</span>,        <span class="json-comment">// opcional</span>
+  <span class="json-key">"email_primario"</span>: <span class="json-str">"carlos.novo@email.com"</span>,  <span class="json-comment">// opcional</span>
+  <span class="json-key">"email_secundario"</span>: <span class="json-str">"carlos2@email.com"</span>,    <span class="json-comment">// opcional</span>
+  <span class="json-key">"tel_primario"</span>: <span class="json-str">"11999990001"</span>,            <span class="json-comment">// opcional</span>
+  <span class="json-key">"tel_secundario"</span>: <span class="json-str">"11988880001"</span>,           <span class="json-comment">// opcional</span>
+  <span class="json-key">"genero"</span>: <span class="json-str">"Masculino"</span>,                    <span class="json-comment">// opcional</span>
+  <span class="json-key">"data_nasc"</span>: <span class="json-str">"2003-05-10"</span>,               <span class="json-comment">// opcional</span>
+  <span class="json-key">"id_turma"</span>: <span class="json-num">2</span>                             <span class="json-comment">// opcional</span>
+}</pre>
+              <p style="margin-top:8px;font-size:12px;color:var(--text-muted)">Pelo menos um campo deve ser enviado. Campos omitidos não são alterados.</p>
+            </div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Dados do aluno atualizados com sucesso."</span> }</pre></div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Aluno atualizado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Nenhum campo editável enviado</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão (somente gestor/coord)</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">E-mail já em uso por outro aluno</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF002</span> <span class="rf-link">RF005</span> <span class="rf-link">RN001</span> <span class="rf-link">RN011</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATCH /gestor/alunos/:id/status (NEW — RF003 ativar/desativar) -->
+      <div class="endpoint-card" id="get-gestor-rm">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/gestor/:rm</span>
+          <span class="endpoint-summary">Ativar / desativar aluno <span class="new-badge">NEW</span></span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">
+              Alterna o <span class="inline-code">status</span> de um aluno entre ativo (<span class="inline-code">true</span>) e inativo (<span class="inline-code">false</span>).
+              Ao desativar, o aluno perde acesso à plataforma (RN001). O registro histórico é preservado.
+              Ao marcar <span class="inline-code">ex_aluno = true</span>, o aluno é classificado como egresso.
+            </div>
+
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: application/json<br>Cookie: session_id=&lt;token&gt;</div></div>
+
+            <span class="ep-label">Path params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody><tr><td class="param-name">id</td><td class="param-type">integer</td><td>RA do aluno</td></tr></tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"status"</span>: <span class="json-bool">false</span>,      <span class="json-comment">// true = ativo, false = inativo</span>
+  <span class="json-key">"ex_aluno"</span>: <span class="json-bool">true</span>    <span class="json-comment">// opcional — marca como egresso</span>
+}</pre>
+              <table class="params-table" style="margin-top:10px">
+                <thead><tr><th>Campo</th><th>Tipo</th><th>Obrigatório</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">status</td><td class="param-type">boolean</td><td><span class="req-tag">Sim</span></td><td>Novo status do aluno</td></tr>
+                  <tr><td class="param-name">ex_aluno</td><td class="param-type">boolean</td><td>Não</td><td>Classifica como ex-aluno/egresso</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Status do aluno atualizado com sucesso."</span> }</pre></div>
+
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Status alterado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campo status ausente</span></div>
+                <div class="status-row"><span class="status-code s40">401</span><span class="status-text">Não autenticado</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão (somente gestor/coord)</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF003</span> <span class="rf-link">RN001</span> <span class="rf-link">RN017</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- COORDENADORA                             -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Coordenadora</div>
+
+    <div class="rf-section" id="rf-coordenadora">
+      <div class="rf-header">
+        <div class="rf-badge">Coordenadora</div>
+        <div>
+          <div class="rf-title">Endpoints da Coordenadora</div>
+          <div class="rf-desc">Consulta, filtragem de alunos, registro de frequências, observações e relatórios individuais.</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-coord-rm">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/coordenadora/:rm</span>
+          <span class="endpoint-summary">Buscar dados da coordenadora</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody><tr><td class="param-name">rm</td><td class="param-type">integer</td><td>Registro da coordenadora</td></tr></tbody></table></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Dados da coordenadora retornados</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">RM inválido</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Coordenadora não encontrada</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-coord-alunos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos</span>
+          <span class="endpoint-summary">Listar alunos da coordenadora</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna todos os alunos vinculados à coordenadora.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Lista de alunos retornada</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">RM inválido</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-coord-filtros">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos/filtros</span>
+          <span class="endpoint-summary">Filtrar alunos (coordenadora)</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Query params</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>
+              <tr><td class="param-name">id_turma</td><td class="param-type">integer</td><td>Filtrar por turma</td></tr>
+              <tr><td class="param-name">genero</td><td class="param-type">string</td><td>Masculino | Feminino | Outro</td></tr>
+              <tr><td class="param-name">empregabilidade</td><td class="param-type">string</td><td>Empregado | Desempregado</td></tr>
+            </tbody></table></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Alunos filtrados retornados</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-coord-eventos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/coordenadora/:rm/eventos</span>
+          <span class="endpoint-summary">Registrar evento</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Body</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"nome"</span>: <span class="json-str">"Workshop IA"</span>, <span class="json-key">"data"</span>: <span class="json-str">"2026-07-10"</span>, <span class="json-key">"descricao"</span>: <span class="json-str">"..."</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Evento registrado</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Dados inválidos</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-coord-freq">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos/:ra/frequencias</span>
+          <span class="endpoint-summary">Registrar frequência (coordenadora)</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>
+              <tr><td class="param-name">rm</td><td class="param-type">integer</td><td>RM da coordenadora</td></tr>
+              <tr><td class="param-name">ra</td><td class="param-type">integer</td><td>RA do aluno</td></tr>
+            </tbody></table></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Frequência registrada</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Dados inválidos</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="patch-coord-freq">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos/:ra/frequencias/:id_aula</span>
+          <span class="endpoint-summary">Atualizar frequência</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>
+              <tr><td class="param-name">id_aula</td><td class="param-type">integer</td><td>ID da aula a corrigir</td></tr>
+            </tbody></table></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Frequência atualizada</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aula não encontrada</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-coord-obs">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos/:ra/observacoes</span>
+          <span class="endpoint-summary">Registrar observação sobre aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Body</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"texto"</span>: <span class="json-str">"Aluno apresentou dificuldades de adaptação."</span>, <span class="json-key">"data"</span>: <span class="json-str">"2026-06-01"</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Observação registrada</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Dados inválidos</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-coord-relatorios">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/coordenadora/:rm/alunos/:ra/relatorios</span>
+          <span class="endpoint-summary">Listar relatórios do aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna relatórios/prontuários associados a um aluno específico, visíveis à coordenadora.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Relatórios retornados</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF006  TURMAS                            -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Turmas · RF006</div>
+
+    <div class="rf-section" id="rf006">
+      <div class="rf-header">
+        <div class="rf-badge">RF006</div>
+        <div>
+          <div class="rf-title">Gestão de Turmas</div>
+          <div class="rf-desc">Cadastro e gerenciamento de turmas com associação de alunos e período de vigência</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-turmas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestao/turmas</span>
+          <span class="endpoint-summary">Listar turmas</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Lista todas as turmas cadastradas com informações resumidas e total de alunos vinculados.</div>
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">page</td><td class="param-type">integer</td><td>Página (padrão: 1)</td></tr>
+                  <tr><td class="param-name">limit</td><td class="param-type">integer</td><td>Itens por página (padrão: 20)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id_turma"</span>: <span class="json-num">1</span>,
+      <span class="json-key">"nome_turma"</span>: <span class="json-str">"Turma 1 - 2026"</span>,
+      <span class="json-key">"data_inicio"</span>: <span class="json-str">"2026-02-01"</span>,
+      <span class="json-key">"data_fim"</span>: <span class="json-str">"2026-07-31"</span>,
+      <span class="json-key">"id_coordenador"</span>: <span class="json-num">3</span>,
+      <span class="json-key">"total_alunos"</span>: <span class="json-num">25</span>
+    }
+  ],
+  <span class="json-key">"pagination"</span>: { <span class="json-key">"page"</span>: <span class="json-num">1</span>, <span class="json-key">"limit"</span>: <span class="json-num">20</span>, <span class="json-key">"total"</span>: <span class="json-num">4</span> }
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Lista retornada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno ao buscar turmas</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF006</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-turmas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestao/turmas</span>
+          <span class="endpoint-summary">Criar nova turma</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Cadastra uma nova turma associada a um coordenador. A <span class="inline-code">data_fim</span> deve ser posterior à <span class="inline-code">data_inicio</span>.</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"nome_turma"</span>: <span class="json-str">"Turma 2 - 2026"</span>,
+  <span class="json-key">"data_inicio"</span>: <span class="json-str">"2026-08-01"</span>,
+  <span class="json-key">"data_fim"</span>: <span class="json-str">"2027-01-31"</span>,
+  <span class="json-key">"id_coordenador"</span>: <span class="json-num">3</span>
+}</pre>
+            </div>
+            <span class="ep-label">Resposta 201</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Turma cadastrada com sucesso."</span>, <span class="json-key">"id_turma"</span>: <span class="json-num">5</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Turma criada</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Coordenador não encontrado</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">data_fim anterior a data_inicio</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF006</span> <span class="rf-link">RN001</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-turmas-id">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestao/turmas/:id</span>
+          <span class="endpoint-summary">Detalhes da turma</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Detalhes completos de uma turma incluindo lista de alunos vinculados.</div>
+            <span class="ep-label">Path params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody><tr><td class="param-name">id</td><td class="param-type">integer</td><td>ID da turma</td></tr></tbody>
+              </table>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Turma retornada</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Turma não encontrada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF006</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="put-turmas-id">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge put">PUT</span>
+          <span class="endpoint-path">/gestao/turmas/:id</span>
+          <span class="endpoint-summary">Atualizar turma</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Substituição completa dos dados de uma turma existente.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Turma atualizada</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Turma não encontrada</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">data_fim anterior a data_inicio</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF006</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-turmas-alunos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestao/turmas/:id/alunos</span>
+          <span class="endpoint-summary">Associar aluno à turma</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Body</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"ra"</span>: <span class="json-num">101</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Aluno associado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campo ra ausente</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Turma ou aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">Aluno já está nesta turma</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF006</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF007  JORNADA                           -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Jornada do Aluno · RF007 / RF012</div>
+
+    <div class="rf-section" id="rf007">
+      <div class="rf-header">
+        <div class="rf-badge">RF007 / RF012</div>
+        <div>
+          <div class="rf-title">Jornada, Certificados e Alertas do Aluno</div>
+          <div class="rf-desc">Histórico completo da trajetória do aluno: programas, eventos, certificados, empregabilidade e alertas de frequência (RF012, RN012)</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-jornada">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/aluno/:ra/jornada</span>
+          <span class="endpoint-summary">Histórico completo da jornada</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna turmas, aulas frequentadas, eventos participados, certificados e status de empregabilidade do aluno.</div>
+            <span class="ep-label">Path params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody><tr><td class="param-name">ra</td><td class="param-type">integer</td><td>RA do aluno</td></tr></tbody>
+              </table>
+            </div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"ra"</span>: <span class="json-num">101</span>,
+  <span class="json-key">"nome"</span>: <span class="json-str">"Carlos Sales"</span>,
+  <span class="json-key">"turmas"</span>: [ { <span class="json-key">"id_turma"</span>: <span class="json-num">1</span>, <span class="json-key">"nome_turma"</span>: <span class="json-str">"Turma 1 - 2026"</span>, <span class="json-key">"status"</span>: <span class="json-str">"Em andamento"</span> } ],
+  <span class="json-key">"aulas"</span>: [ { <span class="json-key">"tema"</span>: <span class="json-str">"Introdução a JavaScript"</span>, <span class="json-key">"frequencia"</span>: <span class="json-bool">true</span> } ],
+  <span class="json-key">"eventos"</span>: [ { <span class="json-key">"tema"</span>: <span class="json-str">"Hackathon Pulse Mais"</span>, <span class="json-key">"frequencia"</span>: <span class="json-bool">true</span> } ],
+  <span class="json-key">"certificados"</span>: [ { <span class="json-key">"nome"</span>: <span class="json-str">"Certificado Módulo Web"</span>, <span class="json-key">"data"</span>: <span class="json-str">"2026-06-30"</span> } ],
+  <span class="json-key">"empregabilidade"</span>: { <span class="json-key">"status"</span>: <span class="json-str">"Empregado"</span>, <span class="json-key">"empresa"</span>: <span class="json-str">"Tech Corp"</span> }
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Jornada retornada</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF007</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-certificados">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/aluno/:ra/certificados</span>
+          <span class="endpoint-summary">Certificados do aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Lista todos os certificados conquistados pelo aluno.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Certificados retornados</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF007</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-aluno-alertas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/aluno/:ra/alertas</span>
+          <span class="endpoint-summary">Alertas de frequência do aluno</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna os alertas de frequência ativos para o aluno. Visível no portal do aluno (RF012).</div>
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>
+              <tr><td class="param-name">ra</td><td class="param-type">integer</td><td>RA do aluno</td></tr>
+            </tbody></table></div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value"><pre>{
+  <span class="json-key">"alertas"</span>: [
+    { <span class="json-key">"tipo"</span>: <span class="json-num">1</span>, <span class="json-key">"motivo"</span>: <span class="json-str">"Mais de 1 falta no módulo"</span>, <span class="json-key">"status"</span>: <span class="json-bool">true</span> }
+  ]
+}</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Alertas retornados</span></div>
+              <div class="status-row"><span class="status-code s40">400</span><span class="status-text">RA inválido</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF012</span> <span class="rf-link">RN012</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF008  FREQUÊNCIA                        -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Frequência · RF008</div>
+
+    <div class="rf-section" id="rf008">
+      <div class="rf-header">
+        <div class="rf-badge">RF008</div>
+        <div>
+          <div class="rf-title">Registro de Frequência</div>
+          <div class="rf-desc">Presença em aulas e participação em eventos. Não é permitido registrar em data futura (RN006)</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-freq-aulas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestao/alunos/:ra/frequencia/aulas</span>
+          <span class="endpoint-summary">Registrar presença em aula</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Registra presença ou falta de um aluno em uma aula. Data não pode ser futura (RN006).</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"id_aula"</span>: <span class="json-num">10</span>,
+  <span class="json-key">"data"</span>: <span class="json-str">"2026-03-05"</span>,
+  <span class="json-key">"frequencia"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"id_coordenador"</span>: <span class="json-num">3</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Frequência registrada</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno ou aula não encontrado</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">Frequência já registrada para esse par aluno/aula</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">Data futura não permitida (RN006)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF008</span> <span class="rf-link">RN006</span> <span class="rf-link">RN012</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-freq-aulas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestao/alunos/:ra/frequencia/aulas</span>
+          <span class="endpoint-summary">Histórico de frequência em aulas</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"ra"</span>: <span class="json-num">101</span>,
+  <span class="json-key">"frequencias"</span>: [
+    { <span class="json-key">"id_aula"</span>: <span class="json-num">10</span>, <span class="json-key">"tema"</span>: <span class="json-str">"Intro JS"</span>, <span class="json-key">"data"</span>: <span class="json-str">"2026-02-15"</span>, <span class="json-key">"frequencia"</span>: <span class="json-bool">true</span> }
+  ],
+  <span class="json-key">"total_aulas"</span>: <span class="json-num">20</span>,
+  <span class="json-key">"percentual_presenca"</span>: <span class="json-num">95.0</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Histórico retornado</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF008</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-freq-eventos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestao/alunos/:ra/frequencia/eventos</span>
+          <span class="endpoint-summary">Registrar participação em evento</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"id_evento"</span>: <span class="json-num">3</span>,
+  <span class="json-key">"data"</span>: <span class="json-str">"2026-03-10"</span>,
+  <span class="json-key">"frequencia"</span>: <span class="json-bool">true</span>,
+  <span class="json-key">"id_coordenador"</span>: <span class="json-num">3</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Participação registrada</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno ou evento não encontrado</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">Participação já registrada</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">Data futura não permitida (RN006)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF008</span> <span class="rf-link">RN006</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-freq-turma">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestao/turmas/:id/frequencia</span>
+          <span class="endpoint-summary">Frequência consolidada da turma</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna percentual de presença e flag de alerta de evasão para cada aluno da turma.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Consolidado retornado</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Turma não encontrada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF008</span> <span class="rf-link">RN012</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF009  EMPREGABILIDADE                   -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Empregabilidade · RF009</div>
+
+    <div class="rf-section" id="rf009">
+      <div class="rf-header">
+        <div class="rf-badge">RF009</div>
+        <div>
+          <div class="rf-title">Registro de Emprego</div>
+          <div class="rf-desc">Apenas um emprego ativo por vez (RN007). Registros encerrados mantidos como histórico (RN017)</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-emprego">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/alunos/:ra/emprego</span>
+          <span class="endpoint-summary">Registrar emprego</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Registra novo vínculo empregatício. Bloqueia se já existir emprego ativo (RN007). Atualiza status do aluno para "Empregado".</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"empresa"</span>: <span class="json-str">"Tech Corp"</span>,
+  <span class="json-key">"cargo"</span>: <span class="json-str">"Desenvolvedor Jr."</span>,
+  <span class="json-key">"data_inicio"</span>: <span class="json-str">"2026-08-01"</span>,
+  <span class="json-key">"faixa_salarial"</span>: <span class="json-str">"3001-5000"</span>
+}</pre>
+            </div>
+            <span class="ep-label">Resposta 201</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"message"</span>: <span class="json-str">"Emprego registrado com sucesso."</span>, <span class="json-key">"id_emprego"</span>: <span class="json-num">7</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Emprego registrado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s40">409</span><span class="status-text">Aluno já tem emprego ativo (RN007)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF009</span> <span class="rf-link">RN007</span> <span class="rf-link">RN008</span> <span class="rf-link">RN019</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="patch-emprego">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/alunos/:ra/emprego/:id_emprego</span>
+          <span class="endpoint-summary">Encerrar emprego ativo</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Encerra vínculo empregatício ativo. Registro mantido no banco como histórico (RN017).</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"data_encerramento"</span>: <span class="json-str">"2026-12-31"</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Emprego encerrado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">data_encerramento ausente</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno ou emprego não encontrado</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">Data anterior ao início do emprego</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF009</span> <span class="rf-link">RN007</span> <span class="rf-link">RN017</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-emprego">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/alunos/:ra/emprego</span>
+          <span class="endpoint-summary">Histórico de empregos</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna histórico completo de empregos. Emprego ativo identificado por ausência de <span class="inline-code">data_encerramento</span>.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Histórico retornado</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF009</span> <span class="rf-link">RN009</span> <span class="rf-link">RN017</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF010  DASHBOARD                         -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Dashboard · RF010</div>
+
+    <div class="rf-section" id="rf010">
+      <div class="rf-header">
+        <div class="rf-badge">RF010</div>
+        <div>
+          <div class="rf-title">Dashboard de Indicadores</div>
+          <div class="rf-desc">Métricas em tempo real: frequência, empregabilidade, retenção e concluintes (RN009, RN018)</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-dashboard">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/dashboard</span>
+          <span class="endpoint-summary">Indicadores gerais</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Indicadores consolidados para o dashboard principal.</div>
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">periodo_inicio</td><td class="param-type">date</td><td>Filtrar a partir de (YYYY-MM-DD)</td></tr>
+                  <tr><td class="param-name">periodo_fim</td><td class="param-type">date</td><td>Filtrar até (YYYY-MM-DD)</td></tr>
+                  <tr><td class="param-name">id_turma</td><td class="param-type">integer</td><td>Filtrar por turma</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"indicadores_gerais"</span>: {
+    <span class="json-key">"total_alunos_ativos"</span>: <span class="json-num">87</span>,
+    <span class="json-key">"total_alunos_formados"</span>: <span class="json-num">180</span>,
+    <span class="json-key">"total_jovens_empregados"</span>: <span class="json-num">75</span>,
+    <span class="json-key">"total_alertas_evasao_ativos"</span>: <span class="json-num">3</span>
+  },
+  <span class="json-key">"empregabilidade"</span>: {
+    <span class="json-key">"taxa_retencao_3_meses"</span>: <span class="json-num">68.0</span>,
+    <span class="json-key">"taxa_retencao_6_meses"</span>: <span class="json-num">61.0</span>,
+    <span class="json-key">"taxa_retencao_12_meses"</span>: <span class="json-num">55.0</span>
+  },
+  <span class="json-key">"concluintes_no_periodo"</span>: { <span class="json-key">"total_concluintes"</span>: <span class="json-num">42</span> }
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Indicadores retornados</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Formato de data inválido</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Turma do filtro não encontrada</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF010</span> <span class="rf-link">RN009</span> <span class="rf-link">RN018</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-dashboard-freq">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/dashboard/frequencia</span>
+          <span class="endpoint-summary">Detalhe de frequência</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">id_turma</td><td class="param-type">integer</td><td>Filtrar por turma</td></tr>
+                  <tr><td class="param-name">apenas_alertas</td><td class="param-type">boolean</td><td>Se true, retorna só alunos com alerta ativo</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Frequências retornadas</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF010</span> <span class="rf-link">RN012</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-dashboard-emp">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/dashboard/empregabilidade</span>
+          <span class="endpoint-summary">Detalhe de empregabilidade</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna distribuição por faixa salarial e taxas de retenção (3, 6 e 12 meses).</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Dados retornados</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF010</span> <span class="rf-link">RN009</span> <span class="rf-link">RN019</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF011–014  ALERTAS & SAÚDE MENTAL        -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Alertas &amp; Saúde Mental · RF011–014</div>
+
+    <div class="rf-section" id="rf011-014">
+      <div class="rf-header">
+        <div class="rf-badge">RF011 / RF012 / RF013 / RF014</div>
+        <div>
+          <div class="rf-title">Alertas de Evasão e Prontuário Psicológico</div>
+          <div class="rf-desc">Alertas automáticos (RN016) e prontuário restrito ao psicólogo (RN003, RN005, RN014)</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-alertas">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestao/alertas</span>
+          <span class="endpoint-summary">Listar alertas de evasão</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Lista alertas de risco de evasão ativos. Gerados automaticamente pelo sistema (RN012, RN013, RN016).</div>
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">status</td><td class="param-type">boolean</td><td>Filtrar por ativos (true) ou resolvidos (false)</td></tr>
+                  <tr><td class="param-name">id_turma</td><td class="param-type">integer</td><td>Filtrar por turma</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"alertas"</span>: [
+    {
+      <span class="json-key">"id_alerta"</span>: <span class="json-num">5</span>,
+      <span class="json-key">"ra"</span>: <span class="json-num">102</span>,
+      <span class="json-key">"nome_aluno"</span>: <span class="json-str">"Ana Lima"</span>,
+      <span class="json-key">"tipo"</span>: <span class="json-num">1</span>,
+      <span class="json-key">"motivo"</span>: <span class="json-str">"Mais de 1 falta no módulo"</span>,
+      <span class="json-key">"data_inicio"</span>: <span class="json-str">"2026-04-10"</span>,
+      <span class="json-key">"status"</span>: <span class="json-bool">true</span>
+    }
+  ]
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Alertas retornados</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF011</span> <span class="rf-link">RN012</span> <span class="rf-link">RN013</span> <span class="rf-link">RN016</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="patch-resolver-alerta">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/gestao/alertas/:id/resolver</span>
+          <span class="endpoint-summary">Resolver alerta de evasão</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body"><div class="ep-grid">
+          <span class="ep-label">Descrição</span><div class="ep-value">Marca o alerta como resolvido e registra a data de resolução.</div>
+          <span class="ep-label">Body opcional</span><div class="ep-value"><pre>{ <span class="json-key">"data_resolucao"</span>: <span class="json-str">"2026-06-11"</span> }</pre></div>
+          <span class="ep-label">Status codes</span><div class="ep-value">200 · 400 · 404 · 500</div>
+          <span class="ep-label">Vinculações</span><div class="ep-value"><span class="rf-link">RF019</span> <span class="rf-link">RN023</span></div>
+        </div></div>
+      </div>
+
+      <div class="endpoint-card" id="post-prontuario">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/psicologa/:rm/alunos/:ra/relatorios</span>
+          <span class="endpoint-summary">Registrar prontuário (relatorio)</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Insere nova entrada no prontuário. Acesso restrito ao psicólogo (RN003, RN005). Registros são imutáveis após criação (RN014, RN015).</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"info_simplificada"</span>: <span class="json-str">"Estável"</span>,
+  <span class="json-key">"observacoes"</span>: <span class="json-str">"Aluno demonstrou melhora na ansiedade."</span>,
+  <span class="json-key">"data"</span>: <span class="json-str">"2026-04-12"</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Atendimento registrado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Acesso negado — perfil não é psicólogo (RN003)</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF013</span> <span class="rf-link">RN003</span> <span class="rf-link">RN005</span> <span class="rf-link">RN014</span> <span class="rf-link">RN015</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-prontuario">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/psicologa/:rm/alunos/:ra/relatorios</span>
+          <span class="endpoint-summary">Consultar prontuários</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">
+              <p>Retorna o histórico completo de atendimentos psicológicos do aluno.</p>
+              <p>Apenas psicólogos acessam o conteúdo integral. Gestores visualizam somente o campo <span class="inline-code">info_simplificada</span> (RN002).</p>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Prontuário retornado</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Acesso negado (RN003)</span></div>
+                <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Aluno não encontrado</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF013</span> <span class="rf-link">RF014</span> <span class="rf-link">RN002</span> <span class="rf-link">RN003</span> <span class="rf-link">RN005</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="patch-prontuario">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge patch">PATCH</span>
+          <span class="endpoint-path">/psicologa/:rm/alunos/:ra/relatorios/:id_relatorio</span>
+          <span class="endpoint-summary">Atualizar prontuário</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Atualiza um prontuário existente. Acesso restrito à psicóloga (RN003, RN015).</div>
+            <span class="ep-label">Parâmetros</span>
+            <div class="ep-value"><table class="params-table"><thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead><tbody>
+              <tr><td class="param-name">rm</td><td class="param-type">integer</td><td>RM da psicóloga</td></tr>
+              <tr><td class="param-name">ra</td><td class="param-type">integer</td><td>RA do aluno</td></tr>
+              <tr><td class="param-name">id_relatorio</td><td class="param-type">integer</td><td>ID do prontuário</td></tr>
+            </tbody></table></div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value"><pre>{ <span class="json-key">"info_simplificada"</span>: <span class="json-str">"Melhora"</span>, <span class="json-key">"observacoes"</span>: <span class="json-str">"Sessão positiva."</span> }</pre></div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Prontuário atualizado</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Prontuário não encontrado</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF013</span> <span class="rf-link">RN003</span> <span class="rf-link">RN015</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-psi-rm">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/psicologa/:rm</span>
+          <span class="endpoint-summary">Buscar dados da psicóloga</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna os dados da psicóloga pelo RM. Também disponível como <span class="inline-code">GET /psicologo/:rm</span>.</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Dados retornados</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Psicóloga não encontrada</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-psi-alunos">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/psicologa/:rm/alunos</span>
+          <span class="endpoint-summary">Listar alunos da psicóloga</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna a lista de alunos sob acompanhamento da psicóloga (RN003).</div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value"><div class="status-list">
+              <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Lista retornada</span></div>
+              <div class="status-row"><span class="status-code s40">404</span><span class="status-text">Nenhum aluno encontrado</span></div>
+              <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+            </div></div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF013</span> <span class="rf-link">RN003</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RF015–017  FILTROS, COMUNICADOS, CSV     -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="section-divider">Filtros, Comunicados e Importação · RF015–017</div>
+
+    <div class="rf-section" id="rf015-017">
+      <div class="rf-header">
+        <div class="rf-badge">RF015 / RF016 / RF017</div>
+        <div>
+          <div class="rf-title">Filtros avançados, comunicados e importação CSV</div>
+          <div class="rf-desc">Segmentação de alunos, envio de e-mails e migração segura de dados históricos</div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="get-filtros">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge get">GET</span>
+          <span class="endpoint-path">/gestor/:rm/alunos/filtros</span>
+          <span class="endpoint-summary">Filtrar alunos (gestor) — RF015</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Retorna alunos que correspondem a um ou mais critérios combinados.</div>
+            <span class="ep-label">Query params</span>
+            <div class="ep-value">
+              <table class="params-table">
+                <thead><tr><th>Param</th><th>Tipo</th><th>Descrição</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">idade_min</td><td class="param-type">integer</td><td>Idade mínima</td></tr>
+                  <tr><td class="param-name">idade_max</td><td class="param-type">integer</td><td>Idade máxima</td></tr>
+                  <tr><td class="param-name">genero</td><td class="param-type">string</td><td>Masculino | Feminino | Outro</td></tr>
+                  <tr><td class="param-name">empregabilidade</td><td class="param-type">string</td><td>Empregado | Desempregado</td></tr>
+                  <tr><td class="param-name">id_turma</td><td class="param-type">integer</td><td>ID da turma</td></tr>
+                  <tr><td class="param-name">eventos_min</td><td class="param-type">integer</td><td>Mínimo de eventos participados</td></tr>
+                  <tr><td class="param-name">ex_aluno</td><td class="param-type">boolean</td><td>Filtrar ex-alunos</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Lista filtrada retornada (pode ser vazia)</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF015</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-comunicados">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestor/comunicados</span>
+          <span class="endpoint-summary">Enviar comunicado por e-mail</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Dispara e-mail para alunos com e-mail cadastrado. Comunicado registrado no histórico do portal.</div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"titulo"</span>: <span class="json-str">"Hackathon Pulse Mais 2026"</span>,
+  <span class="json-key">"conteudo"</span>: <span class="json-str">"Confirme sua presença até 20/06."</span>,
+  <span class="json-key">"destinatarios"</span>: <span class="json-str">"ativos"</span> <span class="json-comment">// "ativos" | "ex-alunos" | "todos"</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">201</span><span class="status-text">Comunicado enviado e registrado</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Campos obrigatórios ausentes</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno ou falha no envio de e-mail</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF016</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint-card" id="post-importacao">
+        <div class="endpoint-head" onclick="toggle(this)">
+          <span class="method-badge post">POST</span>
+          <span class="endpoint-path">/gestor/importacao</span>
+          <span class="endpoint-summary">Importar CSV de alunos</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="endpoint-body">
+          <div class="ep-grid">
+            <span class="ep-label">Descrição</span>
+            <div class="ep-value">Importa dados históricos via arquivo CSV. Conflitos sinalizados sem sobrescrever. Apenas alterações confirmadas explicitamente são salvas (RF017).</div>
+            <span class="ep-label">Headers</span>
+            <div class="ep-value"><div class="header-note">Content-Type: multipart/form-data<br>Cookie: session_id=&lt;token&gt;</div></div>
+            <span class="ep-label">Body</span>
+            <div class="ep-value">Multipart form com campo <span class="inline-code">file</span> contendo o arquivo <span class="inline-code">.csv</span>.</div>
+            <span class="ep-label">Resposta 200</span>
+            <div class="ep-value">
+<pre>{
+  <span class="json-key">"importados"</span>: <span class="json-num">45</span>,
+  <span class="json-key">"conflitos"</span>: [
+    { <span class="json-key">"ra"</span>: <span class="json-num">101</span>, <span class="json-key">"motivo"</span>: <span class="json-str">"CPF já cadastrado"</span> }
+  ],
+  <span class="json-key">"ignorados"</span>: <span class="json-num">1</span>
+}</pre>
+            </div>
+            <span class="ep-label">Status codes</span>
+            <div class="ep-value">
+              <div class="status-list">
+                <div class="status-row"><span class="status-code s2">200</span><span class="status-text">Importação processada (com ou sem conflitos)</span></div>
+                <div class="status-row"><span class="status-code s40">400</span><span class="status-text">Arquivo ausente ou formato inválido</span></div>
+                <div class="status-row"><span class="status-code s40">403</span><span class="status-text">Perfil sem permissão</span></div>
+                <div class="status-row"><span class="status-code s4">422</span><span class="status-text">Estrutura do CSV não corresponde ao modelo</span></div>
+                <div class="status-row"><span class="status-code s5">500</span><span class="status-text">Erro interno ao processar arquivo</span></div>
+              </div>
+            </div>
+            <span class="ep-label">Vinculações</span>
+            <div class="ep-value"><span class="rf-link">RF017</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<script>
+  function toggle(head) {
+    const card = head.parentElement;
+    const body = card.querySelector('.endpoint-body');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    card.classList.toggle('open', !isOpen);
+  }
+
+  const sections = document.querySelectorAll('.rf-section, .endpoint-card');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navItems.forEach(n => {
+          n.classList.toggle('active', n.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => { if (s.id) observer.observe(s); });
+</script>
+</body>
+</html>

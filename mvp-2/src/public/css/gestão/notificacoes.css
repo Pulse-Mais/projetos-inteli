@@ -1,0 +1,160 @@
+/* ============================================================
+   notificacoes.css — Página de Notificações
+   Pulse Mais · Módulo 1AMD2
+   Depende de: global.css (tokens, reset, tipografia)
+   ============================================================ */
+
+/* ── SHELL ── */
+.app-shell { display: flex; min-height: 100vh; }
+
+.main-wrapper { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+.page-content { flex: 1; padding: var(--spacing-xl); display: flex; flex-direction: column; gap: var(--spacing-lg); }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: var(--font-size-sm); color: var(--color-text-secondary);
+}
+.breadcrumb a { color: var(--color-text-secondary); text-decoration: none; }
+.breadcrumb a:hover { color: var(--color-brand); }
+.breadcrumb__sep { color: var(--color-border); }
+
+/* ── PAGE HEADER ── */
+.page-header-row {
+  display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: 4px;
+}
+.page-title { font-size: 34px; font-weight: var(--font-weight-bold); color: var(--color-text-primary); letter-spacing: -.5px; line-height: 1.2; }
+.notif-count-badge {
+  width: 28px; height: 28px; border-radius: var(--radius-full);
+  background: var(--color-error); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: var(--font-weight-bold);
+}
+.page-subtitle { font-size: var(--font-size-sm); color: var(--color-text-secondary); }
+
+/* ── FILTER TABS ── */
+.filter-tabs {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  background: var(--color-card-bg); border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-shadow: var(--shadow-card); flex-wrap: wrap;
+}
+.filter-tab {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: var(--radius-full);
+  font-family: var(--font-family); font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium); border: none; cursor: pointer;
+  background: transparent; color: var(--color-text-secondary);
+  transition: background-color .15s, color .15s;
+  white-space: nowrap;
+}
+.filter-tab:hover { background: var(--color-page-bg); color: var(--color-text-primary); }
+.filter-tab.active { background: var(--color-brand); color: #fff; font-weight: var(--font-weight-semibold); }
+.tab-count {
+  font-size: 11px; font-weight: var(--font-weight-bold);
+}
+
+/* ── NOTIFICATION LIST ── */
+.notif-card {
+  background: var(--color-card-bg); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card); overflow: hidden;
+}
+
+/* Group header */
+.notif-group__title {
+  font-size: 11px; font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary); letter-spacing: .6px; text-transform: uppercase;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background: var(--color-page-bg); border-bottom: 1px solid var(--color-border);
+}
+
+/* Single notification item */
+.notif-item {
+  display: flex; align-items: flex-start; gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color .15s;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #FAFBFF; }
+
+/* Unread dot */
+.notif-dot-wrap {
+  width: 12px; flex-shrink: 0; display: flex;
+  align-items: flex-start; padding-top: 6px;
+}
+.notif-dot {
+  width: 8px; height: 8px; border-radius: var(--radius-full);
+  background: var(--color-brand); flex-shrink: 0;
+}
+.notif-dot--hidden { visibility: hidden; }
+
+/* Icon container */
+.notif-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.notif-icon svg { width: 18px; height: 18px; stroke-width: 1.75; }
+
+.notif-icon--alerta   { background: #FEE2E2; color: #DC2626; }
+.notif-icon--aluno    { background: #DBEAFE; color: #2563EB; }
+.notif-icon--mentoria { background: #EDE9FE; color: #7C3AED; }
+.notif-icon--evento   { background: #DCFCE7; color: #16A34A; }
+.notif-icon--conquista{ background: #FEF9C3; color: #D97706; }
+.notif-icon--sistema  { background: #F3F4F6; color: #6B7280; }
+
+/* Content */
+.notif-body { flex: 1; min-width: 0; }
+
+.notif-title-row {
+  display: flex; align-items: center; gap: var(--spacing-sm); flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.notif-title {
+  font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+/* Type badges */
+.notif-badge {
+  display: inline-flex; align-items: center;
+  padding: 1px 8px; border-radius: var(--radius-full);
+  font-size: 10px; font-weight: var(--font-weight-bold);
+  text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
+}
+.notif-badge--alerta   { background: #FEE2E2; color: #DC2626; }
+.notif-badge--aluno    { background: #DBEAFE; color: #2563EB; }
+.notif-badge--mentoria { background: #EDE9FE; color: #7C3AED; }
+.notif-badge--evento   { background: #DCFCE7; color: #16A34A; }
+.notif-badge--conquista{ background: #FEF9C3; color: #D97706; }
+.notif-badge--sistema  { background: #F3F4F6; color: #6B7280; }
+
+.notif-desc {
+  font-size: var(--font-size-sm); color: var(--color-text-primary);
+  line-height: 1.55; margin-bottom: 4px;
+}
+.notif-meta {
+  font-size: 12px; color: var(--color-text-secondary); margin-bottom: var(--spacing-sm);
+}
+.notif-meta span { margin: 0 4px; opacity: .5; }
+
+/* Action button */
+.notif-action {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 6px 14px; border-radius: var(--radius-full);
+  font-family: var(--font-family); font-size: 13px; font-weight: var(--font-weight-semibold);
+  border: none; cursor: pointer; color: #fff; transition: opacity .15s;
+}
+.notif-action:hover { opacity: .88; }
+.notif-action svg { width: 13px; height: 13px; stroke-width: 2.5; }
+.notif-action--brand  { background: var(--color-brand); }
+.notif-action--danger { background: var(--color-error); }
+
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+  .page-content { padding: var(--spacing-md); }
+  .notif-item   { padding: var(--spacing-md); }
+  .filter-tabs  { gap: 4px; }
+  .filter-tab   { padding: 5px 10px; font-size: 12px; }
+}

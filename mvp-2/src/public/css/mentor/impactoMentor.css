@@ -1,0 +1,338 @@
+/* ============================================================
+   impactoMentor.css — Estilos específicos do Painel de Impacto
+   Layout base: mentor-layout.css
+   ============================================================ */
+
+/* ---------------- Layout ----------------  */
+.impact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.impact-main { min-width: 0; }
+
+/* ---------------- Mentor card ---------------- */
+.mentor-card {
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.mentor-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.mentor-card h2 {
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--space-1);
+}
+
+.mentor-card p {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+/* ---------------- Tracking section ---------------- */
+.tracking-section { margin-top: var(--space-6); }
+
+.section-heading {
+  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.section-heading h2,
+.next-sessions > h2 {
+  color: var(--foreground);
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ---------------- Student grid ---------------- */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+.student-card {
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.student-card h3 {
+  color: var(--foreground);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--space-2);
+}
+
+.student-card p {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  margin: 0;
+}
+
+.student-card p strong { color: var(--foreground); }
+
+.progress-track {
+  height: 10px;
+  margin: var(--space-3) 0 var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  overflow: hidden;
+}
+
+.progress-track span {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  display: block;
+}
+
+.competencies-label {
+  display: block;
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-2);
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.skill-tag {
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ---------------- Distribution card ---------------- */
+.distribution-card {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.distribution-header,
+.distribution-row {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) 46px;
+  align-items: center;
+}
+
+.distribution-header {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: .4px;
+}
+
+.distribution-header strong {
+  color: var(--foreground);
+  text-align: center;
+  text-transform: none;
+  font-size: var(--text-sm);
+  letter-spacing: 0;
+}
+
+.distribution-header span:last-child { text-align: right; }
+
+.distribution-row {
+  min-height: 46px;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+}
+
+.distribution-row:last-child { border-bottom: none; }
+
+.distribution-row > strong {
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+.distribution-track {
+  height: 13px;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  overflow: hidden;
+}
+
+.distribution-track span {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  display: block;
+}
+
+/* ---------------- Next sessions ---------------- */
+.next-sessions { margin-top: var(--space-6); }
+
+.next-sessions > h2 { margin-bottom: var(--space-5); }
+
+.sessions-card {
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+}
+
+.week-label {
+  min-height: 48px;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.week-label svg { color: var(--primary); }
+
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.session-card {
+  min-height: 110px;
+  padding: var(--space-4) var(--space-5);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+
+.session-card:hover { background: var(--primary-hover); }
+
+.session-card span {
+  margin-bottom: var(--space-2);
+  color: rgba(255, 255, 255, .85);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.session-card strong {
+  margin-bottom: var(--space-2);
+  color: #fff;
+  font-size: var(--text-lg);
+}
+
+.session-card small {
+  color: rgba(255, 255, 255, .82);
+  font-size: var(--text-xs);
+}
+
+/* ---------------- Summary sidebar ---------------- */
+.impact-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.summary-card {
+  min-height: 110px;
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.summary-card span {
+  margin-bottom: var(--space-3);
+  color: rgba(255, 255, 255, .88);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.summary-card strong {
+  color: #fff;
+  font-size: 46px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1100px) {
+  .impact-layout { grid-template-columns: 1fr; }
+
+  .impact-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    order: -1;
+  }
+}
+
+@media (max-width: 800px) {
+  .student-grid,
+  .session-grid { grid-template-columns: 1fr; }
+
+  .distribution-header,
+  .distribution-row {
+    grid-template-columns: 50px minmax(0, 1fr) 36px;
+  }
+}
+
+@media (max-width: 560px) {
+  .impact-summary { grid-template-columns: 1fr; }
+  .mentor-card { padding: var(--space-5); }
+}

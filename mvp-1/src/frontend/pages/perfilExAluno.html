@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse Mais — Meu Perfil (Ex-Aluno)</title>
+    <link rel="icon" type="image/png" href="../assets/logoAzul.png">
+  <link rel="stylesheet" href="../css/perfilExAluno.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <a href="perfilExAluno.html" class="sidebar__avatar-link sidebar__avatar-link--ativo" aria-label="Meu Perfil (página atual)" aria-current="page">
+        <img src="/assets/avatar.png" class="sidebar__avatar" alt="Foto do ex-aluno">
+        <span class="sidebar__avatar-hint">Meu Perfil</span>
+      </a>
+      <nav class="sidebar__nav">
+        <a href="homepageExAluno.html" class="sidebar__link">Homepage</a>
+        <a href="conquistasExAluno.html" class="sidebar__link">Conquistas</a>
+        <a href="oportunidades.html" class="sidebar__link">Oportunidades</a>
+      </nav>
+    </div>
+
+    <div class="sidebar__spacer"></div>
+
+    <div class="sidebar__bottom">
+      <div class="sidebar__logo"><img src="/assets/logoAzul.png" alt="Pulse Mais"></div>
+      <div class="sidebar__logout">
+        <button class="sidebar__link" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Sair
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content">
+
+    <div class="page-topbar">
+      <h2>Meu Perfil</h2>
+    </div>
+
+    <div class="page-header">
+      <h1>Perfil do Ex-Aluno</h1>
+      <p>Gerencie suas informações pessoais e profissionais.</p>
+    </div>
+
+    <div class="perfil-layout">
+      <section class="perfil-card perfil-card--main">
+        <div class="perfil-main-grid">
+
+          <!-- LINHA 1: IDENTIDADE + IDENTIFICAÇÃO -->
+          <aside class="perfil-identity">
+            <div class="perfil-card__foto-container">
+              <img src="../assets/avatar.png" class="perfil-card__foto" id="perfilFoto" alt="Foto do ex-aluno">
+              <button class="btn-foto" type="button" id="btnEditarFoto" onclick="document.getElementById('inputFoto').click()" style="display:none;">Editar Foto</button>
+              <button class="btn-foto btn-foto--danger" type="button" id="btnRemoverFoto" onclick="limparFotoExAluno()" style="display:none;">Remover Foto</button>
+              <input type="file" id="inputFoto" accept="image/*" style="display:none;" onchange="previewFoto(this)">
+            </div>
+          </aside>
+
+          <div class="perfil-info-top">
+            <div class="registration-section-header registration-section-header--blue">
+              <span>Identificação</span>
+            </div>
+            <article class="perfil-section">
+              <h3>Nome Completo</h3>
+              <p id="exNome"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>E-mail</h3>
+              <p id="exEmail"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Telefone</h3>
+              <p id="exTelefone"></p>
+            </article>
+          </div>
+
+          <!-- LINHA 2: CARGO -->
+          <div class="perfil-row-cargo">
+            <article class="perfil-section">
+              <h3>Cargo</h3>
+              <p id="exCargo"></p>
+            </article>
+          </div>
+
+          <!-- LINHA 3: PROFISSIONAL -->
+          <div class="perfil-row-pro">
+            <article class="perfil-section">
+              <h3>Empresa Atual</h3>
+              <p id="exEmpresa"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Área de Interesse</h3>
+              <p id="exArea"></p>
+            </article>
+          </div>
+
+          <!-- LINHA 4: MENTORIA + FORMATURA -->
+          <div class="perfil-row-loc">
+            <article class="perfil-section">
+              <h3>Disponibilidade para Mentoria</h3>
+              <p id="exMentoria"></p>
+            </article>
+            <article class="perfil-section">
+              <h3>Data de Formatura</h3>
+              <p id="exFormatura"></p>
+            </article>
+          </div>
+
+        </div>
+
+        <div class="perfil-footer" style="margin-top: 32px;">
+          <span id="feedbackPerfil" class="perfil-feedback"></span>
+          <button class="btn btn-verde" id="btnEditarEx" style="min-width: 220px;">Editar Perfil</button>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<script src="../js/avatarShared.js"></script>
+<script src="../js/perfilExAluno.js"></script>
+</body>
+</html>

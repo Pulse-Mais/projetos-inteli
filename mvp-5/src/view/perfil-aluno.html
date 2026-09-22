@@ -1,0 +1,669 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .content { padding: 28px 32px; overflow-y: auto; flex: 1; background: var(--bg); }
+
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; }
+    .page-header h1 { font-size: 24px; font-weight: 700; color: var(--navy); margin: 0 0 4px; }
+    .page-header p  { font-size: 13px; color: var(--muted); margin: 0; }
+    .btn-update {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; background: var(--brand-dark); color: var(--white);
+      border: none; border-radius: 8px; font-family: inherit;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: opacity 0.15s; white-space: nowrap; flex-shrink: 0;
+    }
+    .btn-update:hover { opacity: 0.87; }
+
+    .hero-perfil {
+      background: var(--brand-dark); border-radius: 14px; padding: 28px 32px;
+      display: flex; align-items: center; gap: 24px;
+      margin-bottom: 20px; color: var(--white);
+    }
+    .hero-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 700; flex-shrink: 0;
+    }
+    .hero-nome   { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+    .hero-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hero-badge  { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; }
+    .hero-badge--green { background: var(--brand-green); color: var(--white); }
+    .hero-badge--blue  { background: rgba(255,255,255,0.18); color: var(--white); border: 1px solid rgba(255,255,255,0.3); }
+
+    .info-grid-2   { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .info-card     { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+    .info-card--full { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+
+    .info-card-title {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 600; color: var(--brand-dark); margin-bottom: 20px;
+    }
+    .icon-wrap { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+    .fields-col  { display: flex; flex-direction: column; gap: 14px; }
+    .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; }
+    .field { display: flex; flex-direction: column; gap: 3px; }
+    .field-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+    .field-value { font-size: 13px; color: var(--navy); display: flex; align-items: center; gap: 6px; }
+    .field-value i { color: var(--muted); flex-shrink: 0; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(10,22,40,0.45); align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+    .modal-title { font-size: 16px; font-weight: 700; color: var(--navy); margin: 0 0 20px; }
+    .modal-field { margin-bottom: 14px; }
+    .modal-field label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+    .modal-field input, .modal-field select {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--border);
+      border-radius: 8px; font-family: inherit; font-size: 13px; color: var(--navy); outline: none;
+    }
+    .modal-field input:focus, .modal-field select:focus { border-color: var(--brand-dark); }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+    .btn-cancel { padding: 9px 18px; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-family: inherit; font-size: 13px; color: var(--navy); cursor: pointer; }
+    .btn-save   { padding: 9px 18px; background: var(--brand-dark); border: none; border-radius: 8px; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--white); cursor: pointer; }
+
+    @media (max-width: 768px) {
+      .info-grid-2 { grid-template-columns: 1fr; }
+      .fields-grid { grid-template-columns: 1fr; }
+      .content { padding: 20px 16px; }
+      .hero-perfil { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-aluno.html" class="sidebar__nav-item" title="Dashboard" id="nav-dashboard">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Dashboard</span>
+      </a>
+      <a href="eventos-aluno.html" class="sidebar__nav-item" title="Eventos" id="nav-eventos">
+        <i data-lucide="calendar" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Eventos</span>
+      </a>
+      <a href="perfil-aluno.html" class="sidebar__nav-item active" title="Meu Perfil" aria-current="page">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Meu Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Meu Perfil</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <h1>Meus Dados</h1>
+          <p>Informações pessoais e acadêmicas</p>
+        </div>
+        <button class="btn-update" onclick="abrirModal()">
+          <i data-lucide="edit-3" width="14" height="14"></i>
+          Atualizar dados
+        </button>
+      </div>
+
+      <div class="hero-perfil">
+        <div class="hero-avatar" id="hero-avatar">--</div>
+        <div>
+          <div class="hero-nome" id="hero-nome">—</div>
+          <div class="hero-badges">
+            <span class="hero-badge hero-badge--green" id="badge-status">ALUNO ATIVO</span>
+            <span class="hero-badge hero-badge--blue"  id="badge-programa">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid-2">
+        <div class="info-card">
+          <div class="info-card-title">
+            <div class="icon-wrap" style="background:var(--blue-light);">
+              <i data-lucide="user" width="15" height="15" style="color:var(--blue-btn);"></i>
+            </div>
+            Informações Pessoais
+          </div>
+          <div class="fields-col">
+            <div class="field">
+              <span class="field-label">Nome completo</span>
+              <span class="field-value" id="f-nome">—</span>
+            </div>
+            <div class="field">
+              <span class="field-label">E-mail</span>
+              <span class="field-value" id="f-email">
+                <i data-lucide="mail" width="13" height="13"></i><span>—</span>
+              </span>
+            </div>
+            <div class="field">
+              <span class="field-label">Telefone</span>
+              <span class="field-value" id="f-telefone">
+                <i data-lucide="phone" width="13" height="13"></i><span>—</span>
+              </span>
+            </div>
+            <div class="field">
+              <span class="field-label">Data de nascimento</span>
+              <span class="field-value" id="f-nascimento">
+                <i data-lucide="calendar" width="13" height="13"></i><span>—</span>
+              </span>
+            </div>
+            <div class="field">
+              <span class="field-label">CPF</span>
+              <span class="field-value" id="f-cpf">—</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Gênero</span>
+              <span class="field-value" id="f-genero">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title">
+            <div class="icon-wrap" style="background:var(--orange-light);">
+              <i data-lucide="map-pin" width="15" height="15" style="color:var(--orange-text);"></i>
+            </div>
+            Endereço
+          </div>
+          <div class="fields-col">
+            <div class="field">
+              <span class="field-label">Endereço</span>
+              <span class="field-value" id="f-endereco">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card--full">
+        <div class="info-card-title">
+          <div class="icon-wrap" style="background:var(--green-badge-bg);">
+            <i data-lucide="graduation-cap" width="15" height="15" style="color:var(--green-badge-text);"></i>
+          </div>
+          Informações Acadêmicas
+        </div>
+        <div class="fields-grid">
+          <div class="field">
+            <span class="field-label">Programa</span>
+            <span class="field-value" id="f-programa">
+              <i data-lucide="book-open" width="13" height="13"></i><span>—</span>
+            </span>
+          </div>
+          <div class="field">
+            <span class="field-label">Data de ingresso</span>
+            <span class="field-value" id="f-ingresso">
+              <i data-lucide="calendar" width="13" height="13"></i><span>—</span>
+            </span>
+          </div>
+          <div class="field">
+            <span class="field-label">Status</span>
+            <span class="field-value" id="f-status-acad">—</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Categoria atual</span>
+            <span class="field-value" id="f-categoria">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Situação profissional/acadêmica ── -->
+      <div class="info-card--full" id="staff-situacao-card" style="display:none;">
+        <div class="info-card-title">
+          <div class="icon-wrap" style="background:var(--blue-light);">
+            <i data-lucide="briefcase" width="15" height="15" style="color:var(--blue-btn);"></i>
+          </div>
+          Situação profissional e acadêmica
+        </div>
+
+        <div class="fields-grid" id="staff-classificacao-section" style="margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border);">
+          <div class="field">
+            <span class="field-label">Classificação Pulse</span>
+            <select id="cat-select" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);">
+              <option value="Conectado">Conectado</option>
+              <option value="Capacitado">Capacitado</option>
+              <option value="Transformado">Transformado</option>
+            </select>
+          </div>
+          <div class="field" style="align-self:flex-end;">
+            <button class="btn-update" onclick="salvarClassificacao()">
+              <i data-lucide="save" width="14" height="14"></i> Alterar classificação
+            </button>
+          </div>
+        </div>
+
+        <div class="fields-grid">
+          <div class="field">
+            <span class="field-label">Status de emprego</span>
+            <select id="emp-status" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);">
+              <option value="">Selecione...</option>
+              <option value="Empregado">Empregado</option>
+              <option value="Procurando">Procurando</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Empresa</span>
+            <input id="emp-empresa" type="text" placeholder="(se empregado)" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);" />
+          </div>
+          <div class="field">
+            <span class="field-label">Área de atuação</span>
+            <input id="emp-area" type="text" placeholder="(opcional)" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);" />
+          </div>
+          <div class="field">
+            <span class="field-label">Renda atual (R$)</span>
+            <input id="emp-renda" type="number" min="0" step="0.01" placeholder="(opcional)" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);" />
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin:12px 0 20px;">
+          <button class="btn-update" onclick="salvarEmprego()">
+            <i data-lucide="save" width="14" height="14"></i> Registrar emprego
+          </button>
+        </div>
+
+        <div id="staff-ensino-section" style="border-top:1px solid var(--border);padding-top:18px;" class="fields-grid">
+          <div class="field">
+            <span class="field-label">Status de ensino superior</span>
+            <select id="es-status" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);">
+              <option value="">Selecione...</option>
+              <option value="Concluido">Concluído</option>
+              <option value="Cursando">Cursando</option>
+              <option value="Não possui">Não possui</option>
+            </select>
+          </div>
+          <div class="field">
+            <span class="field-label">Instituição</span>
+            <input id="es-inst" type="text" placeholder="(se cursando/concluído)" style="padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:13px;color:var(--navy);" />
+          </div>
+        </div>
+        <div id="staff-ensino-actions" style="display:flex;justify-content:flex-end;margin-top:12px;">
+          <button class="btn-update" onclick="salvarEnsino()">
+            <i data-lucide="save" width="14" height="14"></i> Registrar ensino superior
+          </button>
+        </div>
+        <p id="staff-ensino-help" style="font-size:11px;color:var(--muted);margin-top:10px;">
+          <i data-lucide="info" width="11" height="11"></i>
+          Ensino superior só pode ser registrado para jovens da categoria "Transformado".
+        </p>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+        <button class="btn-update" onclick="abrirModal()">
+          <i data-lucide="edit-3" width="14" height="14"></i>
+          Atualizar dados
+        </button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModalExt(event)">
+  <div class="modal">
+    <div class="modal-title">Atualizar dados</div>
+    <div class="modal-field"><label>Nome completo</label><input type="text" id="m-nome" /></div>
+    <div class="modal-field"><label>E-mail</label><input type="email" id="m-email" /></div>
+    <div class="modal-field"><label>Telefone</label><input type="tel" id="m-telefone" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric" /></div>
+    <div class="modal-field"><label>CPF</label><input type="text" id="m-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" /></div>
+    <div class="modal-field"><label>Endereço</label><input type="text" id="m-endereco" placeholder="Rua, nº, Bairro, Cidade - UF" /></div>
+    <div class="modal-field">
+      <label>Gênero</label>
+      <select id="m-genero">
+        <option value="">Não informado</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Não-binário">Não-binário</option>
+        <option value="Prefiro não informar">Prefiro não informar</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-save" onclick="salvarDados()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:3000/api';
+let _jovemId  = null;
+let _userId   = null;
+
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 150000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') { console.warn('[DEV] API offline.'); return null; }
+    return null;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+function initials(nome = '') { return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join(''); }
+function logout() { sessionStorage.removeItem('pulse_session'); localStorage.removeItem('pulse_session'); window.location.href = 'dashboard.html'; }
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  const bg = { success:'#2A9447', error:'#D85A30', default:'#003870' }[type] || '#003870';
+  Object.assign(el.style, { position:'fixed', bottom:'24px', right:'24px', zIndex:'9999',
+    background: bg, color:'#fff', padding:'12px 20px', borderRadius:'10px',
+    fontSize:'13px', fontWeight:'600', boxShadow:'0 4px 16px rgba(0,0,0,0.18)', transition:'opacity 0.3s' });
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3000);
+}
+function escHtml(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmtDate(d) { if (!d) return null; const dt = new Date(d); return isNaN(dt) ? null : dt.toLocaleDateString('pt-BR'); }
+
+function soDigitos(s) { return String(s ?? '').replace(/\D/g, ''); }
+
+function formatarTelefone(valor) {
+  const d = soDigitos(valor).slice(0, 11);
+  if (d.length === 0) return '';
+  if (d.length <= 2)  return `(${d}`;
+  if (d.length <= 7)  return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+}
+
+function formatarCpf(valor) {
+  const d = soDigitos(valor).slice(0, 11);
+  if (d.length === 0) return '';
+  if (d.length <= 3)  return d;
+  if (d.length <= 6)  return `${d.slice(0,3)}.${d.slice(3)}`;
+  if (d.length <= 9)  return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6)}`;
+  return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
+}
+
+function aplicarMascara(input, fn) {
+  input.addEventListener('input', () => {
+    const pos = input.selectionStart;
+    const digitosAntes = soDigitos(input.value.slice(0, pos)).length;
+    input.value = fn(input.value);
+    // reposiciona o cursor após os mesmos dígitos
+    let c = 0, newPos = 0;
+    for (let i = 0; i < input.value.length; i++) {
+      if (/\d/.test(input.value[i])) c++;
+      if (c === digitosAntes) { newPos = i + 1; break; }
+    }
+    input.setSelectionRange(newPos, newPos);
+  });
+}
+
+
+function setField(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '—'; }
+function setIcon(id, icon, val) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<i data-lucide="${icon}" width="13" height="13"></i><span>${escHtml(val || '—')}</span>`;
+}
+
+function abrirModal() { document.getElementById('modal-overlay').classList.add('open'); }
+function fecharModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function fecharModalExt(e) { if (e.target === document.getElementById('modal-overlay')) fecharModal(); }
+
+function mostrarCardSituacao({ staff = false } = {}) {
+  const card = document.getElementById('staff-situacao-card');
+  if (!card) return;
+  card.style.display = '';
+
+  const staffOnlyIds = [
+    'staff-classificacao-section',
+    'staff-ensino-section',
+    'staff-ensino-actions',
+    'staff-ensino-help',
+  ];
+  staffOnlyIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = staff ? '' : 'none';
+  });
+}
+
+async function salvarDados() {
+  if (!_jovemId) { toast('Perfil não carregado.', 'error'); return; }
+  const body = {
+    id_usuario: _userId,
+    nome:     document.getElementById('m-nome').value.trim()                        || undefined,
+    email:    document.getElementById('m-email').value.trim()                       || undefined,
+    telefone: soDigitos(document.getElementById('m-telefone').value)                || null,
+    cpf:      soDigitos(document.getElementById('m-cpf').value)                     || null,
+    endereco: document.getElementById('m-endereco').value.trim()                    || null,
+    genero:   document.getElementById('m-genero').value                             || null,
+
+  };
+  const res = await apiFetch(`/jovens/${_jovemId}`, { method:'PATCH', body: JSON.stringify(body) });
+  if (res) { toast('Dados atualizados!', 'success'); fecharModal(); renderJovem(res); }
+  else     { toast('Não foi possível salvar.', 'error'); }
+}
+
+// ── Gestão de situação profissional/acadêmica (Coordenação/Gestão) ──────────
+async function carregarSituacao(idJovem) {
+  // Empregabilidade: registro mais recente (lista vem ordenada por data DESC)
+  const emp = await apiFetch(`/jovens/${idJovem}/empregabilidade`);
+  if (Array.isArray(emp) && emp.length) {
+    const u = emp[0];
+    document.getElementById('emp-status').value  = u.situacao ?? '';
+    document.getElementById('emp-empresa').value = u.empresa ?? '';
+    document.getElementById('emp-area').value    = u.area_atuacao ?? '';
+    document.getElementById('emp-renda').value   = u.renda_atual ?? '';
+  }
+  // Ensino superior: registro mais recente
+  const es = await apiFetch(`/jovens/${idJovem}/ensino-superior`);
+  if (Array.isArray(es) && es.length) {
+    const u = es[0];
+    document.getElementById('es-status').value = u.situacao ?? '';
+    document.getElementById('es-inst').value   = u.instituicao ?? '';
+  }
+}
+
+async function salvarClassificacao() {
+  const categoria = document.getElementById('cat-select').value;
+  if (!categoria) { toast('Selecione a classificação.', 'error'); return; }
+  const res = await apiFetch(`/jovens/${_jovemId}/categoria`, {
+    method: 'POST',
+    body: JSON.stringify({ categoria_adquirida: categoria, id_usuario: _userId }),
+  });
+  if (res) {
+    toast('Classificação atualizada!', 'success');
+    setField('f-categoria', categoria);
+  } else {
+    toast('Não foi possível alterar a classificação.', 'error');
+  }
+}
+
+async function salvarEmprego() {
+  const situacao = document.getElementById('emp-status').value;
+  if (!situacao) { toast('Selecione o status de emprego.', 'error'); return; }
+  const renda = document.getElementById('emp-renda').value;
+  const body = {
+    situacao,
+    empresa:      document.getElementById('emp-empresa').value.trim() || undefined,
+    area_atuacao: document.getElementById('emp-area').value.trim()    || undefined,
+    renda_atual:  renda ? Number(renda) : undefined,
+  };
+  const res = await apiFetch(`/jovens/${_jovemId}/empregabilidade`, { method: 'POST', body: JSON.stringify(body) });
+  if (res) { toast('Status de emprego registrado!', 'success'); }
+  else     { toast('Não foi possível registrar o emprego.', 'error'); }
+}
+
+async function salvarEnsino() {
+  const situacao = document.getElementById('es-status').value;
+  if (!situacao) { toast('Selecione o status de ensino superior.', 'error'); return; }
+  const body = {
+    situacao,
+    instituicao: document.getElementById('es-inst').value.trim() || undefined,
+  };
+  const res = await apiFetch(`/jovens/${_jovemId}/ensino-superior`, { method: 'POST', body: JSON.stringify(body) });
+  if (res) { toast('Status de ensino superior registrado!', 'success'); }
+  else     { toast('Não foi possível registrar. Ensino superior exige categoria "Transformado".', 'error'); }
+}
+
+function renderJovem(jovem) {
+  document.getElementById('hero-avatar').textContent = initials(jovem.nome);
+  document.getElementById('hero-nome').textContent   = jovem.nome;
+  document.getElementById('badge-status').textContent =
+    `ALUNO ${(jovem.status_global || 'ATIVO').toUpperCase()}`;
+
+  setField('f-nome', jovem.nome);
+  setIcon('f-email',     'mail',     jovem.email);
+  setIcon('f-telefone',  'phone',    formatarTelefone(jovem.telefone));
+  setIcon('f-nascimento','calendar', fmtDate(jovem.data_nascimento));
+  setField('f-cpf',      formatarCpf(jovem.cpf));
+  setField('f-genero',   jovem.genero);
+  setField('f-endereco', jovem.endereco);
+  setField('f-categoria',jovem.categoria_atual);
+  const catSel = document.getElementById('cat-select');
+  if (catSel && jovem.categoria_atual) catSel.value = jovem.categoria_atual;
+
+  document.getElementById('m-nome').value     = jovem.nome                        || '';
+  document.getElementById('m-email').value    = jovem.email                       || '';
+  document.getElementById('m-telefone').value = formatarTelefone(jovem.telefone)  || '';
+  document.getElementById('m-cpf').value      = formatarCpf(jovem.cpf)            || '';
+  document.getElementById('m-endereco').value = jovem.endereco                    || '';
+  document.getElementById('m-genero').value   = jovem.genero                      || '';
+  lucide.createIcons();
+}
+
+(async () => {
+  const session = getSession();
+  if (!session) { window.location.href = 'dashboard.html'; return; }
+
+  const params   = new URLSearchParams(window.location.search);
+  const idParam  = params.get('id');
+  const modoStaff = !!idParam;
+
+  // Sem ?id= → somente o próprio aluno pode ver/editar seu perfil
+  if (!modoStaff && session.perfil !== 'Aluno') { window.location.href = 'dashboard.html'; return; }
+
+  // Modo staff (outra vertical visualizando o aluno): adapta a sidebar do aluno.
+  // Dashboard vira "Voltar"; Eventos aponta para os eventos/programas deste aluno.
+  if (modoStaff) {
+    const navDash = document.getElementById('nav-dashboard');
+    if (navDash) {
+      navDash.setAttribute('href', 'javascript:void(0)');
+      navDash.setAttribute('onclick', 'history.back(); return false;');
+      navDash.title = 'Voltar';
+      navDash.querySelector('.sidebar__nav-label').textContent = 'Voltar';
+      const ic = navDash.querySelector('i');
+      if (ic) ic.setAttribute('data-lucide', 'arrow-left');
+    }
+    const navEv = document.getElementById('nav-eventos');
+    if (navEv) navEv.setAttribute('href', `eventos-aluno.html?id=${encodeURIComponent(idParam)}`);
+    lucide.createIcons();
+  }
+
+  _userId = session.userId ?? null;
+
+  document.getElementById('topbar-name').textContent      = session.nome;
+  document.getElementById('topbar-avatar').textContent    = initials(session.nome);
+  document.getElementById('sidebar-initials').textContent = initials(session.nome);
+
+  let meuJovem;
+  if (modoStaff) {
+    meuJovem = await apiFetch(`/jovens/${idParam}`);
+    if (!meuJovem) { toast('Aluno não encontrado.', 'error'); lucide.createIcons(); return; }
+    // Coordenação/Gestão podem editar o aluno; demais verticais ficam só leitura.
+    const podeEditar = session.perfil === 'Coordenacao' || session.perfil === 'Gestao';
+    if (!podeEditar) {
+      document.querySelectorAll('.btn-update').forEach(b => b.style.display = 'none');
+    } else {
+      mostrarCardSituacao({ staff: true });
+      carregarSituacao(idParam);
+    }
+  } else {
+    let jovemId = session.id_jovem;
+    if (!jovemId) {
+      const usuario = await apiFetch(`/usuarios/${session.userId}`);
+      jovemId = usuario?.id_jovem ?? null;
+    }
+    if (jovemId) {
+      meuJovem = await apiFetch(`/jovens/${jovemId}`);
+    } else {
+      const jovens = await apiFetch('/jovens');
+      meuJovem = Array.isArray(jovens) ? jovens.find(j => j.nome === session.nome) : null;
+    }
+    if (!meuJovem) { toast('Perfil não encontrado.', 'error'); lucide.createIcons(); return; }
+    mostrarCardSituacao({ staff: false });
+    carregarSituacao(meuJovem.id);
+  }
+
+  _jovemId = meuJovem.id;
+
+  const [perfilData, inscricoesRaw, programas] = await Promise.all([
+    apiFetch(`/jovens/${_jovemId}/perfil-completo`),
+    apiFetch(`/jovens/${_jovemId}/inscricoes/${_jovemId}/inscricao`),
+    apiFetch('/programas'),
+  ]);
+
+  const jovem = perfilData?.jovem ?? meuJovem;
+  renderJovem(jovem);
+
+  const inscricoes = Array.isArray(inscricoesRaw) ? inscricoesRaw : [];
+  const progs      = Array.isArray(programas)     ? programas     : [];
+  const progMap    = {};
+  progs.forEach(p => { progMap[p.id] = p; });
+
+  if (inscricoes.length) {
+    const ultima = inscricoes[inscricoes.length - 1];
+    const prog   = progMap[ultima.id_programa];
+    document.getElementById('badge-programa').textContent = prog?.nome ?? `Programa ${ultima.id_programa}`;
+    setIcon('f-programa', 'book-open', prog?.nome);
+    setIcon('f-ingresso', 'calendar', fmtDate(ultima.data_matricula));
+    const st = ultima.status_conclusao || 'Em andamento';
+    document.getElementById('f-status-acad').innerHTML =
+      `<span class="badge ${st === 'Concluído' ? 'badge--green' : 'badge--blue'}" style="font-size:10px;">${escHtml(st)}</span>`;
+  }
+
+  lucide.createIcons();
+})();
+
+aplicarMascara(document.getElementById('m-telefone'), formatarTelefone);
+aplicarMascara(document.getElementById('m-cpf'),      formatarCpf);
+
+</script>
+</body>
+</html>

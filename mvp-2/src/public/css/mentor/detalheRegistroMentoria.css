@@ -1,0 +1,223 @@
+/* ============================================================
+   detalheRegistroMentoria.css — Estilos específicos do Detalhe de Registro
+   Layout base: mentor-layout.css
+   ============================================================ */
+
+/* ---------------- Detail heading ---------------- */
+.detail-heading {
+  padding: var(--space-6) var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.detail-heading-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ---------------- Detail form ---------------- */
+.detail-form {
+  padding: var(--space-8);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* ---------------- Field blocks ---------------- */
+.field-block,
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.field-title,
+.detail-field > span {
+  color: var(--foreground);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ---------------- Mentees area ---------------- */
+.detail-mentees {
+  min-height: 52px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-background);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.detail-chip,
+.detail-topic {
+  height: 30px;
+  padding: 0 var(--space-2) 0 var(--space-3);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-full);
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.detail-chip button,
+.detail-topic button {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: inherit;
+  font-size: var(--text-base);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.detail-chip button:hover,
+.detail-topic button:hover { background: var(--primary-soft); }
+
+.detail-topic {
+  padding: 0 var(--space-4);
+  border-color: transparent;
+  background: var(--primary-soft);
+}
+
+/* Inline add buttons */
+.add-inline-btn,
+.add-topic-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.add-inline-btn:hover,
+.add-topic-btn:hover { color: var(--primary); }
+
+.add-topic-btn {
+  height: 34px;
+  padding: 0 var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+/* ---------------- Detail grid ---------------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+}
+
+.input-with-icon {
+  height: 52px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-background);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--muted-foreground);
+}
+
+.input-with-icon:focus-within {
+  border-color: var(--primary);
+  background: var(--card);
+}
+
+.input-with-icon input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+}
+
+/* ---------------- Topics block ---------------- */
+.detail-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-height: 32px;
+}
+
+/* ---------------- Notes ---------------- */
+.notes-field textarea {
+  margin-top: var(--space-1);
+  width: 100%;
+  min-height: 200px;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-background);
+  outline: none;
+  resize: vertical;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+.notes-field textarea:focus {
+  border-color: var(--primary);
+  background: var(--card);
+}
+
+/* ---------------- Actions ---------------- */
+.detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 800px) {
+  .detail-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .detail-heading,
+  .detail-form { padding: var(--space-5); }
+  .detail-actions { flex-direction: column-reverse; }
+  .detail-actions .btn { width: 100%; justify-content: center; }
+}

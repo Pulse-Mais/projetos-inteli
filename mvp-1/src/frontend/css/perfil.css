@@ -1,0 +1,421 @@
+@import url('../css/global.css');
+
+/* Estado de erro em campos de data (modo edição) */
+.input--erro,
+.input--erro:hover,
+.form-input-edit.input--erro:focus {
+  border-color: var(--color-danger) !important;
+  background: rgba(220, 38, 38, 0.04) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.campo-erro {
+  display: none;
+  color: var(--color-danger);
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.campo-erro.visivel {
+  display: block;
+}
+
+.campo-hint {
+  display: block;
+  color: var(--color-text-support);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Grade principal do perfil */
+.perfil-layout {
+  display: block;
+}
+
+/* Alinhamento de margens laterais conforme o padrão da seção de alunos */
+.page-header,
+.perfil-layout {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+/* Card grande do perfil */
+.perfil-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 28px;
+}
+
+.perfil-card--main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.perfil-main-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.perfil-identity {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.perfil-info {
+  grid-column: span 8;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.perfil-observation-area {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.perfil-info-group {
+  width: 100%;
+}
+
+.perfil-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.perfil-info-grid > article {
+  min-width: 0;
+}
+
+.perfil-info-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.perfil-info-grid-3 > article {
+  min-width: 0;
+}
+
+.perfil-card__foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--color-gray);
+  display: block;
+}
+
+.perfil-card__programa {
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(37, 176, 87, 0.10);
+  color: var(--color-accent);
+  text-align: center;
+}
+
+/* Reuso de estilos de cabeçalho de seção */
+.registration-section-header {
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.registration-section-header--blue {
+  background: rgba(0, 56, 112, 0.06);
+  color: var(--color-primary);
+}
+
+.registration-section-header--green {
+  background: rgba(37, 176, 87, 0.10);
+  color: var(--color-accent);
+}
+
+.perfil-section {
+  background: var(--color-gray);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perfil-section h3 {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-support);
+  margin-bottom: 0;
+}
+
+.perfil-section p {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+  margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Campos no modo edição (substituem o texto dentro de .perfil-section p).
+   Compartilhado entre perfilAluno.html, perfilCoordenador.html e perfilExAluno.html. */
+.form-input-edit {
+  width: 100%;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+.form-input-edit:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+/* Responsivo */
+
+@media (max-width: 768px) {
+  .page-header,
+  .perfil-layout {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .perfil-main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .perfil-identity,
+  .perfil-info,
+  .perfil-observation-area {
+    grid-column: span 16 !important;
+    width: 100%;
+  }
+
+  .perfil-info-grid,
+  .perfil-info-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-card__foto {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .perfil-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .perfil-footer__group {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .perfil-footer .btn {
+    width: 100%;
+  }
+
+  .indicadores-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .indicadores-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.perfil-indicadores {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.indicadores-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.indicador-card {
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 92px;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+}
+
+.indicador-card--blue {
+  background: rgba(0, 56, 112, 0.06);
+  color: var(--color-primary);
+}
+
+.indicador-card--green {
+  background: rgba(37, 176, 87, 0.10);
+  color: var(--color-accent);
+}
+
+.indicador-card--button {
+  background: rgba(0, 56, 112, 0.08);
+  align-items: stretch;
+  justify-content: center;
+}
+
+.indicador-card--button .btn {
+  width: 100%;
+  justify-content: center;
+  height: 100%;
+}
+
+.indicador-card__valor {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.indicador-card__label {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.perfil-historico {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.historico-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.historico-item:last-child { border-bottom: none; }
+
+.perfil-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.perfil-footer__group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.perfil-footer .btn {
+  min-width: 180px;
+  justify-content: center;
+}
+
+.perfil-card__nome {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.perfil-card__programa {
+  font-size: 13px;
+  color: var(--color-text-support);
+  text-align: center;
+}
+
+/* Dados pessoais listados */
+.perfil-card__dados {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+
+.dado-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dado-item__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-support);
+}
+
+.dado-item__valor {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Ações do perfil (botões) */
+.perfil-card__acoes {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 16px;
+  margin-top: 4px;
+}
+
+/* Histórico de programas */
+.historico-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.historico-item:last-child { border-bottom: none; }
+
+.historico-item__nome {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.historico-item__data {
+  font-size: 12px;
+  color: var(--color-text-support);
+  margin-top: 2px;
+}

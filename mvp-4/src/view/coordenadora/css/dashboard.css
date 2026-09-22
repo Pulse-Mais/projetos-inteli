@@ -1,0 +1,264 @@
+.pagina-cabecalho {
+  margin-bottom: var(--espaco-6);
+}
+
+
+/* ===== Cards de indicadores (KPIs) ===== */
+.cards-indicadores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espaco-5);
+}
+
+
+.card {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espaco-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+
+/* Card clicavel (KPI que e link, ex.: Risco de Evasao): feedback de hover */
+a.card {
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+a.card:hover {
+  box-shadow: var(--sombra-md);
+  transform: translateY(-2px);
+}
+
+
+/* Borda colorida por tipo de KPI */
+.card--info     { border-color: var(--cor-secundaria); }
+.card--sucesso  { border-color: var(--sucesso); }
+.card--alerta   { border-color: var(--alerta); }
+.card--erro     { border-color: var(--erro); }
+
+
+.card-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-rotulo {
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  color: var(--texto-secundario);
+}
+
+.card-valor {
+  font-size: 1.75rem;
+  font-weight: var(--peso-bold);
+  color: var(--texto-principal);
+}
+
+.card-subtexto {
+  font-size: var(--texto-xs);
+  color: var(--texto-secundario);
+}
+
+
+.card-icone {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--raio-sm);
+  display: grid;
+  place-items: center;
+}
+.card-icone .lucide {
+  width: 22px;
+  height: 22px;
+}
+
+
+.card-icone--info {
+  background-color: var(--cor-secundaria-clara);
+  color: var(--cor-primaria);
+}
+.card-icone--sucesso {
+  background-color: var(--sucesso-fundo);
+  color: var(--sucesso);
+}
+.card-icone--alerta {
+  background-color: var(--alerta-fundo);
+  color: var(--alerta);
+}
+.card-icone--erro {
+  background-color: var(--erro-fundo);
+  color: var(--erro);
+}
+
+
+/* Selo de variação no canto do KPI */
+.card-selo {
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-semibold);
+  padding: 2px var(--espaco-2);
+  border-radius: var(--raio-full);
+  line-height: 1.4;
+}
+.card-selo--positivo { background-color: var(--sucesso-fundo); color: var(--sucesso); }
+.card-selo--negativo { background-color: var(--erro-fundo);    color: var(--erro); }
+
+
+/* ===== Gráfico ===== */
+.grafico-secao {
+  margin-top: var(--espaco-7);
+}
+.grafico-titulo {
+  font-size: var(--texto-xl);
+  color: var(--texto-principal);
+}
+.grafico-subtitulo {
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+  margin-bottom: var(--espaco-5);
+}
+.grafico-caixa {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-sm);
+  padding: var(--espaco-5);
+  height: 360px;
+}
+
+
+/* ===== Filtros e busca ===== */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-6);
+}
+
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: 0 var(--espaco-3);
+  flex: 1;
+  min-width: 220px;
+}
+.busca:focus-within {
+  border-color: var(--cor-secundaria);
+}
+.busca .lucide {
+  color: var(--texto-secundario);
+  width: 20px;
+  height: 20px;
+}
+.busca-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: var(--espaco-3) 0;
+  font-size: var(--texto-sm);
+}
+
+
+.filtro-select {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+  cursor: pointer;
+}
+
+
+/* ===== Cabeçalho com ações ===== */
+.pagina-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-4);
+}
+.acoes-csv { display: flex; gap: var(--espaco-3); }
+
+
+/* ===== Botões ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-3) var(--espaco-4);
+  border-radius: var(--raio-sm);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  cursor: pointer;
+  transition: background-color var(--transicao), color var(--transicao);
+}
+.btn .lucide { width: 18px; height: 18px; }
+.btn-primario { background-color: var(--cor-secundaria); color: var(--branco); }
+.btn-primario:hover { background-color: var(--cor-primaria); }
+.btn-secundario { background-color: var(--branco); color: var(--cor-secundaria); border: 1px solid var(--cor-secundaria); }
+.btn-secundario:hover { background-color: var(--cinza-fundo); }
+
+
+/* ===== Alertas de risco de evasão ===== */
+.alertas-secao { margin-top: var(--espaco-7); }
+
+.alertas-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-4);
+}
+.alertas-titulo { font-size: var(--texto-xl); color: var(--texto-principal); }
+.alertas-contagem {
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+  background-color: var(--cinza-fundo);
+  padding: 2px var(--espaco-3);
+  border-radius: var(--raio-full);
+}
+
+
+.tabela-caixa {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-sm);
+  overflow: hidden;           /* respeita os cantos arredondados */
+}
+.tabela { width: 100%; border-collapse: collapse; }
+.tabela th, .tabela td {
+  text-align: left;
+  padding: var(--espaco-4);
+  font-size: var(--texto-sm);
+}
+.tabela thead th {
+  color: var(--texto-secundario);
+  font-weight: var(--peso-medio);
+  border-bottom: 1px solid var(--cinza-borda);
+}
+.tabela tbody tr { border-bottom: 1px solid var(--cinza-borda); }
+.tabela tbody tr[hidden] { display: none; }
+.tabela tbody tr:last-child { border-bottom: none; }
+.tabela tbody tr:hover { background-color: var(--cinza-fundo); }
+
+
+/* Pills de status */
+.pill {
+  display: inline-block;
+  padding: 2px var(--espaco-3);
+  border-radius: var(--raio-full);
+  font-size: var(--texto-xs);
+  font-weight: var(--peso-medio);
+}
+.pill-erro   { background-color: var(--erro-fundo);   color: var(--erro); }
+.pill-alerta { background-color: var(--alerta-fundo); color: #946800; }

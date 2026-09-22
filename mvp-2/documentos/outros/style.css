@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --blue:    #003870;
+  --green:   #33B458;
+  --yellow:  #FFD927;
+  --text:    #1E293B;
+  --muted:   #64748B;
+  --border:  #CBD5E1;
+  --card-bg: #F8FAFC;
+  --page-bg: #F1F5F9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--page-bg);
+  margin: 0;
+  padding: 32px 24px;
+}
+
+.section-block {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px 32px;
+  margin: 0 auto 2.5em;
+  max-width: 960px;
+}
+
+.section-header {
+  background: var(--blue);
+  border-radius: 6px;
+  padding: 14px 20px;
+  margin-bottom: 1.6em;
+}
+
+.section-header h1 {
+  color: #fff;
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: var(--blue);
+  margin: 0 0 0.4em;
+}
+
+h2 {
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 2em 0 0.5em;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--green);
+}
+
+h3 {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--text);
+  margin: 1.4em 0 0.3em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2em 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8em 0;
+  font-size: 13px;
+}
+
+table th {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 500;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+table td {
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  vertical-align: top;
+}
+
+table tbody tr:nth-child(even) { background: var(--card-bg); }
+table tbody tr:hover { background: #EEF4FF; }
+
+code {
+  background: #EEF4FF;
+  color: var(--blue);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+pre {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  padding: 14px 16px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+p  { margin: 0.5em 0; }
+ol, ul { margin: 0.5em 0; padding-left: 1.6em; }
+dl { margin: 0.5em 0; }
+dt { font-weight: 600; color: var(--blue); }
+dd { margin-left: 1.4em; margin-bottom: 0.3em; color: var(--muted); }

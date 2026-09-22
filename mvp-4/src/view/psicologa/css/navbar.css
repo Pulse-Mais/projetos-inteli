@@ -1,0 +1,142 @@
+/* ================================================================
+   public/psicologa/css/navbar.css
+   Navbar compartilhada — Psicóloga (Atendimentos + Prontuário).
+   Requer tokens.css carregado antes.
+   ================================================================ */
+
+/* ===== WRAPPER ===== */
+
+.psi-navbar {
+  margin-bottom: 12px;
+}
+
+.psi-navbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background-color: var(--cor-primaria);
+  border-radius: var(--raio-lg);
+  padding: 0 28px;
+  height: 84px;
+}
+
+/* ===== SAUDAÇÃO (esquerda) ===== */
+
+.psi-saudacao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.psi-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: grid;
+  place-items: center;
+  color: var(--branco);
+  flex-shrink: 0;
+}
+
+.psi-avatar .lucide { width: 22px; height: 22px; }
+
+.psi-saudacao-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.psi-saudacao-nome {
+  color: var(--branco);
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-semibold);
+}
+
+.psi-saudacao-sub {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--texto-xs);
+}
+
+/* ===== CENTRO: busca + filtro ===== */
+
+.psi-navbar-centro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  justify-content: center;
+}
+
+/* Busca: mesmo visual de .busca da coordenadora (borda + raio-sm + foco) */
+.psi-busca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: 0 var(--espaco-4);
+  width: 280px;
+}
+
+.psi-busca--turma {
+  width: 120px;
+}
+
+.psi-select--turma {
+  max-width: 180px;
+}
+
+.psi-busca:focus-within { border-color: var(--cor-secundaria); }
+
+/* ícone fica à esquerda — mesmo padrão da coordenadora */
+.psi-busca .lucide {
+  width: 20px;
+  height: 20px;
+  color: var(--texto-secundario);
+  flex-shrink: 0;
+}
+
+.psi-busca input {
+  border: none;
+  outline: none;
+  font-family: var(--fonte);
+  font-size: var(--texto-sm);
+  flex: 1;
+  width: 100%;
+  padding: var(--espaco-3) 0;
+  color: var(--texto-principal);
+  background: transparent;
+}
+
+/* Filtro: mesmo visual de .filtro-select da coordenadora */
+.psi-select {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  font-family: var(--fonte);
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+  cursor: pointer;
+  outline: none;
+  transition: var(--transicao);
+}
+
+.psi-select:focus { border-color: var(--cor-secundaria); }
+
+/* ===== LOGO (direita) ===== */
+
+.psi-navbar-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.psi-logo-img {
+  height: 56px;
+  width: auto;
+  /* sem filter — o SVG já é adequado para fundo escuro, igual ao sidebar da coordenadora */
+}

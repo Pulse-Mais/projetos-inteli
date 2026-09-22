@@ -1,0 +1,117 @@
+/* Combobox de busca — transforma um <select class="combo-busca"> em um campo de texto
+   com sugestões filtradas conforme o usuário digita. Ver js/comboBox.js. */
+
+.combo-busca-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.combo-busca-real-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.combo-busca-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  transition: border-color 0.2s;
+}
+
+.combo-busca-trigger:hover {
+  border-color: var(--color-primary);
+}
+
+.combo-busca-trigger:has(.combo-busca-trigger__input:focus) {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 56, 112, 0.12);
+}
+
+.combo-busca-trigger--erro {
+  border-color: var(--color-danger);
+}
+
+.combo-busca-trigger svg {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.combo-busca-trigger__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--color-text);
+  background: transparent;
+}
+
+.combo-busca-trigger__input::placeholder {
+  color: var(--color-text-support);
+}
+
+.combo-busca-trigger__input:disabled {
+  cursor: not-allowed;
+}
+
+/* Popup de sugestões (anexado ao <body>, posicionado via JS) */
+.combo-busca-popup {
+  position: fixed;
+  z-index: 10000;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+.combo-busca-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.combo-busca-item:hover {
+  background: rgba(0, 56, 112, 0.08);
+}
+
+.combo-busca-item--selecionado {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.combo-busca-item--selecionado:hover {
+  background: var(--color-primary);
+}
+
+.combo-busca-vazio {
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--color-text-support);
+  text-align: center;
+}

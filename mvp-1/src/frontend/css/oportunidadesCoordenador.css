@@ -1,0 +1,35 @@
+/* Listagem de oportunidades do coordenador — reaproveita .oport-card e .toolbar/.search-box */
+
+/* Restaura o border-radius padrão do avatar (oportunidades.css aumenta para radius-lg para o ex-aluno) */
+.sidebar__avatar {
+  border-radius: var(--radius-md);
+}
+
+#listaOportunidadesCoord.oport-grid {
+  margin-left: 48px;
+  margin-right: 48px;
+}
+
+#listaOportunidadesCoord .oport-card {
+  cursor: default;
+}
+
+.oport-card__acoes {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.oport-card__acoes .btn {
+  flex: 1;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  #listaOportunidadesCoord.oport-grid {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

@@ -1,0 +1,686 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar — Configurações</title>
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/configuracoes.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Frequências">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Frequências</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item is-active" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <img src="../../assets/logoPulsar.png" alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <!-- BREADCRUMB -->
+      <nav class="breadcrumb">
+        <a data-navigate="dashboard">Dashboard</a>
+        <span class="breadcrumb__sep">/</span>
+        <span>Configurações</span>
+      </nav>
+
+      <!-- PAGE HEADER -->
+      <div>
+        <h1 class="page-title">Configurações</h1>
+        <p class="page-subtitle">Gerencie sua conta, equipe, programas e integrações da Pulsar.</p>
+      </div>
+
+      <!-- SETTINGS LAYOUT -->
+      <div class="settings-layout">
+
+        <!-- LEFT NAV PANEL -->
+        <aside class="settings-nav-panel">
+
+          <div class="settings-nav-group">
+            <p class="settings-nav-group__title">Pessoal</p>
+            <a class="settings-nav-item active" href="#" data-section="conta">
+              <i data-lucide="user"></i>
+              Conta &amp; Perfil
+            </a>
+            <a class="settings-nav-item" href="#" data-section="seguranca">
+              <i data-lucide="lock"></i>
+              Segurança
+            </a>
+            <a class="settings-nav-item" href="#" data-section="aparencia">
+              <i data-lucide="palette"></i>
+              Aparência &amp; Idioma
+            </a>
+          </div>
+
+          <div class="settings-nav-group">
+            <p class="settings-nav-group__title">Organização</p>
+            <a class="settings-nav-item" href="#" data-section="equipe">
+              <i data-lucide="users"></i>
+              Equipe &amp; Permissões
+            </a>
+            <a class="settings-nav-item" href="#" data-section="programas">
+              <i data-lucide="flag"></i>
+              Programas &amp; Jornada
+            </a>
+            <a class="settings-nav-item" href="#" data-section="notificacoes">
+              <i data-lucide="bell"></i>
+              Notificações
+            </a>
+          </div>
+
+          <div class="settings-nav-group">
+            <p class="settings-nav-group__title">Sistema</p>
+            <a class="settings-nav-item" href="#" data-section="dados">
+              <i data-lucide="shield"></i>
+              Dados &amp; LGPD
+            </a>
+            <a class="settings-nav-item" href="#" data-section="logs">
+              <i data-lucide="file-text"></i>
+              Logs de auditoria
+            </a>
+          </div>
+
+        </aside>
+
+        <!-- RIGHT CONTENT -->
+        <div class="settings-content">
+
+          <!-- CONTA & PERFIL -->
+          <div class="settings-section active" data-section="conta">
+
+          <!-- CONTA & PERFIL CARD -->
+          <div class="settings-card">
+            <h2 class="settings-card__title">Conta &amp; Perfil</h2>
+            <p class="settings-card__subtitle">Informações exibidas a outros membros da equipe.</p>
+
+            <!-- Avatar -->
+            <div class="avatar-row">
+              <div class="avatar-circle" id="avatarCircle"></div>
+              <div class="avatar-info">
+                <p class="avatar-info__name" id="avatarName"></p>
+                <p class="avatar-info__meta" id="avatarMeta"></p>
+                <div class="avatar-info__actions">
+                  <button class="btn-photo" id="btnTrocarFoto">Trocar foto</button>
+                  <button class="btn-remove" id="btnRemoverFoto">Remover</button>
+                </div>
+              </div>
+            </div>
+            <input type="file" id="inputFotoPerfil" accept="image/png,image/jpeg,image/webp" hidden />
+
+            <!-- Form -->
+            <div class="form-grid">
+
+              <div class="form-group">
+                <label class="form-label" for="nomeCompleto">Nome completo</label>
+                <input class="form-input" type="text" id="nomeCompleto" value="" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="cargo">Cargo</label>
+                <input class="form-input" type="text" id="cargo" value="" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="email">E-mail corporativo</label>
+                <input class="form-input" type="email" id="email" value="" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="telefone">Telefone</label>
+                <input class="form-input" type="tel" id="telefone" value="" />
+              </div>
+
+
+            </div>
+
+            <div class="settings-card__actions">
+              <button class="btn btn-primary" id="btnSalvarPerfil">Salvar alterações</button>
+            </div>
+          </div>
+
+          <!-- DANGER ZONE -->
+          <div class="danger-zone">
+            <p class="danger-zone__title">Zona de risco</p>
+            <p class="danger-zone__description">Ações abaixo não podem ser desfeitas. Tenha certeza antes de prosseguir.</p>
+            <div class="danger-zone__actions">
+              <button class="btn-danger-outline" id="btnSairDispositivos">Sair de todos os dispositivos</button>
+              <button class="btn-danger-outline" id="btnExcluirConta">Excluir conta</button>
+            </div>
+          </div>
+
+          </div>
+          <!-- /conta -->
+
+          <!-- SEGURANÇA -->
+          <div class="settings-section" data-section="seguranca">
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Alterar senha</h2>
+              <p class="settings-card__subtitle">Recomendamos atualizar sua senha periodicamente para manter sua conta segura.</p>
+
+              <form id="formAlterarSenha" novalidate>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label" for="senhaAtual">Senha atual</label>
+                    <input class="form-input" type="password" id="senhaAtual" placeholder="••••••••" autocomplete="current-password" />
+                  </div>
+                  <div class="form-group"></div>
+                  <div class="form-group">
+                    <label class="form-label" for="senhaNova">Nova senha <span style="font-weight:400;color:var(--color-text-secondary)">(mín. 6 caracteres)</span></label>
+                    <input class="form-input" type="password" id="senhaNova" placeholder="••••••••" autocomplete="new-password" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="senhaConfirma">Confirmar nova senha</label>
+                    <input class="form-input" type="password" id="senhaConfirma" placeholder="••••••••" autocomplete="new-password" />
+                  </div>
+                </div>
+
+                <div id="senhaFeedback" hidden style="margin-top:var(--spacing-md);padding:10px var(--spacing-md);border-radius:var(--radius-md);font-size:var(--font-size-sm);"></div>
+
+                <div class="settings-card__actions" style="gap:var(--spacing-sm);">
+                  <button type="button" class="btn btn-secondary" id="btnCancelarSenha">Cancelar</button>
+                  <button type="submit" class="btn btn-primary" id="btnSalvarSenha">Salvar nova senha</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Sessões ativas</h2>
+              <p class="settings-card__subtitle">Dispositivos atualmente conectados à sua conta.</p>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title" id="sessaoAtualBrowser">—</p>
+                  <p class="settings-row__desc" id="sessaoAtualData">—</p>
+                </div>
+                <span class="badge badge-success">Sessão atual</span>
+              </div>
+
+              <div class="settings-card__actions" style="margin-top: var(--spacing-lg);">
+                <button class="btn-danger-outline" id="btnEncerrarTodasSessoes">Encerrar todas as sessões</button>
+              </div>
+            </div>
+
+          </div>
+          <!-- /seguranca -->
+
+          <!-- APARÊNCIA & IDIOMA -->
+          <div class="settings-section" data-section="aparencia">
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Aparência</h2>
+              <p class="settings-card__subtitle">Personalize como a interface é exibida para você.</p>
+
+              <p class="aparencia-sublabel">Tema</p>
+              <div class="theme-options">
+                <label class="theme-option" for="temaClaro">
+                  <input type="radio" name="tema" id="temaClaro" value="light" checked />
+                  <span class="theme-preview">
+                    <i data-lucide="sun" style="width:24px;height:24px"></i>
+                  </span>
+                  <span class="theme-label">Claro</span>
+                </label>
+                <label class="theme-option is-disabled" for="temaEscuro" title="Indisponível no momento">
+                  <input type="radio" name="tema" id="temaEscuro" value="dark" disabled />
+                  <span class="theme-preview">
+                    <i data-lucide="moon" style="width:24px;height:24px"></i>
+                  </span>
+                  <span class="theme-label">Escuro</span>
+                </label>
+                <label class="theme-option is-disabled" for="temaSistema" title="Indisponível no momento">
+                  <input type="radio" name="tema" id="temaSistema" value="system" disabled />
+                  <span class="theme-preview">
+                    <i data-lucide="monitor" style="width:24px;height:24px"></i>
+                  </span>
+                  <span class="theme-label">Sistema</span>
+                </label>
+              </div>
+              <p class="aparencia-note">Modo escuro e tema do sistema indisponíveis no momento.</p>
+            </div>
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Idioma</h2>
+              <p class="settings-card__subtitle">Idioma exibido na plataforma.</p>
+
+              <div style="max-width:280px">
+                <div class="form-group">
+                  <label class="form-label" for="idiomaInterface">Idioma</label>
+                  <div class="select-wrap">
+                    <select class="form-input" id="idiomaInterface" disabled style="cursor:not-allowed;background:var(--color-page-bg);color:var(--color-text-secondary);">
+                      <option value="pt-br" selected>Português (Brasil)</option>
+                      <option value="en">English</option>
+                      <option value="es">Español</option>
+                    </select>
+                    <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+                  </div>
+                </div>
+              </div>
+              <p class="aparencia-note">Apenas Português está disponível nesta versão.</p>
+            </div>
+
+          </div>
+          <!-- /aparencia -->
+
+          <!-- EQUIPE & PERMISSÕES -->
+          <div class="settings-section" data-section="equipe">
+
+            <div class="settings-card">
+              <div class="settings-card__header">
+                <div>
+                  <h2 class="settings-card__title">Equipe</h2>
+                  <p class="settings-card__subtitle">Gerencie os membros e níveis de acesso da equipe Pulsar.</p>
+                </div>
+                <button class="btn btn-primary" id="btnAdicionarMembro">
+                  <i data-lucide="user-plus"></i>
+                  Adicionar membro
+                </button>
+              </div>
+
+              <table class="settings-table">
+                <thead>
+                  <tr>
+                    <th>Membro</th>
+                    <th>Função</th>
+                    <th>Permissão</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="equipeTbody">
+                  <tr><td colspan="5" style="text-align:center;color:var(--color-text-secondary);padding:var(--spacing-xl)">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <!-- /equipe -->
+
+          <!-- PROGRAMAS & JORNADA -->
+          <div class="settings-section" data-section="programas">
+
+            <div class="settings-card">
+              <div class="settings-card__header">
+                <div>
+                  <h2 class="settings-card__title">Programas</h2>
+                  <p class="settings-card__subtitle">Programas e jornadas disponíveis para os jovens da Pulsar.</p>
+                </div>
+                <button class="btn btn-primary" id="btnNovoPrograma">
+                  <i data-lucide="plus"></i>
+                  Novo programa
+                </button>
+              </div>
+
+              <div id="programasList">
+                <p style="text-align:center;color:var(--color-text-secondary);padding:var(--spacing-xl)">Carregando...</p>
+              </div>
+            </div>
+
+          </div>
+          <!-- /programas -->
+
+          <!-- NOTIFICAÇÕES -->
+          <div class="settings-section" data-section="notificacoes">
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Preferências de notificação</h2>
+              <p class="settings-card__subtitle">Escolha quais tipos de notificação aparecem na sua central de notificações.</p>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title">Novos jovens cadastrados</p>
+                  <p class="settings-row__desc">Receba um aviso quando um novo jovem entrar no programa.</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="prefJovem" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title">Alertas de risco</p>
+                  <p class="settings-row__desc">Notificações imediatas quando um jovem entrar em situação de risco.</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="prefAlerta" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+          <!-- /notificacoes -->
+
+          <!-- DADOS & LGPD -->
+          <div class="settings-section" data-section="dados">
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Privacidade e dados</h2>
+              <p class="settings-card__subtitle">Gerencie como os dados da equipe e dos jovens são tratados, em conformidade com a LGPD.</p>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title">Exportar dados dos jovens</p>
+                  <p class="settings-row__desc">Baixe uma planilha CSV com todos os jovens cadastrados na plataforma.</p>
+                </div>
+                <button class="btn btn-secondary" id="btnExportarDados">
+                  <i data-lucide="download"></i>
+                  Exportar CSV
+                </button>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title">Compartilhamento de dados com mentores</p>
+                  <p class="settings-row__desc">Permite que mentores visualizem o histórico completo dos jovens acompanhados.</p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggleCompartilhamento" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <p class="settings-row__title">Retenção de dados</p>
+                  <p class="settings-row__desc">Tempo de armazenamento dos registros após o desligamento de um jovem do programa.</p>
+                </div>
+                <div class="select-wrap select-wrap--sm">
+                  <select id="retencaoDados">
+                    <option value="12">12 meses</option>
+                    <option value="24" selected>24 meses</option>
+                    <option value="60">5 anos</option>
+                  </select>
+                  <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!-- /dados -->
+
+          <!-- LOGS DE AUDITORIA -->
+          <div class="settings-section" data-section="logs">
+
+            <div class="settings-card">
+              <h2 class="settings-card__title">Logs de auditoria</h2>
+              <p class="settings-card__subtitle">Histórico de ações realizadas por membros da equipe.</p>
+
+              <table class="settings-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Usuário</th>
+                    <th>Ação</th>
+                    <th>Detalhes</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTbody">
+                  <tr>
+                    <td colspan="4" class="logs-placeholder">Selecione esta aba para carregar os logs.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <!-- /logs -->
+
+        </div>
+        <!-- /settings-content -->
+
+      </div>
+      <!-- /settings-layout -->
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL ADICIONAR / EDITAR MEMBRO -->
+<div class="membro-backdrop" id="membroBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="membro-modal">
+    <div class="membro-modal__header">
+      <h3 class="membro-modal__title" id="membroModalTitle">Adicionar membro</h3>
+      <button class="membro-modal__close" id="btnFecharModalMembro" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+    </div>
+
+    <form id="formMembro" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="membroNome">Nome completo *</label>
+          <input class="form-input" type="text" id="membroNome" placeholder="Ex: Carlos Silva" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="membroCargo">Cargo / Função</label>
+          <input class="form-input" type="text" id="membroCargo" placeholder="Ex: Mentor de carreira" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="membroEmail">E-mail *</label>
+          <input class="form-input" type="email" id="membroEmail" placeholder="exemplo@pulsar.org.br" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="membroPerfil">Nível de acesso *</label>
+          <div class="select-wrap">
+            <select class="form-input" id="membroPerfil" style="padding-right:36px">
+              <option value="Assistente">Assistente — visualizar</option>
+              <option value="Coordenacao">Coordenação — administrador</option>
+            </select>
+            <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="form-group" id="senhaGroup">
+          <label class="form-label" for="membroSenha">Senha * <span style="font-weight:400;color:var(--color-text-secondary)">(mín. 8 caracteres)</span></label>
+          <input class="form-input" type="password" id="membroSenha" placeholder="••••••••" autocomplete="new-password" />
+        </div>
+        <div class="form-group" id="senhaEditInfo" hidden>
+          <label class="form-label">Senha</label>
+          <p style="font-size:var(--font-size-sm);color:var(--color-text-secondary);padding-top:10px">Deixe em branco para não alterar a senha atual.</p>
+          <input class="form-input" type="password" id="membroSenhaEdit" placeholder="Nova senha (opcional)" autocomplete="new-password" style="margin-top:var(--spacing-sm)" />
+        </div>
+      </div>
+
+      <div id="membroFeedback" hidden style="margin-top:var(--spacing-md)"></div>
+
+      <div class="settings-card__actions" style="margin-top:var(--spacing-xl)">
+        <button type="button" class="btn btn-secondary" id="btnCancelarMembro">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btnSalvarMembro">Adicionar membro</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CRIAR / EDITAR PROGRAMA -->
+<div class="membro-backdrop" id="programaBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="membro-modal programa-modal">
+    <div class="membro-modal__header">
+      <h3 class="membro-modal__title" id="programaModalTitle">Novo programa</h3>
+      <button class="membro-modal__close" id="btnFecharModalPrograma" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px"></i>
+      </button>
+    </div>
+
+    <form id="formPrograma" novalidate>
+      <div class="form-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label" for="programaNome">Nome do programa *</label>
+          <input class="form-input" type="text" id="programaNome" placeholder="Ex: Jornada de Empregabilidade 2026" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaTipo">Tipo *</label>
+          <div class="select-wrap">
+            <select class="form-input" id="programaTipo" style="padding-right:36px">
+              <option value="">Selecione...</option>
+              <option value="Curso">Curso</option>
+              <option value="Mentoria">Mentoria</option>
+              <option value="Projeto">Projeto</option>
+              <option value="Evento_Recorrente">Evento Recorrente</option>
+            </select>
+            <span class="select-icon"><i data-lucide="chevron-down"></i></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaAno">Ano *</label>
+          <input class="form-input" type="number" id="programaAno" min="2000" max="2099" placeholder="2026" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaDataInicio">Data de início</label>
+          <input class="form-input" type="date" id="programaDataInicio" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaDataFim">Data de encerramento</label>
+          <input class="form-input" type="date" id="programaDataFim" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaCargaHoraria">Carga horária (horas)</label>
+          <input class="form-input" type="number" id="programaCargaHoraria" min="0" placeholder="Ex: 120" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="programaCoorte">Coorte</label>
+          <input class="form-input" type="text" id="programaCoorte" placeholder="Ex: 2026.1" />
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label" for="programaDescricao">Descrição</label>
+          <textarea class="form-input" id="programaDescricao" rows="3" placeholder="Descreva o objetivo e escopo do programa..." style="resize:vertical"></textarea>
+        </div>
+        <div class="form-group" style="grid-column:1/-1" id="programaAlunosGroup">
+          <label class="form-label">Matricular jovens <span style="font-weight:400;color:var(--color-text-secondary)">(opcional)</span></label>
+
+          <div class="enroll-search-wrap">
+            <span class="enroll-search-icon">
+              <i data-lucide="search" style="width:18px;height:18px"></i>
+            </span>
+            <input class="form-input enroll-search-input" type="text" id="programaBuscaAluno"
+              placeholder="Buscar jovem por nome..." autocomplete="off" />
+            <div class="enroll-dropdown" id="alunoDropdown" hidden></div>
+          </div>
+
+          <div class="enroll-selected" id="alunosSelecionados" hidden>
+            <div class="enroll-selected__header">
+              <span class="enroll-selected__label">Jovens selecionados</span>
+              <span class="enroll-selected__count" id="alunosCount">0</span>
+            </div>
+            <div id="alunoChips"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="programaFeedback" hidden style="margin-top:var(--spacing-md)"></div>
+
+      <div class="settings-card__actions" style="margin-top:var(--spacing-xl)">
+        <button type="button" class="btn btn-secondary" id="btnCancelarPrograma">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btnSalvarPrograma">Criar programa</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<div class="confirm-backdrop" id="confirmBackdrop" hidden aria-modal="true" role="dialog">
+  <div class="confirm-modal">
+    <div class="confirm-icon" id="confirmIcon"></div>
+    <h3 class="confirm-title" id="confirmTitle"></h3>
+    <p class="confirm-message" id="confirmMessage"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" id="confirmCancelBtn">Cancelar</button>
+      <button class="btn" id="confirmOkBtn"></button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/dateLimits.js"></script>
+<script src="../../js/gestão/main.js"></script>
+<script src="../../js/gestão/configuracoes.js"></script>
+</body>
+</html>

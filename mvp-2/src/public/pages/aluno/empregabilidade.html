@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Empregabilidade · Pulsar</title>
+
+  <link rel="stylesheet" href="../../css/aluno/aluno-layout.css" />
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/aluno/aluno-empregabilidade.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <div class="shell">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <button class="sidebar-toggle" id="sidebar-toggle-btn"
+                aria-label="Fixar menu expandido" title="Fixar menu">
+          <i data-lucide="panel-left"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Navegação principal">
+
+        <a href="dashboard.html" class="sidebar-item" title="Dashboard">
+          <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+          <span class="sidebar-item-label">Dashboard</span>
+        </a>
+
+        <a href="perfil.html" class="sidebar-item" title="Meu Perfil">
+          <span class="sidebar-item-icon"><i data-lucide="user"></i></span>
+          <span class="sidebar-item-label">Meu Perfil</span>
+        </a>
+
+        <a href="oportunidades.html" class="sidebar-item" title="Oportunidades">
+          <span class="sidebar-item-icon"><i data-lucide="history"></i></span>
+          <span class="sidebar-item-label">Oportunidades</span>
+        </a>
+
+        <a href="empregabilidade.html" class="sidebar-item is-active"
+           aria-current="page" title="Empregabilidade">
+          <span class="sidebar-item-icon"><i data-lucide="briefcase"></i></span>
+          <span class="sidebar-item-label">Empregabilidade</span>
+          <span class="sidebar-item-bar" aria-hidden="true"></span>
+        </a>
+
+        <a href="ensino-superior.html" class="sidebar-item" title="Ensino Superior">
+          <span class="sidebar-item-icon"><i data-lucide="graduation-cap"></i></span>
+          <span class="sidebar-item-label">Ensino Superior</span>
+        </a>
+
+      </nav>
+    </aside>
+    <!-- /SIDEBAR -->
+
+    <!-- ===== SHELL MAIN ===== -->
+    <div class="shell-main">
+
+      <!-- HEADER / TOPBAR -->
+      <header class="topbar">
+        <a class="topbar-logo" href="dashboard.html">
+          <img src="../../../../assets/logoPulsar.png" alt="Pulsar">
+        </a>
+        <div class="topbar-spacer"></div>
+
+        <div class="topbar-actions">
+          <div class="avatar-menu" id="avatar-menu">
+            <button class="avatar-trigger" id="avatar-trigger"
+                    aria-haspopup="menu" aria-expanded="false">
+              <span class="avatar">
+                <i data-lucide="user"></i>
+              </span>
+              <span class="avatar-meta">
+                <span class="avatar-name"></span>
+                <span class="avatar-role"></span>
+              </span>
+              <i data-lucide="chevron-down" class="avatar-chevron"></i>
+            </button>
+
+            <div class="avatar-dropdown" role="menu" hidden>
+              <a class="dropdown-item" role="menuitem" href="perfil.html">
+                <i data-lucide="user"></i> Meu perfil
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item is-danger" role="menuitem" href="#">
+                <i data-lucide="log-out"></i> Sair
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- /HEADER -->
+
+      <!-- CONTENT -->
+          <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="shell-content">
+        <div class="shell-container">
+
+          <!-- BREADCRUMB -->
+          <div class="crumbs">
+            <div class="crumbs-path">
+              <a href="dashboard.html">Início</a>
+              <span class="sep">/</span>
+              <span class="current">Empregabilidade</span>
+            </div>
+          </div>
+
+          <!-- HERO -->
+          <section class="hero">
+            <h1 class="hero-title">Empregabilidade</h1>
+          </section>
+          <!-- /HERO -->
+
+          <!-- CAREER STATUS -->
+          <section class="career-status">
+
+            <!-- MODO LEITURA -->
+            <div id="emp-view">
+              <div class="career-status-grid">
+                <div class="info-field">
+                  <div class="info-field-label">Atualmente atua como:</div>
+                  <div class="info-field-value" id="emp-cargo">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field-label">Empresa de atuação:</div>
+                  <div class="info-field-value" id="emp-empresa">—</div>
+                </div>
+                <div class="info-field">
+                  <div class="info-field-label">Tempo de atuação:</div>
+                  <div class="info-field-value" id="emp-tempo">—</div>
+                </div>
+              </div>
+              <div class="career-actions">
+                <button class="edit-pill" id="btn-emp-editar">
+                  <i data-lucide="edit"></i> Editar informações
+                </button>
+              </div>
+            </div>
+
+            <!-- MODO EDIÇÃO -->
+            <form id="emp-form" hidden>
+              <div class="career-status-grid">
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-cargo">Cargo:</label>
+                  <input class="info-field-input" id="emp-input-cargo" type="text" placeholder="Ex: Desenvolvedor Front-end" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-empresa">Empresa:</label>
+                  <input class="info-field-input" id="emp-input-empresa" type="text" placeholder="Nome da empresa" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-admissao">Data de início:</label>
+                  <input class="info-field-input" id="emp-input-admissao" type="date" data-date-limit="past" />
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-vinculo">Tipo de vínculo:</label>
+                  <select class="info-field-input" id="emp-input-vinculo">
+                    <option value="">Selecione...</option>
+                    <option value="CLT">CLT</option>
+                    <option value="PJ">PJ</option>
+                    <option value="Estagio">Estágio</option>
+                    <option value="Jovem_Aprendiz">Jovem Aprendiz</option>
+                    <option value="Freelancer">Freelancer</option>
+                    <option value="Informal">Informal</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-modalidade">Modalidade:</label>
+                  <select class="info-field-input" id="emp-input-modalidade">
+                    <option value="">Selecione...</option>
+                    <option value="Presencial">Presencial</option>
+                    <option value="Hibrido">Híbrido</option>
+                    <option value="Remoto">Remoto</option>
+                  </select>
+                </div>
+                <div class="info-field">
+                  <label class="info-field-label" for="emp-input-salario">Faixa salarial:</label>
+                  <select class="info-field-input" id="emp-input-salario">
+                    <option value="">Selecione...</option>
+                    <option value="Ate_1_SM">Até 1 salário mínimo</option>
+                    <option value="1_a_2_SM">1 a 2 salários mínimos</option>
+                    <option value="2_a_3_SM">2 a 3 salários mínimos</option>
+                    <option value="3_a_5_SM">3 a 5 salários mínimos</option>
+                    <option value="Acima_5_SM">Acima de 5 salários mínimos</option>
+                    <option value="Nao_informado">Não informado</option>
+                  </select>
+                </div>
+              </div>
+              <p class="perfil-form-erro" id="emp-erro" hidden></p>
+              <div class="perfil-form-actions" style="margin-top: var(--space-5);">
+                <button type="submit" class="btn btn-primary" id="emp-btn-salvar">Salvar</button>
+                <button type="button" class="btn btn-ghost" id="emp-btn-cancelar">Cancelar</button>
+              </div>
+            </form>
+
+          </section>
+          <!-- /CAREER STATUS -->
+
+          <!-- BOARD 3 COLUNAS -->
+          <div class="opp-board">
+
+            <!-- COLUNA: COMPETÊNCIAS -->
+            <div class="opp-column">
+              <div class="opp-column-head is-courses">
+                <span>Competências:</span>
+                <button class="btn btn-sm" style="background:#fff; color:var(--primary); border-color:#fff;" id="btn-add-comp">
+                  <i data-lucide="plus"></i> Adicionar
+                </button>
+              </div>
+
+              <!-- FORMULÁRIO NOVA COMPETÊNCIA -->
+              <form id="comp-form" hidden style="padding: var(--space-3);">
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="comp-nome">Nome:</label>
+                  <input class="info-field-input" id="comp-nome" type="text" placeholder="Ex: Lógica de Programação" />
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="comp-tipo">Tipo:</label>
+                  <select class="info-field-input" id="comp-tipo">
+                    <option value="">Selecione...</option>
+                    <option value="Competencia">Competência</option>
+                    <option value="Curso">Curso</option>
+                    <option value="Evento">Evento</option>
+                    <option value="Certificacao">Certificação</option>
+                  </select>
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="comp-nivel">Nível:</label>
+                  <select class="info-field-input" id="comp-nivel">
+                    <option value="">Selecione...</option>
+                    <option value="Basico">Básico</option>
+                    <option value="Intermediario">Intermediário</option>
+                    <option value="Avancado">Avançado</option>
+                  </select>
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="comp-inst">Instituição:</label>
+                  <input class="info-field-input" id="comp-inst" type="text" placeholder="Ex: Alura" />
+                </div>
+                <p class="perfil-form-erro" id="comp-erro" hidden></p>
+                <div class="perfil-form-actions">
+                  <button type="submit" class="btn btn-primary btn-sm" id="comp-btn-salvar">Salvar</button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="comp-btn-cancelar">Cancelar</button>
+                </div>
+              </form>
+
+              <div class="opp-column-body" id="emp-competencias-body">
+                <p class="opp-empty">Carregando...</p>
+              </div>
+            </div>
+            <!-- /COLUNA COMPETÊNCIAS -->
+
+            <!-- COLUNA: HISTÓRICO DE CARREIRAS -->
+            <div class="opp-column">
+              <div class="opp-column-head is-events">
+                <span>Histórico de carreiras:</span>
+                <button class="btn btn-sm" style="background:#fff; color:var(--primary); border-color:#fff;" id="btn-add-hist">
+                  <i data-lucide="plus"></i> Adicionar
+                </button>
+              </div>
+
+              <!-- FORMULÁRIO NOVO HISTÓRICO -->
+              <form id="hist-form" hidden style="padding: var(--space-3);">
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="hist-cargo">Cargo:</label>
+                  <input class="info-field-input" id="hist-cargo" type="text" placeholder="Ex: Assistente Administrativo" />
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="hist-empresa">Empresa:</label>
+                  <input class="info-field-input" id="hist-empresa" type="text" placeholder="Nome da empresa" />
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="hist-vinculo">Tipo de vínculo:</label>
+                  <select class="info-field-input" id="hist-vinculo">
+                    <option value="">Selecione...</option>
+                    <option value="CLT">CLT</option>
+                    <option value="PJ">PJ</option>
+                    <option value="Estagio">Estágio</option>
+                    <option value="Jovem_Aprendiz">Jovem Aprendiz</option>
+                    <option value="Freelancer">Freelancer</option>
+                    <option value="Informal">Informal</option>
+                    <option value="Outro">Outro</option>
+                  </select>
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="hist-admissao">Data de início:</label>
+                  <input class="info-field-input" id="hist-admissao" type="date" data-date-limit="past" />
+                </div>
+                <div class="info-field" style="margin-bottom: var(--space-2);">
+                  <label class="info-field-label" for="hist-saida">Data de saída (opcional):</label>
+                  <input class="info-field-input" id="hist-saida" type="date" />
+                </div>
+                <p class="perfil-form-erro" id="hist-erro" hidden></p>
+                <div class="perfil-form-actions">
+                  <button type="submit" class="btn btn-primary btn-sm" id="hist-btn-salvar">Salvar</button>
+                  <button type="button" class="btn btn-ghost btn-sm" id="hist-btn-cancelar">Cancelar</button>
+                </div>
+              </form>
+
+              <div class="opp-column-body" id="emp-historico-body">
+                <p class="opp-empty">Carregando...</p>
+              </div>
+            </div>
+            <!-- /COLUNA HISTÓRICO -->
+
+          </div><!-- /opp-board -->
+
+        </div><!-- /shell-container -->
+      </main>
+      <!-- /CONTENT -->
+
+    </div><!-- /shell-main -->
+
+
+  </div><!-- /shell -->
+
+  <!-- MODAL EDITAR COMPETÊNCIA / HISTÓRICO -->
+  <div class="opp-modal-overlay" id="edit-modal" aria-modal="true" role="dialog">
+    <div class="opp-modal">
+      <div class="opp-modal-header">
+        <h2 class="opp-modal-title" id="edit-modal-titulo">—</h2>
+        <button class="opp-modal-close" id="edit-modal-close" aria-label="Fechar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="opp-modal-body">
+
+        <!-- Formulário: Competência -->
+        <form id="edit-comp-form">
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-comp-nome">Nome:</label>
+            <input class="info-field-input" id="edit-comp-nome" type="text" />
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-comp-tipo">Tipo:</label>
+            <select class="info-field-input" id="edit-comp-tipo">
+              <option value="Competencia">Competência</option>
+              <option value="Curso">Curso</option>
+              <option value="Evento">Evento</option>
+              <option value="Certificacao">Certificação</option>
+            </select>
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-comp-nivel">Nível:</label>
+            <select class="info-field-input" id="edit-comp-nivel">
+              <option value="">Não informado</option>
+              <option value="Basico">Básico</option>
+              <option value="Intermediario">Intermediário</option>
+              <option value="Avancado">Avançado</option>
+            </select>
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-comp-inst">Instituição:</label>
+            <input class="info-field-input" id="edit-comp-inst" type="text" />
+          </div>
+          <p class="perfil-form-erro" id="edit-comp-erro" hidden></p>
+          <div class="perfil-form-actions" style="margin-top:var(--space-4)">
+            <button type="submit" class="btn btn-primary btn-sm" id="edit-comp-salvar">Salvar</button>
+            <button type="button" class="btn btn-danger btn-sm" id="edit-comp-excluir">Excluir</button>
+          </div>
+        </form>
+
+        <!-- Formulário: Histórico de Carreira -->
+        <form id="edit-hist-form" hidden>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-hist-cargo">Cargo:</label>
+            <input class="info-field-input" id="edit-hist-cargo" type="text" />
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-hist-empresa">Empresa:</label>
+            <input class="info-field-input" id="edit-hist-empresa" type="text" />
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-hist-vinculo">Tipo de vínculo:</label>
+            <select class="info-field-input" id="edit-hist-vinculo">
+              <option value="">Selecione...</option>
+              <option value="CLT">CLT</option>
+              <option value="PJ">PJ</option>
+              <option value="Estagio">Estágio</option>
+              <option value="Jovem_Aprendiz">Jovem Aprendiz</option>
+              <option value="Freelancer">Freelancer</option>
+              <option value="Informal">Informal</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-hist-admissao">Data de início:</label>
+            <input class="info-field-input" id="edit-hist-admissao" type="date" data-date-limit="past" />
+          </div>
+          <div class="info-field" style="margin-bottom:var(--space-2)">
+            <label class="info-field-label" for="edit-hist-saida">Data de saída:</label>
+            <input class="info-field-input" id="edit-hist-saida" type="date" />
+          </div>
+          <p class="perfil-form-erro" id="edit-hist-erro" hidden></p>
+          <div class="perfil-form-actions" style="margin-top:var(--space-4)">
+            <button type="submit" class="btn btn-primary btn-sm" id="edit-hist-salvar">Salvar</button>
+            <button type="button" class="btn btn-danger btn-sm" id="edit-hist-excluir">Excluir</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <!-- /MODAL -->
+
+  <script src="../../js/api.js"></script>
+<script src="../../js/dateLimits.js"></script>
+  <script src="../../js/mainJovem.js"></script>
+  <script src="../../js/aluno/empregabilidade.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

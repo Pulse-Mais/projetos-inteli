@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atendimentos - Psicóloga | Pulse Mais</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/atendimentos.css">
+</head>
+<body>
+
+  <header class="psi-navbar">
+    <div class="psi-navbar-inner">
+
+      <div class="psi-saudacao">
+        <div class="psi-avatar">
+          <i data-lucide="user"></i>
+        </div>
+        <div class="psi-saudacao-texto">
+          <span class="psi-saudacao-nome">Olá, psicóloga!</span>
+          <span class="psi-saudacao-sub">seja bem-vinda de volta.</span>
+        </div>
+      </div>
+
+      <div class="psi-navbar-centro">
+        <div class="psi-busca">
+          <i data-lucide="search"></i>
+          <input type="text" id="busca-alunos" placeholder="Buscar alunos">
+        </div>
+        <select class="psi-select psi-select--turma" id="filtro-turma">
+          <option value="">Todas as turmas</option>
+        </select>
+        <select class="psi-select" id="filtro-status">
+          <option value="ALL">Todos</option>
+          <option value="ACTIVE">Ativos</option>
+          <option value="INACTIVE">Inativos</option>
+        </select>
+      </div>
+
+      <div class="psi-navbar-logo">
+        <a href="atendimentos.html" aria-label="Pulse Mais">
+          <img src="../coordenadora/img/logo-pulse.svg" alt="Pulse Mais" class="psi-logo-img">
+        </a>
+      </div>
+
+      <button type="button" id="logoutButton" class="psi-navbar-logout" aria-label="Sair da conta">
+        <i data-lucide="log-out"></i>
+      </button>
+
+    </div>
+  </header>
+
+  <div class="aviso">
+    <i data-lucide="info"></i>
+    <p>Essa área contém informações sensíveis sobre acompanhamento psicológico. Os prontuários e anotações aqui presentes são visíveis apenas para você e seguem as diretrizes da LGPD.</p>
+  </div>
+
+  <main class="container-atendimentos">
+
+    <div class="atend-cabecalho">
+      <div>
+        <h1 class="atend-titulo">Meus Atendimentos:</h1>
+        <p class="atend-subtitulo" id="atend-subtitulo">Carregando atendimentos...</p>
+      </div>
+      <button class="btn-fluxo btn-fluxo--primario" id="btn-adicionar-relatorio"><i data-lucide="plus"></i> Adicionar relatório</button>
+    </div>
+
+    <div class="atend-status" id="atend-status" role="status">Carregando atendimentos...</div>
+    <div class="atend-grade" id="lista-atendimentos"></div>
+
+    <div class="atend-rodape">
+      <button type="button" class="atend-paginacao-btn" id="pagina-anterior">Anterior</button>
+      <span class="atend-paginacao-info" id="pagina-info">Página 1 de 1</span>
+      <button type="button" class="atend-paginacao-btn" id="pagina-proxima">Outros alunos &rsaquo;</button>
+    </div>
+
+  </main>
+
+  <div class="psi-modal" id="modal-selecionar-aluno" hidden>
+    <div class="psi-modal-caixa" role="dialog" aria-modal="true" aria-labelledby="titulo-selecionar-aluno" style="max-width:480px;width:100%">
+      <div class="psi-modal-icone"><i data-lucide="file-plus"></i></div>
+      <h2 id="titulo-selecionar-aluno">Selecionar aluno para relatório</h2>
+      <p>Escolha o aluno para o qual deseja adicionar um novo registro de atendimento.</p>
+      <input
+        type="text"
+        id="modal-busca-aluno"
+        placeholder="Buscar aluno por nome ou matrícula..."
+        style="width:100%;box-sizing:border-box;padding:8px 12px;border:1px solid var(--color-border,#d1d5db);border-radius:8px;font-size:14px;margin-bottom:12px;font-family:inherit"
+      >
+      <div id="modal-lista-alunos" style="max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
+      <div class="psi-modal-acoes" style="margin-top:16px">
+        <button type="button" class="btn-fluxo btn-fluxo--secundario" id="fechar-modal-aluno">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/psicologaService.js"></script>
+  <script>
+    lucide.createIcons();
+
+    const rmPsicologa = sessionStorage.getItem('psicologaRm') || localStorage.getItem('psicologaRm') || '';
+    const listaAtendimentos = document.getElementById('lista-atendimentos');
+    const subtituloAtendimentos = document.getElementById('atend-subtitulo');
+    const statusAtendimentos = document.getElementById('atend-status');
+    const botaoPaginaAnterior = document.getElementById('pagina-anterior');
+    const botaoPaginaProxima = document.getElementById('pagina-proxima');
+    const paginaInfo = document.getElementById('pagina-info');
+    const buscaAlunos = document.getElementById('busca-alunos');
+    const filtroTurma = document.getElementById('filtro-turma');
+    const filtroStatus = document.getElementById('filtro-status');
+    const statusPermitidos = [
+      { valor: 'ACTIVE', texto: 'Ativo' },
+      { valor: 'INACTIVE', texto: 'Inativo' },
+    ];
+    const filtrosAtendimentos = {
+      busca: '',
+      id_turma: '',
+      status: 'ALL',
+    };
+    const controlesAtendimentos = [buscaAlunos, filtroTurma, filtroStatus];
+    const tamanhoPaginaAlunos = 10;
+    let alunosAtendidos = [];
+    let paginaAtualAlunos = 0;
+    let timerBusca = null;
+
+    function normalizarTexto(valor) {
+      return String(valor || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    function obterStatusVisual(status) {
+      if (status === true || normalizarTexto(status) === 'true' || normalizarTexto(status) === 'active') {
+        return { texto: 'Ativo', classe: 'status--sucesso' };
+      }
+
+      if (status === false || normalizarTexto(status) === 'false' || normalizarTexto(status) === 'inactive') {
+        return { texto: 'Inativo', classe: 'status--erro' };
+      }
+
+      const statusNormalizado = normalizarTexto(status);
+
+      return statusNormalizado === 'inactive' || statusNormalizado === 'inativo'
+        ? { texto: 'Inativo', classe: 'status--erro' }
+        : { texto: 'Ativo', classe: 'status--sucesso' };
+    }
+
+    function obterValorStatusAluno(status) {
+      return status === false || normalizarTexto(status) === 'false' || normalizarTexto(status) === 'inactive'
+        ? 'INACTIVE'
+        : 'ACTIVE';
+    }
+
+    function atualizarSubtitulo(quantidade) {
+      const termo = quantidade === 1 ? 'jovem' : 'jovens';
+      subtituloAtendimentos.textContent = `Acompanhamento psicológico de ${quantidade} ${termo}.`;
+    }
+
+    function definirEstado(mensagem, tipo = 'info', acao = null) {
+      statusAtendimentos.replaceChildren();
+      statusAtendimentos.dataset.tipo = tipo;
+      statusAtendimentos.hidden = !mensagem;
+
+      if (!mensagem) {
+        return;
+      }
+
+      const texto = document.createElement('span');
+      texto.textContent = mensagem;
+      statusAtendimentos.appendChild(texto);
+
+      if (acao) {
+        const botao = document.createElement('button');
+        botao.type = 'button';
+        botao.className = 'atend-status-acao';
+        botao.textContent = acao.texto;
+        botao.addEventListener('click', acao.onClick);
+        statusAtendimentos.appendChild(botao);
+      }
+    }
+
+    function definirControlesCarregando(carregando) {
+      controlesAtendimentos.forEach((controle) => {
+        controle.disabled = carregando;
+      });
+    }
+
+    function renderizarSkeletonAtendimentos() {
+      listaAtendimentos.innerHTML = '';
+
+      for (let index = 0; index < 5; index += 1) {
+        const skeleton = document.createElement('div');
+        skeleton.className = 'aluno-card aluno-card--loading';
+        skeleton.innerHTML = `
+          <span class="skeleton skeleton-avatar"></span>
+          <span class="skeleton skeleton-linha skeleton-linha--nome"></span>
+          <span class="skeleton skeleton-linha"></span>
+          <span class="skeleton skeleton-badge"></span>
+          <span class="skeleton skeleton-botao"></span>
+        `;
+        listaAtendimentos.appendChild(skeleton);
+      }
+    }
+
+    function criarCardAluno(aluno) {
+      const statusVisual = obterStatusVisual(aluno.status);
+      const card = document.createElement('div');
+      card.className = 'aluno-card';
+
+      card.innerHTML = `
+        <span class="card-cadeado"><i data-lucide="lock"></i></span>
+        <div class="card-avatar"><i data-lucide="user"></i></div>
+        <span class="card-nome"></span>
+        <span class="card-matricula"></span>
+        <span class="status ${statusVisual.classe}"></span>
+        <label class="status-atendimento">
+          <span>Status</span>
+          <select></select>
+        </label>
+        <a class="btn-fluxo btn-fluxo--secundario js-mais-info">Mais informações</a>
+        <a class="btn-fluxo btn-fluxo--primario js-novo-relatorio">Adicionar relatório</a>
+      `;
+
+      card.querySelector('.card-nome').textContent = aluno.nome || 'Aluno sem nome';
+      card.querySelector('.card-matricula').textContent = `Matrícula: ${aluno.ra || '-'}`;
+      card.querySelector('.status').textContent = statusVisual.texto;
+
+      const seletorStatus = card.querySelector('.status-atendimento select');
+      statusPermitidos.forEach((status) => {
+        const option = document.createElement('option');
+        option.value = status.valor;
+        option.textContent = status.texto;
+        option.selected = obterValorStatusAluno(aluno.status) === status.valor;
+        seletorStatus.appendChild(option);
+      });
+
+      seletorStatus.addEventListener('change', () => atualizarStatusAluno(aluno, seletorStatus));
+
+      const linkProntuario = card.querySelector('.js-mais-info');
+      linkProntuario.href = `prontuario.html?rm=${encodeURIComponent(rmPsicologa)}&ra=${encodeURIComponent(aluno.ra)}`;
+
+      const linkNovoRelatorio = card.querySelector('.js-novo-relatorio');
+      linkNovoRelatorio.href = `prontuario.html?rm=${encodeURIComponent(rmPsicologa)}&ra=${encodeURIComponent(aluno.ra)}&novo=1`;
+
+      return card;
+    }
+
+    async function atualizarStatusAluno(aluno, seletorStatus) {
+      const statusAnterior = aluno.status;
+      const novoStatus = seletorStatus.value;
+
+      seletorStatus.disabled = true;
+      definirEstado('Atualizando status do atendimento...', 'info');
+
+      try {
+        await window.PsicologaService.atualizarStatusAtendimento(rmPsicologa, aluno.ra, novoStatus);
+        await carregarAtendimentos(obterFiltros(), { manterMensagem: true });
+      } catch (erro) {
+        aluno.status = statusAnterior;
+        seletorStatus.value = statusAnterior;
+        seletorStatus.disabled = false;
+        definirEstado(erro.message || 'Não foi possível atualizar o status.', 'erro');
+      }
+    }
+
+    function renderizarAlunos(alunos) {
+      listaAtendimentos.innerHTML = '';
+      const totalPaginas = Math.max(1, Math.ceil(alunos.length / tamanhoPaginaAlunos));
+      paginaAtualAlunos = Math.min(paginaAtualAlunos, totalPaginas - 1);
+
+      if (alunos.length === 0) {
+        definirEstado('Nenhum aluno encontrado com esses filtros.', 'vazio');
+        botaoPaginaAnterior.disabled = true;
+        botaoPaginaProxima.disabled = true;
+        paginaInfo.textContent = 'Página 0 de 0';
+        return;
+      }
+
+      definirEstado('');
+      const inicioPagina = paginaAtualAlunos * tamanhoPaginaAlunos;
+      const fimPagina = inicioPagina + tamanhoPaginaAlunos;
+      const alunosVisiveis = alunos.slice(inicioPagina, fimPagina);
+      alunosVisiveis.forEach((aluno) => listaAtendimentos.appendChild(criarCardAluno(aluno)));
+
+      botaoPaginaAnterior.disabled = paginaAtualAlunos === 0;
+      botaoPaginaProxima.disabled = paginaAtualAlunos >= totalPaginas - 1;
+      botaoPaginaProxima.textContent = fimPagina < alunos.length
+        ? `Outros alunos (${alunos.length - fimPagina}) ›`
+        : 'Outros alunos ›';
+      paginaInfo.textContent = `Página ${paginaAtualAlunos + 1} de ${totalPaginas}`;
+      lucide.createIcons();
+    }
+
+    function obterFiltros() {
+      return { ...filtrosAtendimentos };
+    }
+
+    function sincronizarFiltro(chave, valor) {
+      filtrosAtendimentos[chave] = valor;
+    }
+
+    async function carregarTurmas() {
+      try {
+        const turmas = await window.PsicologaService.listarTurmas();
+
+        filtroTurma.innerHTML = '<option value="">Todas as turmas</option>';
+        turmas.forEach((turma) => {
+          const option = document.createElement('option');
+          option.value = turma.id_turma;
+          option.textContent = turma.nome_turma || `Turma ${turma.id_turma}`;
+          filtroTurma.appendChild(option);
+        });
+
+        filtroTurma.value = filtrosAtendimentos.id_turma;
+      } catch {
+        filtroTurma.innerHTML = '<option value="">Todas as turmas</option>';
+      }
+    }
+
+    async function carregarAtendimentos(filtros = {}, opcoes = {}) {
+      if (!opcoes.manterMensagem) {
+        definirEstado('Carregando atendimentos...', 'info');
+      }
+      definirControlesCarregando(true);
+      botaoPaginaAnterior.disabled = true;
+      botaoPaginaProxima.disabled = true;
+      renderizarSkeletonAtendimentos();
+
+      try {
+        const resposta = await window.PsicologaService.listarAlunosAtendidos(rmPsicologa, filtros);
+        alunosAtendidos = Array.isArray(resposta) ? resposta : [];
+        paginaAtualAlunos = 0;
+        atualizarSubtitulo(alunosAtendidos.length);
+        renderizarAlunos(alunosAtendidos);
+        if (opcoes.manterMensagem) {
+          definirEstado('Status atualizado com sucesso.', 'sucesso');
+        }
+      } catch (erro) {
+        alunosAtendidos = [];
+        paginaAtualAlunos = 0;
+        atualizarSubtitulo(0);
+        listaAtendimentos.innerHTML = '';
+        botaoPaginaAnterior.disabled = true;
+        botaoPaginaProxima.disabled = true;
+        paginaInfo.textContent = 'Página 0 de 0';
+
+        definirEstado(erro.message || 'Não foi possível carregar os atendimentos.', 'erro', {
+          texto: 'Tentar novamente',
+          onClick: () => carregarAtendimentos(obterFiltros()),
+        });
+      } finally {
+        definirControlesCarregando(false);
+      }
+    }
+
+    function aplicarFiltros() {
+      window.clearTimeout(timerBusca);
+      timerBusca = window.setTimeout(() => {
+        carregarAtendimentos(obterFiltros());
+      }, 500);
+    }
+
+    buscaAlunos.addEventListener('input', (event) => {
+      sincronizarFiltro('busca', event.target.value.trim());
+      aplicarFiltros();
+    });
+
+    filtroTurma.addEventListener('change', (event) => {
+      sincronizarFiltro('id_turma', event.target.value);
+      carregarAtendimentos(obterFiltros());
+    });
+
+    filtroStatus.addEventListener('change', (event) => {
+      sincronizarFiltro('status', event.target.value || 'ACTIVE');
+      carregarAtendimentos(obterFiltros());
+    });
+
+    botaoPaginaAnterior.addEventListener('click', () => {
+      if (paginaAtualAlunos === 0) return;
+      paginaAtualAlunos -= 1;
+      renderizarAlunos(alunosAtendidos);
+    });
+
+    botaoPaginaProxima.addEventListener('click', () => {
+      const totalPaginas = Math.ceil(alunosAtendidos.length / tamanhoPaginaAlunos);
+      if (paginaAtualAlunos >= totalPaginas - 1) return;
+      paginaAtualAlunos += 1;
+      renderizarAlunos(alunosAtendidos);
+    });
+    const modalSelecionarAluno = document.getElementById('modal-selecionar-aluno');
+    const modalBuscaAluno = document.getElementById('modal-busca-aluno');
+    const modalListaAlunos = document.getElementById('modal-lista-alunos');
+
+    function renderizarAlunosModal(filtro = '') {
+      const termo = filtro.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const alunosFiltrados = alunosAtendidos.filter((aluno) => {
+        const nome = normalizarTexto(aluno.nome);
+        const ra = normalizarTexto(String(aluno.ra || ''));
+        return nome.includes(termo) || ra.includes(termo);
+      });
+
+      modalListaAlunos.innerHTML = '';
+
+      if (alunosFiltrados.length === 0) {
+        modalListaAlunos.innerHTML = '<p style="text-align:center;color:#6b7280;font-size:14px;padding:16px 0">Nenhum aluno encontrado.</p>';
+        return;
+      }
+
+      alunosFiltrados.forEach((aluno) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--color-border,#e5e7eb);border-radius:8px;background:#fff;cursor:pointer;text-align:left;font-family:inherit;font-size:14px;transition:background .15s';
+        btn.onmouseenter = () => { btn.style.background = '#f3f4f6'; };
+        btn.onmouseleave = () => { btn.style.background = '#fff'; };
+
+        const statusVisual = obterStatusVisual(aluno.status);
+        btn.innerHTML = `
+          <span style="width:36px;height:36px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i data-lucide="user" style="width:18px;height:18px"></i>
+          </span>
+          <span style="flex:1;min-width:0">
+            <strong style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></strong>
+            <small style="color:#6b7280">Matrícula: ${aluno.ra || '-'}</small>
+          </span>
+          <span class="status ${statusVisual.classe}" style="font-size:11px"></span>
+        `;
+        btn.querySelector('strong').textContent = aluno.nome || 'Aluno sem nome';
+        btn.querySelector('.status').textContent = statusVisual.texto;
+
+        btn.addEventListener('click', () => {
+          modalSelecionarAluno.hidden = true;
+          window.location.href = `prontuario.html?rm=${encodeURIComponent(rmPsicologa)}&ra=${encodeURIComponent(aluno.ra)}&novo=1`;
+        });
+
+        modalListaAlunos.appendChild(btn);
+      });
+
+      lucide.createIcons();
+    }
+
+    function abrirModalSelecionarAluno() {
+      modalBuscaAluno.value = '';
+      renderizarAlunosModal();
+      modalSelecionarAluno.hidden = false;
+      modalBuscaAluno.focus();
+    }
+
+    document.getElementById('btn-adicionar-relatorio').addEventListener('click', abrirModalSelecionarAluno);
+    document.getElementById('fechar-modal-aluno').addEventListener('click', () => { modalSelecionarAluno.hidden = true; });
+    modalSelecionarAluno.addEventListener('click', (e) => { if (e.target === modalSelecionarAluno) modalSelecionarAluno.hidden = true; });
+    modalBuscaAluno.addEventListener('input', () => renderizarAlunosModal(modalBuscaAluno.value));
+    buscaAlunos.value = filtrosAtendimentos.busca;
+    filtroStatus.value = filtrosAtendimentos.status;
+    carregarTurmas();
+    carregarAtendimentos(obterFiltros());
+  </script>
+
+</body>
+</html>

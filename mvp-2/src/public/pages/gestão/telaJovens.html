@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jovens – Pulsar</title>
+
+  <!-- Fonts (igual global.css) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Lucide — pinado igual ao padrão do projeto -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/umd/lucide.min.js"></script>
+
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/telaJovens.css" />
+  <link rel="stylesheet" href="../../css/solicitacoesCadastro.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+      </a>
+      <a class="sidebar-item is-active" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Frequências">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Frequências</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <div class="main-wrapper" id="mainWrapper">
+
+    <!-- Header -->
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <img src="../../assets/logoPulsar.png" alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conteúdo -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <p class="breadcrumb">Jovem</p>
+
+      <div class="page-title-row">
+        <h1 class="page-title">Jovem</h1>
+        <span class="count-badge" id="countBadge">—</span>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-input-wrap">
+          <input type="text" id="searchInput" placeholder="Buscar por nome ou CPF" />
+        </div>
+        <button class="btn btn-secondary" id="btnExportar">Exportar</button>
+        <button class="btn btn-primary" id="btnNovoJovem">
+          <i data-lucide="plus"></i> Novo Jovem
+        </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="section-card">
+        <h2 class="section-card__title">Filtros</h2>
+
+        <div class="filter-row">
+
+          <div class="filter-group">
+            <span class="filter-label">Programa</span>
+            <select class="filter-select" id="filterPrograma">
+              <option value="">Selecionar o programa</option>
+              <option>Trilha Tech Jr</option>
+              <option>Pulse+ 2026</option>
+              <option>Empregabilidade</option>
+              <option>Bolsa IES</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Coorte / Período</span>
+            <select class="filter-select" id="filterPeriodo">
+              <option value="">Selecionar o período</option>
+              <option>2024-S1</option>
+              <option>2024-S2</option>
+              <option>2025-S1</option>
+              <option>2026-S1</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Frequência (0-100%)</span>
+            <div class="freq-row">
+              <input type="range" id="filterFreq" min="0" max="100" value="100"
+                style="background: linear-gradient(to right, var(--color-brand) 100%, var(--color-border) 100%);" />
+              <span class="freq-val" id="freqVal">100%</span>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label">Jovem Multiplicador</span>
+            <div class="toggle-wrap">
+              <label class="toggle-switch">
+                <input type="checkbox" id="filterMult" />
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label">Apenas<br>Multiplicadores</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-label">Status de empregabilidade</span>
+          <div class="emp-row" id="empChips" style="margin-top: var(--spacing-xs);">
+            <button class="emp-chip active" data-val="Empregado">Empregado</button>
+            <button class="emp-chip active" data-val="Em_formacao">Em formação</button>
+            <button class="emp-chip active" data-val="Buscando">Buscando</button>
+            <button class="emp-chip active" data-val="Empreendedor">Empreendedor</button>
+            <button class="emp-chip active" data-val="Inativo">Inativo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solicitações pendentes -->
+      <div class="section-card" id="secSolicitacoes">
+
+        <div class="sol-header">
+          <div class="sol-header-left">
+            <h2 class="section-card__title">Solicitações pendentes</h2>
+            <span class="count-badge" id="solBadge">0</span>
+          </div>
+          <span class="sol-timestamp" id="solTimestamp"></span>
+        </div>
+
+        <div class="sol-state" id="solLoading" hidden>
+          <i data-lucide="loader" class="sol-state-icon sol-spin"></i>
+          <p>Carregando solicitações…</p>
+        </div>
+
+        <div class="sol-state sol-state--error" id="solError" hidden>
+          <i data-lucide="alert-circle" class="sol-state-icon"></i>
+          <p id="solErrorMsg">Erro ao carregar.</p>
+          <button class="btn btn-secondary" id="solBtnRecarregar">Tentar de novo</button>
+        </div>
+
+        <div class="sol-state" id="solEmpty" hidden>
+          <i data-lucide="inbox" class="sol-state-icon"></i>
+          <p>Nenhuma solicitação pendente.</p>
+        </div>
+
+        <div class="sol-list" id="solList" hidden></div>
+
+      </div>
+
+      <!-- Resultados -->
+      <div class="section-card">
+        <h2 class="section-card__title">Resultados</h2>
+
+        <div style="overflow-x:auto;"><table class="jovens-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Programa</th>
+              <th>Status</th>
+              <th>Frequência</th>
+              <th>Empregabilidade</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- populado via JS -->
+          </tbody>
+        </table></div>
+
+        <p class="jovens-count" id="jovensCount"></p>
+        <div class="jovens-pagination" id="jovensPagination" hidden></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL: CONFIRMAR EXCLUSÃO -->
+<div class="modal-overlay" id="modalConfirmExcluir">
+  <div class="modal modal-confirm">
+    <div class="modal__header">
+      <h2 class="modal__title">Excluir jovem</h2>
+      <button class="modal__close" id="closeConfirmExcluir" type="button" aria-label="Fechar">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div class="modal__body">
+      <p>Tem certeza que deseja excluir <strong id="confirmExcluirNome"></strong>? Essa ação não pode ser desfeita.</p>
+    </div>
+    <div class="modal__footer">
+      <button class="btn-modal-secondary" id="cancelConfirmExcluir" type="button">Cancelar</button>
+      <button class="btn-modal-danger" id="confirmExcluirBtn" type="button">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/gestão/telaJovens.js"></script>
+<script src="../../js/solicitacoesCadastro.js"></script>
+<script src="../../js/gestão/main.js"></script>
+</body>
+</html>

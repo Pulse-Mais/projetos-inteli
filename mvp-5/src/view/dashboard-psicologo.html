@@ -1,0 +1,517 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel do Psicólogo — Pulse Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/pulse.css" />
+  <script src="lucide.min.js"></script>
+  <style>
+    .hero-card {
+      background: var(--brand-dark);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .hero-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .hero-info { flex: 1; }
+    .hero-name { color: var(--white); font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+    .hero-badges { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .hero-meta { display: flex; flex-direction: column; gap: 8px; }
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+    }
+    .hero-meta-row svg { flex-shrink: 0; opacity: 0.7; }
+
+    .stats-label { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+    .stats-grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .stat-card   { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .stat-icon   { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+    .stat-value  { font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+    .stat-label  { font-size: 13px; color: var(--navy); margin-bottom: 2px; }
+    .stat-sub    { font-size: 11px; color: var(--muted); }
+
+    .atend-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .atend-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .atend-header-right { display: flex; align-items: center; gap: 12px; }
+    .visivel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--error-bg);
+      color: var(--error-text);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .visivel-tag span { width: 8px; height: 8px; border-radius: 50%; background: var(--error-text); display: inline-block; }
+    .atend-link { font-size: 13px; font-weight: 600; color: var(--blue-btn); text-decoration: none; }
+    .atend-link:hover { text-decoration: underline; }
+
+    .atend-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 12px;
+      margin: 0 -12px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background .15s;
+    }
+    .atend-item:hover { background: rgba(0, 56, 112, 0.04); }
+    .atend-item:last-child { border-bottom: none; }
+    .jovem-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--brand-dark);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .atend-info { flex: 1; min-width: 0; }
+    .atend-jovem-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .atend-desc { font-size: 12px; color: var(--slate); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .atend-meta { font-size: 11px; color: var(--muted); }
+    .atend-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+    .empty-state { text-align: center; padding: 40px 0; color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 899px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+      .hero-card  { flex-direction: column; gap: 16px; }
+    }
+    @media (max-width: 599px) {
+      .atend-actions { flex-direction: column; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar__logo"><span class="sidebar__logo-text">PC</span></div>
+    <nav class="sidebar__nav" aria-label="Navegação principal">
+      <a href="dashboard-psicologo.html" class="sidebar__nav-item active" title="Dashboard" aria-current="page">
+        <i data-lucide="layout-dashboard" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Painel do Psicólogo</span>
+      </a>
+      <a href="perfil-psicologo.html" class="sidebar__nav-item" title="Perfil">
+        <i data-lucide="user-circle" width="20" height="20"></i>
+        <span class="sidebar__nav-label">Perfil</span>
+      </a>
+    </nav>
+    <div class="sidebar__bottom">
+      <a href="configuracoes.html" class="sidebar__avatar-mini" id="sidebar-avatar-mini" title="Configurações de perfil">
+        <span id="sidebar-initials">--</span>
+      </a>
+      <button class="sidebar__nav-item" title="Sair" onclick="logout()"
+              style="background:none;border:none;cursor:pointer;width:100%;">
+        <i data-lucide="log-out" width="20" height="20" style="color:rgba(255,255,255,0.6);"></i>
+        <span class="sidebar__nav-label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar__breadcrumb">
+
+        <span>Painel do Psicólogo</span>
+      </div>
+      <div class="topbar__actions">
+        <a class="topbar__user" href="configuracoes.html" title="Configurações de perfil" style="text-decoration:none;">
+          <div class="topbar__user-avatar" id="topbar-avatar">--</div>
+          <span class="topbar__user-name" id="topbar-name">Usuário</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Hero card -->
+      <div class="hero-card">
+        <div class="hero-avatar" id="hero-avatar">--</div>
+        <div class="hero-info">
+          <div class="hero-name" id="hero-name">Carregando...</div>
+          <div class="hero-badges">
+            <span class="badge badge--green-soft">PSICÓLOGO</span>
+            <span class="badge badge--yellow" id="hero-crp" style="display:none;"></span>
+          </div>
+          <div class="hero-meta">
+            <div class="hero-meta-row">
+              <i data-lucide="mail" width="14" height="14"></i>
+              <span id="hero-email">—</span>
+            </div>
+            <div class="hero-meta-row">
+              <i data-lucide="heart" width="14" height="14"></i>
+              <span id="hero-especialidade">—</span>
+            </div>
+            <div class="hero-meta-row">
+              <i data-lucide="map-pin" width="14" height="14"></i>
+              <span id="hero-cidade">—</span>
+            </div>
+            <div class="hero-meta-row">
+              <i data-lucide="clock" width="14" height="14"></i>
+              <span id="hero-horario">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div>
+        <div class="stats-label">Taxas de acompanhamento</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--green-badge-bg);">
+              <i data-lucide="users" width="18" height="18" style="color:var(--green-badge-text);"></i>
+            </div>
+            <div class="stat-value" id="stat-jovens">—</div>
+            <div class="stat-label">Jovens em acompanhamento</div>
+            <div class="stat-sub">Ativos no momento</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--blue-light);">
+              <i data-lucide="trending-up" width="18" height="18" style="color:var(--blue-btn);"></i>
+            </div>
+            <div class="stat-value" id="stat-atendimentos">—</div>
+            <div class="stat-label">Atendimentos realizados</div>
+            <div class="stat-sub">Total acumulado · 2025</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--orange-light);">
+              <i data-lucide="alert-triangle" width="18" height="18" style="color:var(--orange-text);"></i>
+            </div>
+            <div class="stat-value" id="stat-atencao">—</div>
+            <div class="stat-label">Casos em atenção</div>
+            <div class="stat-sub">Nível elevado de cuidado</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:var(--orange-light);">
+              <i data-lucide="clock" width="18" height="18" style="color:var(--orange-text);"></i>
+            </div>
+            <div class="stat-value" id="stat-horas">—</div>
+            <div class="stat-label">Horas de escuta</div>
+            <div class="stat-sub">Total contribuído</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Atendimentos recentes -->
+      <div class="card">
+        <div class="atend-header">
+          <div class="atend-title">
+            <i data-lucide="clock" width="16" height="16" style="color:var(--brand-dark);"></i>
+            Atendimentos recentes
+          </div>
+          <div class="atend-header-right">
+            <div class="visivel-tag">
+              <span></span>VISÍVEL APENAS A VOCÊ
+            </div>
+            <a href="#" class="atend-link">Ver histórico →</a>
+          </div>
+        </div>
+        <div id="atend-list">
+          <div class="skeleton" style="height:72px;border-radius:8px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:72px;border-radius:8px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:72px;border-radius:8px;"></div>
+        </div>
+      </div>
+
+      <!-- Lista de pacientes -->
+      <div class="card">
+        <div class="atend-header">
+          <div class="atend-title">
+            <i data-lucide="users" width="16" height="16" style="color:var(--brand-dark);"></i>
+            Todos os pacientes
+          </div>
+        </div>
+        <div id="pacientes-list">
+          <div class="skeleton" style="height:56px;border-radius:8px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:56px;border-radius:8px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:56px;border-radius:8px;"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const API = 'http://localhost:3000/api';
+
+async function apiFetch(path, options = {}) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 100000);
+  try {
+    const res = await fetch(API + path, {
+      signal: ctrl.signal,
+      headers: { 'Content-Type': 'application/json', ...options.headers },
+      ...options,
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw { status: res.status, message: body.error || `HTTP ${res.status}` };
+    }
+    if (res.status === 204) return null;
+    return res.json();
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof TypeError || err.name === 'AbortError') {
+      console.warn('[DEV] API offline.');
+      return null;
+    }
+    throw err;
+  }
+}
+
+function getSession() {
+  try {
+    const raw = sessionStorage.getItem('pulse_session') || localStorage.getItem('pulse_session');
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+
+function initials(nome = '') {
+  return nome.trim().split(/\s+/).filter(Boolean).map(p => p[0].toUpperCase()).join('');
+}
+
+function escHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function fmtDateTime(s) {
+  if (!s) return '—';
+  try {
+    const d = new Date(s.length === 10 ? s + 'T12:00:00' : s);
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) +
+           ', ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  } catch (_) { return s; }
+}
+
+function toast(msg, type = 'default') {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.style.background = type === 'success' ? '#166534' : type === 'error' ? '#991b1b' : 'var(--navy)';
+  el.textContent = msg;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
+function logout() {
+  sessionStorage.removeItem('pulse_session');
+  localStorage.removeItem('pulse_session');
+  window.location.href = 'dashboard.html';
+}
+
+const AVATAR_COLORS = ['#003870','#0E7490','#2563EB','#7C3AED','#0F766E'];
+
+function renderAtendimentos(registros) {
+  const VISIBLE = 2;
+  const container = document.getElementById('atend-list');
+  if (!registros.length) {
+    container.innerHTML = '<p class="empty-state">Nenhum atendimento registrado.</p>';
+    lucide.createIcons();
+    return;
+  }
+
+  container.innerHTML = registros.map((r, i) => {
+    const jovemNome = r.jovemNome || r.nome_jovem || `Paciente #${r.id_jovem || i+1}`;
+    const ini = initials(jovemNome);
+    const cor = AVATAR_COLORS[i % AVATAR_COLORS.length];
+    const num = r.numero || r.id || (i + 1);
+    const desc = (r.descricao || r.observacao || '').slice(0, 80) + (((r.descricao || r.observacao || '').length > 80) ? '...' : '');
+    const duracao = r.duracao ? `Duração: ${r.duracao} min` : '';
+    const freq   = r.frequencia ? `· ${r.frequencia}` : '';
+    const meta   = [duracao, fmtDateTime(r.data || r.created_at), freq].filter(Boolean).join(' · ');
+
+    const isAgendado = r.status === 'agendado';
+    const badgeHtml = isAgendado
+      ? '<span class="badge badge--yellow">AGENDADO</span>'
+      : '<span class="badge badge--green">REGISTRADO</span>';
+    const hidden = i >= VISIBLE ? ' style="display:none"' : '';
+
+    return `
+      <a class="atend-item" href="prontuario.html?jovem=${encodeURIComponent(r.id_jovem || '')}"${hidden}>
+        <div class="jovem-avatar" style="background:${cor};">${escHtml(ini)}</div>
+        <div class="atend-info">
+          <div class="atend-jovem-name">${escHtml(jovemNome)}</div>
+          <div class="atend-desc">Atendimento #${num} · ${escHtml(desc)}</div>
+          <div class="atend-meta">${escHtml(meta)}</div>
+        </div>
+        <div class="atend-actions">
+          ${badgeHtml}
+        </div>
+      </a>`;
+  }).join('');
+
+  if (registros.length > VISIBLE) {
+    const extra = registros.length - VISIBLE;
+    const btn = document.createElement('button');
+    btn.className = 'feed-toggle';
+    btn.innerHTML = `<span>Ver mais ${extra}</span><i data-lucide="chevron-down" width="14" height="14"></i>`;
+    btn.onclick = () => {
+      const open = btn.classList.toggle('open');
+      container.querySelectorAll('.atend-item').forEach((el, i) => {
+        if (i >= VISIBLE) el.style.display = open ? '' : 'none';
+      });
+      btn.querySelector('span').textContent = open ? 'Ver menos' : `Ver mais ${extra}`;
+      lucide.createIcons();
+    };
+    container.appendChild(btn);
+  }
+
+  lucide.createIcons();
+}
+
+async function renderDashboard(session) {
+  const userId = session.id || session.userId;
+
+  const [usuario, jovens] = await Promise.all([
+    apiFetch('/usuarios/' + userId),
+    apiFetch('/jovens'),
+  ]);
+
+  // Hero card
+  if (usuario) {
+    const ini = initials(usuario.nome || session.nome);
+    document.getElementById('hero-avatar').textContent = ini;
+    document.getElementById('hero-name').textContent   = usuario.nome || session.nome;
+    document.getElementById('hero-email').textContent  = usuario.email || '—';
+    document.getElementById('hero-especialidade').textContent =
+      usuario.especializacao || usuario.area_atuacao || usuario.area || '—';
+    document.getElementById('hero-cidade').textContent = usuario.cidade || '—';
+    document.getElementById('hero-horario').textContent =
+      (usuario.membro_desde ? `Membro Pulse desde ${usuario.membro_desde} · ` : '') +
+      (usuario.horario_atendimento || usuario.disponibilidade || usuario.horario || '—');
+    if (usuario.crp) {
+      const crpEl = document.getElementById('hero-crp');
+      crpEl.textContent = String(usuario.crp).toUpperCase().startsWith('CRP') ? usuario.crp : `CRP ${usuario.crp}`;
+      crpEl.style.display = '';
+    }
+  }
+
+  const jovensList = Array.isArray(jovens) ? jovens : [];
+  const jovensAtivos = jovensList.length;
+
+  // Buscar prontuários dos primeiros 10 jovens em paralelo
+  const limit = jovensList.slice(0, 10);
+  const prontuarios = await Promise.all(
+    limit.map(j => apiFetch('/jovens/' + j.id + '/prontuario?id_usuario=' + userId).then(r => ({ jovem: j, registros: Array.isArray(r) ? r : [] })).catch(() => ({ jovem: j, registros: [] })))
+  );
+
+  let totalAtend = 0;
+  let casosAtencao = 0;
+  const registrosFlat = [];
+
+  prontuarios.forEach(({ jovem, registros }) => {
+    totalAtend += registros.length;
+    if (jovem.flag_atencao || jovem.risco || jovem.status_global === 'Atenção') casosAtencao++;
+    registros.forEach(r => registrosFlat.push({ ...r, id_jovem: jovem.id, jovemNome: jovem.nome }));
+  });
+
+  const totalHoras = Math.round(totalAtend * 0.83); // ~50 min por sessão
+
+  document.getElementById('stat-jovens').textContent      = jovensAtivos;
+  document.getElementById('stat-atendimentos').textContent = totalAtend || '0';
+  document.getElementById('stat-atencao').textContent     = casosAtencao || '0';
+  document.getElementById('stat-horas').textContent       = totalHoras + 'h';
+
+  // Ordenar por data decrescente
+  registrosFlat.sort((a, b) => new Date(b.data || b.created_at || 0) - new Date(a.data || a.created_at || 0));
+  renderAtendimentos(registrosFlat);
+  renderPacientes(jovensList);
+}
+
+function renderPacientes(jovens) {
+  const container = document.getElementById('pacientes-list');
+  if (!jovens.length) {
+    container.innerHTML = '<p class="empty-state">Nenhum paciente cadastrado.</p>';
+    return;
+  }
+  container.innerHTML = jovens.map(j => {
+    const ini = initials(j.nome || '');
+    const idx = Math.abs((j.id || 0)) % AVATAR_COLORS.length;
+    const cor = AVATAR_COLORS[idx];
+    const status = j.status_global || '—';
+    const cat    = j.categoria_atual || '—';
+    return `
+      <a class="atend-item" href="prontuario.html?jovem=${encodeURIComponent(j.id)}">
+        <div class="jovem-avatar" style="background:${cor};">${escHtml(ini)}</div>
+        <div class="atend-info">
+          <div class="atend-jovem-name">${escHtml(j.nome || `Paciente #${j.id}`)}</div>
+          <div class="atend-desc">${escHtml(cat)} · ${escHtml(status)}</div>
+        </div>
+      </a>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+(async () => {
+  const session = getSession();
+  if (!session || session.perfil !== 'Psicologo') {
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  const ini = initials(session.nome || '');
+  document.getElementById('topbar-name').textContent      = session.nome || 'Psicólogo';
+  document.getElementById('topbar-avatar').textContent    = ini;
+  document.getElementById('sidebar-initials').textContent = ini;
+  document.getElementById('hero-avatar').textContent      = ini;
+  document.getElementById('hero-name').textContent        = session.nome || 'Psicólogo';
+
+  lucide.createIcons();
+
+  await renderDashboard(session);
+  lucide.createIcons();
+})();
+</script>
+</body>
+</html>

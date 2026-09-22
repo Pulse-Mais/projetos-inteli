@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guia de Estilo — Pulse Mais | Coordenadora</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Ordem importa: tokens antes de base -->
+    <link rel="stylesheet" href="css/tokens.css" />
+    <link rel="stylesheet" href="css/base.css" />
+
+    <!-- Estilos só desta página de demonstração -->
+    <style>
+      .pagina {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: var(--espaco-7) var(--espaco-5);
+      }
+
+      .topo {
+        background: var(--cor-primaria);
+        color: var(--texto-sobre-azul);
+        border-radius: var(--raio-lg);
+        padding: var(--espaco-6);
+        margin-bottom: var(--espaco-7);
+      }
+      .topo h1 {
+        color: var(--texto-sobre-azul);
+      }
+      .topo p {
+        color: var(--cor-secundaria-clara);
+        margin-top: var(--espaco-2);
+      }
+
+      section {
+        margin-bottom: var(--espaco-7);
+      }
+      section > h2 {
+        padding-bottom: var(--espaco-2);
+        border-bottom: 2px solid var(--cinza-borda);
+        margin-bottom: var(--espaco-5);
+      }
+      .legenda {
+        color: var(--texto-secundario);
+        font-size: var(--texto-sm);
+        margin-bottom: var(--espaco-5);
+      }
+
+      .grade {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: var(--espaco-4);
+      }
+
+      .swatch {
+        background: var(--branco);
+        border: 1px solid var(--cinza-borda);
+        border-radius: var(--raio-md);
+        overflow: hidden;
+        box-shadow: var(--sombra-sm);
+      }
+      .swatch .cor {
+        height: 88px;
+      }
+      .swatch .info {
+        padding: var(--espaco-3) var(--espaco-4);
+      }
+      .swatch .nome {
+        font-weight: var(--peso-semibold);
+        font-size: var(--texto-sm);
+      }
+      .swatch .hex {
+        color: var(--texto-secundario);
+        font-size: var(--texto-xs);
+        margin-top: 2px;
+      }
+      .swatch .var {
+        display: inline-block;
+        margin-top: var(--espaco-2);
+        font-family: monospace;
+        font-size: var(--texto-xs);
+        background: var(--cinza-fundo);
+        color: var(--cor-primaria);
+        padding: 2px 6px;
+        border-radius: var(--raio-sm);
+      }
+
+      .tipo-amostra {
+        margin-bottom: var(--espaco-3);
+      }
+      .tipo-amostra small {
+        color: var(--texto-secundario);
+        font-size: var(--texto-xs);
+      }
+
+      .btns {
+        display: flex;
+        gap: var(--espaco-3);
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .btn {
+        padding: var(--espaco-3) var(--espaco-5);
+        border-radius: var(--raio-sm);
+        font-weight: var(--peso-medio);
+        transition: var(--transicao);
+      }
+      .btn-primario {
+        background: var(--cor-secundaria);
+        color: #fff;
+      }
+      .btn-primario:hover {
+        background: var(--cor-primaria);
+      }
+      .btn-secundario {
+        background: var(--branco);
+        color: var(--cor-secundaria);
+        border: 1px solid var(--cor-secundaria);
+      }
+      .btn-secundario:hover {
+        background: var(--cinza-fundo);
+      }
+
+      .pills {
+        display: flex;
+        gap: var(--espaco-3);
+        flex-wrap: wrap;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: var(--espaco-1) var(--espaco-3);
+        border-radius: var(--raio-full);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-medio);
+      }
+      .pill::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .pill-sucesso {
+        background: var(--sucesso-fundo);
+        color: var(--sucesso);
+      }
+      .pill-alerta {
+        background: var(--alerta-fundo);
+        color: #946800;
+      }
+      .pill-erro {
+        background: var(--erro-fundo);
+        color: var(--erro);
+      }
+
+      .demo-sombra {
+        display: flex;
+        gap: var(--espaco-5);
+        flex-wrap: wrap;
+      }
+      .caixa-sombra {
+        width: 120px;
+        height: 80px;
+        background: var(--branco);
+        border-radius: var(--raio-md);
+        display: grid;
+        place-items: center;
+        font-size: var(--texto-xs);
+        color: var(--texto-secundario);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pagina">
+      <header class="topo">
+        <h1>Guia de Estilo — Pulse Mais</h1>
+        <p>Base visual da plataforma · Painel da Coordenadora Pedagógica</p>
+      </header>
+
+      <!-- Cores -->
+      <section>
+        <h2>Cores</h2>
+        <p class="legenda">Sempre use a variável (ex.: <code>var(--cor-primaria)</code>), nunca o hex direto.</p>
+
+        <h3 style="margin-bottom: var(--espaco-4)">Primárias</h3>
+        <div class="grade">
+          <div class="swatch">
+            <div class="cor" style="background: var(--cor-primaria)"></div>
+            <div class="info">
+              <div class="nome">Azul principal</div>
+              <div class="hex">#003870</div>
+              <span class="var">--cor-primaria</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--cor-primaria-escura)"></div>
+            <div class="info">
+              <div class="nome">Azul escuro</div>
+              <div class="hex">#0C253D</div>
+              <span class="var">--cor-primaria-escura</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin: var(--espaco-5) 0 var(--espaco-4)">Secundárias</h3>
+        <div class="grade">
+          <div class="swatch">
+            <div class="cor" style="background: var(--cor-secundaria)"></div>
+            <div class="info">
+              <div class="nome">Azul interativo</div>
+              <div class="hex">#5696D6</div>
+              <span class="var">--cor-secundaria</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--cor-secundaria-clara)"></div>
+            <div class="info">
+              <div class="nome">Azul claro</div>
+              <div class="hex">#99CCFF</div>
+              <span class="var">--cor-secundaria-clara</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin: var(--espaco-5) 0 var(--espaco-4)">Neutras</h3>
+        <div class="grade">
+          <div class="swatch">
+            <div class="cor" style="background: var(--branco); border-bottom: 1px solid var(--cinza-borda)"></div>
+            <div class="info">
+              <div class="nome">Branco</div>
+              <div class="hex">#FFFFFF</div>
+              <span class="var">--branco</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--cinza-fundo)"></div>
+            <div class="info">
+              <div class="nome">Cinza de fundo</div>
+              <div class="hex">#F5F7FA</div>
+              <span class="var">--cinza-fundo</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--cinza-borda)"></div>
+            <div class="info">
+              <div class="nome">Cinza de borda</div>
+              <div class="hex">#DADCE4</div>
+              <span class="var">--cinza-borda</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin: var(--espaco-5) 0 var(--espaco-4)">Feedback</h3>
+        <div class="grade">
+          <div class="swatch">
+            <div class="cor" style="background: var(--sucesso)"></div>
+            <div class="info">
+              <div class="nome">Sucesso</div>
+              <div class="hex">#22C55E</div>
+              <span class="var">--sucesso</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--alerta)"></div>
+            <div class="info">
+              <div class="nome">Alerta</div>
+              <div class="hex">#F4B400</div>
+              <span class="var">--alerta</span>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="cor" style="background: var(--erro)"></div>
+            <div class="info">
+              <div class="nome">Erro</div>
+              <div class="hex">#EF4444</div>
+              <span class="var">--erro</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tipografia -->
+      <section>
+        <h2>Tipografia — Poppins</h2>
+        <p class="legenda">Família única, vários pesos. A escala de tamanhos é ajustável ao Figma.</p>
+        <div class="tipo-amostra">
+          <div style="font-size: var(--texto-2xl); font-weight: var(--peso-semibold)">Título principal</div>
+          <small>--texto-2xl · 32px · semibold</small>
+        </div>
+        <div class="tipo-amostra">
+          <div style="font-size: var(--texto-xl); font-weight: var(--peso-semibold)">Título de seção</div>
+          <small>--texto-xl · 24px · semibold</small>
+        </div>
+        <div class="tipo-amostra">
+          <div style="font-size: var(--texto-lg); font-weight: var(--peso-medio)">Subtítulo</div>
+          <small>--texto-lg · 18px · medium</small>
+        </div>
+        <div class="tipo-amostra">
+          <div style="font-size: var(--texto-base)">Texto de corpo padrão para leitura.</div>
+          <small>--texto-base · 16px · regular</small>
+        </div>
+        <div class="tipo-amostra">
+          <div style="font-size: var(--texto-sm); color: var(--texto-secundario)">Texto de apoio e legendas.</div>
+          <small>--texto-sm · 14px</small>
+        </div>
+      </section>
+
+      <!-- Componentes de exemplo -->
+      <section>
+        <h2>Amostras de componentes</h2>
+        <p class="legenda">Pequenas peças montadas só com os tokens, pra provar que a base funciona.</p>
+
+        <h3 style="margin-bottom: var(--espaco-4)">Botões</h3>
+        <div class="btns">
+          <button class="btn btn-primario">Botão primário</button>
+          <button class="btn btn-secundario">Botão secundário</button>
+        </div>
+
+        <h3 style="margin: var(--espaco-5) 0 var(--espaco-4)">Selos de status</h3>
+        <div class="pills">
+          <span class="pill pill-sucesso">Ativo</span>
+          <span class="pill pill-alerta">Atenção</span>
+          <span class="pill pill-erro">Inativo</span>
+        </div>
+
+        <h3 style="margin: var(--espaco-5) 0 var(--espaco-4)">Sombras</h3>
+        <div class="demo-sombra">
+          <div class="caixa-sombra" style="box-shadow: var(--sombra-sm)">sm</div>
+          <div class="caixa-sombra" style="box-shadow: var(--sombra-md)">md</div>
+          <div class="caixa-sombra" style="box-shadow: var(--sombra-lg)">lg</div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

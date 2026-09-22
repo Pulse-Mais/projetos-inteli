@@ -1,0 +1,164 @@
+/* Lista de turmas — design idêntico ao da coordenadora (tokens) */
+
+.pagina-turmas {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--espaco-6);
+  background-color: var(--cinza-fundo);
+}
+
+.pagina-cabecalho { margin-bottom: var(--espaco-5); }
+.pagina-subtitulo {
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+  margin-top: var(--espaco-1);
+}
+
+
+/* ===== Busca e filtros ===== */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-5);
+}
+.busca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: 0 var(--espaco-3);
+  flex: 1;
+  min-width: 220px;
+}
+.busca:focus-within { border-color: var(--cor-secundaria); }
+.busca .lucide {
+  color: var(--texto-secundario);
+  width: 20px;
+  height: 20px;
+}
+.busca-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: var(--espaco-3) 0;
+  font-size: var(--texto-sm);
+}
+/* A busca mostra o foco no contêiner (:focus-within); o input interno não leva o anel */
+.busca-input:focus { box-shadow: none; }
+
+.filtro-select {
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  font-size: var(--texto-sm);
+  color: var(--texto-principal);
+  cursor: pointer;
+}
+
+
+/* ===== Lista de turmas (linhas horizontais) ===== */
+.lista-turmas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.gestor-estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-3);
+  min-height: 120px;
+  border: 1px dashed var(--cinza-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--branco);
+  color: var(--texto-secundario);
+  text-align: center;
+  padding: var(--espaco-5);
+}
+
+.gestor-estado--erro {
+  border-color: var(--erro);
+  color: var(--erro);
+}
+
+.btn-estado {
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-sm);
+  padding: var(--espaco-3) var(--espaco-4);
+  background-color: var(--branco);
+  color: var(--texto-principal);
+  font: inherit;
+  font-size: var(--texto-sm);
+  font-weight: var(--peso-medio);
+  cursor: pointer;
+}
+
+.turma-linha {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-sm);
+  overflow: hidden;            /* respeita os cantos arredondados na ponta da marca */
+  color: var(--texto-principal);
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+.turma-linha:hover {
+  box-shadow: var(--sombra-md);
+  transform: translateY(-2px);
+}
+
+
+/* Marca colorida: retângulo vertical que preenche a altura da linha */
+.turma-marca {
+  width: 72px;
+  display: grid;
+  place-items: center;
+  font-weight: var(--peso-bold);
+  font-size: var(--texto-lg);
+  color: var(--branco);
+  flex-shrink: 0;
+}
+.turma-marca--azul-escuro { background-color: var(--cor-primaria-escura); }
+.turma-marca--azul        { background-color: var(--cor-primaria); }
+.turma-marca--verde       { background-color: var(--sucesso); }
+.turma-marca--amarelo     { background-color: var(--alerta); }
+
+
+.turma-detalhes {
+  padding: var(--espaco-4) var(--espaco-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  flex: 1;
+}
+.turma-nome {
+  font-size: var(--texto-base);
+  font-weight: var(--peso-semibold);
+  letter-spacing: 0.02em;
+}
+.turma-info {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  font-size: var(--texto-sm);
+  color: var(--texto-secundario);
+  flex-wrap: wrap;
+  margin: 0;
+}
+.turma-info > span { display: flex; align-items: center; gap: 4px; }
+.turma-info .lucide { width: 16px; height: 16px; }
+.turma-info-separador { opacity: 0.5; }
+
+
+@media (max-width: 760px) {
+  .pagina-turmas { padding: var(--espaco-4); }
+}

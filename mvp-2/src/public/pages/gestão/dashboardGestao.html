@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulsar — Dashboard</title>
+  <link rel="stylesheet" href="../../css/global.css" />
+  <link rel="stylesheet" href="../../css/gestão/dashboardGestao.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Expandir menu" title="Fixar menu">
+        <i data-lucide="panel-left"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="sidebar-item" data-navigate="buscar" title="Buscar">
+        <span class="sidebar-item-icon"><i data-lucide="search"></i></span>
+        <span class="sidebar-item-label">Buscar</span>
+      </a>
+      <a class="sidebar-item is-active" data-navigate="dashboard" title="Dashboard">
+        <span class="sidebar-item-icon"><i data-lucide="home"></i></span>
+        <span class="sidebar-item-label">Dashboard</span>
+        <span class="sidebar-item-bar" aria-hidden="true"></span>
+      </a>
+      <a class="sidebar-item" data-navigate="jovens" title="Jovens">
+        <span class="sidebar-item-icon"><i data-lucide="users"></i></span>
+        <span class="sidebar-item-label">Jovens</span>
+      </a>
+      <a class="sidebar-item" data-navigate="calendario" title="Calendário">
+        <span class="sidebar-item-icon"><i data-lucide="calendar"></i></span>
+        <span class="sidebar-item-label">Calendário</span>
+      </a>
+      <a class="sidebar-item" data-navigate="frequencia" title="Frequências">
+        <span class="sidebar-item-icon"><i data-lucide="flag"></i></span>
+        <span class="sidebar-item-label">Frequências</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cursosBolsas" title="Cursos e Bolsas">
+        <span class="sidebar-item-icon"><i data-lucide="book-open"></i></span>
+        <span class="sidebar-item-label">Cursos e Bolsas</span>
+      </a>
+      <a class="sidebar-item" data-navigate="cadastrarMentor" title="Cadastrar Mentor">
+        <span class="sidebar-item-icon"><i data-lucide="user-plus"></i></span>
+        <span class="sidebar-item-label">Cadastrar Mentor</span>
+      </a>
+      <a class="sidebar-item" data-navigate="notificacoes" title="Notificações">
+        <span class="sidebar-item-icon"><i data-lucide="bell"></i></span>
+        <span class="sidebar-item-label">Notificações</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a class="sidebar-item" data-navigate="configuracoes" title="Configurações">
+        <span class="sidebar-item-icon"><i data-lucide="settings"></i></span>
+        <span class="sidebar-item-label">Configurações</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <a class="header-logo" href="#" data-navigate="dashboard">
+        <!-- Logo real do projeto — troque o src pelo caminho correto -->
+        <img
+          src="../../assets/logoPulsar.png"
+          alt="Pulsar"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Fallback caso o asset não exista -->
+        <span class="logo-fallback" style="display:none;">
+          <span class="logo-fallback-icon"><i data-lucide="zap"></i></span>
+          <span class="logo-fallback-name">Pulsar</span>
+        </span>
+      </a>
+
+      <div class="avatar-menu" id="avatarMenu">
+        <button class="avatar-trigger" id="avatarTrigger" aria-haspopup="menu" aria-expanded="false">
+          <span class="avatar">
+            <i data-lucide="user" style="width:18px;height:18px;stroke-width:2"></i>
+          </span>
+          <span class="avatar-meta">
+            <span class="avatar-name"></span>
+            <span class="avatar-role"></span>
+          </span>
+          <i data-lucide="chevron-down" class="avatar-chevron" style="width:16px;height:16px"></i>
+        </button>
+
+        <div class="avatar-dropdown" role="menu" hidden>
+          <a class="dropdown-item is-danger" role="menuitem" id="btnLogout">
+            <i data-lucide="log-out" style="width:16px;height:16px"></i> Sair
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+        <!-- Banner Ambiente Acadêmico (RNF-ORG-03) -->
+    <div class="env-banner" role="status" aria-label="Aviso de ambiente acadêmico">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Ambiente acadêmico — dados fictícios para fins educacionais.
+    </div>
+<main class="page-content">
+
+      <!-- FILTRO -->
+      <div class="dashboard-filter-row">
+        <label for="programaFilter">Programa</label>
+        <select id="programaFilter">
+          <option value="">Todos os programas</option>
+        </select>
+      </div>
+
+      <!-- KPI CARDS -->
+      <div class="kpi-grid">
+
+        <div class="kpi-card kpi-card--primary">
+          <span class="kpi-card__label">Jovens ativos</span>
+          <span class="kpi-card__value" id="kpiJovens">—</span>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-card__label">Frequência média</span>
+          <span class="kpi-card__value" id="kpiFrequencia">—</span>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-card__label">Mentorias realizadas</span>
+          <span class="kpi-card__value" id="kpiMentorias">—</span>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-card__label">Eventos do mês</span>
+          <span class="kpi-card__value" id="kpiEventos">—</span>
+        </div>
+
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+
+        <!-- Gráfico de linha -->
+        <div class="section-card">
+          <h3 class="section-card__title">Jornada dos jovens</h3>
+          <div class="data-region" id="regionLine">
+            <div class="empty-state">
+              <i data-lucide="bar-chart-2"></i>
+              <p>Sem dados</p>
+            </div>
+            <div class="data-content line-chart-wrap">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico donut -->
+        <div class="section-card">
+          <h3 class="section-card__title" id="donutTitle">Distribuição por<br>programa</h3>
+          <div class="data-region" id="regionDonut">
+            <div class="empty-state">
+              <i data-lucide="pie-chart"></i>
+              <p>Sem dados</p>
+            </div>
+            <div class="data-content donut-wrap">
+              <div class="donut-canvas-wrap">
+                <canvas id="donutChart"></canvas>
+              </div>
+              <div class="donut-legend"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TABELA DE RISCO -->
+      <div class="section-card">
+        <h3 class="section-card__title">Jovens que precisam de atenção</h3>
+        <div class="data-region" id="regionTable">
+          <div class="empty-state">
+            <i data-lucide="inbox"></i>
+            <p>Sem dados</p>
+          </div>
+          <div class="data-content">
+            <table class="risk-table">
+              <thead>
+                <tr>
+                  <th class="col-name">Jovem</th>
+                  <th class="col-prog">Programa</th>
+                  <th class="col-date">Última interação</th>
+                  <th class="col-status">Status</th>
+                  <th class="col-action"></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- AÇÕES DA PÁGINA -->
+      <div class="page-actions">
+        <button class="btn-page-action" data-navigate="importarPlanilha">
+          <i data-lucide="upload"></i>
+          Importar Planilhas
+        </button>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="../../js/api.js"></script>
+<script src="../../js/gestão/main.js"></script>
+<script src="../../js/gestão/dashboardGestao.js"></script>
+
+</body>
+</html>
